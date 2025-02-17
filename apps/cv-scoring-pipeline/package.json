@@ -1,0 +1,30 @@
+{
+  "name": "cv-scoring-pipeline",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3",
+    "vite": "^6.1.0"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.3.30",
+    "@langchain/core": "^0.3.40",
+    "@langchain/openai": "^0.4.4",
+    "@types/pdf-parse": "^1.1.4",
+    "axios": "^1.7.9",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^16.4.7",
+    "langchain": "^0.3.15",
+    "mongoose": "^8.10.1",
+    "openai": "^4.85.1",
+    "pdf-parse": "^1.1.1",
+    "uuid": "^11.0.5",
+    "winston": "^3.17.0"
+  }
+}

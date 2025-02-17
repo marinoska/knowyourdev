@@ -1,0 +1,253 @@
+Name,Usage2024,Usage2016,Trend,Category
+JavaScript,62.3,55.4,Highly Trending,Lang
+HTML/CSS,53,54.4,Steady,Lang
+Python,51,24.9,Highly Trending,Lang
+SQL,47,49.1,Steady,Lang
+TypeScript,34,0.47,Highly Trending,Lang
+Java,33,36.3,Steady,Lang
+Bash/Shell,29,0.45,Steady,Lang
+C#,27,30.9,Steady,Lang
+C++,24,19.4,Steady,Lang
+PHP,21,25.9,Declining,Lang
+C,20,15.5,Steady,Lang
+Go,18,0.16,Highly Trending,Lang
+Kotlin,16,0.12,Highly Trending,Lang
+Rust,13,0.16,Highly Trending,Lang
+Ruby,10,8.9,Declining,Lang
+Dart,8,0.13,Trending,Lang
+Swift,7,2.6,Highly Trending,Lang
+Objective-C,5,6.5,Strong Declining,Lang
+Scala,4,0.16,Trending,Lang
+Perl,3,2,Declining,Lang
+Haskell,2,1.9,Declining,Lang
+Lua,2,0.32,Declining,Lang
+MATLAB,2,4,Steady,Lang
+Groovy,1,0.34,Declining,Lang
+VBA,1,1.5,Declining,Lang
+Ada,0.5,0.2,Declining,Lang
+Prolog,0.5,0.2,Declining,Lang
+Lisp,0.4,0.3,Declining,Lang
+Julia,0.3,0.1,Trending,Lang
+F#,0.2,0.3,Declining,Lang
+COBOL,0.2,0.1,Strong Declining,Lang
+Fortran,0.1,0.14,Strong Declining,Lang
+Delphi,0.1,0.78,Strong Declining,Lang
+Object Pascal,0.1,0.78,Strong Declining,Lang
+Assembly,0.1,0.2,Steady,Lang
+Crystal,0.1,0.1,Trending,Lang
+Elixir,0.1,0.14,Trending,Lang
+Erlang,0.1,0.13,Declining,Lang
+Clojure,0.1,0.2,Declining,Lang
+R,0.1,1.5,Steady,Lang
+Zephyr,0.1,0.1,No data available,Lang
+Node.js,40.8,35,Highly Trending,Framework
+React,39.5,10,Highly Trending,Framework
+jQuery,21.4,48,Declining,Framework
+Next.js,17.9,0,Highly Trending,Framework
+Express,17.8,12,Trending,Framework
+Angular,17.1,30,Steady,Framework
+ASP.NET Core,16.9,0,Trending,Framework
+Vue.js,15.4,3,Trending,Framework
+ASP.NET,12.9,28,Declining,Framework
+Flask,12.9,2,Trending,Framework
+Spring Boot,12.7,0,Steady,Framework
+Django,12,5,Steady,Framework
+WordPress,11.8,25,Declining,Framework
+FastAPI,9.9,0,Highly Trending,Framework
+Laravel,7.9,3,Trending,Framework
+AngularJS,6.8,20,Declining,Framework
+Svelte,6.5,0,Highly Trending,Framework
+NestJS,5.8,0,Highly Trending,Framework
+Blazor,4.9,0,Trending,Framework
+Ruby on Rails,4.7,5,Declining,Framework
+Nuxt.js,3.6,0,Trending,Framework
+Htmx,3.3,0,Highly Trending,Framework
+Symfony,3.2,3,Steady,Framework
+Astro,3,0,Highly Trending,Framework
+Fastify,2.2,0,Highly Trending,Framework
+Deno,1.9,0,Highly Trending,Framework
+Phoenix,1.9,0,Steady,Framework
+Drupal,1.9,3,Declining,Framework
+Strapi,1.7,0,Highly Trending,Framework
+CodeIgniter,1.7,3,Declining,Framework
+Gatsby,1.6,0,Steady,Framework
+Remix,1.6,0,Highly Trending,Framework
+Solid.js,1.2,0,Highly Trending,Framework
+Yii 2,0.9,0,Declining,Framework
+Play Framework,0.8,0,Declining,Framework
+Elm,0.6,0,Declining,Framework
+Meteor,,,Declining,Framework
+Strapi,,,Declining,Framework
+Koa,,,Steady,Framework
+Ember.js,,,Declining,Framework
+Backbone.js,,,Strong Declining,Framework
+Padrino,,,Declining,Framework
+CakePHP,,,Strong Declining,Framework
+Zend Framework,,,Strong Declining,Framework
+Slim,,,Declining,Framework
+Pyramid,,,Declining,Framework
+Turbolinks,,,Declining,Framework
+Hanami,,,Declining,Framework
+Grails,,,Declining,Framework
+Play,,,Declining,Framework
+Hapi,,,Declining,Framework
+Revel,,,Declining,Framework
+PostgreSQL,49,11,Highly Trending,DB
+MySQL,45,30,Steady,DB
+SQLite,32,12,Trending,DB
+Microsoft SQL Server,28,20,Steady,DB
+MongoDB,21,21,Trending,DB
+Redis,18,16,Trending,DB
+MariaDB,15,6,Trending,DB
+Elasticsearch,12,5,Trending,DB
+Oracle,10,12,Steady,DB
+DynamoDB,9,3,Trending,DB
+Firebase Realtime Database,8,2,Highly Trending,DB
+Cloud Firestore,7,0,Highly Trending,DB
+BigQuery,7,1,Trending,DB
+Microsoft Access,5,8,Declining,DB
+Supabase,4,0,Highly Trending,DB
+H2,4,1,Steady,DB
+Cosmos DB,3,0,Trending,DB
+Snowflake,3,0,Highly Trending,DB
+InfluxDB,2,0.5,Trending,DB
+Cassandra,2,3,Steady,DB
+Databricks SQL,1.9,0,Highly Trending,DB
+Neo4j,2,1,Trending,DB
+IBM Db2,2,4,Declining,DB
+ClickHouse,1.4,0,Highly Trending,DB
+Solr,1.3,1,Declining,DB
+DuckDB,1.2,0,Highly Trending,DB
+Firebird,1.1,0.5,Declining,DB
+CouchDB,1,1,Steady,DB
+CockroachDB,0.9,0,Trending,DB
+Couchbase,1,2,Steady,DB
+Presto,0.7,0,Trending,DB
+Datomic,0.6,0,Declining,DB
+EventStoreDB,0.5,0,Trending,DB
+RavenDB,0.4,0.5,Declining,DB
+TiDB,0.3,0,Trending,DB
+Docker,53.9,2.6,Highly Trending,Tool
+npm,49.6,7.9,Highly Trending,Tool
+Pip,32.4,8,Trending,Tool
+Homebrew,22.3,5,Trending,Tool
+Make,20.8,15,Steady,Tool
+Vite,19.9,0,Highly Trending,Tool
+Kubernetes,19.4,0.7,Highly Trending,Tool
+Yarn,18.8,0,Highly Trending,Tool
+Webpack,18.4,0.5,Highly Trending,Tool
+NuGet,16.1,6,Trending,Tool
+Maven,15.6,8,Steady,Tool
+Visual Studio Solution,15.3,10,Steady,Tool
+Gradle,15.3,4,Trending,Tool
+MSBuild,11,7,Steady,Tool
+Terraform,10.6,0.1,Highly Trending,Tool
+APT,10.5,5,Steady,Tool
+pnpm,8.9,0,Highly Trending,Tool
+Composer,8.8,3,Trending,Tool
+Chocolatey,8.8,2,Trending,Tool
+Ansible,7.9,1.5,Highly Trending,Tool
+Helm,7.5,0,Highly Trending,Tool
+Gradle Wrapper,7.3,0,Trending,Tool
+Poetry,6.9,0,Highly Trending,Tool
+Bundler,6.8,4,Steady,Tool
+CMake,6.7,5,Steady,Tool
+Ant,6.5,7,Declining,Tool
+Bazel,5.9,0,Trending,Tool
+SBT,5.7,1,Trending,Tool
+Conan,5.5,0,Trending,Tool
+Meson,5.3,0,Trending,Tool
+Nix,5.1,0,Trending,Tool
+Bower,4.9,6,Declining,Tool
+Pipenv,4.7,0,Trending,Tool
+Cargo,4.5,0.5,Highly Trending,Tool
+Dub,4.3,0,Trending,Tool
+Leiningen,4.1,1,Steady,Tool
+Rebar,3.9,0,Declining,Tool
+Stack,3.7,0,Trending,Tool
+Mix,3.5,0,Trending,Tool
+Cocoapods,3.3,2,Trending,Tool
+Swift Package Manager,3.1,0,Highly Trending,Tool
+Carthage,2.9,0,Declining,Tool
+Spack,2.7,0,Trending,Tool
+Buck,2.5,0,Declining,Tool
+Glide,2.3,0,Declining,Tool
+Gulp,2.1,5,Declining,Tool
+Broccoli,1.9,0,Declining,Tool
+Grunt,1.7,7,Declining,Tool
+SCons,1.5,0,Declining,Tool
+Waf,1.3,0,Declining,Tool
+Tup,1.1,0,Declining,Tool
+Shake,0.9,0,Declining,Tool
+Ninja,0.7,0,Trending,Tool
+Rake,0.5,3,Declining,Tool
+Fabric,0.3,0.5,Declining,Tool
+Chef,0,2,Declining,Tool
+.NET,25.2,,Steady,Other-FW
+NumPy,21.2,,Highly Trending,Other-FW
+Pandas,20.7,,Highly Trending,Other-FW
+.NET Framework,16.4,,Declining,Other-FW
+Spring Framework,11.1,,Steady,Other-FW
+RabbitMQ,10.9,,Trending,Other-FW
+Scikit-Learn,10.6,,Highly Trending,Other-FW
+Torch/PyTorch,10.6,,Highly Trending,Other-FW
+TensorFlow,10.1,,Highly Trending,Other-FW
+Apache Kafka,9.4,,Trending,Other-FW
+Flutter,9.4,,Highly Trending,Other-FW
+OpenCV,8.6,,Steady,Other-FW
+React Native,8.4,,Trending,Other-FW
+Qt,7.3,,Steady,Other-FW
+OpenGL,6.8,,Declining,Other-FW
+Electron,6.5,,Trending,Other-FW
+CUDA,5.8,,Trending,Other-FW
+Hugging Face Transformers,4.5,,Highly Trending,Other-FW
+Apache Spark,4.4,,Steady,Other-FW
+SwiftUI,4.3,,Trending,Other-FW
+Keras,4.3,,Steady,Other-FW
+.NET MAUI,3.1,,Trending,Other-FW
+Ruff,3,,Highly Trending,Other-FW
+Xamarin,2.9,,Declining,Other-FW
+GTK,2.6,,Steady,Other-FW
+Ionic,2.5,,Declining,Other-FW
+Tauri,2.4,,Highly Trending,Other-FW
+Hadoop,2.3,,Declining,Other-FW
+Cordova,2.2,,Declining,Other-FW
+DirectX,1.9,,Strong Declining,Other-FW
+Capacitor,1.8,,Trending,Other-FW
+OpenCL,1.7,,Declining,Other-FW
+Tidyverse,1.7,,Steady,Other-FW
+Roslyn,1.7,,Steady,Other-FW
+Quarkus,1.3,,Trending,Other-FW
+Ktor,1.2,,Trending,Other-FW
+mlflow,1.2,,Trending,Other-FW
+JAX,1,,Trending,Other-FW
+MFC,1,,Declining,Other-FW
+AWS,48,31,Highly Trending,Cloud
+Microsoft Azure,27.8,9,Highly Trending,Cloud
+GCP,25.1,4,Highly Trending,Cloud
+Cloudflare,15.1,,Trending,Cloud
+Firebase,13.9,,Trending,Cloud
+Vercel,11.9,0,Highly Trending,Cloud
+DigitalOcean,11.7,,Steady,Cloud
+Heroku,8.2,,Declining,Cloud
+Netlify,7,0,Highly Trending,Cloud
+VMware,6.6,,Steady,Cloud
+Hetzner,5,,Steady,Cloud
+Supabase,3.8,0,Highly Trending,Cloud
+Linode (now Akamai),3.1,,Steady,Cloud
+OVH,3,,Steady,Cloud
+Managed Hosting,3,,Steady,Cloud
+Oracle Cloud Infrastructure,2.9,,Trending,Cloud
+Render,2.8,0,Highly Trending,Cloud
+Fly.io,2.6,0,Highly Trending,Cloud
+OpenShift,2.4,,Steady,Cloud
+Databricks,2,0,Highly Trending,Cloud
+PythonAnywhere,1.9,,Steady,Cloud
+Vultr,1.7,,Steady,Cloud
+OpenStack,1.6,,Declining,Cloud
+Alibaba Cloud,1.2,,Trending,Cloud
+IBM Cloud or Watson,1.1,,Declining,Cloud
+Scaleway,0.9,,Steady,Cloud
+Colocation,0.7,,Declining,Cloud
+IBM Cloud,,7,Declining,Cloud
+Salesforce,,4,Steady,Cloud
