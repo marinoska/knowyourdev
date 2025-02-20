@@ -1,5 +1,5 @@
 import { Model, model, Schema } from 'mongoose';
-import { CATEGORY, TechStackDocument, TREND } from "./types.js";
+import { TECH_STACK_CATEGORY, TechStackDocument, TREND } from "./types.js";
 
 type TechStackModel = Model<TechStackDocument>;
 
@@ -20,6 +20,7 @@ const techStackSchema = new Schema<TechStackDocument, TechStackModel>(
             },
             required: true, // Ensures that `components` itself is provided
         },
+        componentsString: {type: String, required: true},
         trend: {type: String, enum: TREND, required: true},
         popularity: {type: Number, required: true},
         languages: [
@@ -34,7 +35,7 @@ const techStackSchema = new Schema<TechStackDocument, TechStackModel>(
                 required: true,
             },
         ],
-        category: {type: String, enum: CATEGORY, required: true},
+        category: {type: String, enum: TECH_STACK_CATEGORY, required: true},
         description: {type: String, required: true},
         useCases: {type: String, required: true},
         purpose: {type: String, required: true},
@@ -42,9 +43,9 @@ const techStackSchema = new Schema<TechStackDocument, TechStackModel>(
         bestFor: {type: String, required: true},
         typicalUseCases: {type: String, required: true},
     },
-    {timestamps: true}
+    {timestamps: true, collection: 'techStack'}
 );
 
-techStackSchema.index({name: 1, category: 1, popularity: 1});
+techStackSchema.index({category: 1, popularity: 1});
 
-export default model<TechStackDocument, TechStackModel>('tech', techStackSchema);
+export default model<TechStackDocument, TechStackModel>('techStack', techStackSchema);

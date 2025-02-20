@@ -4,10 +4,12 @@ export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, de
 export const CATEGORY = ['Lang', 'DB', 'Framework', 'Tool', 'Other-FW', 'Cloud'] as const;
 export type TrendType = typeof TREND;
 export type CategoryType = typeof CATEGORY;
+
+export type TechCodeType = string;
 export type TechDocument = Document & {
     _id: Schema.Types.ObjectId;
     name: string;
-    code: string;
+    code: TechCodeType;
     usage2024?: number;
     usage2016?: number;
     trend: TrendType;
@@ -29,19 +31,22 @@ export const TECH_STACK_CATEGORY =
 
 export type TechStackCategory = typeof TECH_STACK_CATEGORY;
 
+export type StackComponents = {
+    'and': TechCodeType[],
+    'or': TechCodeType[][]
+};
+
 export type TechStackDocument = Document & {
     _id: Schema.Types.ObjectId;
     name: string;
     recommended: number;
-    components: {
-        'and': TechDocument["code"][],
-        'or': TechDocument["code"][][]
-    },
+    components: StackComponents,
+    componentsString: string;
     trend: TrendType;
     popularity: number;
-    languages: TechDocument["code"][];
-    relations: TechDocument["code"][];
-    category: CategoryType;
+    languages: TechCodeType[];
+    relations: TechCodeType[];
+    category: TechStackCategory;
     description: string;
     useCases: string;
     purpose: string;

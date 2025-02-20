@@ -9,7 +9,9 @@ if (!MONGO_CONNECTION) {
     throw Error('Missing Mongo connection parameters');
 }
 
-export const connected = mongoose.connect(MONGO_CONNECTION );
+export const connected = mongoose.connect(MONGO_CONNECTION, {
+    // autoIndex: true,
+} );
 mongoose.pluralize(null);
 
 export const db = mongoose.connection;

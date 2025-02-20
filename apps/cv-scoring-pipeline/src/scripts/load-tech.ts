@@ -5,25 +5,33 @@ import path from 'path';
 import TechModel from "../tech/tech.model.js";
 
 import { connected, stopMongoClient, db } from "../app/mongo.js";
+import {
+    CategoryType,
+    StackComponents,
+    TechStackCategory,
+    TrendType
+} from "../tech/types.js";
+import TechStackModel from "../tech/techStack.model.js";
+import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names.js";
 
 // Path to the CSV file
 const CSV_FILE_PATH = path.resolve(process.cwd() + '/files/');
 type TechCSVData = {
     name: string;
     code: string;
-    trend: string;
-    category: string;
+    trend: TrendType;
+    category: CategoryType;
     usage2024?: number;
     usage2016?: number;
 }
 
+const generateTechCode = (techName: string) => techName.replace(/[^a-zA-Z0-9#+]/g, '').toLowerCase();
+
 const dropExistingCollection = async (name: string) => {
     const collections = await db
         .listCollections();
-
-    console.log({collections})
-    if (collections.includes(
-        {name})) {
+    if (collections.filter(
+        coll => coll.name === name)) {
         console.log('Dropping existing collection and indexes...');
         // Drop the collection (removes documents and associated indexes)
         await db.dropCollection(name);
@@ -33,7 +41,6 @@ const dropExistingCollection = async (name: string) => {
     }
 };
 
-// Function to load data from CSV
 const loadTechData = async (fileName: string) => {
     const data: TechCSVData[] = [];
     try {
@@ -41,10 +48,9 @@ const loadTechData = async (fileName: string) => {
             fs.createReadStream(path.resolve(CSV_FILE_PATH, fileName))
                 .pipe(csvParser())
                 .on('data', (row) => {
-                    // Explicitly map CSV column names to document fields
                     data.push({
                         name: row.Name,
-                        code: row.Name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase(),
+                        code: generateTechCode(row.Name),
                         trend: row.Trend.split(/\s+/).map((word: string) => word.charAt(0).toUpperCase()).join(''),
                         category: row.Category,
                         usage2024: row.Usage2024 ? Number(row.Usage2024) : undefined,
@@ -52,26 +58,121 @@ const loadTechData = async (fileName: string) => {
                     });
                 })
                 .on('end', () => {
-                    console.log('CSV file successfully processed');
+                    console.log(`CSV file ${fileName} successfully processed`);
                     resolve(0);
                 })
-                .on('error', (err) => reject(err));
+                .on('error', reject);
         });
 
         // Insert data into the database
         const result = await TechModel.insertMany(data);
-        console.log(`${result.length} documents successfully inserted.`);
+        console.log(`${result.length} documents successfully inserted in Tech collection.`);
     } catch (err) {
         console.error('Error loading data:', err);
-    } finally {
-        // Close the MongoDB connection
-        void stopMongoClient();
     }
+};
+
+type TechStackData = {
+    name: string;
+    recommended: number;
+    components: StackComponents;
+    componentsString: string;
+    trend: TrendType; // Assuming TREND is an enum or object with keys
+    popularity: number;
+    languages: string; // Comma-separated string for `languages` (e.g., "lang1,lang2")
+    relations: string; // Comma-separated string for `relations` (e.g., "relation1,relation2")
+    category: TechStackCategory; // Assuming CATEGORY is an enum or object with keys
+    description: string;
+    useCases: string;
+    purpose: string;
+    frontEnd: string;
+    bestFor: string;
+    typicalUseCases: string;
+};
+
+export const loadTechStackData = async (fileName: string): Promise<void> => {
+    const records: TechStackData[] = [];
+
+    try {
+        // Step 1: Read and parse the CSV file
+        const formatRecord = (record: any): TechStackData => ({
+            name: record.Name?.trim(),
+            recommended: record.Recommended ? record.Recommended : undefined,
+            components: record.Components?.split(',').reduce((acc: StackComponents, item: string) => {
+                item.includes('|') ? acc.or.push(item.split('|').map(generateTechCode)) : acc.and.push(generateTechCode(item));
+                return acc;
+            }, {and: [], or: []} satisfies StackComponents),
+            componentsString: record.Components?.trim(),
+            trend: record.Trend.split(/\s+/).map((word: string) => word.charAt(0).toUpperCase()).join(''),
+            popularity: record.Popularity ? record.Popularity : undefined,
+            languages: record.Languages
+                ?.split(',').map(generateTechCode),
+            relations: record.Relations
+                ?.split(',').map(generateTechCode),
+            category: record.Category?.trim(),
+            description: record.Description?.trim(),
+            useCases: record.UseCases?.trim(),
+            purpose: record.Purpose?.trim(),
+            frontEnd: record.FrontEnd?.trim(),
+            bestFor: record.BestFor?.trim(),
+            typicalUseCases: record.TypicalUseCases?.trim(),
+        });
+
+        await new Promise<void>((resolve, reject) => {
+            fs.createReadStream(path.resolve(CSV_FILE_PATH, fileName))
+                .pipe(csvParser())
+                .on('data', (row) => {
+                    // Parse and push each CSV record
+                    records.push(formatRecord(row));
+                })
+                .on('end', () => {
+                    console.log(`CSV file ${fileName} successfully processed`);
+                    resolve();
+                })
+                .on('error', reject);
+        });
+
+        // const result = records.map((record) => ({
+        //     updateOne: {
+        //         filter: {name: record.name}, // Ensure uniqueness by `name`
+        //         update: {$set: record},
+        //         upsert: true,
+        //     },
+        // }));
+        //
+        // if (result.length > 0) {
+        //     await TechStackModel.bulkWrite(result);
+        // }
+        const result = await TechStackModel.insertMany(records);
+
+        console.log(`Tech stack ${result.length} records successfully loaded.`);
+    } catch (error) {
+        console.error('Error loading tech stack data:', error);
+        throw error;
+    }
+};
+
+const loadData = async () => {
+    await dropExistingCollection("tech");
+    await dropExistingCollection("techStack");
+    await TechModel.init();
+    await TechStackModel.init();
+    await loadTechData("Tech.csv");
+    await loadTechStackData("Stack.csv");
+};
+
+const exportData = async () => {
+    const outputTechNamesFile = path.resolve(process.cwd(), 'src/prompt/tech_list');
+    const outputTeckStackFile = path.resolve(process.cwd(), 'src/prompt/tech_stack_list');
+    await saveTechNamesToFile(outputTechNamesFile);
+    await saveTechStackNamesToFile(outputTeckStackFile);
+
 };
 
 (async () => {
     await connected;
-    await dropExistingCollection("tech");
-    void loadTechData("Tech.csv");
+    // await loadData();
+    await exportData();
+    void stopMongoClient();
 })();
 

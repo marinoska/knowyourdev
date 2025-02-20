@@ -77,7 +77,6 @@ Yii 2,0.9,0,Declining,Framework
 Play Framework,0.8,0,Declining,Framework
 Elm,0.6,0,Declining,Framework
 Meteor,,,Declining,Framework
-Strapi,,,Declining,Framework
 Koa,,,Steady,Framework
 Ember.js,,,Declining,Framework
 Backbone.js,,,Strong Declining,Framework
@@ -190,7 +189,8 @@ Pandas,20.7,,Highly Trending,Other-FW
 Spring Framework,11.1,,Steady,Other-FW
 RabbitMQ,10.9,,Trending,Other-FW
 Scikit-Learn,10.6,,Highly Trending,Other-FW
-Torch/PyTorch,10.6,,Highly Trending,Other-FW
+Torch,10.6,,Highly Trending,Other-FW
+PyTorch,10.6,,Highly Trending,Other-FW
 TensorFlow,10.1,,Highly Trending,Other-FW
 Apache Kafka,9.4,,Trending,Other-FW
 Flutter,9.4,,Highly Trending,Other-FW
@@ -233,7 +233,7 @@ Heroku,8.2,,Declining,Cloud
 Netlify,7,0,Highly Trending,Cloud
 VMware,6.6,,Steady,Cloud
 Hetzner,5,,Steady,Cloud
-Supabase,3.8,0,Highly Trending,Cloud
+Supabase Cloud,3.8,0,Highly Trending,Cloud
 Linode (now Akamai),3.1,,Steady,Cloud
 OVH,3,,Steady,Cloud
 Managed Hosting,3,,Steady,Cloud
