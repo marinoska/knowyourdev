@@ -1,6 +1,6 @@
-import { techList } from './tech_list';
+import { techList } from './tech_list.js';
 
-export const techExtraction = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
+export const techExtractionPrompt = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
 
 TODAY is ${Date()}
 
@@ -20,7 +20,7 @@ TODAY is ${Date()}
 
 ---
 
-## **Extract Jobs**
+## **Step 2: Extract Jobs**
 ✅ **Extract the developer’s jobs/roles with descriptions**
 ✅ Extract experience details based on the following rules:
    - **"role"**: The candidate's role/title in the job/project.

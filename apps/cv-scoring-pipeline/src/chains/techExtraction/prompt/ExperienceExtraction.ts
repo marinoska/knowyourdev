@@ -1,4 +1,4 @@
-import { techList } from './tech_list';
+import { techList } from './tech_list.js';
 
 export const sp2p1 = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
 

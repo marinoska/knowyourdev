@@ -162,8 +162,8 @@ const loadData = async () => {
 };
 
 const exportData = async () => {
-    const outputTechNamesFile = path.resolve(process.cwd(), 'src/prompt/tech_list');
-    const outputTeckStackFile = path.resolve(process.cwd(), 'src/prompt/tech_stack_list');
+    const outputTechNamesFile = path.resolve(process.cwd(), 'src/chains/techExtraction/prompt/tech_list');
+    const outputTeckStackFile = path.resolve(process.cwd(), 'src/chains/techExtraction/prompt/tech_stack_list');
     await saveTechNamesToFile(outputTechNamesFile);
     await saveTechStackNamesToFile(outputTeckStackFile);
 

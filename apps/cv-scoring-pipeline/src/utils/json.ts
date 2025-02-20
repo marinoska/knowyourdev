@@ -23,4 +23,6 @@ export function parseJsonOutput<T extends {content: string}>(output: T) {
     if (!result) {
         throw new Error("Parsing failed. Result is expected to be stringified json.");
     }
+
+    return result;
 }
