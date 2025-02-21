@@ -25,9 +25,10 @@ TODAY is ${Date()}
 ✅ Extract experience details based on the following rules:
    - **"role"**: The candidate's role/title in the job/project.
    - **"job"**: The job/project name as listed in the CV.
-   - **"start"**: The start date of the job/project in **dd-mm-yyyy** format.
-   - **"end"**: The end date of the job/project in **dd-mm-yyyy** format. If not specified then TODAY
+   - **"start"**: The start date of the job/project in **mm-yyyy** format.
+   - **"end"**: The end date of the job/project in **mm-yyyy** format. If not specified then TODAY
    - **"months"** Number of month which is calculated by (end - start)
+   - **"present"** If it's a current job, mark as **true**, otherwise **false**.
    - **"description"** Full **unchanged** job description
 
 ---
