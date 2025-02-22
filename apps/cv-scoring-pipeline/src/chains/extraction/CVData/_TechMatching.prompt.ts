@@ -1,3 +1,6 @@
+/**
+ deprecated
+ */
 export const TechMatchingPrompt = `
 Matching Process:
 1. Exact Match First: If the extracted technology exactly matches a name in TechList, use its corresponding code.

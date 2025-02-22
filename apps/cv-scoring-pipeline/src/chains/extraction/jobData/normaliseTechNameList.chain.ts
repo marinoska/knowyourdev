@@ -1,14 +1,14 @@
 import { RunnableSequence } from "@langchain/core/runnables";
-import { gpt4oMini } from "../../app/models.js";
-import { parseJsonOutput } from "../../utils/json.js";
-import { jsonOutputPrompt } from "../../utils/JsonOutput.prompt.js";
+import { gpt4oMini } from "../../../app/models.js";
+import { parseJsonOutput } from "../../../utils/json.js";
+import { jsonOutputPrompt } from "../../../utils/JsonOutput.prompt.js";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { TechModel } from "../../tech/techModelType.js";
-import { techMatchingPrompt } from "./prompt/TechMatchingPrompt.js";
-import { TechName } from "../../tech/types.js";
+import { TechModel } from "../../../tech/techModelType.js";
+import { normaliseTechNameListPrompt } from "./normaliseTechNameList.prompt.js";
+import { TechName } from "../../../tech/types.js";
 
 const prompt = PromptTemplate.fromTemplate(`
-${techMatchingPrompt}
+${normaliseTechNameListPrompt}
 
 ${jsonOutputPrompt({
     technologies: 'matching technologies array',

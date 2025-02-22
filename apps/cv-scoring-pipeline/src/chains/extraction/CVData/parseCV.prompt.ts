@@ -1,10 +1,10 @@
-import { TechMatchingPrompt } from "./_TechMatching.prompt.js";
+import { normaliseTechNamePrompt } from "./normaliseTechName.prompt.js";
 
 /**
  * Langchain params
  * {cv_text}
  */
-export const techExtractionPrompt = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
+export const ParseCVPrompt = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
 
 TODAY is ${Date()}
 
@@ -14,8 +14,8 @@ TODAY is ${Date()}
 ✅ Extract technology details based on the following rules:
    - **"originalName"**: The exact technology name as written in the CV.
    - **"name"**: The corresponding tech name from TechList. 
-        - ${TechMatchingPrompt}
-        - If no match is found, leave the code blank.
+        - ${normaliseTechNamePrompt}
+        - If no match is found, leave the name blank.
    - **"proficiency"**: If explicitly mentioned by the candidate, normalize to:
        - **"expert"** (advanced, high proficiency, deep expertise)
        - **"skilled"** (good, intermediate, proficient)

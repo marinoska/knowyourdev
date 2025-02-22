@@ -1,4 +1,4 @@
-export const techPerJobExtractionPrompt = `You're provided with a developer's job description. 
+export const extractTechPerJobPrompt = `You're provided with a developer's job description. 
 Your task is to analyze the developer's **work experience, project descriptions, and skills** to extract and classify **technologies list**.
 
 ## **Extract Technologies**

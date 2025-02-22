@@ -1,5 +1,5 @@
 import { Document, Model, Schema } from "mongoose";
-import { TechStack } from "../chains/techExtraction/types.js";
+import { TechStack } from "../chains/extraction/types.js";
 
 export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, decline, steady, trending, highly trending
 export const CATEGORY = ['Lang', 'DB', 'Framework', 'Tool', 'Other-FW', 'Cloud'] as const;

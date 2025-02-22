@@ -3,7 +3,7 @@
  * input_tech_list: {input_tech_list}
  * reference_tech_list: {reference_tech_list}
  */
-export const techMatchingPrompt = `
+export const normaliseTechNameListPrompt = `
 
 You are given:
 

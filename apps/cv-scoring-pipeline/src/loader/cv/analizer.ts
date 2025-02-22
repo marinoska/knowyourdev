@@ -1,6 +1,6 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
-import { extractTechs } from "../../chains/techExtraction/extractTechs.chain.js";
-import { extractTechPerJob } from "../../chains/techExtraction/extractTechPerJob.chain.js";
+import { parseCV } from "../../chains/extraction/CVData/parseCV.chain.js";
+import { extractTechPerJob } from "../../chains/extraction/jobData/extractTechPerJob.chain.js";
 
 async function extractCVText(filePath: string): Promise<string> {
     const loader = new PDFLoader(filePath);
@@ -15,7 +15,7 @@ export async function analyzeCV(filePath: string) {
         throw new Error("CV text extraction failed. Please check the PDF file.");
     }
 
-    const extractedTechnologies = await extractTechs(cvText);
+    const extractedTechnologies = await parseCV(cvText);
     const enrichedJobs = await extractTechPerJob(extractedTechnologies.jobs);
 
     return {...extractedTechnologies, jobs: {...enrichedJobs}};

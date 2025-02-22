@@ -11,7 +11,7 @@ import {
     TrendType
 } from "../tech/types.js";
 import { TechStackModel } from "../tech/techStack.model.js";
-import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names.js";
+// import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names.js";
 import { TechModel } from "../tech/techModelType.js";
 
 // Path to the CSV file
@@ -160,18 +160,17 @@ const loadData = async () => {
     await loadTechStackData("Stack.csv");
 };
 
-const exportData = async () => {
-    const outputTechNamesFile = path.resolve(process.cwd(), 'src/chains/techExtraction/prompt/tech_list');
-    const outputTeckStackFile = path.resolve(process.cwd(), 'src/chains/techExtraction/prompt/tech_stack_list');
-    await saveTechNamesToFile(outputTechNamesFile);
-    await saveTechStackNamesToFile(outputTeckStackFile);
-
-};
+// const exportData = async () => {
+//     const outputTechNamesFile = path.resolve(process.cwd(), 'src/chains/extraction/prompt/tech_list');
+//     const outputTeckStackFile = path.resolve(process.cwd(), 'src/chains/extraction/prompt/tech_stack_list');
+//     await saveTechNamesToFile(outputTechNamesFile);
+//     await saveTechStackNamesToFile(outputTeckStackFile);
+// };
 
 (async () => {
     await connected;
     await loadData();
-    await exportData();
+    // await exportData();
 
     void stopMongoClient();
 })();
