@@ -9,7 +9,7 @@ export type JobEntry = {
     present: boolean;
     description: string;
     technologies?: TechName[];
-    stack: TechStack;
+    stack?: TechStack;
 };
 
 export type TechnologiesEntry = {

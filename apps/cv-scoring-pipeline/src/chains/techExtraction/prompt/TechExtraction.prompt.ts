@@ -1,3 +1,5 @@
+import { TechMatchingPrompt } from "./_TechMatching.prompt.js";
+
 /**
  * Langchain params
  * {cv_text}
@@ -11,20 +13,8 @@ TODAY is ${Date()}
 ✅ **Examine all CV sections and pages** - skills, profile, general description, job descriptions etc. 
 ✅ Extract technology details based on the following rules:
    - **"originalName"**: The exact technology name as written in the CV.
-   - **"name"**: The corresponding name from TechList. 
-       - Matching Process:
-       --Exact Match First: If the extracted technology exactly matches a name in TechList, use its corresponding code.
-       --Case-Insensitive Matching: Convert both extracted names and TechList keys to lowercase for comparison.
-       - Normalize Variants & Aliases: If the extracted name is a common variant, alternative name, or abbreviation, resolve it to the best match in TechList.
-            Example: "Node", "Node.js", "NodeJS" → if "Node.j" or "Node" in TechList, use it.
-        - Smart Guessing for Partial Matches (If Exact Match Fails): If an exact match is not found, try intelligent normalization: 
-          1. Remove common suffixes (".js", "JS", ".ts", "TS", "py" etc.). 
-          2. Prefer longer, more descriptive names if multiple variations exist.
-            Example: "Node" should match "Node.js" if only "Node.js" exists.
-            Example: "Angular" should match "Angular.js" if only "Angular.js" exists.
-        - Semantic Approximation (If Still No Match): If the extracted name resembles a TechList entry but is slightly different, assume they refer to the same technology.
-            Example: "Express" → "Express.js" if "Express.js" exists.
-            Example: "Gatsby.js" → "Gatsby" if "Gatsby" exists.
+   - **"name"**: The corresponding tech name from TechList. 
+        - ${TechMatchingPrompt}
         - If no match is found, leave the code blank.
    - **"proficiency"**: If explicitly mentioned by the candidate, normalize to:
        - **"expert"** (advanced, high proficiency, deep expertise)
@@ -33,8 +23,6 @@ TODAY is ${Date()}
        - If no proficiency is mentioned, leave it **blank**.
    - **"skill"**: If the tech is explicitly listed in the skills section, mark as **true**, otherwise **false**.
    - **"inTechList"**: **true** if the extracted technology exists in TechList, otherwise **false** (discard any technology not in the list).
-
----
 
 ## **Step 2: Extract Jobs**
 ✅ **Extract the developer’s jobs/roles with descriptions**
