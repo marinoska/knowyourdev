@@ -2,8 +2,8 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import { JobEntry } from "./types.js";
 import { gpt4oMini } from "../../app/models.js";
 import { parseJsonOutput } from "../../utils/json.js";
-import { techPerJobExtractionPrompt } from "./prompt/TechPerJobExtractionPrompt.js";
-import { jsonOutputPrompt } from "../../utils/JsonOutputPrompt.js";
+import { techPerJobExtractionPrompt } from "./prompt/TechPerJobExtraction.prompt.js";
+import { jsonOutputPrompt } from "../../utils/JsonOutput.prompt.js";
 import { PromptTemplate } from "@langchain/core/prompts";
 
 const prompt = PromptTemplate.fromTemplate(`

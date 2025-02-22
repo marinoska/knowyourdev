@@ -1,5 +1,7 @@
-import { techList } from './tech_list.js';
-
+/**
+ * Langchain params
+ * {cv_text}
+ */
 export const techExtractionPrompt = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
 
 TODAY is ${Date()}
@@ -9,7 +11,24 @@ TODAY is ${Date()}
 ✅ **Examine all CV sections and pages** - skills, profile, general description, job descriptions etc. 
 ✅ Extract technology details based on the following rules:
    - **"originalName"**: The exact technology name as written in the CV.
-   - **"name"**: **Normalize the technology name against** TechList. If the extracted name has an alias (e.g., "AngularJS" → "Angular"), use the standardized name from **TechList**.
+   - **"code"**: The corresponding code from TechList. Normalize the technology name before matching against TechList using these steps:
+       - The TechList is a dictionary-like structure where: The first value is the technology name. The second value is the technology code.
+            Example Entries: "Node=43" → "Node" is the tech name, and 43 is its code. "React.js=44" → "React.js" is the tech name, and 44 is its code. "Vue.js=50" → "Vue.js" is the tech name, and 50 is its code.
+       - Matching Process:
+       --Exact Match First: If the extracted technology exactly matches a name in TechList, use its corresponding code.
+       --Case-Insensitive Matching: Convert both extracted names and TechList keys to lowercase for comparison.
+       - Normalize Variants & Aliases: If the extracted name is a common variant, alternative name, or abbreviation, resolve it to the best match in TechList.
+            Example: "Node", "Node.js", "NodeJS" → If "Node.js=43" or "Node=43" exists, use 43.
+            Example: "React" → "React.js", "Vue" → "Vue.js", "Express" → "Express.js".
+        - Smart Guessing for Partial Matches (If Exact Match Fails): If an exact match is not found, try intelligent normalization: 
+          1. Remove common suffixes (".js", "JS", ".ts", "TS", etc.). 
+          2. Prefer longer, more descriptive names if multiple variations exist.
+            Example: "Node" should match "Node.js" if only "Node.js=43" exists.
+            Example: "Angular" should match "Angular.js" if only "Angular.js" exists.
+        - Semantic Approximation (If Still No Match): If the extracted name resembles a TechList entry but is slightly different, assume they refer to the same technology.
+            Example: "Express" → "Express.js" if "Express.js=47" exists.
+            Example: "Gatsby" → "Gatsby.js" if "Gatsby.js" exists.
+        - If no match is found, leave the code blank.
    - **"proficiency"**: If explicitly mentioned by the candidate, normalize to:
        - **"expert"** (advanced, high proficiency, deep expertise)
        - **"skilled"** (good, intermediate, proficient)
@@ -36,11 +55,20 @@ TODAY is ${Date()}
 Example Output:
 {{
   "technologies": [
-    {{"originalName": "TypeScript", "name": "TypeScript", "proficiency": "skilled", "skill": true, "inTechList": true}}
+    {{"originalName": "TypeScript", 
+    "code": "3",
+    "proficiency": "skilled", 
+    "skill": true, 
+    "inTechList": true, 
+   }}
   ],
   "jobs": [
     {{"role": "Full Stack Engineer", "job": "Company Name", "start": "01-01-2022", "end": "01-01-2023", "months": 12, "description": "Job description here"}}
   ]
 }}
 
-**TechList Reference:** ${techList}`;
+**TechList Reference:** 
+{tech_list}
+
+CV:
+{cv_text}`;

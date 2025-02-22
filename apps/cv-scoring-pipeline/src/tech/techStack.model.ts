@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { TECH_STACK_CATEGORY, TechName, TechStackDocumentType, TechStackModelType, TREND } from "./types.js";
-import { TechStack } from "../chains/techExtraction/types.js";
+import { TECH_STACK_CATEGORY, TechStackDocumentType, TechStackModelType, TREND } from "./types.js";
 import { identifyStack } from "./techStack.statics.js";
+import { matchTechList } from "./techStack.methods.js";
 
 export const TechStackSchema = new Schema<TechStackDocumentType, TechStackModelType>(
     {
@@ -50,32 +50,6 @@ TechStackSchema.index({category: 1, popularity: 1});
 
 TechStackSchema.static('identifyStack', identifyStack);
 
-TechStackSchema.methods.matchTechList = async function matchTechList(techNamesSet: Set<TechName>): Promise<TechStack | null> {
-    if (techNamesSet.has(this.name)) {
-        return {
-            stackName: this.name,
-            matchedComponents: [this.name],
-            matchPercentage: 100
-        }
-    }
-
-    const matches: TechName[] = this.components.and.filter((name: TechName) => techNamesSet.has(name));
-    for (const techs of this.components.or) {
-        const found = techs.find((name: TechName) => techNamesSet.has(name))
-        found && matches.push(found);
-    }
-
-    if (!matches.length) return null;
-
-    const percentMatches = matches.length / (this.components.or.length + this.components.and.length);
-
-    if (percentMatches < 0.75) return null;
-
-    return {
-        stackName: this.name,
-        matchedComponents: matches,
-        matchPercentage: percentMatches * 100
-    }
-}
+TechStackSchema.methods.matchTechList = matchTechList;
 
 export const TechStackModel = model<TechStackDocumentType, TechStackModelType>('techStack', TechStackSchema);

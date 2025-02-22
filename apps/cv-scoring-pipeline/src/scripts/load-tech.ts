@@ -2,7 +2,6 @@ import 'dotenv/config';
 import csvParser from 'csv-parser';
 import fs from 'fs';
 import path from 'path';
-import TechModel from "../tech/tech.model.js";
 
 import { connected, stopMongoClient, db } from "../app/mongo.js";
 import {
@@ -11,8 +10,9 @@ import {
     TechStackCategory,
     TrendType
 } from "../tech/types.js";
-import TechStackModel from "../tech/techStack.model.js";
+import { TechStackModel } from "../tech/techStack.model.js";
 import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names.js";
+import { TechModel } from "../tech/techModelType.js";
 
 // Path to the CSV file
 const CSV_FILE_PATH = path.resolve(process.cwd() + '/files/');
@@ -49,10 +49,10 @@ const loadTechData = async (fileName: string) => {
                 .pipe(csvParser())
                 .on('data', (row) => {
                     data.push({
-                        name: row.Name,
+                        name: row.Name.trim(),
                         code: generateTechCode(row.Name),
                         trend: row.Trend.split(/\s+/).map((word: string) => word.charAt(0).toUpperCase()).join(''),
-                        category: row.Category,
+                        category: row.Category.trim(),
                         usage2024: row.Usage2024 ? Number(row.Usage2024) : undefined,
                         usage2016: row.Usage2016 ? Number(row.Usage2016) : undefined,
                     });
@@ -92,6 +92,8 @@ type TechStackData = {
 
 export const loadTechStackData = async (fileName: string): Promise<void> => {
     const records: TechStackData[] = [];
+    const techs = await TechModel.find({}, {name: 1}).lean();
+    const techNamesSet = new Set(techs.map(tech => tech.name));
 
     try {
         // Step 1: Read and parse the CSV file
@@ -99,7 +101,15 @@ export const loadTechStackData = async (fileName: string): Promise<void> => {
             name: record.Name?.trim(),
             recommended: record.Recommended ? record.Recommended : undefined,
             components: record.Components?.split(',').reduce((acc: StackComponents, item: string) => {
-                item.includes('|') ? acc.or.push(item.split('|').map(generateTechCode)) : acc.and.push(generateTechCode(item));
+                const techs = item.split('|').map(t => t.trim());
+                for (const tech of techs) {
+                    if (!techNamesSet.has(tech)) {
+                        throw new Error(`Tech name ${tech} not found in Tech collection`);
+                    }
+                }
+
+                techs.length > 1 ? acc.or.push(techs) : acc.and.push(techs[0]);
+
                 return acc;
             }, {and: [], or: []} satisfies StackComponents),
             componentsString: record.Components?.trim(),
@@ -132,17 +142,6 @@ export const loadTechStackData = async (fileName: string): Promise<void> => {
                 .on('error', reject);
         });
 
-        // const result = records.map((record) => ({
-        //     updateOne: {
-        //         filter: {name: record.name}, // Ensure uniqueness by `name`
-        //         update: {$set: record},
-        //         upsert: true,
-        //     },
-        // }));
-        //
-        // if (result.length > 0) {
-        //     await TechStackModel.bulkWrite(result);
-        // }
         const result = await TechStackModel.insertMany(records);
 
         console.log(`Tech stack ${result.length} records successfully loaded.`);
@@ -171,8 +170,9 @@ const exportData = async () => {
 
 (async () => {
     await connected;
-    // await loadData();
+    await loadData();
     await exportData();
+
     void stopMongoClient();
 })();
 

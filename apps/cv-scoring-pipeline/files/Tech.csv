@@ -2,6 +2,8 @@ Name,Usage2024,Usage2016,Trend,Category
 JavaScript,62.3,55.4,Highly Trending,Lang
 HTML/CSS,53,54.4,Steady,Lang
 Python,51,24.9,Highly Trending,Lang
+HTML,53,54.4,Steady,Lang
+CSS,53,54.4,Steady,Lang
 SQL,47,49.1,Steady,Lang
 TypeScript,34,0.47,Highly Trending,Lang
 Java,33,36.3,Steady,Lang
@@ -41,11 +43,11 @@ Clojure,0.1,0.2,Declining,Lang
 R,0.1,1.5,Steady,Lang
 Zephyr,0.1,0.1,Strong Declining,Lang
 Node.js,40.8,35,Highly Trending,Framework
-React,39.5,10,Highly Trending,Framework
+React.js,39.5,10,Highly Trending,Framework
 jQuery,21.4,48,Declining,Framework
 Next.js,17.9,0,Highly Trending,Framework
-Express,17.8,12,Trending,Framework
-Angular,17.1,30,Steady,Framework
+Express.js,17.8,12,Trending,Framework
+Angular.js,17.1,30,Steady,Framework
 ASP.NET Core,16.9,0,Trending,Framework
 Vue.js,15.4,3,Trending,Framework
 ASP.NET,12.9,28,Declining,Framework
@@ -55,9 +57,8 @@ Django,12,5,Steady,Framework
 WordPress,11.8,25,Declining,Framework
 FastAPI,9.9,0,Highly Trending,Framework
 Laravel,7.9,3,Trending,Framework
-AngularJS,6.8,20,Declining,Framework
 Svelte,6.5,0,Highly Trending,Framework
-NestJS,5.8,0,Highly Trending,Framework
+Nest.js,5.8,0,Highly Trending,Framework
 Blazor,4.9,0,Trending,Framework
 Ruby on Rails,4.7,5,Declining,Framework
 Nuxt.js,3.6,0,Trending,Framework
@@ -218,7 +219,7 @@ OpenCL,1.7,,Declining,Other-FW
 Tidyverse,1.7,,Steady,Other-FW
 Roslyn,1.7,,Steady,Other-FW
 Quarkus,1.3,,Trending,Other-FW
-Ktor,1.2,,Trending,Other-FW
+Ktor,1.2,,Highly Trending,Other-FW
 mlflow,1.2,,Trending,Other-FW
 JAX,1,,Trending,Other-FW
 MFC,1,,Declining,Other-FW
@@ -251,3 +252,7 @@ Scaleway,0.9,,Steady,Cloud
 Colocation,0.7,,Declining,Cloud
 IBM Cloud,,7,Declining,Cloud
 Salesforce,,4,Steady,Cloud
+Linux,,,Steady,Tool
+Apache,,,Declining,Tool
+Nginx,,,Steady,Tool
+IIS,,,Strong Declining,Tool

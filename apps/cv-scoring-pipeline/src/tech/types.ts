@@ -1,9 +1,11 @@
-import { Document, Schema } from "mongoose";
+import { Document, Model, Schema } from "mongoose";
+import { TechStack } from "../chains/techExtraction/types.js";
 
 export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, decline, steady, trending, highly trending
 export const CATEGORY = ['Lang', 'DB', 'Framework', 'Tool', 'Other-FW', 'Cloud'] as const;
 export type TrendType = typeof TREND;
 export type CategoryType = typeof CATEGORY;
+export type TechName = string;
 
 export type TechCodeType = string;
 export type TechDocument = Document & {
@@ -32,11 +34,11 @@ export const TECH_STACK_CATEGORY =
 export type TechStackCategory = typeof TECH_STACK_CATEGORY;
 
 export type StackComponents = {
-    'and': TechCodeType[],
-    'or': TechCodeType[][]
+    'and': TechName[],
+    'or': TechName[][]
 };
 
-export type TechStackDocument = Document & {
+export type TechStackDocumentType = Document & {
     _id: Schema.Types.ObjectId;
     name: string;
     recommended: number;
@@ -53,4 +55,12 @@ export type TechStackDocument = Document & {
     frontEnd: string;
     bestFor: string;
     typicalUseCases: string;
+} & {
+    matchTechList: (techNamesSet: Set<TechName>) => Promise<TechStack | null>;
 }
+
+export type TechStackModelType = Model<TechStackDocumentType> & {
+    identifyStack: (techNames: TechName[]) => Promise<TechStack[]>;
+};
+
+export type TechModelType = Model<TechDocument>;

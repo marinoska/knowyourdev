@@ -6,11 +6,11 @@ export function safeJsonParse<T>(jsonString: string): T | null {
         // Log the error for debugging
         // @ts-ignore
         console.error("Failed to parse JSON:", error.message);
-        return null; // Return `null` if parsing fails
+        return null;
     }
 }
 
-export function parseJsonOutput<T extends {content: string}>(output: T) {
+export function parseJsonOutput<T extends {content: string}, R extends {}>(output: T): R {
     if (!output.content) {
         throw new Error("Parsing failed. Empty content in the output");
     }
@@ -19,7 +19,7 @@ export function parseJsonOutput<T extends {content: string}>(output: T) {
         throw new Error("Parsing failed. Result is expected to be stringified json.");
     }
 
-    const result = safeJsonParse(output.content);
+    const result = safeJsonParse<R>(output.content);
     if (!result) {
         throw new Error("Parsing failed. Result is expected to be stringified json.");
     }
