@@ -23,6 +23,7 @@ export async function analyzeCV(filePath: string): Promise<{
     const techDocList = await TechModel.find({}, {name: 1}).lean();
     const referenceTechList = techDocList.map(({name}) => name);
 
+// todo function composition here: pipe({cvText, referenceTechList}, parseCV, extractTechPerJob)
     const extractedData = await parseCV({cvText, referenceTechList});
     const enrichedJobs = await extractTechPerJob({jobs: extractedData.jobs, referenceTechList});
 
