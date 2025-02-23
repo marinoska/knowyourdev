@@ -1,5 +1,4 @@
 import { Document, Model, Schema } from "mongoose";
-import { TechStack } from "../chains/extraction/types.js";
 
 export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, decline, steady, trending, highly trending
 export const CATEGORY = ['Lang', 'DB', 'Framework', 'Tool', 'Other-FW', 'Cloud'] as const;
@@ -38,8 +37,12 @@ export type StackComponents = {
     'or': TechName[][]
 };
 
+export type TechStack = {
+    stackName: string,
+    matchedComponents: TechName[],
+    matchPercentage: number
+}
 export type TechStackDocumentType = Document & {
-    _id: Schema.Types.ObjectId;
     name: string;
     recommended: number;
     components: StackComponents,
@@ -64,3 +67,36 @@ export type TechStackModelType = Model<TechStackDocumentType> & {
 };
 
 export type TechModelType = Model<TechDocument>;
+
+export type JobEntry = {
+    role: string;
+    job: string;
+    start: string; // Format: 'mm-yyyy'
+    end: string;   // Format: 'mm-yyyy'
+    months: number;
+    present: boolean;
+    description: string;
+    technologies?: TechName[];
+    stack?: TechStack[];
+};
+
+export type TechnologiesEntry = {
+    originalName: string; // Exact name as found in the job description
+    name: string; // Normalized name from TechList
+    proficiency?: "skilled" | "expert" | "familiar";
+    skill?: boolean;
+    inTechList: boolean; // True if it's a recognized technology from TechList
+};
+
+export type ExtractedCVData = {
+    technologies: TechnologiesEntry[],
+    techStack: TechStack[];
+    jobs: JobEntry[];
+    fullName: string;
+};
+
+export type CVDataDocumentType = Document & {
+    hash: string;
+} & ExtractedCVData;
+
+export type CVDataModelType = Model<CVDataDocumentType>;

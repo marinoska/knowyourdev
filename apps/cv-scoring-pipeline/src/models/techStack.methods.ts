@@ -1,5 +1,4 @@
-import { TechName, TechStackDocumentType } from "./types.js";
-import { TechStack } from "../chains/extraction/types.js";
+import { TechName, TechStack, TechStackDocumentType } from "./types.js";
 
 // Methods on Document level (TechStackDocument)
 

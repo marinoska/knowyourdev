@@ -1,5 +1,4 @@
-import { TechName, TechStackModelType } from "./types.js";
-import { TechStack } from "../chains/extraction/types.js";
+import { TechName, TechStack, TechStackModelType } from "./types.js";
 import { isNotNull } from "../utils/types.utils.js";
 
 // Methods on Model level (TechStackModel)

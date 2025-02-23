@@ -35,10 +35,15 @@ TODAY is ${Date()}
    - **"present"** If it's a current job, mark as **true**, otherwise **false**.
    - **"description"** Full **unchanged** job description
 
+## **Step 3: Extract additional Info**
+✅ Extract the developer’s data
+   - **"fullName"**: The candidate's name and surname.
+
 ---
 
 Example Output:
 {{
+  "fullName": "Joe Doe",
   "technologies": [
     {{"originalName": "TypeScript", 
     "name": "TypeScript",
@@ -49,7 +54,7 @@ Example Output:
   ],
   "jobs": [
     {{"role": "Full Stack Engineer", "job": "Company Name", "start": "01-01-2022", "end": "01-01-2023", "months": 12, "description": "Job description here"}}
-  ]
+  ],
 }}
 
 **TechList Reference:** 

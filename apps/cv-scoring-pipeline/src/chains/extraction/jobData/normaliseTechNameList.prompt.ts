@@ -5,31 +5,37 @@
  */
 export const normaliseTechNameListPrompt = `
 
-You are given:
+Your goal is to match each technology from **input_tech_list** to its closest equivalent in **reference_tech_list** using a **fuzzy matching approach** and return an **output_tech_list**.  
+The match should be based on similarity, abbreviations, common variations, and typical naming conventions.  
 
-An input list of technologies: input_tech_list
-A reference list of technologies: reference_tech_list
-Your goal is to match each technology from input_tech_list to its closest equivalent in reference_tech_list using a fuzzy matching approach and return an output_tech_list. 
-The match should be based on similarity, abbreviations, common variations, and typical naming conventions.
+### Matching Instructions:
+1. **Pick a value** from input_tech_list.
+2. **Find the closest match** in reference_tech_list:
+   - If an **exact match** exists, add it to output_tech_list.
+   - If no exact match exists, find the **closest equivalent** based on:
+     - Common abbreviations (e.g., "JS" ≈ "JavaScript")
+     - Typical variations (e.g., "ReactJS" ≈ "React.js")
+     - Minor typos (e.g., "Nodejs" ≈ "Node.js")
+     - Case insensitivity (e.g., "react" ≈ "React.js")
+     - Formatting differences (e.g., "Elasticsearch" ≈ "Elastic Search")
+   - If there is **no sufficiently close match (below 80% similarity)**, **do not include the input value** in output_tech_list.
+3. **Ensure the output list only contains values from reference_tech_list**.
+4. **Drop the input value after matching**, move to the next, and repeat.
 
-Instructions, for each value in input_tech_list:
-If an exact match exists in TechList, add it in output_tech_list.
-If no exact match exists, add in output_tech_list the closest match based on fuzzy similarity, common abbreviations, or typical variations.
-Ignore differences like:
-Case sensitivity (React.js == react.js == React)
-Dots in names (React.js == React)
-Minor typos (Node.js ≈ Node)
-Spacing and dashes (Elasticsearch == Elastic Search, Node.js == Node)
-If there is no sufficiently close match (below 80% similarity), do not add a value in output_tech_list.
+### Example:
 
-Example Inputs & Outputs:
-  input_tech_list: "Node.js, React, MongoDB",
-  tech_reference_list: 
-    "PHP, Symfony, JavaScript, React.js, Ansible, Ant, Jenkins, Node"
-  
-  Matching process: Node.js (input) => Node (reference), React (input) => React.js (reference), MongoDB (input) => "" (not found)
-  output_tech_list:
-  {{
-  "technologies": [Node, React.js]
-  }}
-`;
+#### Input:
+  - **input_tech_list:** "Node.js, React, MongoDB"
+  - **reference_tech_list:** ["PHP", "Symfony", "JavaScript", "React.js", "Ansible", "Ant", "Jenkins", "Node"]
+
+#### Matching Process:
+  - "Node.js" (input) → **"Node"** (reference)
+  - "React" (input) → **"React.js"** (reference)
+  - "MongoDB" (input) → **No match (below 80% similarity), excluded**
+
+#### Output:
+{{
+    "technologies": ["Node", "React.js"]
+}}
+
+Ensure that the **output list only includes technologies from the reference list and does not contain unmodified input values** if they do not have a valid match.\`; `;

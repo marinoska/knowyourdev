@@ -9,10 +9,10 @@ import {
     StackComponents,
     TechStackCategory,
     TrendType
-} from "../tech/types.js";
-import { TechStackModel } from "../tech/techStack.model.js";
+} from "@/models/types.js";
+import { TechStackModel } from "@/models/techStack.model.js";
 // import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names.js";
-import { TechModel } from "../tech/techModelType.js";
+import { TechModel } from "@/models/tech.model.js";
 
 // Path to the CSV file
 const CSV_FILE_PATH = path.resolve(process.cwd() + '/files/');
