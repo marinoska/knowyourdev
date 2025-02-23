@@ -4,6 +4,8 @@ import { extractTechPerJob } from "@/chains/extraction/jobData/extractTechPerJob
 import { TechModel } from "@/models/tech.model.js";
 import { ExtractedCVData } from "@/models/types.js";
 import { hash } from "@/utils/crypto.js";
+import { pipe } from "@/utils/func.js";
+import { ExtractionChainParam } from "@/chains/extraction/types.js";
 
 async function extractCVText(filePath: string): Promise<string> {
     const loader = new PDFLoader(filePath);
@@ -11,7 +13,7 @@ async function extractCVText(filePath: string): Promise<string> {
     return docs.map(doc => doc.pageContent).join(" ");
 }
 
-export async function analyzeCV(filePath: string): Promise<{
+export async function runCVDataExtraction(filePath: string): Promise<{
     hash: string;
 } & ExtractedCVData> {
     const cvText = await extractCVText(filePath);
@@ -23,9 +25,12 @@ export async function analyzeCV(filePath: string): Promise<{
     const techDocList = await TechModel.find({}, {name: 1}).lean();
     const referenceTechList = techDocList.map(({name}) => name);
 
-// todo function composition here: pipe({cvText, referenceTechList}, parseCV, extractTechPerJob)
-    const extractedData = await parseCV({cvText, referenceTechList});
-    const enrichedJobs = await extractTechPerJob({jobs: extractedData.jobs, referenceTechList});
+    const inputData: ExtractionChainParam = {cvText, referenceTechList};
+    const output = await pipe<ExtractionChainParam>(inputData, parseCV, extractTechPerJob);
+    // type narrowing here
+    if (!("extractedData" in output)) {
+        throw new Error("extractedData cannot be empty");
+    }
 
-    return {...extractedData, jobs: [...enrichedJobs], hash: hash(extractedData.fullName)};
+    return {...output.extractedData, hash: hash(output.extractedData.fullName)};
 }
