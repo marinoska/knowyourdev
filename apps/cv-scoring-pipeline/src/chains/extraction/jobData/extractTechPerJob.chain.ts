@@ -16,6 +16,8 @@ ${jsonOutputPrompt({
     technologies: 'extracted technologies array',
 })}
 
+Job role:
+{job_role}
 Job description:
 {job_description}
 `);
@@ -32,7 +34,10 @@ export const extractTechPerJob = async (param: ExtractionChainParam): Promise<Ex
     ]);
 
     const enrichedJobsPromises = extractedData.jobs.map(async (job: JobEntry) => {
-        const {technologies} = (await jobTechExtractor.invoke({job_description: job.description}) as {
+        const {technologies, ...rest} = (await jobTechExtractor.invoke({
+            job_description: job.description,
+            job_role: job.role
+        }) as {
             technologies: string[]
         }); // Process each job separately
 
@@ -46,6 +51,7 @@ export const extractTechPerJob = async (param: ExtractionChainParam): Promise<Ex
         return {
             ...job,
             technologies: normalisedTechList,
+            ...rest,
             stack: stackMatches,
         } satisfies JobEntry;
     });

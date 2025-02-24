@@ -6,8 +6,9 @@ import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { gpt4oMini } from "@/app/models.js";
 import { TechStackModel } from "@/models/techStack.model.js";
 import { isNotNull } from "@/utils/types.utils.js";
-import { ExtractedCVData } from "@/models/types.js";
+import { ExtractedCVData, PROFICIENCY, ProficiencyType } from "@/models/types.js";
 import { ExtractionChainParam } from "@/chains/extraction/types.js";
+import { normalizeToReferenceList } from "@/utils/normalizeToReferenceList.js";
 
 const techPrompt = PromptTemplate.fromTemplate(`
 ${ParseCVPrompt}
@@ -41,10 +42,17 @@ export const parseCV = async (param: ExtractionChainParam): Promise<ExtractionCh
 
     const stackMatches = await TechStackModel.identifyStack(extractedData.technologies.map(tech => tech.name).filter(isNotNull));
 
+    const normalizer = normalizeToReferenceList<ProficiencyType>([...PROFICIENCY]);
+    const technologies = extractedData.technologies.map(tech => ({
+        ...tech,
+        proficiency: tech.proficiency ? normalizer(tech.proficiency) : undefined
+    }));
+
     return {
         extractedData:
             {
                 ...extractedData,
+                technologies,
                 techStack: stackMatches || []
             },
         referenceTechList

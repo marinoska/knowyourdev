@@ -2,6 +2,8 @@ import { Document, Model, Schema } from "mongoose";
 
 export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, decline, steady, trending, highly trending
 export const CATEGORY = ['Lang', 'DB', 'Framework', 'Tool', 'Other-FW', 'Cloud'] as const;
+export const PROFICIENCY = ['skilled', 'expert', 'familiar'] as const;
+export type ProficiencyType = typeof PROFICIENCY[ number];
 export type TrendType = typeof TREND;
 export type CategoryType = typeof CATEGORY;
 export type TechName = string;
@@ -70,6 +72,11 @@ export type TechModelType = Model<TechDocument>;
 
 export type JobEntry = {
     role: string;
+    roleType?: "SE" | "QA" | "UI/UX" | "PM",
+    softwareDevelopmentScope?: "BE" | "FE" | "FS",
+    isSoftwareDevelopmentRole: boolean,
+    isMobileDevelopmentRole: boolean,
+    summary: string,
     job: string;
     start: string; // Format: 'mm-yyyy'
     end: string;   // Format: 'mm-yyyy'
@@ -83,7 +90,7 @@ export type JobEntry = {
 export type TechnologiesEntry = {
     originalName: string; // Exact name as found in the job description
     name: string; // Normalized name from TechList
-    proficiency?: "skilled" | "expert" | "familiar";
+    proficiency?: ProficiencyType;
     skill?: boolean;
     inTechList: boolean; // True if it's a recognized technology from TechList
 };

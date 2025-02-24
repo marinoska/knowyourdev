@@ -17,7 +17,7 @@ import { CVDataModel } from "@/models/CVData.model..js";
     // Path `description` is required., jobs.0.present: Path `present` is required., jobs.0.months: Path `months` is required., jobs.0.end:
     // Path `end` is required., jobs.0.start: Path `start` is required., jobs.0.job: Path `job` is required., jobs.0.role: Path `role` is required.
 
-    const data = await runCVDataExtraction("./cv/cv_marina.pdf");
+    const data = await runCVDataExtraction("./cv/cv_dexter.pdf");
     const updatedCV = await CVDataModel.findOneAndUpdate(
         {hash: data.hash}, // Find by hash
         {$set: data}, // Set new or updated fields

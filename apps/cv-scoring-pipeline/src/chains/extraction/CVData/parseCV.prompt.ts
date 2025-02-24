@@ -12,32 +12,32 @@ TODAY is ${Date()}
 ✅ **Identify and classify only explicitly mentioned technologies** (languages, frameworks, databases, cloud tools, etc.) throughout the whole CV.
 ✅ **Examine all CV sections and pages** - skills, profile, general description, job descriptions etc. 
 ✅ Extract technology details based on the following rules:
-   - **"originalName"**: The exact technology name as written in the CV.
-   - **"name"**: The corresponding tech name from TechList. 
+   - "originalName": The exact technology name as written in the CV.
+   - "name": The corresponding tech name from TechList. 
         - ${normaliseTechNamePrompt}
         - If no match is found, leave the name blank.
-   - **"proficiency"**: If explicitly mentioned by the candidate, normalize to:
-       - **"expert"** (advanced, high proficiency, deep expertise)
-       - **"skilled"** (good, intermediate, proficient)
-       - **"familiar"** (basic, beginner, limited experience)
+   - "proficiency": If explicitly mentioned by the candidate, normalize to:
+       - "expert" (advanced, high proficiency, deep expertise)
+       - "skilled" (good, intermediate, proficient)
+       - "familiar" (basic, beginner, limited experience)
        - If no proficiency is mentioned, leave it **blank**.
-   - **"skill"**: If the tech is explicitly listed in the skills section, mark as **true**, otherwise **false**.
-   - **"inTechList"**: **true** if the extracted technology exists in TechList, otherwise **false** (discard any technology not in the list).
+   - "skill": If the tech is explicitly listed in the skills section, mark as **true**, otherwise **false**.
+   - "inTechList": **true** if the extracted technology exists in TechList, otherwise **false** (discard any technology not in the list).
 
 ## **Step 2: Extract Jobs**
 ✅ **Extract the developer’s jobs/roles with descriptions**
 ✅ Extract experience details based on the following rules:
-   - **"role"**: The candidate's role/title in the job/project.
-   - **"job"**: The job/project name as listed in the CV.
-   - **"start"**: The start date of the job/project in **mm-yyyy** format.
-   - **"end"**: The end date of the job/project in **mm-yyyy** format. If not specified then TODAY
-   - **"months"** Number of month which is calculated by (end - start)
-   - **"present"** If it's a current job, mark as **true**, otherwise **false**.
-   - **"description"** Full **unchanged** job description
+   - "role": The candidate's role/title in the job/project.
+   - "job": The company/project name as listed in the CV.
+   - "start": The start date of the job/project in **mm-yyyy** format.
+   - "end": The end date of the job/project in **mm-yyyy** format. If not specified then TODAY
+   - "months": Number of month which is calculated by (end - start)
+   - "present": If it's a current job, mark as **true**, otherwise **false**.
+   - "description": Full **unchanged** job description
 
 ## **Step 3: Extract additional Info**
 ✅ Extract the developer’s data
-   - **"fullName"**: The candidate's name and surname.
+   - "fullName": The candidate's name and surname.
 
 ---
 
