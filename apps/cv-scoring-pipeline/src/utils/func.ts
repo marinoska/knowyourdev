@@ -8,3 +8,5 @@ export function pipe<T>(
         Promise.resolve(input)
     );
 }
+
+export const generateTechCode = (techName: string) => techName.replace(/[^a-zA-Z0-9#+]/g, '').toLowerCase();

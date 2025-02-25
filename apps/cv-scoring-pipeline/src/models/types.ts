@@ -1,4 +1,4 @@
-import { Document, Model, Schema } from "mongoose";
+import { Document, Model } from "mongoose";
 
 export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, decline, steady, trending, highly trending
 export const CATEGORY = ['Lang', 'DB', 'Framework', 'Tool', 'Other-FW', 'Cloud'] as const;
@@ -10,7 +10,6 @@ export type TechName = string;
 
 export type TechCodeType = string;
 export type TechDocument = Document & {
-    _id: Schema.Types.ObjectId;
     name: string;
     code: TechCodeType;
     usage2024?: number;
@@ -89,10 +88,10 @@ export type JobEntry = {
 
 export type TechnologiesEntry = {
     originalName: string; // Exact name as found in the job description
-    name: string; // Normalized name from TechList
+    name: string; // Name from TechList by AI
+    code: string; // Code of normalized name
     proficiency?: ProficiencyType;
     skill?: boolean;
-    inTechList: boolean; // True if it's a recognized technology from TechList
 };
 
 export type ExtractedCVData = {

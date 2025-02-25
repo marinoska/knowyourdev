@@ -3,16 +3,12 @@ import csvParser from 'csv-parser';
 import fs from 'fs';
 import path from 'path';
 
-import { connected, stopMongoClient, db } from "../app/mongo.js";
-import {
-    CategoryType,
-    StackComponents,
-    TechStackCategory,
-    TrendType
-} from "@/models/types.js";
+import { connected, db, stopMongoClient } from "../app/mongo.js";
+import { CategoryType, StackComponents, TechStackCategory, TrendType } from "@/models/types.js";
 import { TechStackModel } from "@/models/techStack.model.js";
 // import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names.js";
 import { TechModel } from "@/models/tech.model.js";
+import { generateTechCode } from "@/utils/func.js";
 
 // Path to the CSV file
 const CSV_FILE_PATH = path.resolve(process.cwd() + '/files/');
@@ -24,8 +20,6 @@ type TechCSVData = {
     usage2024?: number;
     usage2016?: number;
 }
-
-const generateTechCode = (techName: string) => techName.replace(/[^a-zA-Z0-9#+]/g, '').toLowerCase();
 
 const dropExistingCollection = async (name: string) => {
     const collections = await db

@@ -22,10 +22,10 @@ Job description:
 {job_description}
 `);
 
-export const extractTechPerJob = async (param: ExtractionChainParam): Promise<ExtractionChainParam> => {
-    if (!("extractedData" in param))
+export const extractTechPerJob = async (params: ExtractionChainParam): Promise<ExtractionChainParam> => {
+    if (!("extractedData" in params))
         throw new Error("extractedData is required");
-    const {extractedData, referenceTechList} = param;
+    const {extractedData, techNamesMap} = params;
 
     const jobTechExtractor = RunnableSequence.from([
         prompt,  // Injects job description into prompt
@@ -43,7 +43,7 @@ export const extractTechPerJob = async (param: ExtractionChainParam): Promise<Ex
 
         const normalisedTechList = technologies.length ? await normalizeTechList({
             inputTechList: technologies,
-            referenceTechList: referenceTechList
+            referenceTechList: Object.values(techNamesMap)
         }) : [];
 
         const stackMatches = await TechStackModel.identifyStack(normalisedTechList);
@@ -57,11 +57,11 @@ export const extractTechPerJob = async (param: ExtractionChainParam): Promise<Ex
     });
 
     return {
+        ...params,
         extractedData:
             {
                 ...extractedData,
                 jobs: await Promise.all(enrichedJobsPromises)
             },
-        referenceTechList
     };
 }

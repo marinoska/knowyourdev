@@ -9,9 +9,9 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
             {
                 originalName: {type: String, required: true},
                 name: {type: String},
+                code: {type: String},
                 proficiency: {type: String, enum: ["skilled", "expert", "familiar", ""]},
                 skill: {type: Boolean},
-                inTechList: {type: Boolean, required: true},
             }
         ],
         techStack: [

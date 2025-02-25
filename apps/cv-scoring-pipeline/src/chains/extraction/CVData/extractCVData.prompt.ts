@@ -4,16 +4,16 @@ import { normaliseTechNamePrompt } from "./normaliseTechName.prompt.js";
  * Langchain params
  * {cv_text}
  */
-export const ParseCVPrompt = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
+export const ExtractCVDataPrompt = `You're provided with a developer's CV. Your task is to analyze the developer's **work experience, project descriptions, and skills list** to extract and classify **technologies and experience details**.
 
 TODAY is ${Date()}
 
 ## **Step 1: Extract & Normalize Technologies**
 ✅ **Identify and classify only explicitly mentioned technologies** (languages, frameworks, databases, cloud tools, etc.) throughout the whole CV.
-✅ **Examine all CV sections and pages** - skills, profile, general description, job descriptions etc. 
+✅ **Examine all general CV sections** - skills, profile, general description etc. 
 ✅ Extract technology details based on the following rules:
    - "originalName": The exact technology name as written in the CV.
-   - "name": The corresponding tech name from TechList. 
+   - "name": The corresponding tech name from TechList. Leave blank if not in the list. 
         - ${normaliseTechNamePrompt}
         - If no match is found, leave the name blank.
    - "proficiency": If explicitly mentioned by the candidate, normalize to:
@@ -22,7 +22,18 @@ TODAY is ${Date()}
        - "familiar" (basic, beginner, limited experience)
        - If no proficiency is mentioned, leave it **blank**.
    - "skill": If the tech is explicitly listed in the skills section, mark as **true**, otherwise **false**.
-   - "inTechList": **true** if the extracted technology exists in TechList, otherwise **false** (discard any technology not in the list).
+✅ **Examine all job descriptions** and extract technology details based on the following rules:
+   - "originalName": The exact technology name as written in the CV.
+   - "name": The corresponding tech name from TechList. Leave blank if not in the list. 
+        - ${normaliseTechNamePrompt}
+        - If no match is found, leave the name blank.
+   - "proficiency": If explicitly mentioned by the candidate, normalize to:
+       - "expert" (advanced, high proficiency, deep expertise)
+       - "skilled" (good, intermediate, proficient)
+       - "familiar" (basic, beginner, limited experience)
+       - If no proficiency is mentioned, leave it **blank**.
+   - "skill": If the tech is explicitly listed in the skills section, mark as **true**, otherwise **false**.
+ 
 
 ## **Step 2: Extract Jobs**
 ✅ **Extract the developer’s jobs/roles with descriptions**
