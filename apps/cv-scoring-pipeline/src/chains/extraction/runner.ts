@@ -5,7 +5,7 @@ import { ExtractedCVData } from "@/models/types.js";
 import { hash } from "@/utils/crypto.js";
 import { pipe } from "@/utils/func.js";
 import { ExtractionChainParam, TechNamesMap } from "@/chains/extraction/types.js";
-import { extractTechnologies } from "@/chains/extraction/techs/sub/extractTechnologies.chain.js";
+import { extractTechnologies } from "@/chains/extraction/techs/extractTechnologies.chain.js";
 
 async function extractCVText(filePath: string): Promise<string> {
     const loader = new PDFLoader(filePath);

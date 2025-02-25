@@ -86,8 +86,8 @@ type TechStackData = {
 
 export const loadTechStackData = async (fileName: string): Promise<void> => {
     const records: TechStackData[] = [];
-    const techs = await TechModel.find({}, {name: 1}).lean();
-    const techNamesSet = new Set(techs.map(tech => tech.name));
+    const techs = await TechModel.find({}, {code: 1}).lean();
+    const techNamesSet = new Set(techs.map(tech => tech.code));
 
     try {
         // Step 1: Read and parse the CSV file
@@ -95,7 +95,7 @@ export const loadTechStackData = async (fileName: string): Promise<void> => {
             name: record.Name?.trim(),
             recommended: record.Recommended ? record.Recommended : undefined,
             components: record.Components?.split(',').reduce((acc: StackComponents, item: string) => {
-                const techs = item.split('|').map(t => t.trim());
+                const techs = item.split('|').map(t => generateTechCode(t.trim()));
                 for (const tech of techs) {
                     if (!techNamesSet.has(tech)) {
                         throw new Error(`Tech name ${tech} not found in Tech collection`);

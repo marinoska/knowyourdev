@@ -1,9 +1,9 @@
-import { TechName, TechStack, TechStackDocumentType } from "./types.js";
+import { TechCode, TechStack, TechStackDocumentType } from "./types.js";
 
 // Methods on Document level (TechStackDocument)
 
-export async function matchTechList(this: TechStackDocumentType, techNamesSet: Set<TechName>): Promise<TechStack | null> {
-    if (techNamesSet.has(this.name)) {
+export async function matchTechList(this: TechStackDocumentType, techCodeSet: Set<TechCode>): Promise<TechStack | null> {
+    if (techCodeSet.has(this.name)) {
         return {
             stackName: this.name,
             matchedComponents: [this.name],
@@ -11,9 +11,9 @@ export async function matchTechList(this: TechStackDocumentType, techNamesSet: S
         }
     }
 
-    const matches: TechName[] = this.components.and.filter((name: TechName) => techNamesSet.has(name));
+    const matches: TechCode[] = this.components.and.filter((code: TechCode) => techCodeSet.has(code));
     for (const techs of this.components.or) {
-        const found = techs.find((name: TechName) => techNamesSet.has(name))
+        const found = techs.find((code: TechCode) => techCodeSet.has(code))
         found && matches.push(found);
     }
 

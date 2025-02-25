@@ -4,10 +4,11 @@ import { gpt4oMini } from "@/app/models.js";
 import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { extractTechnologiesPrompt } from "./extractTechnologies.prompt.js";
-import { normalizeTechList } from "../normaliseTechNameList.chain.js";
-import { JobEntry } from "@/models/types.js";
+import { normalizeTechList } from "./sub/normaliseTechNameList.chain.js";
+import { JobEntry, TechnologyEntry, TechStack } from "@/models/types.js";
 import { ExtractionChainParam } from "@/chains/extraction/types.js";
 import { extractTechProficiency } from "@/chains/extraction/techs/sub/extractTechProficiency.chain.js";
+import { TechStackModel } from "@/models/techStack.model.js";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechnologiesPrompt}
@@ -36,7 +37,9 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
         parseJsonOutput, // Parses JSON output
     ]);
 
-    async function extracted(text: string) {
+    async function extracted(text: string): Promise<{ technologies: TechnologyEntry[], techStack: TechStack[] }> {
+        if (!text) return {technologies: [], techStack: []};
+
         const {technologies} = (await jobTechExtractor.invoke({
             description: text,
         })); // Process each job separately
@@ -52,25 +55,30 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
             description: text
         }) : {};
 
-        return normalisedTechList.map(tech => ({
+        const technologiesEntry = normalisedTechList.map<TechnologyEntry>(tech => ({
             ...tech,
             proficiency: proficiency[tech.original]
         }));
+
+        const stackMatches = await TechStackModel.identifyStack(normalisedTechList.map(tech => tech.code));
+        
+        return {
+            technologies: technologiesEntry,
+            techStack: stackMatches,
+        }
     }
 
-    const profileTechs = extractedData.profileSection.text && await extracted(extractedData.profileSection.text);
-    const skillTechs = extractedData.skillSection.text && await extracted(extractedData.skillSection.text);
+    const profileTechs = await extracted(extractedData.profileSection.text);
+    const skillTechs = await extracted(extractedData.skillSection.text);
 
     const jobsTechPromises = extractedData.jobs.map(async (job: JobEntry) => {
-        const normalisedTechList = await extracted(job.text);
+        const extractedTechData = await extracted(job.text);
 
-        // const stackMatches = await TechStackModel.identifyStack(normalisedTechList);
 
         return {
             ...job,
-            technologies: normalisedTechList,
-            // ...rest,
-            // stack: stackMatches,
+            technologies: extractedTechData.technologies,
+            stack: extractedTechData.techStack,
         } satisfies JobEntry;
     });
 
@@ -82,11 +90,13 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
                 jobs: await Promise.all(jobsTechPromises),
                 profileSection: {
                     ...extractedData.profileSection,
-                    technologies: profileTechs || [],
+                    technologies: profileTechs.technologies,
+                    stack: profileTechs.techStack
                 },
                 skillSection: {
                     ...extractedData.skillSection,
-                    technologies: skillTechs || [],
+                    technologies: skillTechs.technologies,
+                    stack: skillTechs.techStack
                 }
             },
     };

@@ -13,7 +13,7 @@ import { CvDataModel } from "@/models/cvData.model.js";
     await CvDataModel.init();
 
     // Validation failed: profileSection.text: Path `profileSection.text` is required., skillSection.text: Path `skillSection.text` is required
-    const data = (await runCVDataExtraction("./cv/cv_dexter.pdf"));
+    const data = (await runCVDataExtraction("./cv/cv_marina.pdf"));
 
     try {
         const updatedCV = await CvDataModel.findOneAndUpdate(
@@ -25,7 +25,7 @@ import { CvDataModel } from "@/models/cvData.model.js";
         );
         // console.log("Final Evaluation:", updatedCV);
     } catch (validationError) {
-        console.error("%%% Validation failed:", validationError);
+        console.error("Validation failed:", validationError);
         throw validationError;
     }
 

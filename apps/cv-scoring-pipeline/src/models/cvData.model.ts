@@ -1,11 +1,17 @@
 import { model, Schema } from 'mongoose';
 import { CVDataDocumentType, CVDataModelType } from "./types.js";
 
-const technologyEntrySchema = {
+const TechnologyEntrySchema = {
     original: {type: String, required: true},
     normalized: {type: String, default: ""},
     code: {type: String, default: ""},
     proficiency: {type: String, enum: ["skilled", "expert", "familiar", ""]},
+};
+
+const TechStackSchema = {
+    stackName: {type: String, required: true},
+    matchedComponents: [{type: String, required: true}],
+    matchPercentage: {type: Number, required: true},
 };
 
 const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
@@ -17,7 +23,10 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
                 type: String, required: true, default: ""
             },
             technologies: [
-                technologyEntrySchema
+                TechnologyEntrySchema
+            ],
+            stack: [
+                TechStackSchema
             ],
         },
         skillSection: {
@@ -25,7 +34,10 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
                 type: String, required: true, default: ""
             },
             technologies: [
-                technologyEntrySchema
+                TechnologyEntrySchema
+            ],
+            stack: [
+                TechStackSchema
             ],
         },
         // techStack: [
@@ -39,7 +51,7 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
             {
                 text: {type: String, required: true},
                 role: {type: String, required: true},
-                // summary: {type: String, required: true},
+                summary: {type: String, required: true},
                 // roleType: {
                 //     type: String,
                 //     enum: ["SE", "QA", "UI/UX", "PM", ""]
@@ -53,16 +65,11 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
                 months: {type: Number, required: true},
                 present: {type: Boolean, default: false},
                 technologies: [
-                    technologyEntrySchema
+                    TechnologyEntrySchema
                 ],
-
-                // stack: [
-                //     {
-                //         stackName: {type: String, required: true},
-                //         matchedComponents: [{type: String, required: true}],
-                //         matchPercentage: {type: Number, required: true},
-                //     }
-                // ],
+                stack: [
+                    TechStackSchema
+                ],
             }
         ],
     },

@@ -4,7 +4,7 @@ import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { normaliseTechNameListPrompt } from "./normaliseTechNameList.prompt.js";
-import { TechName, TechnologiesEntry } from "@/models/types.js";
+import { TechnologyEntry } from "@/models/types.js";
 import { semanticSimilarity } from "@/chains/normalizer/semanticSimilarity.js";
 import { overlapSimilarity } from "@/chains/normalizer/overlapSimilarity.js";
 import { generateTechCode } from "@/utils/func.js";
@@ -30,16 +30,15 @@ type Output = {
 
 type Params = {
     inputTechList: string[],
-    referenceTechList: TechName[],
+    referenceTechList: string[],
     techNamesMap: TechNamesMap
 };
 
-
 export const normalizeTechList = async ({inputTechList, referenceTechList, techNamesMap}: Params
-): Promise<TechnologiesEntry[]> => {
+): Promise<Omit<TechnologyEntry, "proficiency">[]> => {
     const techNormalizer = RunnableSequence.from<{
         input_tech_list: string[],
-        reference_tech_list: TechName[]
+        reference_tech_list: string[]
     }, Output>([
         prompt,  // Injects job description into prompt
         gpt4oMini, // Extracts technologies
@@ -51,7 +50,6 @@ export const normalizeTechList = async ({inputTechList, referenceTechList, techN
         reference_tech_list: referenceTechList
     }));
     // todo validate extractedData for errors
-
 
     const techCodes = Object.keys(techNamesMap);
     const techNames = Object.values(techNamesMap);
@@ -65,9 +63,8 @@ export const normalizeTechList = async ({inputTechList, referenceTechList, techN
             ...tech,
             normalized: normalized || "",
             code: code || "",
-        } satisfies TechnologiesEntry;
+        } satisfies Omit<TechnologyEntry, "proficiency">;
     });
-
 
     return techs;
 }

@@ -6,7 +6,7 @@ export const PROFICIENCY = ['skilled', 'expert', 'familiar'] as const;
 export type ProficiencyType = typeof PROFICIENCY[ number];
 export type TrendType = typeof TREND;
 export type CategoryType = typeof CATEGORY;
-export type TechName = string;
+export type TechCode = string;
 
 export type TechCodeType = string;
 export type TechDocument = Document & {
@@ -34,13 +34,13 @@ export const TECH_STACK_CATEGORY =
 export type TechStackCategory = typeof TECH_STACK_CATEGORY;
 
 export type StackComponents = {
-    'and': TechName[],
-    'or': TechName[][]
+    'and': TechCode[],
+    'or': TechCode[][]
 };
 
 export type TechStack = {
     stackName: string,
-    matchedComponents: TechName[],
+    matchedComponents: TechCode[],
     matchPercentage: number
 }
 export type TechStackDocumentType = Document & {
@@ -60,11 +60,11 @@ export type TechStackDocumentType = Document & {
     bestFor: string;
     typicalUseCases: string;
 } & {
-    matchTechList: (techNamesSet: Set<TechName>) => Promise<TechStack | null>;
+    matchTechList: (techNamesSet: Set<TechCode>) => Promise<TechStack | null>;
 }
 
 export type TechStackModelType = Model<TechStackDocumentType> & {
-    identifyStack: (techNames: TechName[]) => Promise<TechStack[]>;
+    identifyStack: (techNames: TechCode[]) => Promise<TechStack[]>;
 };
 
 export type TechModelType = Model<TechDocument>;
@@ -75,22 +75,22 @@ export type JobEntry = {
     // softwareDevelopmentScope?: "BE" | "FE" | "FS",
     // isSoftwareDevelopmentRole: boolean,
     // isMobileDevelopmentRole: boolean,
-    // summary: string,
+    summary: string,
     job: string;
     start: string; // Format: 'mm-yyyy'
     end: string;   // Format: 'mm-yyyy'
     months: number;
     present: boolean;
     text: string;
-    technologies: TechnologiesEntry[];
-    // stack?: TechStack[];
+    technologies: TechnologyEntry[];
+    stack: TechStack[];
 };
 
-export type TechnologiesEntry = {
+export type TechnologyEntry = {
     original: string; // Exact name as found in the job description
-    normalized?: string; // Name from TechList by AI
-    code?: string; // Code of normalized name
-    proficiency?: ProficiencyType;
+    normalized: string | ""; // Name from TechList by AI
+    code: TechCode | ""; // Code of normalized name
+    proficiency: ProficiencyType;
 };
 
 export type ExtractedCVData = {
@@ -99,11 +99,13 @@ export type ExtractedCVData = {
     fullName: string;
     profileSection: {
         text: string;
-        technologies: TechnologiesEntry[];
+        technologies: TechnologyEntry[];
+        stack: TechStack[];
     };
     skillSection: {
         text: string;
-        technologies: TechnologiesEntry[];
+        technologies: TechnologyEntry[];
+        stack: TechStack[];
     }
     jobs: JobEntry[];
 };
