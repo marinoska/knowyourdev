@@ -4,7 +4,7 @@ import { parseJsonOutput } from "@/utils/json.js";
 import { ExtractCVDataPrompt } from "./extractCVData.prompt.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { gpt4oMini } from "@/app/models.js";
-import { JobEntry } from "@/models/types.js";
+import { ExtractedCVData, JobEntry } from "@/models/types.js";
 import { ExtractionChainParam } from "@/chains/extraction/types.js";
 
 type OutputType = {
@@ -43,6 +43,15 @@ export const extractCVData = async (params: ExtractionChainParam): Promise<Extra
 
     return {
         ...params,
-        extractedData
+        extractedData: {
+            fullName: extractedData.fullName,
+            jobs: extractedData.jobs,
+            profileSection: {
+                text: extractedData.profileSection
+            },
+            skillSection: {
+                text: extractedData.skillSection
+            }
+        } as ExtractedCVData
     };
 }

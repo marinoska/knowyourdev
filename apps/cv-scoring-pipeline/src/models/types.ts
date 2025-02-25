@@ -82,14 +82,14 @@ export type JobEntry = {
     months: number;
     present: boolean;
     text: string;
-    // technologies?: TechName[];
+    technologies: TechnologiesEntry[];
     // stack?: TechStack[];
 };
 
 export type TechnologiesEntry = {
-    originalName: string; // Exact name as found in the job description
-    name: string; // Name from TechList by AI
-    code: string; // Code of normalized name
+    original: string; // Exact name as found in the job description
+    normalized?: string; // Name from TechList by AI
+    code?: string; // Code of normalized name
     proficiency?: ProficiencyType;
 };
 
@@ -97,8 +97,14 @@ export type ExtractedCVData = {
     // technologies: TechnologiesEntry[],
     // techStack: TechStack[];
     fullName: string;
-    profileSection: string;
-    skillSection: string;
+    profileSection: {
+        text: string;
+        technologies: TechnologiesEntry[];
+    };
+    skillSection: {
+        text: string;
+        technologies: TechnologiesEntry[];
+    }
     jobs: JobEntry[];
 };
 

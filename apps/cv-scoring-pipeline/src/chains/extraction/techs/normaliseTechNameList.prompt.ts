@@ -11,13 +11,14 @@ The match should be based on similarity, abbreviations, common variations, and t
 ### Matching Instructions:
 1. **Pick a value** from input_tech_list.
 2. **Find the closest match** in reference_tech_list:
-   - If an **exact match** exists, add it to output_tech_list.
+   - If an **exact match** exists, add the pair {{original, normalized}} to output_tech_list.
    - If no exact match exists, find the **closest equivalent** based on:
-     - Common abbreviations (e.g., "JS" ≈ "JavaScript")
-     - Typical variations (e.g., "ReactJS" ≈ "React.js")
-     - Minor typos (e.g., "Nodejs" ≈ "Node.js")
-     - Case insensitivity (e.g., "react" ≈ "React.js")
-     - Formatting differences (e.g., "Elasticsearch" ≈ "Elastic Search")
+     -- Common abbreviations (e.g., "JS" ≈ "JavaScript")
+     -- Typical variations (e.g., "ReactJS" ≈ "React.js")
+     -- Minor typos (e.g., "Nodejs" ≈ "Node.js")
+     -- Case insensitivity (e.g., "react" ≈ "React.js")
+     -- Formatting differences (e.g., "Elasticsearch" ≈ "Elastic Search")
+   - If no exact match found, add add the pair {{original, normalized}} to output_tech_list
    - If there is **no sufficiently close match (below 80% similarity)**, **do not include the input value** in output_tech_list.
 3. **Ensure the output list only contains values from reference_tech_list**.
 4. **Drop the input value after matching**, move to the next, and repeat.
@@ -26,16 +27,30 @@ The match should be based on similarity, abbreviations, common variations, and t
 
 #### Input:
   - **input_tech_list:** "Node.js, React, MongoDB"
-  - **reference_tech_list:** ["PHP", "Symfony", "JavaScript", "React.js", "Ansible", "Ant", "Jenkins", "Node"]
+  - **reference_tech_list:** ["PHP", "Symfony", "JavaScript", "React.js", "Ansible", "Jenkins", "Node"]
 
 #### Matching Process:
   - "Node.js" (input) → **"Node"** (reference)
   - "React" (input) → **"React.js"** (reference)
-  - "MongoDB" (input) → **No match (below 80% similarity), excluded**
+  - "Ant" (input) → **No match, excluded**
 
 #### Output:
 {{
-    "technologies": ["Node", "React.js"]
+    "technologies": [
+    {{
+        original: "Node.js",
+        normalized: "Node",
+    }}, 
+    {{
+        original: "ReactJS",
+        normalized: "React.js",
+    }},
+    {{
+        original: "Ant",
+        normalized: "",
+    }}
+    ]
 }}
 
-Ensure that the **output list only includes technologies from the reference list and does not contain unmodified input values** if they do not have a valid match.\`; `;
+Ensure that the output list **contains an entry for each of the input technologies**, with empty "normalized" field if they do not have a valid match.
+`;

@@ -24,7 +24,7 @@ export const semanticSimilarity = <T extends string>(referenceList: T[]) => (val
     });
 
     // Return the closest match if similarity is above threshold, otherwise leave blank
-    return highestScore > 0.75 ? bestMatch : undefined;
+    return highestScore > 0.9 ? bestMatch : undefined;
 };
 
 // Example Usage:

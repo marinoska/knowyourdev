@@ -1,22 +1,33 @@
 import { model, Schema } from 'mongoose';
 import { CVDataDocumentType, CVDataModelType } from "./types.js";
 
-// const techmologyEntrySchema = {
-//     originalName: {type: String, required: true},
-//     name: {type: String},
-//     code: {type: String},
-//     proficiency: {type: String, enum: ["skilled", "expert", "familiar", ""]},
-// };
+const technologyEntrySchema = {
+    original: {type: String, required: true},
+    normalized: {type: String, default: ""},
+    code: {type: String, default: ""},
+    proficiency: {type: String, enum: ["skilled", "expert", "familiar", ""]},
+};
 
 const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
     {
         hash: {type: String, required: true, immutable: true, unique: true},
         fullName: {type: String, required: true, immutable: true},
-        profileSection: {type: String, required: true, immutable: true},
-        skillSection: {type: String, required: true, immutable: true},
-        // technologies: [
-        //     techmologyEntrySchema
-        // ],
+        profileSection: {
+            text: {
+                type: String, required: true, default: ""
+            },
+            technologies: [
+                technologyEntrySchema
+            ],
+        },
+        skillSection: {
+            text: {
+                type: String, required: true, default: ""
+            },
+            technologies: [
+                technologyEntrySchema
+            ],
+        },
         // techStack: [
         //     {
         //         stackName: {type: String, required: true},
@@ -41,7 +52,10 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
                 end: {type: String, required: true},   // Format: 'mm-yyyy'
                 months: {type: Number, required: true},
                 present: {type: Boolean, default: false},
-                // technologies: [{type: String}],
+                technologies: [
+                    technologyEntrySchema
+                ],
+
                 // stack: [
                 //     {
                 //         stackName: {type: String, required: true},

@@ -1,4 +1,4 @@
-export const extractTechPerJobPrompt = `You're provided with a developer's role and job description. 
+export const extractTechnologiesPrompt = `You're provided with a developer's role and job description. 
 Your task is to analyze the developer's **work experience, project descriptions, and skills** to extract and classify **technologies list**.
 
 ## Step 1. **Extract Technologies**

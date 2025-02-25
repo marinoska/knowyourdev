@@ -1,11 +1,11 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { extractCVData } from "@/chains/extraction/CVData/extractCVData.chain.js";
-import { extractTechPerJob } from "@/chains/extraction/jobData/extractTechPerJob.chain.js";
 import { TechModel } from "@/models/tech.model.js";
 import { ExtractedCVData } from "@/models/types.js";
 import { hash } from "@/utils/crypto.js";
 import { pipe } from "@/utils/func.js";
 import { ExtractionChainParam, TechNamesMap } from "@/chains/extraction/types.js";
+import { extractTechnologies } from "@/chains/extraction/techs/sub/extractTechnologies.chain.js";
 
 async function extractCVText(filePath: string): Promise<string> {
     const loader = new PDFLoader(filePath);
@@ -35,7 +35,7 @@ export async function runCVDataExtraction(filePath: string): Promise<{
     const output = await pipe<ExtractionChainParam>(
         inputData,
         extractCVData,
-        // extractTechPerJob
+        extractTechnologies
     );
     // type narrowing here
     if (!("extractedData" in output)) {
