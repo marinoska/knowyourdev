@@ -32,11 +32,15 @@ export async function runCVDataExtraction(filePath: string): Promise<{
         techNamesMap,
         techNamesString: Object.values(techNamesMap).join(',')
     };
-    const output = await pipe<ExtractionChainParam>(inputData, extractCVData, extractTechPerJob);
+    const output = await pipe<ExtractionChainParam>(
+        inputData,
+        extractCVData,
+        // extractTechPerJob
+    );
     // type narrowing here
     if (!("extractedData" in output)) {
         throw new Error("extractedData cannot be empty");
     }
 
-    return {...output.extractedData, hash: hash(output.extractedData.fullName)};
+    return {...output.extractedData, hash: hash(cvText)};
 }

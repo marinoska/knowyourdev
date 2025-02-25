@@ -35,7 +35,7 @@ export const extractTechPerJob = async (params: ExtractionChainParam): Promise<E
 
     const enrichedJobsPromises = extractedData.jobs.map(async (job: JobEntry) => {
         const {technologies, ...rest} = (await jobTechExtractor.invoke({
-            job_description: job.description,
+            job_description: job.text,
             job_role: job.role
         }) as {
             technologies: string[]

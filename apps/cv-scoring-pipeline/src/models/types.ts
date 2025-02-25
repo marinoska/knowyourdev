@@ -71,19 +71,19 @@ export type TechModelType = Model<TechDocument>;
 
 export type JobEntry = {
     role: string;
-    roleType?: "SE" | "QA" | "UI/UX" | "PM",
-    softwareDevelopmentScope?: "BE" | "FE" | "FS",
-    isSoftwareDevelopmentRole: boolean,
-    isMobileDevelopmentRole: boolean,
-    summary: string,
+    // roleType?: "SE" | "QA" | "UI/UX" | "PM",
+    // softwareDevelopmentScope?: "BE" | "FE" | "FS",
+    // isSoftwareDevelopmentRole: boolean,
+    // isMobileDevelopmentRole: boolean,
+    // summary: string,
     job: string;
     start: string; // Format: 'mm-yyyy'
     end: string;   // Format: 'mm-yyyy'
     months: number;
     present: boolean;
-    description: string;
-    technologies?: TechName[];
-    stack?: TechStack[];
+    text: string;
+    // technologies?: TechName[];
+    // stack?: TechStack[];
 };
 
 export type TechnologiesEntry = {
@@ -91,14 +91,15 @@ export type TechnologiesEntry = {
     name: string; // Name from TechList by AI
     code: string; // Code of normalized name
     proficiency?: ProficiencyType;
-    skill?: boolean;
 };
 
 export type ExtractedCVData = {
-    technologies: TechnologiesEntry[],
-    techStack: TechStack[];
-    jobs: JobEntry[];
+    // technologies: TechnologiesEntry[],
+    // techStack: TechStack[];
     fullName: string;
+    profileSection: string;
+    skillSection: string;
+    jobs: JobEntry[];
 };
 
 export type CVDataDocumentType = Document & {
