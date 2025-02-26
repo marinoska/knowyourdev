@@ -5,7 +5,7 @@ import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { extractTechnologiesPrompt } from "./extractTechnologies.prompt.js";
 import { normalizeTechList } from "./sub/normaliseTechNameList.chain.js";
-import { JobEntry, TechnologyEntry, TechStack } from "@/models/types.js";
+import { JobEntry, RoleType, TechnologyEntry } from "@/models/types.js";
 import { ExtractionChainParam } from "@/chains/extraction/types.js";
 import { extractTechProficiency } from "@/chains/extraction/techs/sub/extractTechProficiency.chain.js";
 import { TechStackModel } from "@/models/techStack.model.js";
@@ -21,9 +21,19 @@ Work experience description:
 {description}
 `);
 
+
 type Output = {
-    technologies: string[]
+    technologies: string[];
+    roleType: string;
+    isSoftwareDevelopmentRole: boolean;
+    summary: string;
 };
+
+const jobTechExtractor = RunnableSequence.from<{ description: string }, Output>([
+    prompt,  // Injects job description into prompt
+    gpt4oMini, // Extracts technologies
+    parseJsonOutput, // Parses JSON output
+]);
 
 //role + description
 export const extractTechnologies = async (params: ExtractionChainParam): Promise<ExtractionChainParam> => {
@@ -31,16 +41,10 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
         throw new Error("extractedData is required");
     const {extractedData, techNamesMap} = params;
 
-    const jobTechExtractor = RunnableSequence.from<{ description: string }, Output>([
-        prompt,  // Injects job description into prompt
-        gpt4oMini, // Extracts technologies
-        parseJsonOutput, // Parses JSON output
-    ]);
-
-    async function extracted(text: string): Promise<{ technologies: TechnologyEntry[], techStack: TechStack[] }> {
+    async function extracted(text: string): Promise<Partial<JobEntry>> {
         if (!text) return {technologies: [], techStack: []};
 
-        const {technologies} = (await jobTechExtractor.invoke({
+        const {technologies, roleType, isSoftwareDevelopmentRole, summary} = (await jobTechExtractor.invoke({
             description: text,
         })); // Process each job separately
 
@@ -61,10 +65,13 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
         }));
 
         const stackMatches = await TechStackModel.identifyStack(normalisedTechList.map(tech => tech.code));
-        
+
         return {
             technologies: technologiesEntry,
             techStack: stackMatches,
+            roleType: roleType as RoleType,
+            isSoftwareDevelopmentRole,
+            summary
         }
     }
 
@@ -72,13 +79,14 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
     const skillTechs = await extracted(extractedData.skillSection.text);
 
     const jobsTechPromises = extractedData.jobs.map(async (job: JobEntry) => {
-        const extractedTechData = await extracted(job.text);
+        const extractedTechData = await extracted(`Role: ${job.role}. Description: ${job.text}`);
 
 
         return {
             ...job,
-            technologies: extractedTechData.technologies,
-            stack: extractedTechData.techStack,
+            // technologies: extractedTechData.technologies || [],
+            // techStack: extractedTechData.techStack || [],
+            ...extractedTechData
         } satisfies JobEntry;
     });
 
@@ -90,13 +98,13 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
                 jobs: await Promise.all(jobsTechPromises),
                 profileSection: {
                     ...extractedData.profileSection,
-                    technologies: profileTechs.technologies,
-                    stack: profileTechs.techStack
+                    technologies: profileTechs.technologies || [],
+                    techStack: profileTechs.techStack || []
                 },
                 skillSection: {
                     ...extractedData.skillSection,
-                    technologies: skillTechs.technologies,
-                    stack: skillTechs.techStack
+                    technologies: skillTechs.technologies || [],
+                    techStack: skillTechs.techStack || []
                 }
             },
     };

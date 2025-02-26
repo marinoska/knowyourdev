@@ -2,6 +2,7 @@ import { model, Schema } from 'mongoose';
 import { CVDataDocumentType, CVDataModelType } from "./types.js";
 
 const TechnologyEntrySchema = {
+    _id: false,
     original: {type: String, required: true},
     normalized: {type: String, default: ""},
     code: {type: String, default: ""},
@@ -9,6 +10,7 @@ const TechnologyEntrySchema = {
 };
 
 const TechStackSchema = {
+    _id: false,
     stackName: {type: String, required: true},
     matchedComponents: [{type: String, required: true}],
     matchPercentage: {type: Number, required: true},
@@ -25,7 +27,7 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
             technologies: [
                 TechnologyEntrySchema
             ],
-            stack: [
+            techStack: [
                 TechStackSchema
             ],
         },
@@ -36,28 +38,21 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
             technologies: [
                 TechnologyEntrySchema
             ],
-            stack: [
+            techStack: [
                 TechStackSchema
             ],
         },
-        // techStack: [
-        //     {
-        //         stackName: {type: String, required: true},
-        //         matchedComponents: [{type: String, required: true}],
-        //         matchPercentage: {type: Number, required: true},
-        //     }
-        // ],
         jobs: [
             {
                 text: {type: String, required: true},
                 role: {type: String, required: true},
                 summary: {type: String, required: true},
-                // roleType: {
-                //     type: String,
-                //     enum: ["SE", "QA", "UI/UX", "PM", ""]
-                // },
+                roleType: {
+                    type: String,
+                    enum: ["SE", "QA", "UI/UX", "PM", ""]
+                },
+                isSoftwareDevelopmentRole: {type: Boolean, default: false},
                 // softwareDevelopmentScope: {type: String, enum: ["BE", "FE", "FS", ""]},
-                // isSoftwareDevelopmentRole: {type: Boolean, default: false},
                 // isMobileDevelopmentRole: {type: Boolean, default: false},
                 job: {type: String, required: true},
                 start: {type: String, required: true}, // Format: 'mm-yyyy'
@@ -67,7 +62,7 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
                 technologies: [
                     TechnologyEntrySchema
                 ],
-                stack: [
+                techStack: [
                     TechStackSchema
                 ],
             }

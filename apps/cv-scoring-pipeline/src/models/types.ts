@@ -69,11 +69,13 @@ export type TechStackModelType = Model<TechStackDocumentType> & {
 
 export type TechModelType = Model<TechDocument>;
 
+export type RoleType = JobEntry["roleType"];
+
 export type JobEntry = {
     role: string;
-    // roleType?: "SE" | "QA" | "UI/UX" | "PM",
+    roleType: "SE" | "QA" | "UI/UX" | "PM" | "",
+    isSoftwareDevelopmentRole: boolean,
     // softwareDevelopmentScope?: "BE" | "FE" | "FS",
-    // isSoftwareDevelopmentRole: boolean,
     // isMobileDevelopmentRole: boolean,
     summary: string,
     job: string;
@@ -83,7 +85,7 @@ export type JobEntry = {
     present: boolean;
     text: string;
     technologies: TechnologyEntry[];
-    stack: TechStack[];
+    techStack: TechStack[];
 };
 
 export type TechnologyEntry = {
@@ -100,12 +102,12 @@ export type ExtractedCVData = {
     profileSection: {
         text: string;
         technologies: TechnologyEntry[];
-        stack: TechStack[];
+        techStack: TechStack[];
     };
     skillSection: {
         text: string;
         technologies: TechnologyEntry[];
-        stack: TechStack[];
+        techStack: TechStack[];
     }
     jobs: JobEntry[];
 };
