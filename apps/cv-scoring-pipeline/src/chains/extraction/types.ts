@@ -1,6 +1,8 @@
 import { ExtractedCVData, TechDocument } from "@/models/types.js";
 
-export type ExtractionChainParam = { cvText: string } |
-    { extractedData: ExtractedCVData };
+export type ExtractionChainInput = {
+    cvText: string, techCollection: TechDocument[]
+};
 
-export type TechNamesMap = Record<TechDocument["code"], TechDocument['name']>;
+export type ExtractionChainParam =
+    ExtractionChainInput | ExtractionChainInput & { extractedData: ExtractedCVData };

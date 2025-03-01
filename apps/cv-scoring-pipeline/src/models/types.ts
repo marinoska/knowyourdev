@@ -125,9 +125,27 @@ export type ExtractedCVData = {
 export type CVDataDocumentType = Document & ExtractedCVData;
 export type CVDataModelType = Model<CVDataDocumentType>;
 
-export type ProfileType = {
+export type TechProfileTechnologiesEntry = {
+    techReference: Schema.Types.ObjectId;
+    code: TechCode;
+    jobs: {
+        start: Date;
+        end: Date;
+        role: string;
+        company: string;
+    }[];
+    totalMonths: number;
+    recentMonths: number;
+    name: string;
+    trend: TrendType;
+    category: CategoryType;
+    scope: ScopeType;
+};
+
+export type TechProfileType = {
     hash: string;
     fullName: string;
+    technologies: TechProfileTechnologiesEntry[]
 };
-export type ProfileDocumentType = Document & ProfileType;
-export type ProfileModelType = Model<ProfileType>;
+export type TechProfileDocumentType = Document & TechProfileType;
+export type TechProfileModelType = Model<TechProfileDocumentType>;

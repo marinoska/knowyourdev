@@ -19,6 +19,7 @@
     "@types/pdf-parse": "^1.1.4",
     "axios": "^1.7.9",
     "csv-parser": "^3.2.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "langchain": "^0.3.15",
     "mongoose": "^8.10.1",

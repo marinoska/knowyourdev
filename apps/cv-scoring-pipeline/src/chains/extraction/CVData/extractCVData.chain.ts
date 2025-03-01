@@ -5,7 +5,7 @@ import { ExtractCVDataPrompt } from "./extractCVData.prompt.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { gpt4oMini } from "@/app/models.js";
 import { ExtractedCVData, JobEntry } from "@/models/types.js";
-import { ExtractionChainParam } from "@/chains/extraction/types.js";
+import { ExtractionChainInput, ExtractionChainParam } from "@/chains/extraction/types.js";
 
 type OutputType = {
     fullName: string;
@@ -24,10 +24,7 @@ ${jsonOutputPrompt({
 })}
 `);
 
-export const extractCVData = async (params: ExtractionChainParam): Promise<ExtractionChainParam> => {
-    if (!("cvText" in params))
-        throw new Error("cvText is required");
-
+export const extractCVData = async (params: ExtractionChainInput): Promise<ExtractionChainParam> => {
     const {cvText} = params;
 
     const techExtractionChain = RunnableSequence.from<{ cv_text: string }, OutputType>([
