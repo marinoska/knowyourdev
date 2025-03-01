@@ -9,6 +9,7 @@ import { JobEntry, RoleType, TechnologyEntry } from "@/models/types.js";
 import { ExtractionChainParam } from "@/chains/extraction/types.js";
 import { extractTechProficiency } from "@/chains/extraction/techs/sub/extractTechProficiency.chain.js";
 import { TechStackModel } from "@/models/techStack.model.js";
+import { TechModel } from "@/models/tech.model.js";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechnologiesPrompt}
@@ -39,7 +40,10 @@ const jobTechExtractor = RunnableSequence.from<{ description: string }, Output>(
 export const extractTechnologies = async (params: ExtractionChainParam): Promise<ExtractionChainParam> => {
     if (!("extractedData" in params))
         throw new Error("extractedData is required");
-    const {extractedData, techNamesMap} = params;
+
+    const techDocList = await TechModel.find({}, {name: 1, code: 1}).lean();
+
+    const {extractedData} = params;
 
     async function extracted(text: string): Promise<Partial<JobEntry>> {
         if (!text) return {technologies: [], techStack: []};
@@ -50,8 +54,7 @@ export const extractTechnologies = async (params: ExtractionChainParam): Promise
 
         const normalisedTechList = technologies.length ? await normalizeTechList({
             inputTechList: technologies,
-            referenceTechList: Object.values(techNamesMap),
-            techNamesMap: params.techNamesMap
+            techDocList
         }) : [];
 
         const proficiency = technologies.length ? await extractTechProficiency({

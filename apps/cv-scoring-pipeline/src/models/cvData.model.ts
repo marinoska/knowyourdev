@@ -2,11 +2,14 @@ import { model, Schema } from 'mongoose';
 import { CVDataDocumentType, CVDataModelType } from "./types.js";
 
 const TechnologyEntrySchema = {
-    _id: false,
     original: {type: String, required: true},
     normalized: {type: String, default: ""},
     code: {type: String, default: ""},
     proficiency: {type: String, enum: ["skilled", "expert", "familiar", ""]},
+    techReference: {
+        type: Schema.Types.ObjectId, // Use ObjectId to reference another model
+        ref: "TechModel" // Name of the model being referenced
+    },
 };
 
 const TechStackSchema = {

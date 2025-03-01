@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { connected, db, stopMongoClient } from "../app/mongo.js";
-import { CategoryType, StackComponents, TechStackCategory, TrendType } from "@/models/types.js";
+import { CategoryType, ScopeType, StackComponents, TechStackCategory, TrendType } from "@/models/types.js";
 import { TechStackModel } from "@/models/techStack.model.js";
 // import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names.js";
 import { TechModel } from "@/models/tech.model.js";
@@ -17,6 +17,7 @@ type TechCSVData = {
     code: string;
     trend: TrendType;
     category: CategoryType;
+    scope: ScopeType;
     usage2024?: number;
     usage2016?: number;
 }
@@ -47,6 +48,7 @@ const loadTechData = async (fileName: string) => {
                         code: generateTechCode(row.Name),
                         trend: row.Trend.split(/\s+/).map((word: string) => word.charAt(0).toUpperCase()).join(''),
                         category: row.Category.trim(),
+                        scope: row.Scope.trim(),
                         usage2024: row.Usage2024 ? Number(row.Usage2024) : undefined,
                         usage2016: row.Usage2016 ? Number(row.Usage2016) : undefined,
                     });
@@ -76,6 +78,7 @@ type TechStackData = {
     languages: string; // Comma-separated string for `languages` (e.g., "lang1,lang2")
     relations: string; // Comma-separated string for `relations` (e.g., "relation1,relation2")
     category: TechStackCategory; // Assuming CATEGORY is an enum or object with keys
+    scope: ScopeType;
     description: string;
     useCases: string;
     purpose: string;
@@ -114,6 +117,7 @@ export const loadTechStackData = async (fileName: string): Promise<void> => {
             relations: record.Relations
                 ?.split(',').map(generateTechCode),
             category: record.Category?.trim(),
+            scope: record.Scope?.trim(),
             description: record.Description?.trim(),
             useCases: record.UseCases?.trim(),
             purpose: record.Purpose?.trim(),

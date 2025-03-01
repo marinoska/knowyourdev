@@ -34,8 +34,8 @@ Example Output:
     "role": "Full Stack Engineer", 
     "job": "Company Name", 
     "text": "Job description here",
-    "start": "01-01-2022", 
-    "end": "01-01-2023", 
+    "start": "01-2022", 
+    "end": "01-2023", 
     "months": 12, 
     }}
   ],

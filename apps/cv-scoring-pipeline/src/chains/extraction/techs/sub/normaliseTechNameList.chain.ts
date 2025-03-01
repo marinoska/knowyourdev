@@ -4,11 +4,10 @@ import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { normaliseTechNameListPrompt } from "./normaliseTechNameList.prompt.js";
-import { TechnologyEntry } from "@/models/types.js";
+import { TechDocument, TechnologyEntry } from "@/models/types.js";
 import { semanticSimilarity } from "@/chains/normalizer/semanticSimilarity.js";
 import { overlapSimilarity } from "@/chains/normalizer/overlapSimilarity.js";
 import { generateTechCode } from "@/utils/func.js";
-import { TechNamesMap } from "@/chains/extraction/types.js";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${normaliseTechNameListPrompt}
@@ -30,11 +29,10 @@ type Output = {
 
 type Params = {
     inputTechList: string[],
-    referenceTechList: string[],
-    techNamesMap: TechNamesMap
+    techDocList: TechDocument[];
 };
 
-export const normalizeTechList = async ({inputTechList, referenceTechList, techNamesMap}: Params
+export const normalizeTechList = async ({inputTechList, techDocList}: Params
 ): Promise<Omit<TechnologyEntry, "proficiency">[]> => {
     const techNormalizer = RunnableSequence.from<{
         input_tech_list: string[],
@@ -45,24 +43,31 @@ export const normalizeTechList = async ({inputTechList, referenceTechList, techN
         parseJsonOutput, // Parses JSON output
     ]);
 
+
+    const referenceTechList = techDocList.map(({name}) => name);
     const {technologies} = (await techNormalizer.invoke({
         input_tech_list: inputTechList,
         reference_tech_list: referenceTechList
     }));
     // todo validate extractedData for errors
 
-    const techCodes = Object.keys(techNamesMap);
-    const techNames = Object.values(techNamesMap);
-    const techNameSemanticNormalizer = semanticSimilarity(techNames);
+    const codeTechDocMap = techDocList.reduce<Record<string, TechDocument>>((acc, techDoc) => ({
+        ...acc,
+        [techDoc.code]: techDoc
+    }), {});
+    const techCodes = Object.keys(codeTechDocMap);
+    const techNameSemanticNormalizer = semanticSimilarity(referenceTechList);
     const techNameOverlapNormalizer = overlapSimilarity(techCodes);
     const techs = technologies.map(tech => {
         const normalized = tech.normalized ? tech.normalized : techNameSemanticNormalizer(tech.original);
 
         const code = normalized ? techNameOverlapNormalizer(generateTechCode(normalized)) : techNameOverlapNormalizer(generateTechCode(tech.original));
+        const techDoc = code ? codeTechDocMap?.[code] : null;
         return {
             ...tech,
             normalized: normalized || "",
             code: code || "",
+            techReference: techDoc?._id || null, // Reference the TechModel object
         } satisfies Omit<TechnologyEntry, "proficiency">;
     });
 

@@ -16,6 +16,7 @@ Your task is to analyze the developer's **work experience, project descriptions,
    - "roleType": Carefully analyze the job description and role name. Identify and infer the relevant category:
       - Use "SE" for Software Engineering roles, including mobile developers (e.g., iOS/Android, cross-platform).
       - Use "QA" for Quality Assurance/Testing roles, such as testers or automation engineers.
+      - Use "DO" for Devops roles, for deploy, security, release and monitoring jobs.
       - Use "UI/UX" for design-focused roles, such as UX designers, UI designers, or researchers.
       - Use "PM" for Product/Project/Program Management roles, focusing on planning, strategy, or team coordination.
       - Leave empty if the role does not clearly match any of the above categories. 

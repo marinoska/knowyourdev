@@ -11,7 +11,10 @@ if (!MONGO_CONNECTION) {
 
 export const connected = mongoose.connect(MONGO_CONNECTION, {
     // autoIndex: true,
-} );
+    tls: true,
+    tlsAllowInvalidCertificates: true, // Only for debugging
+    serverSelectionTimeoutMS: 5000,  // Adjust timeout
+});
 mongoose.pluralize(null);
 
 export const db = mongoose.connection;
