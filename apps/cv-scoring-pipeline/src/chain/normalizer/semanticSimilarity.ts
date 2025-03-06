@@ -4,7 +4,7 @@ import natural from 'natural';
  * Function to normalize proficiency values dynamically
  * @returns normalized proficiency category
  */
-export const semanticSimilarity = <T extends string>(referenceList: T[]) => (value: string): T | undefined => {
+export const semanticSimilarity = <T extends string>(referenceList: T[], score: number = 0.9) => (value: string): T | undefined => {
     const lowerValue = value; //.toLowerCase().trim(); // Normalize case and trim spaces
 
     if (referenceList.includes(lowerValue as T)) {
@@ -24,7 +24,7 @@ export const semanticSimilarity = <T extends string>(referenceList: T[]) => (val
     });
 
     // Return the closest match if similarity is above threshold, otherwise leave blank
-    return highestScore > 0.9 ? bestMatch : undefined;
+    return highestScore > score ? bestMatch : undefined;
 };
 
 // Example Usage:

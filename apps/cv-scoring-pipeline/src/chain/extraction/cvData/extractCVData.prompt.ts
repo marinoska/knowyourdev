@@ -10,6 +10,9 @@ Step 1: Extract general profile/description and skills section** based on the fo
    - "skillSection": Full **unchanged** general skill section 
    - "profileSection": Full **unchanged** general profile/description section
    - "fullName": The candidate's name and surname.
+   - "position": Headline/position/"role in the heading",
+   - "sections": Array of CV sections names normalized to one of the "List of sections" provided below.)',
+
 
 ## **Step 2: Extract Jobs**
 ✅ **Extract the developer’s jobs/roles with descriptions**
@@ -29,6 +32,13 @@ Example Output:
   "fullName": "Joe Doe",
   "skillSection": "TS, Node, React - expert ...",
   "profileSection": "seasoned web engineer",
+  "position": "Full-stack engineer",
+  "sections": [
+    "Education", 
+    "Contacts", 
+    "Skills", 
+    "Jobs"
+  ]
   "jobs": [
     {{
     "role": "Full Stack Engineer", 
@@ -40,6 +50,9 @@ Example Output:
     }}
   ],
 }}
+
+List of sections:
+{list_of_sections}
 
 CV:
 {cv_text}`;

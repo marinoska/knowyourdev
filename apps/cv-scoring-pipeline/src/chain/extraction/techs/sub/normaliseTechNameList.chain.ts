@@ -4,10 +4,11 @@ import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { normaliseTechNameListPrompt } from "./normaliseTechNameList.prompt.js";
-import { TechDocument, TechnologyEntry } from "@/models/types.js";
-import { semanticSimilarity } from "@/chains/normalizer/semanticSimilarity.js";
-import { overlapSimilarity } from "@/chains/normalizer/overlapSimilarity.js";
+import { TechDocument } from "@/models/types.js";
+import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.js";
+import { overlapSimilarity } from "@/chain/normalizer/overlapSimilarity.js";
 import { generateTechCode } from "@/utils/func.js";
+import { TechnologyEntry } from "@/models/cvData.model.js";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${normaliseTechNameListPrompt}

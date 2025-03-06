@@ -3,8 +3,8 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { gpt4oMini } from "@/app/models.js";
 import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
-import { extractTechProficiencyPrompt } from "@/chains/extraction/techs/sub/extractTechProficiency.prompt.js";
-import { semanticSimilarity } from "@/chains/normalizer/semanticSimilarity.js";
+import { extractTechProficiencyPrompt } from "@/chain/extraction/techs/sub/extractTechProficiency.prompt.js";
+import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.js";
 import { PROFICIENCY, ProficiencyType } from "@/models/types.js";
 
 const prompt = PromptTemplate.fromTemplate(`

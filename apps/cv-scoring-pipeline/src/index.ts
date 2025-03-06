@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import { connected, stopMongoClient } from "./app/mongo.js";
-import { runCVDataExtraction } from "./chains/extraction/runner.js";
+import { runCVDataExtraction } from "@/chain/extraction/runner.js";
 import { TechModel } from "@/models/tech.model.js";
 import { TechStackModel } from "@/models/techStack.model.js";
 import { CvDataModel } from "@/models/cvData.model.js";

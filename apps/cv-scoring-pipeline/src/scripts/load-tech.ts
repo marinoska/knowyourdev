@@ -159,8 +159,8 @@ const loadData = async () => {
 };
 
 // const exportData = async () => {
-//     const outputTechNamesFile = path.resolve(process.cwd(), 'src/chains/extraction/prompt/tech_list');
-//     const outputTeckStackFile = path.resolve(process.cwd(), 'src/chains/extraction/prompt/tech_stack_list');
+//     const outputTechNamesFile = path.resolve(process.cwd(), 'src/extraction/extraction/prompt/tech_list');
+//     const outputTeckStackFile = path.resolve(process.cwd(), 'src/extraction/extraction/prompt/tech_stack_list');
 //     await saveTechNamesToFile(outputTechNamesFile);
 //     await saveTechStackNamesToFile(outputTeckStackFile);
 // };
