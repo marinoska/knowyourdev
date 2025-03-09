@@ -1,10 +1,9 @@
-import * as React from 'react';
+import React from "react";
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Card from '@mui/joy/Card';
-import Chip from '@mui/joy/Chip';
 import Divider from '@mui/joy/Divider';
 import IconButton from '@mui/joy/IconButton';
 import LinearProgress from '@mui/joy/LinearProgress';
@@ -18,48 +17,45 @@ import Stack from '@mui/joy/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DashboardIcon from '@mui/icons-material/BarChart';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import QuestionAnswerRoundedIcon from '@mui/icons-material/QuestionAnswerRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
 
 import { closeSidebar } from '../utils';
-import theme from "../theme.js";
 
-function Toggler({
-                     defaultExpanded = false,
-                     renderToggle,
-                     children,
-                 }: {
-    defaultExpanded?: boolean;
-    children: React.ReactNode;
-    renderToggle: (params: {
-        open: boolean;
-        setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    }) => React.ReactNode;
-}) {
-    const [open, setOpen] = React.useState(defaultExpanded);
+// sx={{
+//     '& .Mui-selected,  & .MuiListItem-root :hover': {
+//         backgroundColor: 'var(--joy-palette-background-level1) !important', // Black background for selected items
+//     },
+// }}
+const NavigationItem = ({
+                            icon: Icon,
+                            label,
+                            selected
+                        }: {
+    icon: React.ElementType;
+    label: string;
+    selected?: boolean;
+}) => {
+    const selectedColor = 'var(--joy-palette-background-level1) !important';
+    const styles = {
+        backgroundColor: 'inherit',
+    };
+    if (selected) {
+        styles.backgroundColor = selectedColor;
+    }
+
     return (
-        <React.Fragment>
-            {renderToggle({open, setOpen})}
-            <Box
-                sx={[
-                    {
-                        display: 'grid',
-                        transition: '0.2s ease',
-                        '& > *': {
-                            overflow: 'hidden',
-                        },
-                    },
-                    open ? {gridTemplateRows: '1fr'} : {gridTemplateRows: '0fr'},
-                ]}
-            >
-                {children}
-            </Box>
-        </React.Fragment>
-    );
+        <ListItem>
+            <ListItemButton sx={{...styles, '&:hover': {backgroundColor: selectedColor}}} selected={selected}>
+                <Icon/>
+                <ListItemContent>
+                    <Typography level="body-md">{label}</Typography>
+                </ListItemContent>
+            </ListItemButton>
+        </ListItem>
+    )
 }
 
 export default function Sidebar() {
@@ -85,16 +81,10 @@ export default function Sidebar() {
                 gap: 2,
                 borderRight: '1px solid',
                 borderColor: 'divider',
-                backgroundColor: 'var(--joy-palette-background-backdrop)',
-                color: 'var(--joy-palette-text-secondary)',   // Use the secondary color from the theme
+                backgroundColor: 'var(--joy-palette-background-level2)',
+                color: 'var(--joy-palette-text-level1Contrast)',   // Use the secondary color from the theme
                 '& *': {
                     color: 'inherit !important',
-                },
-                '&[aria-selected="true"]': {
-                    backgroundColor: '#000',
-                    // backgroundColor: 'var(--joy-palette-primary-softBg)',
-                    color: 'var(--joy-palette-primary-softColor)',
-                    fontWeight: 'bold',
                 },
             }}
         >
@@ -127,7 +117,7 @@ export default function Sidebar() {
                 onClick={() => closeSidebar()}
             />
             <Box sx={{display: 'flex', gap: 1, pt: 2, pb: 2, alignItems: 'center'}}>
-                <IconButton variant="soft" color="secondary" size="sm">
+                <IconButton variant="soft" size="sm">
                     <BrightnessAutoRoundedIcon/>
                 </IconButton>
                 <Typography level="title-lg">KnowYourDev.</Typography>
@@ -140,46 +130,18 @@ export default function Sidebar() {
                     display: 'flex',
                     flexDirection: 'column',
                     [`& .${listItemButtonClasses.root}`]: {
-                        gap: 1.5,
+                        gap: 2,
                     },
                 }}
             >
                 <List
-                    size="sm"
-                    sx={{
-                        '& .Mui-selected,  .MuiListItem-root :hover': {
-                            backgroundColor: 'var(--joy-palette-background-level1) !important', // Black background for selected items
-                        },
-                        '& li': {pt: 1, pb: 1, m: 0},
-                        '--List-nestedInsetStart': '30px',
-                    }}
+                    size="lg"
                 >
-                    <ListItem>
-                        <ListItemButton>
-                            <HomeRoundedIcon/>
-                            <ListItemContent>
-                                <Typography level="title-sm">Home</Typography>
-                            </ListItemContent>
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem>
-                        <ListItemButton>
-                            <DashboardIcon/>
-                            <ListItemContent>
-                                <Typography level="title-sm">Dashboard</Typography>
-                            </ListItemContent>
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem>
-                        <ListItemButton selected>
-                            <UploadFileIcon/>
-                            <ListItemContent>
-                                <Typography level="title-sm">Upload CV</Typography>
-                            </ListItemContent>
-                        </ListItemButton>
-                    </ListItem>
+                    <NavigationItem label="Home" icon={HomeRoundedIcon}/>
+                    <NavigationItem label="Dashboard" icon={DashboardIcon}/>
+                    <NavigationItem selected label="Uploaded CVs" icon={UploadFileIcon}/>
+                    <Divider/>
+                    <NavigationItem label="Support" icon={SupportRoundedIcon}/>
 
                     {/*<ListItem>*/}
                     {/*    <ListItemButton*/}
@@ -196,17 +158,12 @@ export default function Sidebar() {
                     {/*        </Chip>*/}
                     {/*    </ListItemButton>*/}
                     {/*</ListItem>*/}
-                    <ListItem>
-                        <ListItemButton>
-                            <SupportRoundedIcon/>
-                            Support
-                        </ListItemButton>
-                    </ListItem>
+
 
                 </List>
 
 
-                <Box sx={{p: 2}}>
+                <Box sx={{p: 3}}>
 
                     <Card
                         invertedColors

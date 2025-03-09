@@ -1,32 +1,58 @@
 import { extendTheme } from '@mui/joy/styles';
 
-// Extend the typography definitions by adding custom levels like body1
-// declare module '@mui/joy/styles' {
-//     interface CssVarsThemeOptions {
-//         vars?: {
-//             Sidebar?: {
-//                 width?: string;
-//             };
-//         };
-//     }
-// }
+declare module '@mui/joy/styles' {
+    interface Palette {
+        secondary: {
+            solidBg: string;
+            solidHoverBg: string;
+            solidActiveBg: string;
+        };
+    }
+
+    interface PaletteColorOverrides {
+        secondary: true; // Enables "secondary" as a valid palette color
+    }
+}
 
 const theme = extendTheme({
     fontSize: {
-        sm: '18px', // Example font sizes
-        md: '20px',
-        lg: '22px',
+        sm: '16px', // Example font sizes
+        md: '18px',
+        lg: '20px',
+    },
+
+    components: {
+        // JoyButton: {
+        //     defaultProps: {
+        //         color: 'primary',
+        //     },
+        // },
     },
     colorSchemes: {
         light: {
             palette: {
                 text: {
-                    secondary: '#ffffff', // Subtle gray color for menu items
+// @ts-expect-error TODO
+                    level1Contrast: '#FFFFFF', // Set contrast text to white for the sidebar
+                },
+                primary: {
+                    solidBg: '#00A676',       // Normal primary action button background
+                    solidHoverBg: '#008F63',  // Used on hover for primary elements
+                    solidActiveBg: '#007750', // Active state (clicked)
+                    // softBg: '#E6F4F1',        // A soft, subtle background shade for hover effects
+                    // softHoverBg: '#CCE9E4',   // Slightly darker hover for less active elements (optional)
+                },
+                secondary: {
+                    solidBg: '#003366',       // Normal primary action button background
+                    solidHoverBg: '#004080',   // Slightly lighter for hover state
+                    solidActiveBg: '#002244',  // Slightly darker for active state
+// @ts-expect-error TODO
+                    solidColor: '#FFFFFF',    // Text color for the button
                 },
                 background: {
-                    backdrop: '#3F51B5', // New backdrop color (Dark Blue)
-                    level1: '#4558C0', // New backdrop color (Dark Blue)
-                    body: '#f5f5f5', // Default body background color
+                    level2: '#003366', // New sidebar color (Dark Blue)
+                    level1: '#004480', // New sidebar color (Dark Blue)
+                    body: '#F0F0F5', // Default body background color
                     surface: '#ffffff', // Background for surfaces like cards or sheets
                 },
             },
@@ -37,7 +63,6 @@ const theme = extendTheme({
                     secondary: '#ffffff', // Subtle gray color for menu items
                 },
                 background: {
-                    backdrop: '#0F172A', // Different color for dark mode
                     body: '#F9FAFB', // Default body background color
                     surface: '#ffffff', // Background for surfaces like cards or sheets
                 },

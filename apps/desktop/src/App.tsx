@@ -1,19 +1,16 @@
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
 import theme from './theme';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 import Sidebar from './components/Sidebar';
-import OrderTable from './components/OrderTable';
-import OrderList from './components/OrderList';
 import Header from './components/Header';
+import { UploadedCVList } from "./pages/UploadedCVList.js";
 
 export default function JoyOrderDashboardTemplate() {
     return (
@@ -64,33 +61,13 @@ export default function JoyOrderDashboardTemplate() {
                             >
                                 Dashboard
                             </Link>
-                            <Typography color="primary" sx={{fontWeight: 500, fontSize: 12}}>
-                                Upload CV
+                            <Typography color="primary">
+                                Uploaded CV
                             </Typography>
                         </Breadcrumbs>
                     </Box>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            mb: 1,
-                            gap: 1,
-                            flexDirection: {xs: 'column', sm: 'row'},
-                            alignItems: {xs: 'start', sm: 'center'},
-                            flexWrap: 'wrap',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Typography level="h2" component="h1">
-                            Upload CV
-                        </Typography>
-                        <Button
-                            color="primary"
-                            startDecorator={<DownloadRoundedIcon/>}
-                            size="sm"
-                        >
-                            Download PDF
-                        </Button>
-                    </Box>
+
+                    <UploadedCVList/>
                     {/*<OrderTable/>*/}
                     {/*<OrderList/>*/}
                 </Box>
