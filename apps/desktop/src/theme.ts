@@ -14,6 +14,12 @@ declare module '@mui/joy/styles' {
     }
 }
 
+declare module '@mui/joy/Button' {
+    interface ButtonPropsColorOverrides {
+        secondary: true;
+    }
+}
+
 const theme = extendTheme({
     fontSize: {
         sm: '16px', // Example font sizes
@@ -23,8 +29,10 @@ const theme = extendTheme({
 
     components: {
         // JoyButton: {
-        //     defaultProps: {
-        //         color: 'primary',
+        //     styleOverrides: {
+        //         root: {
+        //             color: 'secondary',
+        //         },
         //     },
         // },
     },

@@ -8,14 +8,26 @@ import { DropzoneBox } from "../components/DropzoneBox";
 import Divider from "@mui/joy/Divider";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
-import { Alert, FormLabel, Input } from "@mui/joy";
+import { FormLabel, Input } from "@mui/joy";
 import { useState } from "react";
+import { useUploadMutation } from "../api/query/useUploadMutation.js";
+import { SnackbarWarning } from "../components/SnackbarWarning.js";
 
 export const UploadModal = ({open, setOpen}: {
     open: boolean,
     setOpen: StateSetter<boolean>
 }) => {
     const [file, setFile] = useState<File | null>(null);
+    const [name, setName] = useState('');
+    const [role, setRole] = useState('');
+
+    const {
+        isPending,
+        isError,
+        isSuccess,
+        reset,
+        handleFileUpload,
+    } = useUploadMutation();
 
     return (
         <Modal
@@ -27,63 +39,73 @@ export const UploadModal = ({open, setOpen}: {
                 justifyContent: 'center',
                 alignItems: 'center'
             }}
-        ><>
-            <Sheet
-                variant="outlined"
-                sx={{maxWidth: 500, borderRadius: 'md', boxShadow: 'lg'}}
-            >
-                <Box sx={{m: 3}}>
-                    <ModalClose variant="plain" sx={{m: 1}} onClick={() => setOpen(false)}/>
-                    <Typography
-                        component="h2"
-                        level="h4"
-                        sx={{fontWeight: 'lg', mb: 1}}
-                    >
-                        Upload new CV
-                    </Typography>
-                </Box>
-                <Divider sx={{my: 2}}/>
-                <Stack gap={2} sx={{m: 3}}>
-                    <DropzoneBox file={file} setFile={setFile}/>
+        >
+            <>
+                {isError && <SnackbarWarning msg="Failed file uploading" type={"danger"} onClose={() => reset()}/>}
+                {isSuccess &&
+                    <SnackbarWarning msg="File uploded successfully" type={"success"} onClose={() => reset()}/>}
 
-                    <FormLabel id="custom-name-label" htmlFor="custom-name">Custom Name</FormLabel>
-                    <Input id="custom-name" placeholder="e.g., John Smith - Senior Developer"/>
-                    <FormLabel id="applied-label">Applied For</FormLabel>
-                    <Input id="applied" placeholder="e.g., Engineer for MVP"/>
-                </Stack>
-
-                <Divider sx={{my: 2}}/>
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        gap: 1,
-                        m: 3,
-                    }}
+                <Sheet
+                    variant="outlined"
+                    sx={{maxWidth: 800, borderRadius: 'md', boxShadow: 'lg'}}
                 >
-                    <Button
-                        size="md"
-                        variant="plain"
-                        color="neutral"
-                        onClick={() => setOpen(false)}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        disabled={!file}
-                        size="md"
-                        variant="solid"
-                        color="primary"
-                        onClick={() => {
+                    <Box sx={{m: 3}}>
+                        <ModalClose variant="plain" sx={{m: 1}} onClick={() => setOpen(false)}/>
+                        <Typography
+                            component="h2"
+                            level="h4"
+                            sx={{fontWeight: 'lg', mb: 1}}
+                        >
+                            Upload new CV
+                        </Typography>
+                    </Box>
+                    <Divider sx={{my: 2}}/>
+                    <Stack gap={2} sx={{m: 3}}>
+                        <DropzoneBox file={file} setFile={setFile}/>
+
+                        <FormLabel id="custom-name-label" htmlFor="custom-name">Custom Name</FormLabel>
+                        <Input id="custom-name" placeholder="e.g., John Smith - Senior Developer" value={name}
+                               onChange={(e) => setName(e.target.value)}/>
+                        <FormLabel id="applied-label">Applied For</FormLabel>
+                        <Input id="applied" placeholder="e.g., Engineer for MVP" value={role}
+                               onChange={(e) => setRole(e.target.value)}/>
+                    </Stack>
+
+                    <Divider sx={{my: 2}}/>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            gap: 1,
+                            m: 3,
                         }}
                     >
-                        Proceed
-                    </Button>
-                </Box>
+                        <Button
+                            size="md"
+                            variant="plain"
+                            color="neutral"
+                            onClick={() => setOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            disabled={!file}
+                            loading={isPending}
+                            size="md"
+                            variant="solid"
+                            color="primary"
+                            onClick={() => {
+                                if (!file) return;
+                                handleFileUpload(file, name, role);
+                            }}
+                        >
+                            Proceed
+                        </Button>
+                    </Box>
 
-            </Sheet>
-        </>
+                </Sheet>
+            </>
         </Modal>
     );
 }

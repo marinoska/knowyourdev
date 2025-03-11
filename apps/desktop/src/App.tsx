@@ -12,7 +12,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { UploadedCVList } from "./pages/UploadedCVList.js";
 
-export default function JoyOrderDashboardTemplate() {
+export default function App() {
     return (
         <CssVarsProvider theme={theme} defaultMode="light" disableTransitionOnChange>
             <CssBaseline/>
