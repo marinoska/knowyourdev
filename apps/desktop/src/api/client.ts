@@ -27,12 +27,16 @@ class Client {
     private authHeader: { Authorization?: string } = {};
     private onError?: (options: object) => void;
 
-    constructor(private host: string) {
+    constructor(private readonly host: string) {
+        if (!host) throw new Error("No remote host provided");
+
         this.host = host;
+        console.log({host});
     }
 
     private async _doFetch<T>(url: string, options: RequestInit): Promise<T> {
         const {onError, host, authHeader}: Client = this;
+        console.log({host: this.host, url,});
         const headers = {headers: {...options.headers, ...authHeader}};
         try {
             const response = await fetch(`${host}${url}`, {...options, ...headers});
@@ -103,4 +107,5 @@ class Client {
     }
 }
 
+console.log({host2: import.meta.env.VITE_KYD_API_ENDPOINT});
 export const apiClient = new Client(import.meta.env.VITE_KYD_API_ENDPOINT);
