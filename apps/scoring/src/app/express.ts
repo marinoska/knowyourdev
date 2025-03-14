@@ -1,12 +1,13 @@
 import express, { ErrorRequestHandler } from "express";
 import "express-async-errors";
 import bodyParser from "body-parser";
-import logger from './logger.ts';
-import { normalizeError } from './errors.ts';
+import logger from './logger';
+import { normalizeError } from './errors';
 import cors from "cors";
-import routes from '@/routes/index.ts';
+import routes from '@/routes/index';
 // Init Mongo connection
-import './mongo.ts';
+import './mongo';
+import multer from "multer";
 
 const log = logger('Application');
 
@@ -29,9 +30,9 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
 const app = express();
 app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
 app.use('/api', routes.apiRouter);
 // app.use('/', routes.publicRouter);
 app.use(errorHandler);

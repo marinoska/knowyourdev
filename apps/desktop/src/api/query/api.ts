@@ -17,5 +17,8 @@ export const uploadCV = ({file, name, role}: UploadCVRequestType) => {
     formData.append('name', name);
     formData.append('role', role);
 
-    return apiClient.post<ApiResponse>('/upload', {body: formData, isJson: false});
+    return apiClient.post<ApiResponse>('/document/upload', {
+        body: formData,
+        isFormData: true
+    });
 };

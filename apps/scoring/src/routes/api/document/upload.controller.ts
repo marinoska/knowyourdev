@@ -1,9 +1,9 @@
 import { Joi, Segments } from 'celebrate';
 import multer, { FileFilterCallback } from "multer";
-import logger from "@/app/logger.ts";
+import logger from "@/app/logger";
 import { IncomingMessage } from 'http';
 import type { Response, Request, RequestHandler } from "express";
-import { ValidationError } from "@/app/errors.ts";
+import { ValidationError } from "@/app/errors";
 
 type DocumentUploadRequestBody = {
     name: string;
@@ -14,6 +14,7 @@ const log = logger('UploadController');
 const MAX_FILE_SIZE = 3 * 1024 * 1024;  // Max file size: 3MB
 
 export const upload = multer({
+    dest: 'uploads/',
     limits: {fileSize: MAX_FILE_SIZE},
     fileFilter: (_req: IncomingMessage, file: Express.Multer.File, cb: FileFilterCallback) => {
         const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; // PDF and DOCX mime types

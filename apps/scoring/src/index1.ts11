@@ -1,10 +1,10 @@
 import 'dotenv/config';
 
-import { connected, stopMongoClient } from "./app/mongo.ts";
-import { runCVDataExtraction } from "@/chain/extraction/runner.ts";
-import { TechModel } from "@/models/tech.model.ts";
-import { TechStackModel } from "@/models/techStack.model.ts";
-import { CvDataModel } from "@/models/cvData.model.ts";
+import { connected, stopMongoClient } from "./app/mongo";
+import { runCVDataExtraction } from "@/chain/extraction/runner";
+import { TechModel } from "@/models/tech.model";
+import { TechStackModel } from "@/models/techStack.model";
+import { CvDataModel } from "@/models/cvData.model";
 
 (async () => {
     await connected;

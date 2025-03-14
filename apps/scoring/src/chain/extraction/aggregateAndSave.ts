@@ -1,17 +1,17 @@
-import { ExtractionChainParam } from "@/chain/extraction/types.ts";
-import { CvDataModel, TechnologyEntry } from "@/models/cvData.model.ts";
-import { hash } from "@/utils/crypto.ts";
+import { ExtractionChainParam } from "@/chain/extraction/types";
+import { CvDataModel, TechnologyEntry } from "@/models/cvData.model";
+import { hash } from "@/utils/crypto";
 import {
     TechCode,
     TechDocument,
     TechProfileJobEntry,
     TechProfileTechnologiesEntry, TREND_MAP
-} from "@/models/types.ts";
+} from "@/models/types";
 import { parse, subYears } from "date-fns";
-import logger from '@/app/logger.ts';
+import logger from '@/app/logger';
 import { Schema } from "mongoose";
-import { TechProfileModel } from "@/models/techProfile.model.ts";
-import { isNotNull } from "@/utils/types.utils.ts";
+import { TechProfileModel } from "@/models/techProfile.model";
+import { isNotNull } from "@/utils/types.utils";
 
 const log = logger('extraction:extraction:runner');
 

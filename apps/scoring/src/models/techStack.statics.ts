@@ -1,5 +1,5 @@
-import { TechCode, TechStack, TechStackModelType } from "./types.ts";
-import { isNotNull } from "../utils/types.utils.ts";
+import { TechCode, TechStack, TechStackModelType } from "./types";
+import { isNotNull } from "../utils/types.utils";
 
 // Methods on Model level (TechStackModel)
 

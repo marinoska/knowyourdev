@@ -1,5 +1,5 @@
-import { ExtractionChainOutput } from "@/chain/extraction/types.ts";
-import { FactorsType } from "@/models/types.ts";
+import { ExtractionChainOutput } from "@/chain/extraction/types";
+import { FactorsType } from "@/models/types";
 
 export const getBasicFactors = (params: ExtractionChainOutput) => {
     const output: FactorsType = {

@@ -1,11 +1,11 @@
 import { RunnableSequence } from "@langchain/core/runnables";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { gpt4oMini } from "@/app/aiModel.ts";
-import { parseJsonOutput } from "@/utils/json.ts";
-import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.ts";
-import { extractTechProficiencyPrompt } from "@/chain/extraction/techs/sub/extractTechProficiency.prompt.ts";
-import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.ts";
-import { PROFICIENCY, ProficiencyType } from "@/models/types.ts";
+import { gpt4oMini } from "@/app/aiModel";
+import { parseJsonOutput } from "@/utils/json";
+import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
+import { extractTechProficiencyPrompt } from "@/chain/extraction/techs/sub/extractTechProficiency.prompt";
+import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
+import { PROFICIENCY, ProficiencyType } from "@/models/types";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechProficiencyPrompt}

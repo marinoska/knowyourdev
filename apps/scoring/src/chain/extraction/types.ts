@@ -1,5 +1,5 @@
-import { TechDocument, TechProfileDocumentType } from "@/models/types.ts";
-import { CVDataDocumentType, ExtractedCVData } from "@/models/cvData.model.ts";
+import { TechDocument, TechProfileDocumentType } from "@/models/types";
+import { CVDataDocumentType, ExtractedCVData } from "@/models/cvData.model";
 
 export type ExtractionChainInput = {
     cvText: string, techCollection: TechDocument[]

@@ -1,6 +1,6 @@
-import apiRouter from './apiRouter.ts';
+import apiRouter from './apiRouter';
 // import publicRouter from './publicRouter';
-import { notFoundController } from './api/notFound.controller.ts';
+import { notFoundController } from './api/notFound.controller';
 
 export default {
     // publicRouter,

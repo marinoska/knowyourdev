@@ -1,13 +1,13 @@
 import { RunnableSequence } from "@langchain/core/runnables";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { parseJsonOutput } from "@/utils/json.ts";
-import { ExtractCVDataPrompt } from "./extractCVData.prompt.ts";
-import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.ts";
-import { gpt4oMini } from "@/app/aiModel.ts";
-import { SECTIONS, SectionsNames } from "@/models/types.ts";
-import { ExtractionChainInput, ExtractionChainParam } from "@/chain/extraction/types.ts";
-import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.ts";
-import { ExtractedCVData, JobEntry } from "@/models/cvData.model.ts";
+import { parseJsonOutput } from "@/utils/json";
+import { ExtractCVDataPrompt } from "./extractCVData.prompt";
+import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
+import { gpt4oMini } from "@/app/aiModel";
+import { SECTIONS, SectionsNames } from "@/models/types";
+import { ExtractionChainInput, ExtractionChainParam } from "@/chain/extraction/types";
+import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
+import { ExtractedCVData, JobEntry } from "@/models/cvData.model";
 
 type OutputType = {
     fullName: string;

@@ -1,4 +1,4 @@
-import { TechCode, TechStack, TechStackDocumentType } from "./types.ts";
+import { TechCode, TechStack, TechStackDocumentType } from "./types";
 
 // Methods on Document level (TechStackDocument)
 

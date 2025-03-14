@@ -1,12 +1,12 @@
 import express, { Router } from 'express';
 import { celebrate, errors } from 'celebrate';
 // import { checkAuth0Token } from 'nftit/User/checkAuth0Token.middlware';
-import { notFoundController } from './api/notFound.controller.ts';
+import { notFoundController } from './api/notFound.controller';
 import {
     documentUploadController,
     documentUploadValidationSchema, FILE_MULTIPART_PARAM,
     upload
-} from "@/routes/api/document/upload.controller.ts";
+} from "@/routes/api/document/upload.controller";
 // import { loadAuthenticatedUser } from 'nftit/User/loadAuthenticatedUser.middleware';
 
 const validateOptions = {abortEarly: false};

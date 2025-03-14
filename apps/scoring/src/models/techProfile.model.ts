@@ -6,7 +6,7 @@ import {
     TechProfileModelType,
     TechProfileTechnologiesEntry,
     TREND
-} from "@/models/types.ts";
+} from "@/models/types";
 
 const JobSchema =
     {

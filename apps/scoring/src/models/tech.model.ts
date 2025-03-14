@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { CATEGORY, SCOPE, TechDocument, TechModelType, TREND } from "./types.ts";
+import { CATEGORY, SCOPE, TechDocument, TechModelType, TREND } from "./types";
 
 const techSchema = new Schema<TechDocument, TechModelType>(
     {

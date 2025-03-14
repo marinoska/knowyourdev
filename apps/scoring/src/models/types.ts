@@ -1,5 +1,5 @@
 import { Document, Model, Schema } from "mongoose";
-import { JobEntry } from "@/models/cvData.model.ts";
+import { JobEntry } from "@/models/cvData.model";
 
 export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, decline, steady, trending, highly trending
 export const TREND_MAP: Record<TrendType, number> = {

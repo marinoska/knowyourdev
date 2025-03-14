@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import logger from './logger.ts';
+import logger from './logger';
 
 const log = logger('Mongo');
 

@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { TECH_STACK_CATEGORY, TechStackDocumentType, TechStackModelType, TREND } from "./types.ts";
-import { identifyStack } from "./techStack.statics.ts";
-import { matchTechList } from "./techStack.methods.ts";
+import { TECH_STACK_CATEGORY, TechStackDocumentType, TechStackModelType, TREND } from "./types";
+import { identifyStack } from "./techStack.statics";
+import { matchTechList } from "./techStack.methods";
 
 export const TechStackSchema = new Schema<TechStackDocumentType, TechStackModelType>(
     {

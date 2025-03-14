@@ -1,5 +1,5 @@
 import { Document, Model, model, Schema } from 'mongoose';
-import { ProficiencyType, ScopeType, SectionsNames, TechCode, TechDocument, TechStack } from "@/models/types.ts";
+import { ProficiencyType, ScopeType, SectionsNames, TechCode, TechDocument, TechStack } from "@/models/types";
 
 export type JobEntry = {
     _id: Schema.Types.ObjectId;

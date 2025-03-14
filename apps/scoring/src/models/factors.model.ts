@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { FactorsDocumentType, FactorsModelType } from "@/models/types.ts";
+import { FactorsDocumentType, FactorsModelType } from "@/models/types";
 
 // Define Job History Quality Schema
 const JobHistoryQualitySchema = new mongoose.Schema({

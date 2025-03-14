@@ -1,7 +1,8 @@
 import { stringify } from 'qs';
 
+export const CONTENT_TYPE = 'Content-Type';
 const defaultHeaders = {
-    'Content-Type': 'application/json'
+    [CONTENT_TYPE]: 'application/json'
 };
 
 function isJsonResponse<T extends { headers: Headers }>(response: T) {
@@ -20,7 +21,7 @@ type PostParams = {
     body?: BodyInit;
     headers?: HeadersInit;
     query?: object;
-    isJson?: boolean;
+    isFormData?: boolean;
 };
 
 class Client {
@@ -74,10 +75,19 @@ class Client {
         });
     }
 
-    public post<R>(path: string, {body, headers, query = {}, isJson = true}: PostParams) {
+    public post<R>(path: string, {body, headers, query = {}, isFormData = false}: PostParams) {
         const qs = Object.keys(query).length ? `?${stringify(query)}` : '';
+        console.log("HEADERS", headers ? {...defaultHeaders, ...headers} : {...defaultHeaders})
+
+        if (isFormData) {
+            return this._doFetch<R>(`${path}${qs}`, {
+                body,
+                method: 'POST',
+            })
+        }
+        
         return this._doFetch<R>(`${path}${qs}`, {
-            body: isJson ? body && JSON.stringify(body) : body,
+            body: body && JSON.stringify(body),
             headers: headers ? {...defaultHeaders, ...headers} : {...defaultHeaders},
             method: 'POST'
         });

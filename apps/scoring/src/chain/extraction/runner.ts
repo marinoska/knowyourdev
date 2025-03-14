@@ -1,11 +1,11 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
-import { extractCVData } from "@/chain/extraction/cvData/extractCVData.chain.ts";
-import { pipe } from "@/utils/func.ts";
-import { ExtractionChainParam } from "@/chain/extraction/types.ts";
-import { extractTechnologies } from "@/chain/extraction/techs/extractTechnologies.chain.ts";
-import { aggregateAndSave } from "@/chain/extraction/aggregateAndSave.ts";
-import { TechModel } from "@/models/tech.model.ts";
-import { ExtractedCVData } from "@/models/cvData.model.ts";
+import { extractCVData } from "@/chain/extraction/cvData/extractCVData.chain";
+import { pipe } from "@/utils/func";
+import { ExtractionChainParam } from "@/chain/extraction/types";
+import { extractTechnologies } from "@/chain/extraction/techs/extractTechnologies.chain";
+import { aggregateAndSave } from "@/chain/extraction/aggregateAndSave";
+import { TechModel } from "@/models/tech.model";
+import { ExtractedCVData } from "@/models/cvData.model";
 
 async function extractCVText(filePath: string): Promise<string> {
     const loader = new PDFLoader(filePath);

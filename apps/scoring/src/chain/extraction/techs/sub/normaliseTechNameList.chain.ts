@@ -1,14 +1,14 @@
 import { RunnableSequence } from "@langchain/core/runnables";
-import { gpt4oMini } from "@/app/aiModel.ts";
-import { parseJsonOutput } from "@/utils/json.ts";
-import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.ts";
+import { gpt4oMini } from "@/app/aiModel";
+import { parseJsonOutput } from "@/utils/json";
+import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { normaliseTechNameListPrompt } from "./normaliseTechNameList.prompt.ts";
-import { TechDocument } from "@/models/types.ts";
-import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.ts";
-import { overlapSimilarity } from "@/chain/normalizer/overlapSimilarity.ts";
-import { generateTechCode } from "@/utils/func.ts";
-import { TechnologyEntry } from "@/models/cvData.model.ts";
+import { normaliseTechNameListPrompt } from "./normaliseTechNameList.prompt";
+import { TechDocument } from "@/models/types";
+import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
+import { overlapSimilarity } from "@/chain/normalizer/overlapSimilarity";
+import { generateTechCode } from "@/utils/func";
+import { TechnologyEntry } from "@/models/cvData.model";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${normaliseTechNameListPrompt}
