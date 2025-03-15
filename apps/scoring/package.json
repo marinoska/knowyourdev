@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@kyd/types": "workspace:*",
+    "@kyd/typescript-config": "workspace:*",
     "@swc/core": "^1.11.9",
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",

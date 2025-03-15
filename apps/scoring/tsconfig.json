@@ -1,15 +1,8 @@
 {
+  "extends": "@kyd/typescript-config/base.json",
   "compilerOptions": {
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "target": "ESNext",
     "outDir": "dist",
     "rootDir": "src",
-    "strict": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [

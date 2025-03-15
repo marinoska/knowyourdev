@@ -160,6 +160,9 @@ importers:
       '@kyd/types':
         specifier: workspace:*
         version: link:../../packages/types
+      '@kyd/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@swc/core':
         specifier: ^1.11.9
         version: 1.11.9(@swc/helpers@0.5.15)
