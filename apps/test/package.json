@@ -1,6 +1,6 @@
 {
   "name": "test",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon -r tsconfig-paths/register --exec ts-node ./src/index.ts --files",

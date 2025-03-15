@@ -9,7 +9,7 @@ import Divider from "@mui/joy/Divider";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import { FormLabel, Input } from "@mui/joy";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUploadMutation } from "../api/query/useUploadMutation.js";
 import { SnackbarWarning } from "../components/SnackbarWarning.js";
 
@@ -28,6 +28,10 @@ export const UploadModal = ({open, setOpen}: {
         reset,
         handleFileUpload,
     } = useUploadMutation();
+
+    useEffect(() => {
+        isSuccess && setOpen(false);
+    }, [isSuccess, setOpen]);
 
     return (
         <Modal

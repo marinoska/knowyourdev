@@ -1,6 +1,6 @@
 import { ExtractionChainParam } from "@/chain/extraction/types";
 import { CvDataModel, TechnologyEntry } from "@/models/cvData.model";
-import { hash } from "@/utils/crypto";
+import { createHash } from "@/utils/crypto";
 import {
     TechCode,
     TechDocument,
@@ -22,7 +22,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         throw new Error("extractedData is required");
 
     const updatedCV = await CvDataModel.findOneAndUpdate(
-        {hash: hash(params.cvText)}, // Find by hash
+        {hash: createHash(params.cvText)}, // Find by hash
         {
             $set: {...params.extractedData},
         }, // Set new or updated fields
@@ -50,7 +50,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             const start = parse(job.start, FormatString, new Date());
             const end = parse(job.end, FormatString, new Date());
             if (isNaN(end.getTime()) || isNaN(start.getTime())) {
-                log.error(`Invalid Date in ${job}, hash ${hash}`);
+                log.error(`Invalid Date in ${job}, hash ${createHash}`);
             }
 
             // Parse the date

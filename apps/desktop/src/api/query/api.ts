@@ -1,8 +1,7 @@
 import { apiClient } from "../client.js";
 
-export type ApiResponse = {
-    success: boolean;
-    message: string;
+export type DocumentUploadResponse = {
+    uploadId: string;
 };
 
 export type UploadCVRequestType = {
@@ -17,8 +16,12 @@ export const uploadCV = ({file, name, role}: UploadCVRequestType) => {
     formData.append('name', name);
     formData.append('role', role);
 
-    return apiClient.post<ApiResponse>('/document/upload', {
+    return apiClient.post<DocumentUploadResponse>('/document/upload', {
         body: formData,
         isFormData: true
     });
 };
+
+export const listUploads = () => {
+    return apiClient.get<DocumentUploadsResponse>('/document/uploads');
+}

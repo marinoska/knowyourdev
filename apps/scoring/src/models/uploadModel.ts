@@ -1,0 +1,43 @@
+import mongoose, { Document, Model, Schema } from 'mongoose';
+import { CVDataDocumentType } from "@/models/cvData.model";
+
+export type PARSE_STATUS = 'pending' | 'parsed' | 'failed';
+
+export type TUpload = {
+    originalName: string;  // Original filename
+    filename: string;      // Stored filename (hashed or unique)
+    hash: string;          // SHA-256 hash for deduplication
+    contentType: string;   // MIME type (e.g., application/pdf, image/png)
+    // data: Buffer;          // Binary file data
+    size: number;          // File size in bytes
+    metadata: {
+        name: string;
+        role: string;
+    },
+    parseStatus: PARSE_STATUS;
+};
+
+export type TUploadDocument = Document & TUpload & {
+    _id: Schema.Types.ObjectId,
+    createdAt: Date,
+    updatedAt: Date,
+};
+export type TUploadModel = Model<TUploadDocument>;
+
+const UploadSchema = new Schema<TUploadDocument, TUploadModel>({
+        originalName: {type: String, required: true, immutable: true},
+        filename: {type: String, required: true, immutable: true},
+        hash: {type: String, required: true, immutable: true},
+        contentType: {type: String, required: true, immutable: true},
+        // data: {type: Buffer, required: true},
+        size: {type: Number, required: true, immutable: true},
+        metadata: {
+            name: {type: String, required: true},
+            role: {type: String, default: ""},
+        },
+        parseStatus: {type: String, default: 'pending'}
+    },
+    {timestamps: true, collection: 'upload', autoIndex: true}
+);
+
+export const UploadModel = mongoose.model<TUploadDocument, TUploadModel>('upload', UploadSchema);

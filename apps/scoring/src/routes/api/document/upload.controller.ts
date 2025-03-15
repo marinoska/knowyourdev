@@ -4,6 +4,9 @@ import logger from "@/app/logger";
 import { IncomingMessage } from 'http';
 import type { Response, Request, RequestHandler } from "express";
 import { ValidationError } from "@/app/errors";
+import { createHash } from "@/utils/crypto";
+import { TUploadDocument, UploadModel } from "@/models/uploadModel";
+import fs from "node:fs";
 
 type DocumentUploadRequestBody = {
     name: string;
@@ -15,6 +18,7 @@ const MAX_FILE_SIZE = 3 * 1024 * 1024;  // Max file size: 3MB
 
 export const upload = multer({
     dest: 'uploads/',
+    // storage: multer.memoryStorage(),
     limits: {fileSize: MAX_FILE_SIZE},
     fileFilter: (_req: IncomingMessage, file: Express.Multer.File, cb: FileFilterCallback) => {
         const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; // PDF and DOCX mime types
@@ -27,40 +31,70 @@ export const upload = multer({
     },
 });
 
+type DocumentUploadResponse = {
+    uploadId: string;
+};
+
 export type DocumentUploadController = RequestHandler<
     any,
-    Response,
+    DocumentUploadResponse,
     DocumentUploadRequestBody,
     any,
     {}
 >;
 export type DocumentUploadRequest = Request<any, any, DocumentUploadRequestBody>;
 export const FILE_MULTIPART_PARAM = 'file';
-export const documentUploadController: DocumentUploadController = async (req: DocumentUploadRequest, res: Response) => {
+
+
+export const documentUploadController: DocumentUploadController = async (req: DocumentUploadRequest, res: Response<DocumentUploadResponse>) => {
     // Multer should have added the file to `req.file`, check it
     if (!req.file) {
         throw new ValidationError('No file provided.');
     }
 
+    const {name, role} = req.body;
     // File metadata (use it as required, e.g., saving to database or storage)
-    const {originalname, mimetype, size} = req.file;
+    const {originalname, mimetype, size, filename, path: filePath} = req.file;
+    console.log({originalname, mimetype, size, filename, filePath});
+    let buffer: Buffer;
+    try {
+        buffer = fs.readFileSync(filePath); // Read the file as a Buffer
+    } catch (err) {
+        throw new Error("Failed to read the file" + JSON.stringify(err));
+    }
 
-    // Simulate saving or further processing of the file (custom logic can go here)
-    const fileMetadata = {
-        fileName: originalname,
-        type: mimetype,
-        size: size,
-    };
+    const hash = createHash(buffer);
+    // const existingFile = await UploadModel.findOne({hash});
+    // if (existingFile) {
+    //     res.status(409).json({error: 'File already exists', fileId: existingFile._id});
+    //
+    //     return;
+    // }
+
+    const newUpload: TUploadDocument = new UploadModel({
+        originalName: originalname,
+        filename: filename,  // Store the hash as the filename for uniqueness
+        hash,
+        contentType: mimetype,
+        // data: buffer,
+        size,
+        metadata: {
+            name: name || originalname,
+            role
+        },
+        parseStatus: 'pending'
+    });
+
+    await newUpload.save();
 
     res.status(200).json({
-        message: 'File uploaded successfully.',
-        file: fileMetadata,
+        uploadId: newUpload._id.toString(),
     });
 };
 
 export const documentUploadValidationSchema = {
     [Segments.BODY]: {
-        name: Joi.string().valid('').required(),
-        role: Joi.string().valid('').required(),
+        name: Joi.string().allow('').optional().default(''),
+        role: Joi.string().allow('').optional().default('')
     },
 };

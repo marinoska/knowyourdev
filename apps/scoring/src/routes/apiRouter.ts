@@ -7,6 +7,7 @@ import {
     documentUploadValidationSchema, FILE_MULTIPART_PARAM,
     upload
 } from "@/routes/api/document/upload.controller";
+import { getUploadsListController, getUploadsListValidationSchema } from "@/routes/api/document/list.controller";
 // import { loadAuthenticatedUser } from 'nftit/User/loadAuthenticatedUser.middleware';
 
 const validateOptions = {abortEarly: false};
@@ -15,6 +16,7 @@ const apiRouter: Router = express.Router();
 // apiRouter.use(checkAuth0Token, loadAuthenticatedUser);
 
 apiRouter.post('/document/upload', upload.single(FILE_MULTIPART_PARAM), celebrate(documentUploadValidationSchema, validateOptions), documentUploadController);
+apiRouter.get('/document/uploads', celebrate(getUploadsListValidationSchema), getUploadsListController);
 
 apiRouter.use(notFoundController);
 apiRouter.use(errors());
