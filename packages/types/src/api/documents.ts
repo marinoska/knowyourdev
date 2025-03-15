@@ -19,3 +19,12 @@ export type GetUploadsListQueryParams = {
     // sortBy?: string;
     // sortOrder?: 'asc' | 'desc';
 };
+
+export type DocumentUploadResponse = {
+    uploadId: string;
+};
+
+export type DocumentUploadRequestBody = {
+    name: string;
+    role: string;
+}

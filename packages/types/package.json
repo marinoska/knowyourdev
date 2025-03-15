@@ -1,15 +1,20 @@
 {
   "name": "@kyd/types",
   "version": "0.0.0",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
     "dev": "tsc --watch"
   },
   "exports": {
-    ".": "./dist/index.d.ts",
     "./api": "./dist/api/index.d.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "api": [
+        "./dist/api/index.d.ts"
+      ]
+    }
   },
   "devDependencies": {
     "typescript": "^5.0.0",

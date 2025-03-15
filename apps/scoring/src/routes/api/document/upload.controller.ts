@@ -6,12 +6,8 @@ import type { Response, Request, RequestHandler } from "express";
 import { ValidationError } from "@/app/errors";
 import { createHash } from "@/utils/crypto";
 import { TUploadDocument, UploadModel } from "@/models/uploadModel";
-import fs from "node:fs";
-
-type DocumentUploadRequestBody = {
-    name: string;
-    role: string;
-}
+import * as fs from "node:fs";
+import { DocumentUploadRequestBody, DocumentUploadResponse } from "@kyd/types/api";
 
 const log = logger('UploadController');
 const MAX_FILE_SIZE = 3 * 1024 * 1024;  // Max file size: 3MB
@@ -30,10 +26,6 @@ export const upload = multer({
         }
     },
 });
-
-type DocumentUploadResponse = {
-    uploadId: string;
-};
 
 export type DocumentUploadController = RequestHandler<
     any,
