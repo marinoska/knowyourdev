@@ -8,7 +8,8 @@ import { useState } from "react";
 import { SnackbarWarning } from "./SnackbarWarning.js";
 import { StateSetter } from "../types.js";
 import { Alert } from "@mui/joy";
-import { MAXIMUM_UPLOAD_SIZE_BYTES, validateFileContent } from "../utils/files.js";
+import { validateFileContent } from "../utils/files.js";
+import { MAXIMUM_UPLOAD_SIZE_BYTES } from "@/utils/const.ts";
 
 export const DropzoneBox = ({file, setFile}: { file: File | null; setFile: StateSetter<File | null> }) => {
     const [error, setError] = useState('');

@@ -25,6 +25,12 @@ export default tseslint.config(
             ],
             'no-unused-expressions': 'off',
             '@typescript-eslint/no-unused-expressions': 'off',
+            '@typescript-eslint/ban-ts-comment': [
+                'off', // Disable the rule to disallow @ts-ignore
+                {
+                    'ts-ignore': false, // Alternatively, if you use "warn", set this to "false" to allow @ts-ignore
+                },
+            ],
         },
     },
 );

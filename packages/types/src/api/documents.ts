@@ -1,8 +1,10 @@
+export type ParsedStatus = 'pending' | 'failed' | 'processed';
 export type UploadItem = {
     _id: string;
     name: string;
     role: string;
     size: number;
+    parseStatus: ParsedStatus;
     createdAt: string;
 };
 
@@ -20,11 +22,14 @@ export type GetUploadsListQueryParams = {
     // sortOrder?: 'asc' | 'desc';
 };
 
-export type DocumentUploadResponse = {
-    uploadId: string;
-};
+export type DocumentUploadResponse = UploadItem;
 
 export type DocumentUploadRequestBody = {
     name: string;
     role: string;
 }
+
+export type DocumentUploadRequestType = {
+    file: File,
+} & DocumentUploadRequestBody;
+

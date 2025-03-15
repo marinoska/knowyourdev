@@ -1,16 +1,11 @@
-import { apiClient } from "../client.js";
+import { apiClient } from "@/api";
+import {
+    DocumentUploadRequestType,
+    DocumentUploadResponse,
+    GetUploadsListResponse
+} from "@kyd/types/api";
 
-export type DocumentUploadResponse = {
-    uploadId: string;
-};
-
-export type UploadCVRequestType = {
-    file: File,
-    name: string,
-    role: string
-};
-
-export const uploadCV = ({file, name, role}: UploadCVRequestType) => {
+export const uploadCV = ({file, name, role}: DocumentUploadRequestType) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('name', name);
@@ -22,6 +17,7 @@ export const uploadCV = ({file, name, role}: UploadCVRequestType) => {
     });
 };
 
-export const listUploads = () => {
-    return apiClient.get<DocumentUploadsResponse>('/document/uploads');
+export const listUploads = async () => {
+    const response = await apiClient.get<GetUploadsListResponse>('/document/uploads');
+    return response.uploads;
 }

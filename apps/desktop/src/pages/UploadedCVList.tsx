@@ -6,11 +6,17 @@ import { UploadedItem } from "./UploadedItem";
 import UploadFile from '@mui/icons-material/Upload';
 import * as React from "react";
 import { UploadModal } from "./UploadModal.js";
+import { useUploadsListQuery } from "@/api/query/useUploadsListQuery.ts";
+import { SnackbarWarning } from "@/components/SnackbarWarning.tsx";
+import { CircularProgress } from "@mui/joy";
 
 export const UploadedCVList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
+    const {data: uploads, isLoading, showError, dismissError} = useUploadsListQuery();
+
     return (<>
+            {showError && <SnackbarWarning type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
             <Sheet sx={{
                 // width: 'fit-content',
                 // minWidth: {
@@ -25,9 +31,14 @@ export const UploadedCVList = () => {
                             action={() => setOpenUploadModal(true)}/>
                 <Box sx={{m: 3}}>
                     <Stack spacing={2}>
-                        <UploadedItem title="Michael Chen - Frontend Developer" date={new Date()}/>
-                        <UploadedItem title="Sarah Johnson - Full Stack Developer" date={new Date()}/>
-                        <UploadedItem title="David Kim - Backend Developer" date={new Date()}/>
+                        {isLoading &&
+                            (<Box sx={{alignItems: 'center', justifyContent: 'center', display: 'flex',}}>
+                                <CircularProgress size="lg"/>
+                            </Box>)}
+                        {uploads?.map((upload) => (
+                            <UploadedItem key={upload._id} title={`${upload.name} ${upload.role}`}
+                                          date={new Date(upload.createdAt)}/>
+                        ))}
                     </Stack>
                 </Box>
 

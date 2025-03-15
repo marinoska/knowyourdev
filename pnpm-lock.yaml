@@ -50,10 +50,16 @@ importers:
       react-dropzone:
         specifier: ^14.3.8
         version: 14.3.8(react@19.0.0)
+      uuid:
+        specifier: ^11.0.5
+        version: 11.0.5
     devDependencies:
       '@eslint/js':
         specifier: ^9.21.0
         version: 9.21.0
+      '@kyd/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@types/qs':
         specifier: ^6.9.18
         version: 6.9.18

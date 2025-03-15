@@ -3,7 +3,7 @@ import { Snackbar } from "@mui/joy";
 
 export function SnackbarWarning({msg, onClose, variant = 'soft', type = 'warning'}: {
     msg: string,
-    onClose: VoidFunction,
+    onClose?: VoidFunction,
     variant?: 'soft' | 'solid' | 'outlined',
     type?: 'danger'
         | 'neutral'
@@ -20,7 +20,8 @@ export function SnackbarWarning({msg, onClose, variant = 'soft', type = 'warning
         anchorOrigin={{vertical: 'top', horizontal: 'right'}}
         endDecorator={
             <Button
-                onClick={onClose}
+                onClick={onClose || (() => {
+                })}
                 size="md"
                 variant={variant}
             >

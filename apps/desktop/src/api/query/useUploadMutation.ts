@@ -1,16 +1,26 @@
-import { useMutation } from "@tanstack/react-query";
-import { DocumentUploadResponse, uploadCV, UploadCVRequestType } from "./api.js";
-import { MAXIMUM_UPLOAD_SIZE_BYTES } from "../../utils/files.js";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { uploadCV } from "./api.js";
+import { DocumentUploadRequestType, DocumentUploadResponse, UploadItem } from "@kyd/types/api";
+import { MAXIMUM_UPLOAD_SIZE_BYTES } from "@/utils/const.ts";
+import { uploadsKeys } from "@/api/query/keys.ts";
+
 
 export const useUploadMutation = () => {
-    const {mutate, ...results} = useMutation<DocumentUploadResponse, Error, UploadCVRequestType>(
+    const queryClient = useQueryClient();
+    const {mutate, ...results} = useMutation<DocumentUploadResponse, Error, DocumentUploadRequestType>(
         {
             mutationFn: uploadCV,
             onError: (err) => {
                 console.log(err.toString());
             },
-            onSuccess: ({uploadId}) => {
-                // TODO
+            onSuccess: async (upload) => {
+                void queryClient.setQueryData(
+                    uploadsKeys.list(),
+                    (uploads: UploadItem[] = []) => {
+                        console.log({uploads, upload});
+                        return [upload, ...uploads]
+                    }
+                )
             }
         }
     );

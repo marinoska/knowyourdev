@@ -80,7 +80,11 @@ export const documentUploadController: DocumentUploadController = async (req: Do
     await newUpload.save();
 
     res.status(200).json({
-        uploadId: newUpload._id.toString(),
+        _id: newUpload._id.toString(),
+        name: newUpload.metadata.name,
+        role: newUpload.metadata.role,
+        size: newUpload.size,
+        createdAt: newUpload.createdAt.toISOString()
     });
 };
 

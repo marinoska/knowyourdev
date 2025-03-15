@@ -17,7 +17,7 @@ export const getUploadsListController: RequestHandler<
 
     const uploads = await UploadModel.find()
         // .sort({[sortBy]: sortOrder === 'asc' ? 1 : -1})
-        .sort({'createdAt': 1})
+        .sort({'createdAt': -1})
         .skip(skip)
         .limit(limit) // Limit documents per page
         .select('metadata.size metadata.name metadata.role size createdAt')
