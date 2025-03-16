@@ -5,9 +5,9 @@ import {
     TechCode,
     TechDocument,
     TechProfileJobEntry,
-    TechProfileTechnologiesEntry, TREND_MAP
+    TechProfileTechnologiesEntry, TechProfileTechnologiesJobEntry, TREND_MAP
 } from "@/models/types";
-import { parse, subYears } from "date-fns";
+import { isValid, parse, subYears } from "date-fns";
 import logger from '@/app/logger';
 import { Schema } from "mongoose";
 import { TechProfileModel } from "@/models/techProfile.model";
@@ -22,9 +22,9 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         throw new Error("extractedData is required");
 
     const updatedCV = await CvDataModel.findOneAndUpdate(
-        {hash: createHash(params.cvText)}, // Find by hash
+        {uploadRef: params.uploadId}, // Find by hash
         {
-            $set: {...params.extractedData},
+            $set: {uploadRef: params.uploadId, ...params.extractedData},
         }, // Set new or updated fields
         {upsert: true, new: true, runValidators: true} // Create if not exists, return updated, apply schema validations
     ).populate(
@@ -38,7 +38,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         techReference: Schema.Types.ObjectId,
         code: TechCode,
 
-        jobs: { start: Date, end: Date; role: string; company: string }[]
+        jobs: TechProfileTechnologiesJobEntry[]
     }> = {};
 
     for (const job of updatedCV.jobs) {
@@ -47,14 +47,21 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         }
 
         job.technologies.forEach(tech => {
+            const jobEntry: TechProfileTechnologiesJobEntry = {role: job.role, company: job.job};
             const start = parse(job.start, FormatString, new Date());
+            if (!isValid(start)) {
+                log.warn(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
+            } else {
+                jobEntry.start = start;
+            }
             const end = parse(job.end, FormatString, new Date());
-            if (isNaN(end.getTime()) || isNaN(start.getTime())) {
-                log.error(`Invalid Date in ${job}, hash ${createHash}`);
+            if (!isValid(end)) {
+                log.warn(`Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`);
+            } else {
+                jobEntry.end = end;
             }
 
             // Parse the date
-            const jobEntry = {start, end, role: job.role, company: job.job};
             !aggTechs[tech.code] && (aggTechs[tech.code] = {
                 techReference: tech.techReference as Schema.Types.ObjectId,
                 code: tech.code,
@@ -70,7 +77,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
     }), {});
 
     const withTotalMonth = Object.values(aggTechs).map<TechProfileTechnologiesEntry | null>(tech => {
-        const mergedRanges = mergeRanges(tech.jobs); // Merge the overlapping ranges
+        const mergedRanges = mergeRanges(tech.jobs as Range[]); // Merge the overlapping ranges
         const totalMonths = calculateTotalMonths(mergedRanges); // Calculate total unique months
         const recentMonths = calculateTotalMonths(mergedRanges, 3); // Calculate total unique months
 
@@ -137,9 +144,18 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             }
         }).filter(isNotNull);
 
+        const start = parse(job.start, FormatString, new Date());
+        if (!isValid(start)) {
+            log.warn(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
+        }
+        const end = parse(job.end, FormatString, new Date());
+        if (!isValid(end)) {
+            log.warn(`Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`);
+        }
+
         return {
-            start: parse(job.start, FormatString, new Date()),
-            end: parse(job.end, FormatString, new Date()),
+            start: isValid(start) ? start : undefined,
+            end: isValid(end) ? end : undefined,
             months: job.months,
             trending: technologies.length
                 ? technologies.reduce((acc, tech) => acc + tech.trending, 0) / technologies.length
@@ -154,10 +170,10 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
     });
 
     const techProfile = await TechProfileModel.findOneAndUpdate(
-        {hash: updatedCV.hash}, // Find by hash
+        {uploadRef: updatedCV.uploadRef}, // Find by hash
         {
             $set: {
-                hash: updatedCV.hash,
+                uploadRef: updatedCV.uploadRef,
                 fullName: updatedCV.fullName,
                 technologies: Object.values(withTotalMonth),
                 jobs: techProfileJobs,

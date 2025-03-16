@@ -1,7 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import { CVDataDocumentType } from "@/models/cvData.model";
-
-export type PARSE_STATUS = 'pending' | 'parsed' | 'failed';
+import { ParsedStatus } from "@kyd/types/api";
 
 export type TUpload = {
     originalName: string;  // Original filename
@@ -14,7 +13,7 @@ export type TUpload = {
         name: string;
         role: string;
     },
-    parseStatus: PARSE_STATUS;
+    parseStatus: ParsedStatus;
 };
 
 export type TUploadDocument = Document & TUpload & {

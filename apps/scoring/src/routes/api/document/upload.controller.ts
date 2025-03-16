@@ -8,12 +8,14 @@ import { createHash } from "@/utils/crypto";
 import { TUploadDocument, UploadModel } from "@/models/uploadModel";
 import * as fs from "node:fs";
 import { DocumentUploadRequestBody, DocumentUploadResponse } from "@kyd/types/api";
+import { processUpload, runCVDataExtraction } from "@/chain/extraction/runner";
+import { env } from "@/app/env";
 
 const log = logger('UploadController');
 const MAX_FILE_SIZE = 3 * 1024 * 1024;  // Max file size: 3MB
-
+const dest = env('UPLOAD_DIR');
 export const upload = multer({
-    dest: 'uploads/',
+    dest,
     // storage: multer.memoryStorage(),
     limits: {fileSize: MAX_FILE_SIZE},
     fileFilter: (_req: IncomingMessage, file: Express.Multer.File, cb: FileFilterCallback) => {
@@ -79,11 +81,14 @@ export const documentUploadController: DocumentUploadController = async (req: Do
 
     await newUpload.save();
 
+    void processUpload(newUpload);
+
     res.status(200).json({
         _id: newUpload._id.toString(),
         name: newUpload.metadata.name,
         role: newUpload.metadata.role,
         size: newUpload.size,
+        parseStatus: newUpload.parseStatus,
         createdAt: newUpload.createdAt.toISOString()
     });
 };

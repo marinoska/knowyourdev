@@ -3,27 +3,46 @@ import DocumentIcon from '@mui/icons-material/Grading';
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { format } from "date-fns";
+import { ParsedStatus, UploadItem } from "@kyd/types/api";
+import { CircularProgress } from "@mui/joy";
+import * as React from "react";
+import { Done, ReportProblem } from "@mui/icons-material";
 
-export const UploadedItem = ({title, date}: { title: string, date: Date }) => {
+const StatusIcon: Record<ParsedStatus, React.ReactNode> = {
+    'pending': <CircularProgress variant="solid" size="sm"/>,
+    'failed': <ReportProblem color="warning"/>,
+    'processed': <Done color="success"/>,
+};
+
+export const UploadedItem = ({item}: { item: UploadItem }) => {
+    const style = {
+        backgroundColor: 'var(--joy-palette-background-body)',
+        p: 2,
+    };
+
+    const hoverStyle = {
+        "&:hover": {
+            backgroundColor: "var(--joy-palette-primary-softHoverBg)", // Hover color
+            cursor: "pointer",
+        }
+    };
+
     return (
-        <Box onClick={() => {
+        <Box key={item._id} onClick={() => {
             alert("www")
         }}
-             sx={{
-                 backgroundColor: 'var(--joy-palette-background-body)',
-                 p: 2,
-                 "&:hover": {
-                     backgroundColor: "var(--joy-palette-primary-softHoverBg)", // Hover color
-                     cursor: "pointer",
-                 },
-             }}>
+             sx={
+                 item.parseStatus === 'processed' ? {...style, ...hoverStyle} : {...style}
+             }>
             <Stack direction="row" gap={2} alignItems="center">
                 <Typography level="body-md"><DocumentIcon/></Typography>
                 <Stack>
 
-                    <Typography>{title}</Typography>
-                    <Typography level="body-xs">Uploaded on {format(date, "MMMM d, yyyy")}</Typography>
+                    <Typography>{item.name} {item.role && ` - ${item.role}`}</Typography>
+                    <Typography level="body-xs">Uploaded
+                        on {format(new Date(item.createdAt), "MMMM d, yyyy")}</Typography>
                 </Stack>
+                <Typography sx={{marginLeft: "auto"}} level="body-md">{StatusIcon[item.parseStatus]}</Typography>
             </Stack>
         </Box>
     )

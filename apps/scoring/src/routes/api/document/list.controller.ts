@@ -20,7 +20,7 @@ export const getUploadsListController: RequestHandler<
         .sort({'createdAt': -1})
         .skip(skip)
         .limit(limit) // Limit documents per page
-        .select('metadata.size metadata.name metadata.role size createdAt')
+        .select('metadata.size metadata.name metadata.role size createdAt parseStatus')
         .lean();
 
     // Fetch the total count
@@ -33,6 +33,7 @@ export const getUploadsListController: RequestHandler<
             name: upload.metadata.name,
             role: upload.metadata.role,
             size: upload.size,
+            parseStatus: upload.parseStatus,
             createdAt: upload.createdAt.toISOString(),
         })),
         totalRecords,

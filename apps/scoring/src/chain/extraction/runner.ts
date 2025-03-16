@@ -6,24 +6,64 @@ import { extractTechnologies } from "@/chain/extraction/techs/extractTechnologie
 import { aggregateAndSave } from "@/chain/extraction/aggregateAndSave";
 import { TechModel } from "@/models/tech.model";
 import { ExtractedCVData } from "@/models/cvData.model";
+import { TUploadDocument } from "@/models/uploadModel";
+import logger from "@/app/logger";
+import { env } from "@/app/env";
+import path from "node:path";
+import mammoth from "mammoth";
+import { Schema } from "mongoose";
 
-async function extractCVText(filePath: string): Promise<string> {
-    const loader = new PDFLoader(filePath);
-    const docs = await loader.load();
-    return docs.map(doc => doc.pageContent).join(" ");
+const log = logger('DataExtraction');
+const dir = env('UPLOAD_DIR');
+
+async function extractCVText(filePath: string, contentType: string): Promise<string> {
+    if (contentType.includes('wordprocessingml.document')) {
+        // Handle .docx files
+        const result = await mammoth.extractRawText({path: filePath});
+        return result.value;
+    }
+    if (contentType.includes('pdf')) {
+        const loader = new PDFLoader(filePath);
+        const docs = await loader.load();
+        return docs.map(doc => doc.pageContent).join(" ");
+    }
+
+    throw new Error("Unknown file type: " + contentType);
 }
 
-export async function runCVDataExtraction(filePath: string): Promise<ExtractedCVData> {
-    const cvText = await extractCVText(filePath);
+/*
+    await TechModel.init();
+    await TechStackModel.init();
+    await CvDataModel.init();
+ */
 
+export async function processUpload(upload: TUploadDocument) {
+    try {
+        const filePath = path.join(process.cwd(), dir, upload.filename);
+        const cvText = await extractCVText(filePath, upload.contentType);
+
+        const data = (await runCVDataExtraction(cvText, upload._id));
+        upload.parseStatus = "processed";
+        void upload.save();
+    } catch (error) {
+        //TODO process failed on FE
+        upload.parseStatus = "failed";
+        void upload.save();
+        log.error("Upload processing error: " + upload._id, error);
+    }
+}
+
+export async function runCVDataExtraction(cvText: string, uploadId: Schema.Types.ObjectId): Promise<ExtractedCVData> {
     if (!cvText || cvText.trim() === "") {
         throw new Error("CV text extraction failed. Please check the PDF file.");
     }
+
     const techCollection = await TechModel.find().lean();
 
     const inputData: ExtractionChainParam = {
         cvText,
-        techCollection
+        techCollection,
+        uploadId
     };
 
     const output = await pipe<ExtractionChainParam>(

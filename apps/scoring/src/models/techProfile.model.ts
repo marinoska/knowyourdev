@@ -11,8 +11,8 @@ import {
 const JobSchema =
     {
         _id: false, // No separate _id for sub-documents
-        start: {type: Date, required: true},
-        end: {type: Date, required: true},
+        start: {type: Date, required: false},
+        end: {type: Date, required: false},
         role: {type: String, required: true},
         company: {type: String, required: true},
     };
@@ -72,7 +72,12 @@ const TechProfileTechnologiesEntrySchema = new Schema<TechProfileTechnologiesEnt
 
 const TechProfileSchema = new Schema<TechProfileDocumentType, TechProfileModelType>(
     {
-        hash: {type: String, required: true, unique: true}, // Unique hash for identifying the profile
+        uploadRef: {
+            type: Schema.Types.ObjectId, // Refers to ObjectId type in MongoDB
+            ref: "upload", // The name of the model/collection being referenced
+            required: true, // Ensure this is always provided
+            unique: true,
+        },
         fullName: {type: String, required: true},
         technologies: {type: [TechProfileTechnologiesEntrySchema], required: true, default: []}, // List of technology entries
         jobs: {type: [TechProfileJobEntrySchema], required: true, default: []},

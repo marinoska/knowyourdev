@@ -19,5 +19,5 @@ export const uploadCV = ({file, name, role}: DocumentUploadRequestType) => {
 
 export const listUploads = async () => {
     const response = await apiClient.get<GetUploadsListResponse>('/document/uploads');
-    return response.uploads;
+    return response?.uploads || response;
 }

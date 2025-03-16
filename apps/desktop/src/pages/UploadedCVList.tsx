@@ -7,8 +7,9 @@ import UploadFile from '@mui/icons-material/Upload';
 import * as React from "react";
 import { UploadModal } from "./UploadModal.js";
 import { useUploadsListQuery } from "@/api/query/useUploadsListQuery.ts";
-import { SnackbarWarning } from "@/components/SnackbarWarning.tsx";
+import { Snackbar } from "@/components/Snackbar.tsx";
 import { CircularProgress } from "@mui/joy";
+
 
 export const UploadedCVList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
@@ -16,7 +17,7 @@ export const UploadedCVList = () => {
     const {data: uploads, isLoading, showError, dismissError} = useUploadsListQuery();
 
     return (<>
-            {showError && <SnackbarWarning type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
+            {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
             <Sheet sx={{
                 // width: 'fit-content',
                 // minWidth: {
@@ -36,10 +37,10 @@ export const UploadedCVList = () => {
                                 <CircularProgress size="lg"/>
                             </Box>)}
                         {uploads?.map((upload) => (
-                            <UploadedItem key={upload._id} title={`${upload.name} ${upload.role}`}
-                                          date={new Date(upload.createdAt)}/>
+                            <UploadedItem item={upload}/>
                         ))}
                     </Stack>
+
                 </Box>
 
             </Sheet>

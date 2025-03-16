@@ -5,7 +5,7 @@ import CloudUpload from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from "@mui/joy/Button";
 import { useState } from "react";
-import { SnackbarWarning } from "./SnackbarWarning.js";
+import { Snackbar } from "./Snackbar.tsx";
 import { StateSetter } from "../types.js";
 import { Alert } from "@mui/joy";
 import { validateFileContent } from "../utils/files.js";
@@ -77,7 +77,7 @@ export const DropzoneBox = ({file, setFile}: { file: File | null; setFile: State
                         </Typography></>)}
             </Stack>
 
-            <SnackbarWarning msg={error} onClose={() => setError('')}/>
+            <Snackbar msg={error} onClose={() => setError('')}/>
         </>
     );
 };

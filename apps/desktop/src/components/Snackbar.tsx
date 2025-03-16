@@ -1,7 +1,7 @@
 import Button from "@mui/joy/Button";
-import { Snackbar } from "@mui/joy";
+import { Snackbar as JoySnackbar } from "@mui/joy";
 
-export function SnackbarWarning({msg, onClose, variant = 'soft', type = 'warning'}: {
+export function Snackbar({msg, onClose, variant = 'soft', type = 'warning'}: {
     msg: string,
     onClose?: VoidFunction,
     variant?: 'soft' | 'solid' | 'outlined',
@@ -11,7 +11,7 @@ export function SnackbarWarning({msg, onClose, variant = 'soft', type = 'warning
         | 'success'
         | 'warning'
 }) {
-    return <Snackbar
+    return <JoySnackbar
         variant="soft"
         color={type}
         open={!!msg}
@@ -30,5 +30,5 @@ export function SnackbarWarning({msg, onClose, variant = 'soft', type = 'warning
         }
     >
         {msg}
-    </Snackbar>;
+    </JoySnackbar>;
 }

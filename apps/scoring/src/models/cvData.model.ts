@@ -25,7 +25,6 @@ export type TechnologyEntry = {
     techReference: Schema.Types.ObjectId | TechDocument | null;
 };
 export type ExtractedCVData = {
-    hash: string;
     // technologies: TechnologiesEntry[],
     // techStack: TechStack[];
     position: string;
@@ -43,7 +42,9 @@ export type ExtractedCVData = {
     }
     jobs: JobEntry[];
 };
-export type CVDataDocumentType = Document & ExtractedCVData;
+export type CVDataDocumentType = Document & ExtractedCVData & {
+    uploadRef: Schema.Types.ObjectId;
+};
 export type CVDataModelType = Model<CVDataDocumentType>;
 
 const TechnologyEntrySchema = new Schema<TechnologyEntry>({
@@ -91,7 +92,12 @@ const JobEntrySchema = new Schema<JobEntry>(
 
 const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
     {
-        hash: {type: String, required: true, immutable: true, unique: true},
+        uploadRef: {
+            type: Schema.Types.ObjectId, // Refers to ObjectId type in MongoDB
+            ref: "upload", // The name of the model/collection being referenced
+            required: true, // Ensure this is always provided
+            unique: true,
+        },
         fullName: {type: String, required: true, immutable: true},
         position: {type: String, required: true, default: ""},
         sections: [{type: String}],

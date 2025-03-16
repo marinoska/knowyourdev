@@ -11,7 +11,7 @@ import Stack from "@mui/joy/Stack";
 import { FormLabel, Input } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useUploadMutation } from "../api/query/useUploadMutation.js";
-import { SnackbarWarning } from "../components/SnackbarWarning.js";
+import { Snackbar } from "../components/Snackbar.tsx";
 
 export const UploadModal = ({open, setOpen}: {
     open: boolean,
@@ -45,9 +45,9 @@ export const UploadModal = ({open, setOpen}: {
             }}
         >
             <>
-                {isError && <SnackbarWarning msg="Failed file uploading" type={"danger"} onClose={() => reset()}/>}
+                {isError && <Snackbar msg="Failed file uploading" type={"danger"} onClose={() => reset()}/>}
                 {isSuccess &&
-                    <SnackbarWarning msg="File uploded successfully" type={"success"} onClose={() => reset()}/>}
+                    <Snackbar msg="File uploded successfully" type={"success"} onClose={() => reset()}/>}
 
                 <Sheet
                     variant="outlined"

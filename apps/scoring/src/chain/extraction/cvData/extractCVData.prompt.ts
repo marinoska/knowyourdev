@@ -21,7 +21,7 @@ Step 1: Extract general profile/description and skills section** based on the fo
    - "text": Full **unchanged** job description
    - "job": The company/project name as listed in the CV.
    - "start": The start date of the job/project in **mm-yyyy** format.
-   - "end": The end date of the job/project in **mm-yyyy** format. If not specified then TODAY
+   - "end": The end date of the job/project in **mm-yyyy** format. If it's a present job with no end date specified set TODAY's date in **mm-yyyy** format
    - "months": Number of month which is calculated as (end - start)
    - "present": If it's a current job, mark as **true**, otherwise **false**.
 

@@ -101,15 +101,17 @@ export type TechModelType = Model<TechDocument>;
 
 export type RoleType = JobEntry["roleType"];
 
+export type TechProfileTechnologiesJobEntry = {
+    start?: Date;
+    end?: Date;
+    role: string;
+    company: string;
+};
+
 export type TechProfileTechnologiesEntry = {
     techReference: Schema.Types.ObjectId;
     code: TechCode;
-    jobs: {
-        start: Date;
-        end: Date;
-        role: string;
-        company: string;
-    }[];
+    jobs: TechProfileTechnologiesJobEntry[];
     totalMonths?: number;
     recentMonths?: number;
     name: string;
@@ -134,8 +136,8 @@ export type TechProfileJobEntry =
 // >
 // &
     {
-        start: Date;
-        end: Date;
+        start?: Date;
+        end?: Date;
         months: number;
         popularity?: number;
         trending?: number;
@@ -154,12 +156,14 @@ export type TechProfileJobEntry =
     };
 
 export type TechProfileType = {
-    hash: string;
     fullName: string;
     technologies: TechProfileTechnologiesEntry[],
     jobs: TechProfileJobEntry[]
 };
-export type TechProfileDocumentType = Document & TechProfileType;
+export type TechProfileDocumentType = Document & TechProfileType & {
+    uploadRef: Schema.Types.ObjectId
+};
+
 export type TechProfileModelType = Model<TechProfileDocumentType>;
 
 export type JobHistoryQuality = {
