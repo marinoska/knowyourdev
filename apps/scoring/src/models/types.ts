@@ -1,26 +1,6 @@
 import { Document, Model, Schema } from "mongoose";
 import { JobEntry } from "@/models/cvData.model";
-
-export const TREND = ['SD', 'D', 'S', 'T', 'HT'] as const;  //string decline, decline, steady, trending, highly trending
-export const TREND_MAP: Record<TrendType, number> = {
-    SD: -2,
-    D: -1,
-    S: 0,
-    T: 1,
-    HT: 2,
-} as const;
-
-export const CATEGORY = ['Lang', 'DB', 'Framework', 'Tool', 'Other-FW', 'Cloud'] as const;
-// CPM -cross-platform mobile,
-// CV - computer vision,
-// DA - desktop apps
-export const SCOPE = ["BE", "FE", "FS", "MD", "DO", "SYS", "ANDR", "IOS", "CPM", "CMS", "CV", "AI", "ML", "DA"] as const;
-export const PROFICIENCY = ['skilled', 'expert', 'familiar'] as const;
-export type ProficiencyType = typeof PROFICIENCY[ number];
-export type TrendType = typeof TREND[number];
-export type CategoryType = typeof CATEGORY;
-export type TechCode = string;
-export type ScopeType = typeof SCOPE;
+import { CategoryType, ScopeType, TechCode, TechProfileType, TrendType } from "@kyd/types/api";
 
 export type TechCodeType = string;
 export type TechType = {
@@ -101,67 +81,10 @@ export type TechModelType = Model<TechDocument>;
 
 export type RoleType = JobEntry["roleType"];
 
-export type TechProfileTechnologiesJobEntry = {
-    start?: Date;
-    end?: Date;
-    role: string;
-    company: string;
-};
-
-export type TechProfileTechnologiesEntry = {
-    techReference: Schema.Types.ObjectId;
-    code: TechCode;
-    jobs: TechProfileTechnologiesJobEntry[];
-    totalMonths?: number;
-    recentMonths?: number;
-    name: string;
-    trend: TrendType;
-    category: CategoryType;
-    scope: ScopeType;
-    inSkillsSection?: boolean;
-    inProfileSection?: boolean;
-};
-
-export type TechProfileJobEntry =
-// Pick<
-//     JobEntry,
-//     "job"
-//     | "summary"
-//     | "months"
-//     | "present"
-//     | "role"
-//     | "roleType"
-//     | "isSoftwareDevelopmentRole"
-//     | "softwareDevelopmentScope"
-// >
-// &
-    {
-        start?: Date;
-        end?: Date;
-        months: number;
-        popularity?: number;
-        trending?: number;
-        techStack?: {
-            ref: Schema.Types.ObjectId;
-            name: string;
-            popularity: number;
-            trending: number;
-        };
-        technologies: {
-            ref: Schema.Types.ObjectId;
-            name: string;
-            popularity: number;
-            trending: number;
-        }[]
-    };
-
-export type TechProfileType = {
-    fullName: string;
-    technologies: TechProfileTechnologiesEntry[],
-    jobs: TechProfileJobEntry[]
-};
 export type TechProfileDocumentType = Document & TechProfileType & {
-    uploadRef: Schema.Types.ObjectId
+    uploadRef: Schema.Types.ObjectId;
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 export type TechProfileModelType = Model<TechProfileDocumentType>;

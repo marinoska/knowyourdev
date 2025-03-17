@@ -1,7 +1,8 @@
 import { model, Schema } from 'mongoose';
-import { TECH_STACK_CATEGORY, TechStackDocumentType, TechStackModelType, TREND } from "./types";
+import { TECH_STACK_CATEGORY, TechStackDocumentType, TechStackModelType } from "./types";
 import { identifyStack } from "./techStack.statics";
 import { matchTechList } from "./techStack.methods";
+import { TREND } from "@kyd/types/api";
 
 export const TechStackSchema = new Schema<TechStackDocumentType, TechStackModelType>(
     {

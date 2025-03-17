@@ -1,5 +1,6 @@
-import { TechCode, TechStack, TechStackModelType } from "./types";
+import { TechStack, TechStackModelType } from "./types";
 import { isNotNull } from "../utils/types.utils";
+import { TechCode } from "@kyd/types/api";
 
 // Methods on Model level (TechStackModel)
 

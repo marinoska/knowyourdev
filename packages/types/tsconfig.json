@@ -1,9 +1,7 @@
 {
   "extends": "@kyd/typescript-config/base.json",
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    // Enable explicit .ts extensions
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     // Emit only declaration files
     "declaration": true,
     "declarationMap": true,

@@ -5,7 +5,7 @@ import { parseJsonOutput } from "@/utils/json";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
 import { extractTechProficiencyPrompt } from "@/chain/extraction/techs/sub/extractTechProficiency.prompt";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
-import { PROFICIENCY, ProficiencyType } from "@/models/types";
+import { PROFICIENCY, ProficiencyType } from "@kyd/types/api";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechProficiencyPrompt}

@@ -7,7 +7,10 @@
     "dev": "tsc --watch"
   },
   "exports": {
-    "./api": "./dist/api/index.d.ts"
+    "./api": {
+      "types": "./dist/api/index.d.ts",
+      "default": "./dist/api/index.js"
+    }
   },
   "typesVersions": {
     "*": {

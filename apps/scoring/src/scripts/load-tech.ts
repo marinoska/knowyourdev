@@ -3,12 +3,13 @@ import csvParser from 'csv-parser';
 import fs from 'fs';
 import path from 'path';
 
-import { connected, db, stopMongoClient } from "../app/mongo";
-import { CategoryType, ScopeType, StackComponents, TechStackCategory, TrendType } from "@/models/types";
+import { connected, db, stopMongoClient } from "@/app/mongo";
+import { StackComponents, TechStackCategory } from "@/models/types";
 import { TechStackModel } from "@/models/techStack.model";
 // import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names";
 import { TechModel } from "@/models/tech.model";
 import { generateTechCode } from "@/utils/func";
+import { CategoryType, ScopeType, TrendType } from "@kyd/types/api";
 
 // Path to the CSV file
 const CSV_FILE_PATH = path.resolve(process.cwd() + '/files/');

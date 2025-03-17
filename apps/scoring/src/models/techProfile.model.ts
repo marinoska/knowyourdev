@@ -1,12 +1,9 @@
 import { model, Schema } from "mongoose";
 import {
-    CATEGORY,
-    SCOPE,
-    TechProfileDocumentType, TechProfileJobEntry,
+    TechProfileDocumentType,
     TechProfileModelType,
-    TechProfileTechnologiesEntry,
-    TREND
 } from "@/models/types";
+import { CATEGORY, SCOPE, TechProfileJobEntry, TechProfileTechnologiesEntry, TREND } from "@kyd/types/api";
 
 const JobSchema =
     {

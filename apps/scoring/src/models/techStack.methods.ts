@@ -1,4 +1,5 @@
-import { TechCode, TechStack, TechStackDocumentType } from "./types";
+import { TechStack, TechStackDocumentType } from "./types";
+import { TechCode } from "@kyd/types/api";
 
 // Methods on Document level (TechStackDocument)
 

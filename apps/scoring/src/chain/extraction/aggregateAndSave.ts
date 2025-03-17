@@ -1,17 +1,20 @@
 import { ExtractionChainParam } from "@/chain/extraction/types";
 import { CvDataModel, TechnologyEntry } from "@/models/cvData.model";
-import { createHash } from "@/utils/crypto";
 import {
-    TechCode,
     TechDocument,
-    TechProfileJobEntry,
-    TechProfileTechnologiesEntry, TechProfileTechnologiesJobEntry, TREND_MAP
 } from "@/models/types";
 import { isValid, parse, subYears } from "date-fns";
 import logger from '@/app/logger';
 import { Schema } from "mongoose";
 import { TechProfileModel } from "@/models/techProfile.model";
 import { isNotNull } from "@/utils/types.utils";
+import {
+    TechCode,
+    TechProfileJobEntry,
+    TechProfileTechnologiesEntry,
+    TechProfileTechnologiesJobEntry,
+    TREND_MAP
+} from "@kyd/types/api";
 
 const log = logger('extraction:extraction:runner');
 
