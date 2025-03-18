@@ -7,7 +7,7 @@ import Divider from "@mui/joy/Divider";
 export const PageHeader = ({title, buttonLabel, icon: Icon, action}: {
     title: string,
     buttonLabel?: string,
-    icon: React.ElementType,
+    icon?: React.ElementType,
     action?: VoidFunction,
 }) => {
     return (
@@ -28,7 +28,7 @@ export const PageHeader = ({title, buttonLabel, icon: Icon, action}: {
                 </Typography>
                 {buttonLabel && <Button
                     onClick={action}
-                    startDecorator={<Icon/>}
+                    startDecorator={Icon && <Icon/>}
                     size="md"
                 >
                     {buttonLabel}

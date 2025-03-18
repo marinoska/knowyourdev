@@ -6,14 +6,14 @@ import { UploadedItem } from "./UploadedItem";
 import UploadFile from '@mui/icons-material/Upload';
 import * as React from "react";
 import { UploadModal } from "./UploadModal.js";
-import { useUploadsListQuery } from "@/api/query/useUploadsListQuery.ts";
+import { useUploadListQuery } from "@/api/query/useUploadListQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { CircularProgress } from "@mui/joy";
 
 export const UploadedCVList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
-    const {data: uploads, isLoading, showError, dismissError} = useUploadsListQuery();
+    const {data: uploads, isLoading, showError, dismissError} = useUploadListQuery();
 
     return (<>
             {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}

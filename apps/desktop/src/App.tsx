@@ -12,6 +12,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { UploadedCVList } from "./pages/UploadedCVList.js";
 import { useMemo } from "react";
+import { UploadedCVProfile } from "@/pages/UploadedCVProfile.tsx";
 
 const NotFound = () => {
     return <div>Not Found</div>
@@ -19,9 +20,6 @@ const NotFound = () => {
 
 const Dashboard = () => {
     return <div>Dashboard</div>
-}
-const CVDetails = () => {
-    return <div>CVDetails</div>
 }
 
 const routeMapping: { [key: string]: string } = {
@@ -114,7 +112,7 @@ export default function App() {
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/uploads" element={<UploadedCVList/>}/>
-                        <Route path="/uploads/:id" element={<CVDetails/>}/>
+                        <Route path="/uploads/:id" element={<UploadedCVProfile/>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </Box>

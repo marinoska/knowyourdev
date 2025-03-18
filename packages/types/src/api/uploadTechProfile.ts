@@ -1,10 +1,10 @@
 import { Schema } from "mongoose";
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants";
 
-export type TechProfileTechnologiesEntry = {
+export type UploadTechProfileTechnologiesEntry = {
     techReference: Schema.Types.ObjectId;
     code: TechCode;
-    jobs: TechProfileTechnologiesJobEntry[];
+    jobs: UploadTechProfileTechnologiesJobEntry[];
     totalMonths?: number;
     recentMonths?: number;
     name: string;
@@ -15,14 +15,14 @@ export type TechProfileTechnologiesEntry = {
     inProfileSection?: boolean;
 };
 
-export type TechProfileTechnologiesJobEntry = {
+export type UploadTechProfileTechnologiesJobEntry = {
     start?: Date;
     end?: Date;
     role: string;
     company: string;
 };
 
-export type TechProfileJobEntry =
+export type UploadTechProfileJobEntry =
 // Pick<
 //     JobEntry,
 //     "job"
@@ -55,9 +55,15 @@ export type TechProfileJobEntry =
         }[]
     };
 
-export type TechProfileType = {
+export type UploadTechProfileType = {
     fullName: string;
-    technologies: TechProfileTechnologiesEntry[],
-    jobs: TechProfileJobEntry[],
+    technologies: UploadTechProfileTechnologiesEntry[],
+    jobs: UploadTechProfileJobEntry[],
     position: string;
 };
+
+export type UploadTechProfileResponse = {
+    uploadId: string;
+    createdAt: string;
+    updatedAt: string;
+} & UploadTechProfileType;

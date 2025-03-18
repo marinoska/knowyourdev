@@ -1,33 +1,28 @@
 import { RequestHandler, Response } from "express";
 import { UploadTechProfileModel } from "@/models/uploadTechProfile.model";
 import { Joi, Segments } from "celebrate";
-import { UploadTechProfileJobEntry, UploadTechProfileTechnologiesEntry } from "@kyd/types/api";
-import { NotFound } from "@/app/errors";
+import {
+    UploadTechProfileResponse,
+} from "@kyd/types/api";
+import { NotFound, ValidationError } from "@/app/errors";
+import { Types } from "mongoose";
 
-export type TechProfileController = RequestHandler<
+export type UploadTechProfileController = RequestHandler<
     { uploadId: string },
-    TechProfileResponse,
+    UploadTechProfileResponse,
     any,
     any,
     {}
 >;
 
-export type TechProfileResponse = {
-    uploadId: string;
-    techProfile: {
-        fullName: string;
-        technologies: UploadTechProfileTechnologiesEntry[];
-        jobs: UploadTechProfileJobEntry[];
-        createdAt: string;
-        updatedAt: string;
-    };
-};
-
-export const getTechProfileController: TechProfileController = async (
+export const getUploadTechProfileController: UploadTechProfileController = async (
     req,
-    res: Response<TechProfileResponse>
+    res: Response<UploadTechProfileResponse>
 ) => {
     const {uploadId} = req.params;
+    if (!Types.ObjectId.isValid(uploadId)) {
+        throw new ValidationError("Invalid upload ID: " + uploadId)
+    }
 
     const techProfile = await UploadTechProfileModel.findOne({uploadRef: uploadId});
 
@@ -38,13 +33,12 @@ export const getTechProfileController: TechProfileController = async (
     // Send the tech profile in the response
     res.status(200).json({
         uploadId,
-        techProfile: {
-            fullName: techProfile.fullName,
-            technologies: techProfile.technologies,
-            jobs: techProfile.jobs,
-            createdAt: techProfile.createdAt.toISOString(),
-            updatedAt: techProfile.updatedAt.toISOString(),
-        },
+        fullName: techProfile.fullName,
+        position: techProfile.position,
+        createdAt: techProfile.createdAt.toISOString(),
+        updatedAt: techProfile.updatedAt.toISOString(),
+        technologies: techProfile.technologies,
+        jobs: techProfile.jobs,
     });
 
 };
