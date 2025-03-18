@@ -1,4 +1,3 @@
-import React from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { UploadTechProfileJobEntry } from "@kyd/types/api";
 
@@ -6,7 +5,7 @@ type TechStackChartProps = {
     jobs: UploadTechProfileJobEntry[];
 }
 
-const TechStackChart: React.FC<TechStackChartProps> = ({jobs}) => {
+export const TechStackChart = ({jobs}: TechStackChartProps) => {
     // Aggregate technology popularity across jobs
     const techMap = new Map<string, number>();
 
@@ -40,4 +39,3 @@ const TechStackChart: React.FC<TechStackChartProps> = ({jobs}) => {
     );
 };
 
-export default TechStackChart;

@@ -1,32 +1,24 @@
-import React, { useState } from "react";
+import { useState, ReactNode } from "react";
 import Box from "@mui/joy/Box";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
 
-export const AnalysisTabs = () => {
+export type TabItem = {
+    label: string;
+    content: ReactNode; // Allows any valid React renderable element
+};
+
+export const AnalysisTabs = ({tabs}: { tabs: TabItem[] }) => {
     const [activeTab, setActiveTab] = useState(1); // Default to Red Flags tab
 
-    const tabs = [
-        {
-            label: "Career Timeline",
-            content: <div>Content for Career Timeline</div>,
-        },
-        {
-            label: "Red Flags",
-            content: <div>Content for Red Flags</div>,
-        },
-        {
-            label: "Strengths & Suitability",
-            content: <div>Content for Strengths & Suitability</div>,
-        },
-    ];
     return (
         <Box id="analysis-tabs" sx={{mb: 8}}>
             <Tabs
                 variant="plain"
                 value={activeTab}
+                // @ts-ignore
                 onChange={(_, newValue) => setActiveTab(newValue)}
                 sx={{
                     borderBottom: "1px solid",
