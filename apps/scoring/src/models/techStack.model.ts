@@ -44,7 +44,7 @@ export const TechStackSchema = new Schema<TechStackDocumentType, TechStackModelT
         bestFor: {type: String, required: true},
         typicalUseCases: {type: String, required: true},
     },
-    {timestamps: true, collection: 'techStack'}
+    {timestamps: true, collection: 'TechStack'}
 );
 
 TechStackSchema.index({category: 1, popularity: 1});
@@ -53,4 +53,4 @@ TechStackSchema.static('identifyStack', identifyStack);
 
 TechStackSchema.methods.matchTechList = matchTechList;
 
-export const TechStackModel = model<TechStackDocumentType, TechStackModelType>('techStack', TechStackSchema);
+export const TechStackModel = model<TechStackDocumentType, TechStackModelType>('TechStack', TechStackSchema);

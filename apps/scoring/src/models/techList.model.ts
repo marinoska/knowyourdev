@@ -12,9 +12,9 @@ const techSchema = new Schema<TechDocument, TechModelType>(
         usage2024: {type: Number, required: false},
         usage2016: {type: Number, required: false},
     },
-    {timestamps: true, collection: 'tech', autoIndex: true}
+    {timestamps: true, collection: 'TechList', autoIndex: true}
 );
 
 techSchema.index({category: 1});
 
-export const TechModel = model<TechDocument, TechModelType>('tech', techSchema);
+export const TechListModel = model<TechDocument, TechModelType>('TechList', techSchema);

@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import { CVDataDocumentType } from "@/models/cvData.model";
+import { UploadDataDocumentType } from "@/models/uploadData.model";
 import { ParsedStatus } from "@kyd/types/api";
 
 export type TUpload = {
@@ -36,7 +36,7 @@ const UploadSchema = new Schema<TUploadDocument, TUploadModel>({
         },
         parseStatus: {type: String, default: 'pending'}
     },
-    {timestamps: true, collection: 'upload', autoIndex: true}
+    {timestamps: true, collection: 'Upload', autoIndex: true}
 );
 
-export const UploadModel = mongoose.model<TUploadDocument, TUploadModel>('upload', UploadSchema);
+export const UploadModel = mongoose.model<TUploadDocument, TUploadModel>('Upload', UploadSchema);

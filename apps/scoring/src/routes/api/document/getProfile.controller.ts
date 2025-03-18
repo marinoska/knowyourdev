@@ -1,7 +1,7 @@
 import { RequestHandler, Response } from "express";
-import { TechProfileModel } from "@/models/techProfile.model";
+import { UploadTechProfileModel } from "@/models/uploadTechProfile.model";
 import { Joi, Segments } from "celebrate";
-import { TechProfileJobEntry, TechProfileTechnologiesEntry } from "@kyd/types/api";
+import { UploadTechProfileJobEntry, UploadTechProfileTechnologiesEntry } from "@kyd/types/api";
 import { NotFound } from "@/app/errors";
 
 export type TechProfileController = RequestHandler<
@@ -16,8 +16,8 @@ export type TechProfileResponse = {
     uploadId: string;
     techProfile: {
         fullName: string;
-        technologies: TechProfileTechnologiesEntry[];
-        jobs: TechProfileJobEntry[];
+        technologies: UploadTechProfileTechnologiesEntry[];
+        jobs: UploadTechProfileJobEntry[];
         createdAt: string;
         updatedAt: string;
     };
@@ -29,7 +29,7 @@ export const getTechProfileController: TechProfileController = async (
 ) => {
     const {uploadId} = req.params;
 
-    const techProfile = await TechProfileModel.findOne({uploadRef: uploadId});
+    const techProfile = await UploadTechProfileModel.findOne({uploadRef: uploadId});
 
     if (!techProfile) {
         throw new NotFound(`TechProfile not found for the provided uploadRef: ${uploadId}`);

@@ -7,7 +7,7 @@ import { gpt4oMini } from "@/app/aiModel";
 import { SECTIONS, SectionsNames } from "@/models/types";
 import { ExtractionChainInput, ExtractionChainParam } from "@/chain/extraction/types";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
-import { ExtractedCVData, JobEntry } from "@/models/cvData.model";
+import { ExtractedCVData, JobEntry } from "@/models/uploadData.model";
 
 type OutputType = {
     fullName: string;

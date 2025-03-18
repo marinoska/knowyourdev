@@ -1,18 +1,18 @@
 import { ExtractionChainParam } from "@/chain/extraction/types";
-import { CvDataModel, TechnologyEntry } from "@/models/cvData.model";
+import { UploadDataModel, TechnologyEntry } from "@/models/uploadData.model";
 import {
     TechDocument,
 } from "@/models/types";
 import { isValid, parse, subYears } from "date-fns";
 import logger from '@/app/logger';
 import { Schema } from "mongoose";
-import { TechProfileModel } from "@/models/techProfile.model";
+import { UploadTechProfileModel } from "@/models/uploadTechProfile.model";
 import { isNotNull } from "@/utils/types.utils";
 import {
     TechCode,
-    TechProfileJobEntry,
-    TechProfileTechnologiesEntry,
-    TechProfileTechnologiesJobEntry,
+    UploadTechProfileJobEntry,
+    UploadTechProfileTechnologiesEntry,
+    UploadTechProfileTechnologiesJobEntry,
     TREND_MAP
 } from "@kyd/types/api";
 
@@ -24,7 +24,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
     if (!("extractedData" in params))
         throw new Error("extractedData is required");
 
-    const updatedCV = await CvDataModel.findOneAndUpdate(
+    const updatedCV = await UploadDataModel.findOneAndUpdate(
         {uploadRef: params.uploadId}, // Find by hash
         {
             $set: {uploadRef: params.uploadId, ...params.extractedData},
@@ -41,7 +41,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         techReference: Schema.Types.ObjectId,
         code: TechCode,
 
-        jobs: TechProfileTechnologiesJobEntry[]
+        jobs: UploadTechProfileTechnologiesJobEntry[]
     }> = {};
 
     for (const job of updatedCV.jobs) {
@@ -50,7 +50,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         }
 
         job.technologies.forEach(tech => {
-            const jobEntry: TechProfileTechnologiesJobEntry = {role: job.role, company: job.job};
+            const jobEntry: UploadTechProfileTechnologiesJobEntry = {role: job.role, company: job.job};
             const start = parse(job.start, FormatString, new Date());
             if (!isValid(start)) {
                 log.warn(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
@@ -79,7 +79,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         ...acc, [doc.code]: doc
     }), {});
 
-    const withTotalMonth = Object.values(aggTechs).map<TechProfileTechnologiesEntry | null>(tech => {
+    const withTotalMonth = Object.values(aggTechs).map<UploadTechProfileTechnologiesEntry | null>(tech => {
         const mergedRanges = mergeRanges(tech.jobs as Range[]); // Merge the overlapping ranges
         const totalMonths = calculateTotalMonths(mergedRanges); // Calculate total unique months
         const recentMonths = calculateTotalMonths(mergedRanges, 3); // Calculate total unique months
@@ -98,13 +98,13 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             trend: techCollectionObj[tech.code].trend,
             category: techCollectionObj[tech.code].category,
             scope: techCollectionObj[tech.code].scope
-        } satisfies TechProfileTechnologiesEntry;
-    }).filter<TechProfileTechnologiesEntry>(isNotNull)
-        .reduce<Record<TechCode, TechProfileTechnologiesEntry>>((acc, doc) => ({
+        } satisfies UploadTechProfileTechnologiesEntry;
+    }).filter<UploadTechProfileTechnologiesEntry>(isNotNull)
+        .reduce<Record<TechCode, UploadTechProfileTechnologiesEntry>>((acc, doc) => ({
             ...acc, [doc.code]: doc
         }), {});
 
-    const enrich = (techs: TechnologyEntry[], props: Partial<TechProfileTechnologiesEntry>) => {
+    const enrich = (techs: TechnologyEntry[], props: Partial<UploadTechProfileTechnologiesEntry>) => {
 
         for (let tech of techs) {
             if (!tech.code) {
@@ -131,12 +131,12 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
     enrich(updatedCV.skillSection.technologies, {inSkillsSection: true});
     enrich(updatedCV.profileSection.technologies, {inProfileSection: true});
 
-    const techProfileJobs: TechProfileJobEntry[] = updatedCV.jobs.map(job => {
+    const techProfileJobs: UploadTechProfileJobEntry[] = updatedCV.jobs.map(job => {
         const technologies = job.technologies.map(tech => {
             if (!tech.techReference) return null;
 
             if (!("name" in tech.techReference)) {
-                throw new Error(`${updatedCV._id}: CVData jobs.tech.techReference is populated`);
+                throw new Error(`${updatedCV._id}: UploadData jobs.tech.techReference is populated`);
             }
 
             return {
@@ -172,7 +172,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         }
     });
 
-    const techProfile = await TechProfileModel.findOneAndUpdate(
+    const techProfile = await UploadTechProfileModel.findOneAndUpdate(
         {uploadRef: updatedCV.uploadRef}, // Find by hash
         {
             $set: {
@@ -186,7 +186,6 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         {upsert: true, new: true, runValidators: true} // Create if not exists, return updated, apply schema validations
     ).lean();
 
-    console.log(techProfile);
     return {...params, cvData: updatedCV, techProfile};
 }
 

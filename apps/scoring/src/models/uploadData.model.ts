@@ -43,10 +43,10 @@ export type ExtractedCVData = {
     }
     jobs: JobEntry[];
 };
-export type CVDataDocumentType = Document & ExtractedCVData & {
+export type UploadDataDocumentType = Document & ExtractedCVData & {
     uploadRef: Schema.Types.ObjectId;
 };
-export type CVDataModelType = Model<CVDataDocumentType>;
+export type UploadDataModelType = Model<UploadDataDocumentType>;
 
 const TechnologyEntrySchema = new Schema<TechnologyEntry>({
     original: {type: String, required: true},
@@ -55,7 +55,7 @@ const TechnologyEntrySchema = new Schema<TechnologyEntry>({
     proficiency: {type: String, enum: ["skilled", "expert", "familiar", ""]},
     techReference: {
         type: Schema.Types.ObjectId, // Use ObjectId to reference another model
-        ref: "tech" // Name of the model being referenced
+        ref: "TechList" // Name of the model being referenced
     },
 }, {_id: false});
 
@@ -91,11 +91,11 @@ const JobEntrySchema = new Schema<JobEntry>(
         ],
     });
 
-const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
+const uploadDataSchema = new Schema<UploadDataDocumentType, UploadDataModelType>(
     {
         uploadRef: {
             type: Schema.Types.ObjectId, // Refers to ObjectId type in MongoDB
-            ref: "upload", // The name of the model/collection being referenced
+            ref: "Upload", // The name of the model/collection being referenced
             required: true, // Ensure this is always provided
             unique: true,
         },
@@ -126,7 +126,7 @@ const cvDataSchema = new Schema<CVDataDocumentType, CVDataModelType>(
         },
         jobs: [JobEntrySchema],
     },
-    {timestamps: true, collection: 'cvData', autoIndex: true}
+    {timestamps: true, collection: 'UploadData', autoIndex: true}
 );
 
-export const CvDataModel = model<CVDataDocumentType, CVDataModelType>('cv', cvDataSchema);
+export const UploadDataModel = model<UploadDataDocumentType, UploadDataModelType>('UploadData', uploadDataSchema);

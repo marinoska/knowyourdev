@@ -239,7 +239,3 @@ Scaleway,0.9,,Steady,Cloud,DO
 Colocation,0.7,,Declining,Cloud,DO
 IBM Cloud,,7,Declining,Cloud,DO
 Salesforce,,4,Steady,Cloud,DO
-Linux,,,Steady,Tool,DO
-Apache,,,Declining,Tool,DO
-Nginx,,,Steady,Tool,DO
-IIS,,,Strong Declining,Tool,DO

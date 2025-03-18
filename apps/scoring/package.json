@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon -r tsconfig-paths/register --exec ts-node ./src/index.ts --files",
+    "dev": "NODE_ENV=development nodemon -r tsconfig-paths/register --exec tsx ./src/index.ts",
     "start": "NODE_ENV=production node ./build/src/index.js",
     "build": "tsc && tsc-alias",
     "lint": "eslint ./src/**/*.ts --fix",
@@ -23,6 +23,7 @@
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.11",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.19.3",
     "typescript": "~5.7.3",
     "typescript-transform-paths": "^3.5.4",
     "vite": "^6.1.0"

@@ -1,12 +1,12 @@
 import { TechDocument, TechProfileDocumentType } from "@/models/types";
-import { CVDataDocumentType, ExtractedCVData } from "@/models/cvData.model";
+import { UploadDataDocumentType, ExtractedCVData } from "@/models/uploadData.model";
 import { Schema } from "mongoose";
 
 export type ExtractionChainInput = {
     cvText: string, techCollection: TechDocument[], uploadId: Schema.Types.ObjectId
 };
 export type ExtractionChainOutput = {
-    cvData: CVDataDocumentType,
+    cvData: UploadDataDocumentType,
     techProfile: TechProfileDocumentType
 };
 

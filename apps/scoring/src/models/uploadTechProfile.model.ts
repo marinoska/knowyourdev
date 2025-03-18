@@ -1,9 +1,13 @@
-import { model, Schema } from "mongoose";
+import { Document, Model, model, Schema } from "mongoose";
+
 import {
-    TechProfileDocumentType,
-    TechProfileModelType,
-} from "@/models/types";
-import { CATEGORY, SCOPE, TechProfileJobEntry, TechProfileTechnologiesEntry, TREND } from "@kyd/types/api";
+    CATEGORY,
+    SCOPE,
+    UploadTechProfileJobEntry,
+    UploadTechProfileTechnologiesEntry,
+    TREND,
+    UploadTechProfileType
+} from "@kyd/types/api";
 
 const JobSchema =
     {
@@ -14,7 +18,7 @@ const JobSchema =
         company: {type: String, required: true},
     };
 
-const TechProfileJobEntrySchema = new Schema<TechProfileJobEntry>({
+const UploadTechProfileJobEntrySchema = new Schema<UploadTechProfileJobEntry>({
     start: Date,
     end: Date,
     months: {type: Number, required: true},
@@ -29,7 +33,7 @@ const TechProfileJobEntrySchema = new Schema<TechProfileJobEntry>({
         }, required: false
     },
     technologies: [{
-        ref: {type: Schema.Types.ObjectId, ref: 'tech', required: true},
+        ref: {type: Schema.Types.ObjectId, ref: 'TechList', required: true},
         name: String,
         popularity: Number,
         trending: Number,
@@ -38,9 +42,9 @@ const TechProfileJobEntrySchema = new Schema<TechProfileJobEntry>({
     _id: false,
 });
 
-const TechProfileTechnologiesEntrySchema = new Schema<TechProfileTechnologiesEntry>(
+const UploadTechProfileTechnologiesEntrySchema = new Schema<UploadTechProfileTechnologiesEntry>(
     {
-        techReference: {type: Schema.Types.ObjectId, ref: 'tech', required: true},
+        techReference: {type: Schema.Types.ObjectId, ref: 'TechList', required: true},
         code: {type: String, required: true}, // Assuming TechCode is a string
         jobs: {type: [JobSchema], required: false},
         totalMonths: {type: Number, required: false},
@@ -67,19 +71,27 @@ const TechProfileTechnologiesEntrySchema = new Schema<TechProfileTechnologiesEnt
         _id: false, // No separate _id for sub-documents;
     });
 
-const TechProfileSchema = new Schema<TechProfileDocumentType, TechProfileModelType>(
+export type UploadTechProfileDocumentType = Document & UploadTechProfileType & {
+    uploadRef: Schema.Types.ObjectId;
+    createdAt: Date;
+    updatedAt: Date;
+};
+
+export type UploadTechProfileModelType = Model<UploadTechProfileDocumentType>;
+
+const UploadTechProfileSchema = new Schema<UploadTechProfileDocumentType, UploadTechProfileModelType>(
     {
         uploadRef: {
             type: Schema.Types.ObjectId, // Refers to ObjectId type in MongoDB
-            ref: "upload", // The name of the model/collection being referenced
+            ref: "Upload", // The name of the model/collection being referenced
             required: true, // Ensure this is always provided
             unique: true,
         },
         fullName: {type: String, required: true},
-        technologies: {type: [TechProfileTechnologiesEntrySchema], required: true, default: []}, // List of technology entries
-        jobs: {type: [TechProfileJobEntrySchema], required: true, default: []},
+        technologies: {type: [UploadTechProfileTechnologiesEntrySchema], required: true, default: []}, // List of technology entries
+        jobs: {type: [UploadTechProfileJobEntrySchema], required: true, default: []},
     },
-    {timestamps: true, collection: 'techProfile'} // Automatically adds createdAt and updatedAt
+    {timestamps: true, collection: 'UploadTechProfile'} // Automatically adds createdAt and updatedAt
 );
 
-export const TechProfileModel = model<TechProfileDocumentType, TechProfileModelType>('techProfile', TechProfileSchema);
+export const UploadTechProfileModel = model<UploadTechProfileDocumentType, UploadTechProfileModelType>('UploadTechProfile', UploadTechProfileSchema);

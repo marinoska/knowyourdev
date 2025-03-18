@@ -4,9 +4,9 @@ import { pipe } from "@/utils/func";
 import { ExtractionChainParam } from "@/chain/extraction/types";
 import { extractTechnologies } from "@/chain/extraction/techs/extractTechnologies.chain";
 import { aggregateAndSave } from "@/chain/extraction/aggregateAndSave";
-import { TechModel } from "@/models/tech.model";
-import { ExtractedCVData } from "@/models/cvData.model";
-import { TUploadDocument } from "@/models/uploadModel";
+import { TechListModel } from "@/models/techList.model";
+import { ExtractedCVData } from "@/models/uploadData.model";
+import { TUploadDocument } from "@/models/upload.model";
 import logger from "@/app/logger";
 import { env } from "@/app/env";
 import path from "node:path";
@@ -58,7 +58,7 @@ export async function runCVDataExtraction(cvText: string, uploadId: Schema.Types
         throw new Error("CV text extraction failed. Please check the PDF file.");
     }
 
-    const techCollection = await TechModel.find().lean();
+    const techCollection = await TechListModel.find().lean();
 
     const inputData: ExtractionChainParam = {
         cvText,

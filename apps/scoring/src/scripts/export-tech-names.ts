@@ -1,11 +1,11 @@
 import fs from 'fs';
 import { TechStackModel } from "@/models/techStack.model";
-import { TechModel } from "@/models/tech.model"; // Assuming this model interacts with your database
+import { TechListModel } from "@/models/techList.model"; // Assuming this model interacts with your database
 
 export const saveTechNamesToFile = async (outputFilePath: string) => {
     try {
         // Step 1: Fetch all tech entries from the database
-        const techDocuments = await TechModel.find({}, {name: 1, _id: 0}); // Only fetch the "name" field
+        const techDocuments = await TechListModel.find({}, {name: 1, _id: 0}); // Only fetch the "name" field
 
         // Step 2: Extract names into a comma-separated string
         const techList = techDocuments.map(doc => doc.name).join(',');

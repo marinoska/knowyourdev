@@ -1,6 +1,6 @@
 import { Document, Model, Schema } from "mongoose";
-import { JobEntry } from "@/models/cvData.model";
-import { CategoryType, ScopeType, TechCode, TechProfileType, TrendType } from "@kyd/types/api";
+import { JobEntry } from "@/models/uploadData.model";
+import { CategoryType, ScopeType, TechCode, UploadTechProfileType, TrendType } from "@kyd/types/api";
 
 export type TechCodeType = string;
 export type TechType = {
@@ -81,14 +81,6 @@ export type TechStackModelType = Model<TechStackDocumentType> & {
 export type TechModelType = Model<TechDocument>;
 
 export type RoleType = JobEntry["roleType"];
-
-export type TechProfileDocumentType = Document & TechProfileType & {
-    uploadRef: Schema.Types.ObjectId;
-    createdAt: Date;
-    updatedAt: Date;
-};
-
-export type TechProfileModelType = Model<TechProfileDocumentType>;
 
 export type JobHistoryQuality = {
     hasDetailedJobs: boolean; // Confirms that job descriptions contain enough detail, not just titles

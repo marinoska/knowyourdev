@@ -5,7 +5,7 @@ import { IncomingMessage } from 'http';
 import type { Response, Request, RequestHandler } from "express";
 import { ValidationError } from "@/app/errors";
 import { createHash } from "@/utils/crypto";
-import { TUploadDocument, UploadModel } from "@/models/uploadModel";
+import { TUploadDocument, UploadModel } from "@/models/upload.model";
 import * as fs from "node:fs";
 import { DocumentUploadRequestBody, DocumentUploadResponse } from "@kyd/types/api";
 import { processUpload, runCVDataExtraction } from "@/chain/extraction/runner";

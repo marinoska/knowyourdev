@@ -7,7 +7,7 @@ import { connected, db, stopMongoClient } from "@/app/mongo";
 import { StackComponents, TechStackCategory } from "@/models/types";
 import { TechStackModel } from "@/models/techStack.model";
 // import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names";
-import { TechModel } from "@/models/tech.model";
+import { TechListModel } from "@/models/techList.model";
 import { generateTechCode } from "@/utils/func";
 import { CategoryType, ScopeType, TrendType } from "@kyd/types/api";
 
@@ -62,7 +62,7 @@ const loadTechData = async (fileName: string) => {
         });
 
         // Insert data into the database
-        const result = await TechModel.insertMany(data);
+        const result = await TechListModel.insertMany(data);
         console.log(`${result.length} documents successfully inserted in Tech collection.`);
     } catch (err) {
         console.error('Error loading data:', err);
@@ -90,7 +90,7 @@ type TechStackData = {
 
 export const loadTechStackData = async (fileName: string): Promise<void> => {
     const records: TechStackData[] = [];
-    const techs = await TechModel.find({}, {code: 1}).lean();
+    const techs = await TechListModel.find({}, {code: 1}).lean();
     const techNamesSet = new Set(techs.map(tech => tech.code));
 
     try {
@@ -151,9 +151,9 @@ export const loadTechStackData = async (fileName: string): Promise<void> => {
 };
 
 const loadData = async () => {
-    await dropExistingCollection("tech");
-    await dropExistingCollection("techStack");
-    await TechModel.init();
+    await dropExistingCollection("TechList");
+    await dropExistingCollection("TechStack");
+    await TechListModel.init();
     await TechStackModel.init();
     await loadTechData("Tech.csv");
     await loadTechStackData("Stack.csv");
