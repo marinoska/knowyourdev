@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import { StyledEngineProvider } from "@mui/joy";
 import App from './App.tsx'
 import {
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
             <StyledEngineProvider injectFirst>
-                <App/>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
             </StyledEngineProvider>
         </QueryClientProvider>
     </StrictMode>

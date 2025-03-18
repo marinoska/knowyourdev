@@ -12,6 +12,7 @@ export type TechType = {
     category: CategoryType;
     scope: ScopeType;
 };
+
 export type TechDocument = Document<unknown, unknown, TechType> & TechType & {
     _id: Schema.Types.ObjectId
 };

@@ -1,5 +1,5 @@
 import { TechStack, TechStackModelType } from "./types";
-import { isNotNull } from "../utils/types.utils";
+import { isNotNull } from "@/utils/types.utils";
 import { TechCode } from "@kyd/types/api";
 
 // Methods on Model level (TechStackModel)
@@ -12,3 +12,4 @@ export async function identifyStack(this: TechStackModelType, techCodes: TechCod
 
     return (await Promise.all(matchesPromises)).filter(isNotNull);
 }
+

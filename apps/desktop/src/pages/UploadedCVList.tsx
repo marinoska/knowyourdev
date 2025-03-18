@@ -10,7 +10,6 @@ import { useUploadsListQuery } from "@/api/query/useUploadsListQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { CircularProgress } from "@mui/joy";
 
-
 export const UploadedCVList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
@@ -37,7 +36,7 @@ export const UploadedCVList = () => {
                                 <CircularProgress size="lg"/>
                             </Box>)}
                         {uploads?.map((upload) => (
-                            <UploadedItem item={upload}/>
+                            <UploadedItem key={upload._id} item={upload}/>
                         ))}
                     </Stack>
 

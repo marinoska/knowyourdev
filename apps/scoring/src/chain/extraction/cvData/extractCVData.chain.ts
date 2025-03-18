@@ -57,7 +57,7 @@ export const extractCVData = async (params: ExtractionChainInput): Promise<Extra
             ...extractedData,
             // fullName: extractedData.fullName,
             // jobs: extractedData.jobs,
-            // position: extractedData.position,
+            position: extractedData.position,
             sections,
             profileSection: {
                 text: extractedData.profileSection

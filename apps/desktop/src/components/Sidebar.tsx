@@ -21,21 +21,38 @@ import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { closeSidebar } from '../utils';
 
-// sx={{
-//     '& .Mui-selected,  & .MuiListItem-root :hover': {
-//         backgroundColor: 'var(--joy-palette-background-level1) !important', // Black background for selected items
-//     },
-// }}
+// Navigation Configuration
+const routes = [
+    {
+        path: '/dashboard',
+        label: 'Dashboard',
+        icon: HomeRoundedIcon
+    },
+    {
+        path: '/uploads',
+        label: 'Uploaded CVs',
+        icon: UploadFileIcon
+    },
+    {
+        path: '/support',
+        label: 'Support',
+        icon: DashboardIcon
+    }
+];
+
 const NavigationItem = ({
                             icon: Icon,
                             label,
-                            selected
+                            path,
+                            selected,
                         }: {
     icon: React.ElementType;
     label: string;
+    path: string;
     selected?: boolean;
 }) => {
     const selectedColor = 'var(--joy-palette-background-level1) !important';
@@ -47,18 +64,22 @@ const NavigationItem = ({
     }
 
     return (
-        <ListItem>
-            <ListItemButton sx={{...styles, '&:hover': {backgroundColor: selectedColor}}} selected={selected}>
-                <Icon/>
-                <ListItemContent>
-                    <Typography level="body-md">{label}</Typography>
-                </ListItemContent>
-            </ListItemButton>
-        </ListItem>
-    )
-}
+        <ListItemButton
+            component={RouterLink}
+            to={path}
+            selected={selected}
+            sx={{...styles, '&:hover': {backgroundColor: selectedColor}}}
+        >
+            <Icon/>
+            <ListItemContent>
+                <Typography level="body-md">{label}</Typography>
+            </ListItemContent>
+        </ListItemButton>
+    );
+};
 
 export default function Sidebar() {
+    const location = useLocation();
     return (
         <Sheet
             className="Sidebar"
@@ -134,34 +155,18 @@ export default function Sidebar() {
                     },
                 }}
             >
-                <List
-                    size="lg"
-                >
-                    <NavigationItem label="Home" icon={HomeRoundedIcon}/>
-                    <NavigationItem label="Dashboard" icon={DashboardIcon}/>
-                    <NavigationItem selected label="Uploaded CVs" icon={UploadFileIcon}/>
+                <List size="lg">
+                    {routes.map((route, index) => (
+                        <NavigationItem
+                            key={route.path} // Unique key for each route
+                            label={route.label}
+                            icon={route.icon}
+                            path={route.path}
+                            selected={location.pathname === route.path} // Dynamically check if the route matches the current path
+                        />
+                    ))}
                     <Divider/>
-                    <NavigationItem label="Support" icon={SupportRoundedIcon}/>
-
-                    {/*<ListItem>*/}
-                    {/*    <ListItemButton*/}
-                    {/*        role="menuitem"*/}
-                    {/*        component="a"*/}
-                    {/*        href="/joy-ui/getting-started/templates/messages/"*/}
-                    {/*    >*/}
-                    {/*        <QuestionAnswerRoundedIcon/>*/}
-                    {/*        <ListItemContent>*/}
-                    {/*            <Typography level="title-sm">Messages</Typography>*/}
-                    {/*        </ListItemContent>*/}
-                    {/*        <Chip size="sm" color="primary" variant="solid">*/}
-                    {/*            4*/}
-                    {/*        </Chip>*/}
-                    {/*    </ListItemButton>*/}
-                    {/*</ListItem>*/}
-
-
                 </List>
-
 
                 <Box sx={{p: 3}}>
 

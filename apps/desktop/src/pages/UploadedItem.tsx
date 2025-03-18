@@ -7,6 +7,7 @@ import { ParsedStatus, UploadItem } from "@kyd/types/api";
 import { CircularProgress } from "@mui/joy";
 import * as React from "react";
 import { Done, ReportProblem } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
 
 const StatusIcon: Record<ParsedStatus, React.ReactNode> = {
     'pending': <CircularProgress variant="solid" size="sm"/>,
@@ -15,6 +16,9 @@ const StatusIcon: Record<ParsedStatus, React.ReactNode> = {
 };
 
 export const UploadedItem = ({item}: { item: UploadItem }) => {
+    const navigate = useNavigate();
+    const hasDetails = item.parseStatus === 'processed';
+
     const style = {
         backgroundColor: 'var(--joy-palette-background-body)',
         p: 2,
@@ -28,11 +32,11 @@ export const UploadedItem = ({item}: { item: UploadItem }) => {
     };
 
     return (
-        <Box key={item._id} onClick={() => {
-            alert("www")
-        }}
+        <Box key={item._id} onClick={
+            hasDetails ? () => navigate(`/uploads/${item._id}`) : undefined
+        }
              sx={
-                 item.parseStatus === 'processed' ? {...style, ...hoverStyle} : {...style}
+                 hasDetails ? {...style, ...hoverStyle} : {...style}
              }>
             <Stack direction="row" gap={2} alignItems="center">
                 <Typography level="body-md"><DocumentIcon/></Typography>

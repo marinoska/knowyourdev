@@ -20,7 +20,10 @@
     }
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "@kyd/typescript-config": "workspace:*"
+    "@kyd/typescript-config": "workspace:*",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "mongoose": "^8.10.1"
   }
 }

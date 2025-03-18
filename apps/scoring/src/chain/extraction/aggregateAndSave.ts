@@ -178,6 +178,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             $set: {
                 uploadRef: updatedCV.uploadRef,
                 fullName: updatedCV.fullName,
+                position: updatedCV.position,
                 technologies: Object.values(withTotalMonth),
                 jobs: techProfileJobs,
             },
