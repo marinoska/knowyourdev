@@ -1,18 +1,13 @@
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
-import Breadcrumbs from '@mui/joy/Breadcrumbs';
-import Link from '@mui/joy/Link';
-import Typography from '@mui/joy/Typography';
 import theme from './theme';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import { Routes, Route, Link as RouterLink, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { UploadedCVList } from "./pages/UploadedCVList.js";
-import { useMemo } from "react";
 import { UploadedCVProfile } from "@/pages/UploadedCVProfile.tsx";
+import { BreadcrumbsComponent } from "@/components/Breadcrumbs.tsx";
 
 const NotFound = () => {
     return <div>Not Found</div>
@@ -21,63 +16,6 @@ const NotFound = () => {
 const Dashboard = () => {
     return <div>Dashboard</div>
 }
-
-const routeMapping: { [key: string]: string } = {
-    dashboard: 'Dashboard',
-    uploads: 'Uploaded CV',
-};
-
-const BreadcrumbsComponent = () => {
-    const location = useLocation();
-    const breadcrumbs = useMemo(() => {
-        const pathnames = location.pathname.split('/').filter(Boolean); // Split path and remove empty parts
-
-        return pathnames.map((pathname, index) => {
-            const pathTo = `/${pathnames.slice(0, index + 1).join('/')}`; // Construct URL
-
-            return {
-                label: routeMapping[pathname] || pathname.charAt(0).toUpperCase() + pathname.slice(1), // Default to capitalized segment
-                path: pathTo,
-                isLast: index === pathnames.length - 1, // Check if it's the last breadcrumb
-            };
-        });
-    }, [location]);
-
-    return (
-        <Breadcrumbs
-            size="sm"
-            separator={<ChevronRightRoundedIcon fontSize="small"/>}
-            sx={{pl: 0}}
-        >
-            <Link
-                underline="none"
-                color="neutral"
-                component={RouterLink}
-                to="/dashboard"
-            >
-                <HomeRoundedIcon/>
-            </Link>
-            {breadcrumbs.map((breadcrumb, index) =>
-                breadcrumb.isLast ? (
-                    <Typography color="primary" key={index}>
-                        {breadcrumb.label}
-                    </Typography>
-                ) : (
-                    <Link
-                        underline="hover"
-                        color="neutral"
-                        component={RouterLink}
-                        to={breadcrumb.path}
-                        key={index}
-                        sx={{fontSize: 12, fontWeight: 500}}
-                    >
-                        {breadcrumb.label}
-                    </Link>
-                )
-            )}
-        </Breadcrumbs>
-    );
-};
 
 export default function App() {
     return (

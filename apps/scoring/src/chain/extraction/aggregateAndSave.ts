@@ -52,6 +52,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         job.technologies.forEach(tech => {
             const jobEntry: UploadTechProfileTechnologiesJobEntry = {role: job.role, company: job.job};
             const start = parse(job.start, FormatString, new Date());
+            // TODO date cannot be empty
             if (!isValid(start)) {
                 log.warn(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
             } else {
@@ -148,6 +149,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         }).filter(isNotNull);
 
         const start = parse(job.start, FormatString, new Date());
+        // TODO date cannot be empty
         if (!isValid(start)) {
             log.warn(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
         }

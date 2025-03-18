@@ -8,7 +8,6 @@ import Divider from '@mui/joy/Divider';
 import IconButton from '@mui/joy/IconButton';
 import LinearProgress from '@mui/joy/LinearProgress';
 import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
 import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import Typography from '@mui/joy/Typography';
@@ -17,7 +16,6 @@ import Stack from '@mui/joy/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DashboardIcon from '@mui/icons-material/BarChart';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
@@ -156,7 +154,7 @@ export default function Sidebar() {
                 }}
             >
                 <List size="lg">
-                    {routes.map((route, index) => (
+                    {routes.map((route) => (
                         <NavigationItem
                             key={route.path} // Unique key for each route
                             label={route.label}

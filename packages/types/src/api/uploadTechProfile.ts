@@ -23,18 +23,6 @@ export type UploadTechProfileTechnologiesJobEntry = {
 };
 
 export type UploadTechProfileJobEntry =
-// Pick<
-//     JobEntry,
-//     "job"
-//     | "summary"
-//     | "months"
-//     | "present"
-//     | "role"
-//     | "roleType"
-//     | "isSoftwareDevelopmentRole"
-//     | "softwareDevelopmentScope"
-// >
-// &
     {
         start?: Date;
         end?: Date;
