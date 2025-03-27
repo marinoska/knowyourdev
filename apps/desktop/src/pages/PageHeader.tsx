@@ -4,7 +4,7 @@ import React from "react";
 import Stack from "@mui/joy/Stack";
 
 export const PageHeader = ({title, subtitle, buttonLabel, icon: Icon, action}: {
-    title: string,
+    title?: string,
     subtitle?: string,
     buttonLabel?: string,
     icon?: React.ElementType,

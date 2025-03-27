@@ -19,3 +19,14 @@ export const TREND_MAP: Record<TrendType, number> = {
 } as const;
 
 export const PROFICIENCY = ['skilled', 'expert', 'familiar'] as const;
+
+export const SECTIONS = [
+    "Contacts",
+    "Summary",
+    "Education",
+    "Skills",
+    "Professional experience/work history",
+    "Certifications",
+    "Publications",
+    "Languages",
+] as const;

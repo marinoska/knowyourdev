@@ -1,5 +1,5 @@
 import { ExtractionChainParam } from "@/chain/extraction/types";
-import { UploadDataModel, TechnologyEntry } from "@/models/uploadData.model";
+import { UploadDataModel } from "@/models/uploadData.model";
 import {
     TechDocument,
 } from "@/models/types";
@@ -13,7 +13,7 @@ import {
     UploadTechProfileJobEntry,
     UploadTechProfileTechnologiesEntry,
     UploadTechProfileTechnologiesJobEntry,
-    TREND_MAP
+    TREND_MAP, TechnologyEntry
 } from "@kyd/types/api";
 
 const log = logger('extraction:extraction:runner');
@@ -132,7 +132,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
     enrich(updatedCV.skillSection.technologies, {inSkillsSection: true});
     enrich(updatedCV.profileSection.technologies, {inProfileSection: true});
 
-    const techProfileJobs: UploadTechProfileJobEntry[] = updatedCV.jobs.map(job => {
+    const techProfileJobs = updatedCV.jobs.map<UploadTechProfileJobEntry>(job => {
         const technologies = job.technologies.map(tech => {
             if (!tech.techReference) return null;
 
@@ -162,6 +162,11 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             start: isValid(start) ? start : undefined,
             end: isValid(end) ? end : undefined,
             months: job.months,
+            role: job.role,
+            job: job.job,
+            isSoftwareDevelopmentRole: job.isSoftwareDevelopmentRole,
+            roleType: job.roleType,
+            present: job.present,
             trending: technologies.length
                 ? technologies.reduce((acc, tech) => acc + tech.trending, 0) / technologies.length
                 : 0,

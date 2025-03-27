@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants";
+import { ExtractedCVData, JobEntry } from "./uploadedData";
 
 export type UploadTechProfileTechnologiesEntry = {
     techReference: Schema.Types.ObjectId;
@@ -23,35 +24,32 @@ export type UploadTechProfileTechnologiesJobEntry = {
 };
 
 export type UploadTechProfileJobEntry =
-    {
-        start?: Date;
-        end?: Date;
-        months: number;
-        popularity?: number;
-        trending?: number;
-        techStack?: {
-            ref: Schema.Types.ObjectId;
-            name: string;
-            popularity: number;
-            trending: number;
-        };
-        technologies: {
-            ref: Schema.Types.ObjectId;
-            name: string;
-            popularity: number;
-            trending: number;
-        }[]
+    Pick<JobEntry, 'isSoftwareDevelopmentRole' | 'roleType' | 'present' | 'role' | 'job' | 'months' | 'start' | 'end'>
+    & {
+    popularity?: number;
+    trending?: number;
+    techStack?: {
+        ref: Schema.Types.ObjectId;
+        name: string;
+        popularity: number;
+        trending: number;
     };
+    technologies: {
+        ref: Schema.Types.ObjectId;
+        name: string;
+        popularity: number;
+        trending: number;
+    }[]
+};
 
-export type UploadTechProfileType = {
-    fullName: string;
+export type UploadTechProfileType =
+    Pick<ExtractedCVData, 'position' | 'fullName'> & {
     technologies: UploadTechProfileTechnologiesEntry[],
     jobs: UploadTechProfileJobEntry[],
-    position: string;
 };
 
 export type UploadTechProfileResponse = {
     uploadId: string;
     createdAt: string;
     updatedAt: string;
-} & UploadTechProfileType;
+} & Partial<UploadTechProfileType>;

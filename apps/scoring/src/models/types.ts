@@ -1,17 +1,11 @@
 import { Document, Model, Schema } from "mongoose";
-import { JobEntry } from "@/models/uploadData.model";
-import { CategoryType, ScopeType, TechCode, UploadTechProfileType, TrendType } from "@kyd/types/api";
+import {
+    TechCode,
+    TrendType,
+    TechType,
+    TechCodeType, TechStack, JobEntry
+} from "@kyd/types/api";
 
-export type TechCodeType = string;
-export type TechType = {
-    name: string;
-    code: TechCodeType;
-    usage2024?: number;
-    usage2016?: number;
-    trend: TrendType;
-    category: CategoryType;
-    scope: ScopeType;
-};
 
 export type TechDocument = Document<unknown, unknown, TechType> & TechType & {
     _id: Schema.Types.ObjectId
@@ -30,18 +24,6 @@ export const TECH_STACK_CATEGORY =
         "CMS",
     ] as const;
 
-export const SECTIONS = [
-    "Contacts",
-    "Summary",
-    "Education",
-    "Skills",
-    "Professional experience/work history",
-    "Certifications",
-    "Publications",
-    "Languages",
-] as const;
-export type SectionsNames = typeof SECTIONS[number];
-
 export type TechStackCategory = typeof TECH_STACK_CATEGORY;
 
 export type StackComponents = {
@@ -49,11 +31,6 @@ export type StackComponents = {
     'or': TechCode[][]
 };
 
-export type TechStack = {
-    stackName: string,
-    matchedComponents: TechCode[],
-    matchPercentage: number
-}
 export type TechStackDocumentType = Document & {
     name: string;
     recommended: number;

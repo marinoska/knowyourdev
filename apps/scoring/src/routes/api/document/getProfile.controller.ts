@@ -24,7 +24,7 @@ export const getUploadTechProfileController: UploadTechProfileController = async
         throw new ValidationError("Invalid upload ID: " + uploadId)
     }
 
-    const techProfile = await UploadTechProfileModel.findOne({uploadRef: uploadId});
+    const techProfile = await UploadTechProfileModel.findOne({uploadRef: uploadId}).lean();
 
     if (!techProfile) {
         throw new NotFound(`TechProfile not found for the provided uploadRef: ${uploadId}`);

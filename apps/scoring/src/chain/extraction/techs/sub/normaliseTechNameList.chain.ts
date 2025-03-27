@@ -8,7 +8,7 @@ import { TechDocument } from "@/models/types";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
 import { overlapSimilarity } from "@/chain/normalizer/overlapSimilarity";
 import { generateTechCode } from "@/utils/func";
-import { TechnologyEntry } from "@/models/uploadData.model";
+import { TechnologyEntry } from "@kyd/types/api";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${normaliseTechNameListPrompt}

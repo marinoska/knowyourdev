@@ -26,12 +26,12 @@ export const BasePage = ({
     return (
         <Box
             sx={{
-                width: 'fit-content',
+                maxHeight: "100vh", // Restrict height to viewport
+                overflow: "auto", // Enable scrolling when content overflows
                 minWidth: {
                     xs: 'auto', // No minimum width on small screens
                     md: '900px', // Minimum width of 800px for desktop (from "md" breakpoint)
                 },
-                // maxWidth: "1000px",
                 borderRadius: "sm",
             }}>
             {header}

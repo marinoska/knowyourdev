@@ -4,10 +4,9 @@ import { parseJsonOutput } from "@/utils/json";
 import { ExtractCVDataPrompt } from "./extractCVData.prompt";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
 import { gpt4oMini } from "@/app/aiModel";
-import { SECTIONS, SectionsNames } from "@/models/types";
 import { ExtractionChainInput, ExtractionChainParam } from "@/chain/extraction/types";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
-import { ExtractedCVData, JobEntry } from "@/models/uploadData.model";
+import { ExtractedCVData, JobEntry, SECTIONS, SectionsNames } from "@kyd/types/api";
 
 type OutputType = {
     fullName: string;

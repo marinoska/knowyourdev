@@ -1,48 +1,7 @@
 import { Document, Model, model, Schema } from 'mongoose';
-import { SectionsNames, TechDocument, TechStack } from "@/models/types";
-import { ProficiencyType, ScopeType, TechCode } from "@kyd/types/api";
+import { ExtractedCVData, JobEntry, TechnologyEntry } from "@kyd/types/api";
 
-export type JobEntry = {
-    _id: Schema.Types.ObjectId;
-    role: string;
-    roleType: "SE" | "QA" | "UI/UX" | "PM" | "DO" | "",
-    isSoftwareDevelopmentRole: boolean,
-    softwareDevelopmentScope: ScopeType | "",
-    summary: string,
-    job: string;
-    start: string; // Format: 'mm-yyyy'
-    end: string;   // Format: 'mm-yyyy'
-    months: number;
-    present: boolean;
-    text: string;
-    technologies: TechnologyEntry[];
-    techStack: TechStack[];
-};
-export type TechnologyEntry = {
-    original: string; // Exact name as found in the job description
-    normalized: string | ""; // Name from TechList by AI
-    code: TechCode | ""; // Code of normalized name
-    proficiency: ProficiencyType;
-    techReference: Schema.Types.ObjectId | TechDocument | null;
-};
-export type ExtractedCVData = {
-    // technologies: TechnologiesEntry[],
-    // techStack: TechStack[];
-    position: string;
-    sections: SectionsNames[];
-    fullName: string;
-    profileSection: {
-        text: string;
-        technologies: TechnologyEntry[];
-        techStack: TechStack[];
-    };
-    skillSection: {
-        text: string;
-        technologies: TechnologyEntry[];
-        techStack: TechStack[];
-    }
-    jobs: JobEntry[];
-};
+
 export type UploadDataDocumentType = Document & ExtractedCVData & {
     uploadRef: Schema.Types.ObjectId;
 };
@@ -76,13 +35,13 @@ const JobEntrySchema = new Schema<JobEntry>(
             enum: ["SE", "QA", "UI/UX", "PM", ""]
         },
         isSoftwareDevelopmentRole: {type: Boolean, default: false},
-        // softwareDevelopmentScope: {type: String, enum: ["BE", "FE", "FS", ""]},
-        // isMobileDevelopmentRole: {type: Boolean, default: false},
         job: {type: String, required: true},
         start: {type: String, required: true}, // Format: 'mm-yyyy'
         end: {type: String, required: true},   // Format: 'mm-yyyy'
         months: {type: Number, required: true},
         present: {type: Boolean, default: false},
+        // softwareDevelopmentScope: {type: String, enum: ["BE", "FE", "FS", ""]},
+        // isMobileDevelopmentRole: {type: Boolean, default: false},
         technologies: [
             TechnologyEntrySchema
         ],

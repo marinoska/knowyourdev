@@ -32,6 +32,14 @@ const UploadTechProfileJobEntrySchema = new Schema<UploadTechProfileJobEntry>({
             trending: Number,
         }, required: false
     },
+    roleType: {
+        type: String,
+        enum: ["SE", "QA", "UI/UX", "PM", ""]
+    },
+    isSoftwareDevelopmentRole: {type: Boolean, default: false},
+    job: {type: String, required: true},
+    role: {type: String, required: true},
+    present: {type: Boolean, default: false},
     technologies: [{
         ref: {type: Schema.Types.ObjectId, ref: 'TechList', required: true},
         name: String,
@@ -88,6 +96,7 @@ const UploadTechProfileSchema = new Schema<UploadTechProfileDocumentType, Upload
             unique: true,
         },
         fullName: {type: String, required: true},
+        position: {type: String, required: true},
         technologies: {type: [UploadTechProfileTechnologiesEntrySchema], required: true, default: []}, // List of technology entries
         jobs: {type: [UploadTechProfileJobEntrySchema], required: true, default: []},
     },

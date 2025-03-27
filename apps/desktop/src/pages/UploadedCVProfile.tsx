@@ -7,8 +7,9 @@ import { useMemo } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { UploadTechProfileResponse } from "@kyd/types/api";
-import { TechStackChart } from "@/pages/Analisys/TechStackChart.tsx";
-import { TechTimelineChart } from "@/pages/Analisys/TechTimelineChart.tsx";
+import { CareerTimelineChart } from "@/pages/Analisys/CareerTimelineChart.tsx";
+import JobChart from "@/pages/Analisys/PopularityTimelineChart.tsx";
+import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 
 type UploadedCVProfileParams = {
     id: string;
@@ -18,8 +19,9 @@ const getTabItems = (upload: UploadTechProfileResponse): TabItem[] => ([
     {
         label: "Career Timeline",
         content: (<>
-                <TechStackChart jobs={upload.jobs}/>
-                <TechTimelineChart jobs={upload.jobs}/>
+                {/*<TechStackChart jobs={upload.jobs}/>*/}
+                <CareerTimelineChart jobs={upload.jobs}/>
+                <JobChart jobs={upload.jobs}/>
             </>
         )
     },
@@ -38,8 +40,10 @@ export const UploadedCVProfile = () => {
 
     const {data: upload, isError, isLoading, showError, dismissError} = useUploadProfileQuery({uploadId: id || ''});
     const header = useMemo(() => (
-        <PageHeader subtitle="Senior software engineer • 8 years experience" title={"Marina Orlova"}/>), [])
+        <PageHeader subtitle={`${upload?.position} • 8 years experience`}
+                    title={upload?.fullName}/>), [upload?.fullName, upload?.position])
     return (<>
+        <NavigateBackLink/>
         {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
         <BasePage isLoading={isLoading} isError={isError} showEmpty={!upload} header={header} component={Box}>
             {upload && <AnalysisTabs tabs={getTabItems(upload)}/>}

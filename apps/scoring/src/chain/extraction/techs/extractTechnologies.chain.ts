@@ -9,7 +9,7 @@ import { RoleType } from "@/models/types";
 import { ExtractionChainParam } from "@/chain/extraction/types";
 import { extractTechProficiency } from "@/chain/extraction/techs/sub/extractTechProficiency.chain";
 import { TechStackModel } from "@/models/techStack.model";
-import { JobEntry, TechnologyEntry } from "@/models/uploadData.model";
+import { JobEntry, TechnologyEntry } from "@kyd/types/api";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechnologiesPrompt}

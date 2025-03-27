@@ -5,13 +5,13 @@ import { ExtractionChainParam } from "@/chain/extraction/types";
 import { extractTechnologies } from "@/chain/extraction/techs/extractTechnologies.chain";
 import { aggregateAndSave } from "@/chain/extraction/aggregateAndSave";
 import { TechListModel } from "@/models/techList.model";
-import { ExtractedCVData } from "@/models/uploadData.model";
 import { TUploadDocument } from "@/models/upload.model";
 import logger from "@/app/logger";
 import { env } from "@/app/env";
 import path from "node:path";
 import mammoth from "mammoth";
 import { Schema } from "mongoose";
+import { ExtractedCVData } from "@kyd/types/api";
 
 const log = logger('DataExtraction');
 const dir = env('UPLOAD_DIR');

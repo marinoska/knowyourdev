@@ -11,7 +11,7 @@ const routeMapping: { [key: string]: string } = {
     uploads: 'Uploaded CVs',
 };
 
-export const BreadcrumbsComponent = () => {
+const BreadcrumbsComponent = () => {
     const location = useLocation();
     const breadcrumbs = useMemo(() => {
         const pathnames = location.pathname.split('/').filter(Boolean); // Split path and remove empty parts
@@ -62,3 +62,4 @@ export const BreadcrumbsComponent = () => {
         </Breadcrumbs>
     );
 };
+export const Breadcrumbs = BreadcrumbsComponent;

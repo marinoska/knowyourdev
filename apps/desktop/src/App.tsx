@@ -7,7 +7,6 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { UploadedCVList } from "./pages/UploadedCVList.js";
 import { UploadedCVProfile } from "@/pages/UploadedCVProfile.tsx";
-import { BreadcrumbsComponent } from "@/components/Breadcrumbs.tsx";
 
 const NotFound = () => {
     return <div>Not Found</div>
@@ -18,6 +17,7 @@ const Dashboard = () => {
 }
 
 export default function App() {
+
     return (
         <CssVarsProvider theme={theme} defaultMode="light" disableTransitionOnChange>
             <CssBaseline/>
@@ -43,9 +43,7 @@ export default function App() {
                         gap: 1,
                     }}
                 >
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        <BreadcrumbsComponent/>
-                    </Box>
+
                     <Routes>
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>

@@ -17,7 +17,6 @@ export const useUploadMutation = () => {
                 void queryClient.setQueryData(
                     uploadsKeys.list(),
                     (uploads: UploadItem[] = []) => {
-                        console.log({uploads, upload});
                         return [upload, ...uploads]
                     }
                 )

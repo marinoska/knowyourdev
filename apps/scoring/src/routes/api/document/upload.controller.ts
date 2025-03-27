@@ -49,7 +49,6 @@ export const documentUploadController: DocumentUploadController = async (req: Do
     const {name, role} = req.body;
     // File metadata (use it as required, e.g., saving to database or storage)
     const {originalname, mimetype, size, filename, path: filePath} = req.file;
-    console.log({originalname, mimetype, size, filename, filePath});
     let buffer: Buffer;
     try {
         buffer = fs.readFileSync(filePath); // Read the file as a Buffer
