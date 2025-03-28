@@ -1,8 +1,9 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import { Chart, ReactGoogleChartEvent } from "react-google-charts";
 import { Box, Typography } from "@mui/joy";
-import { UploadTechProfileJobEntry } from "@kyd/types/api";
+import { UploadTechProfileJobEntry, GAP_JOB, GAP_ROLE } from "@kyd/types/api";
 import { useAutoChartHeight } from "@/pages/Analisys/useAutoChartHeight.ts";
+import { differenceInMonths, addMonths } from 'date-fns';
 
 interface TechTimelineProps {
     jobs: UploadTechProfileJobEntry[];
@@ -23,76 +24,86 @@ const getColorByPopularity = (popularity: number = 0, maxPopularity: number, min
         (popularity - minPopularity) / (maxPopularity - minPopularity); // Normalize 0 to 1
     return getColorFromPercentage(percentage);
 };
+type Job = Omit<UploadTechProfileJobEntry, 'start' | 'end'> & {
+    start: Date;
+    end: Date;
+};
 
-export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs: validJobs = []}) => {
+type Gap = Pick<Job, 'job' | 'role' | 'months' | 'start' | 'end' | 'popularity'>;
+export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs = []}) => {
+    const sortedJobs = jobs.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+    const jobsAndGaps = useMemo(() => {
+        const jobsAndGaps: Array<Job | Gap> = [];
+
+        for (const job of sortedJobs) {
+            // TODO make sure jobs are not empty then remove defaults
+            const start = job.start ? new Date(job.start) : new Date(0); // Default to epoch if start is undefined
+            const end = job.end ? new Date(job.end) : new Date(); // Default to now if end is undefined
+            if (jobsAndGaps.length) {
+
+                const lastJob = jobsAndGaps[jobsAndGaps.length - 1];
+                const monthsGap = differenceInMonths(job.start, lastJob.end);
+                if (monthsGap > 1) {
+                    jobsAndGaps.push({
+                        role: GAP_ROLE,
+                        job: GAP_JOB,
+                        start: addMonths(lastJob.end, 1),
+                        end: start,
+                        months: monthsGap,
+                        popularity: 0,
+                    });
+                }
+            }
+            jobsAndGaps.push({...job, start, end});
+        }
+
+        return jobsAndGaps;
+    }, [sortedJobs]);
     const minPopularity = useMemo(() => Math.min(
-        ...validJobs.map((job) => job.popularity || 0)
-    ), [validJobs]);
+        ...jobsAndGaps.map((job) => job.popularity || 0)
+    ), [jobsAndGaps]);
     const maxPopularity = useMemo(() => Math.max(
-        ...(validJobs || []).map((job) => job.popularity || 0)
-    ), [validJobs]);
+        ...(jobsAndGaps || []).map((job) => job.popularity || 0)
+    ), [jobsAndGaps]);
 
     // Transform data into Google Charts Timeline format
     const chartData = [
-        ["Role", "Name", "Start Date", "End Date", {type: "string", role: "style"}], // Header row with style column
-        ...validJobs.map((job) => [
-            job.role || "Undefined Role", // Role fallback
-            job.job || "Undefined Name", // Name fallback
-            job.start ? new Date(job.start) : new Date(0), // Default to epoch if start is undefined
-            job.end ? new Date(job.end) : new Date(), // Default to now if end is undefined
-            `color: ${getColorByPopularity(job.popularity, maxPopularity, minPopularity)}`, // Dynamic gradient-based color
-        ]),
+        ["Role", "Name", "Start Date", "End Date"], // Header row with style column
+        ...jobsAndGaps.map((job) => {
+
+            return [
+                job.role || "Undefined Role", // Role fallback
+                job.job || "Undefined Name", // Name fallback
+                job.start,
+                job.end,
+            ]
+        }),
     ];
-    const startDates = [
-        ...new Set(
-            chartData.slice(1)
-                .map(row => row[2])
-                .filter((d): d is Date => d instanceof Date) // 👈 filter only Dates
-                .map(d => d.toISOString())
-        )
-    ].map(iso => new Date(iso));
-    console.log({startDates})
+
+// Move "Gap" rows to the top of the chart
+    const [header, ...rows] = chartData;
+
+    const sortedRows = rows.sort((a, b) => {
+        const isGapA = a[0] === GAP_ROLE;
+        const isGapB = b[0] === GAP_ROLE;
+        if (isGapA && !isGapB) return -1;
+        if (!isGapA && isGapB) return 1;
+
+        return 0;
+    });
+
+    const sortedChartData = [header, ...sortedRows];
     const options = {
+        colors: [
+            // '#E57373', // Gaps color
+            '#FFD800', // Gaps color (first row)
+            ...Array(sortedChartData.length - 1).fill('#4CAF50')
+        ],
         timeline: {
             showRowLabels: true,
             groupByRowLabel: true,
+            colorByRowLabel: true,
         },
-        avoidOverlappingGridLines: true,
-    };
-
-    const drawVerticalLines = () => {
-
-        requestAnimationFrame(() => {
-            const svg = chartRef.current?.querySelector('svg[aria-label="A chart."]');
-            if (!svg) return;
-
-            // Remove previously drawn lines
-            svg.querySelectorAll(".custom-tick-line").forEach(line => line.remove());
-
-            const bars = svg.querySelectorAll("rect");
-
-            const svgHeight = parseFloat(svg.getAttribute("height") || "0");
-
-            const drawTickLine = (x: number) => {
-                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                line.setAttribute("x1", `${x}`);
-                line.setAttribute("x2", `${x}`);
-                line.setAttribute("y1", "0");
-                line.setAttribute("y2", `${svgHeight - 50}`);
-                line.setAttribute("stroke", "gray");
-                line.setAttribute("stroke-dasharray", "2,2");
-                line.setAttribute("stroke-width", "1");
-                line.classList.add("custom-tick-line");
-                svg.appendChild(line);
-            };
-
-            // Add lines at bar starts only (or both start and end if you prefer)
-            bars.forEach((bar) => {
-                const x = parseFloat(bar.getAttribute("x") || "0");
-                drawTickLine(x);
-            });
-        });
-
     };
 
     const chartRef = useRef(null);
@@ -103,7 +114,6 @@ export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs: validJob
             eventName: "ready",
             callback: () => {
                 handleChartReady();
-                drawVerticalLines();
             }
         },
     ];
@@ -119,7 +129,7 @@ export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs: validJob
                 Tech Timeline
             </Typography>
 
-            {validJobs.length === 0 ? (
+            {jobsAndGaps.length === 0 ? (
                 <Typography>No data available to display the timeline chart.</Typography>
             ) : (
                 <>
@@ -131,7 +141,7 @@ export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs: validJob
                             height={chartHeight}
                             options={options}
                             chartEvents={chartEvents}
-                            data={chartData}
+                            data={sortedChartData}
                             loader={<Typography>Loading Chart...</Typography>}
                         />
                     </div>

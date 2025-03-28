@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
-import { CategoryType, ScopeType, TechCode, TrendType } from "./constants";
-import { ExtractedCVData, JobEntry } from "./uploadedData";
+import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
+import { ExtractedCVData, JobEntry } from "./uploadedData.js";
 
 export type UploadTechProfileTechnologiesEntry = {
     techReference: Schema.Types.ObjectId;

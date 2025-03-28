@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
-import { ProficiencyType, ScopeType, SECTIONS, TechCode } from "./constants";
-import { TechStack, TechType } from "./tech";
+import { ProficiencyType, ScopeType, SECTIONS, TechCode } from "./constants.js";
+import { TechStack, TechType } from "./tech.js";
 
 export type TechnologyEntry = {
     original: string; // Exact name as found in the job description

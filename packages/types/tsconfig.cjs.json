@@ -1,0 +1,24 @@
+{
+  "extends": "@kyd/typescript-config/base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    // Ensures CommonJS output (instead of ESM syntax)
+    "moduleResolution": "Node",
+    // Use classic Node.js resolution for CommonJS
+    "target": "ESNext",
+    "emitDeclarationOnly": false,
+    // Emit only declaration files
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist/cjs",
+    "rootDir": "src",
+    "baseUrl": "."
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

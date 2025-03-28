@@ -1,24 +1,30 @@
 {
   "name": "@kyd/types",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build": "pnpm run build:cjs && pnpm run build:esm",
     "clean": "rm -rf dist",
     "dev": "tsc --watch"
   },
+  "main": "./dist/cjs/api/index.js",
+  "module": "./dist/esm/api/index.js",
   "exports": {
+    ".": {
+      "require": "./dist/cjs/api/index.js",
+      "import": "./dist/esm/api/index.js"
+    },
     "./api": {
-      "types": "./dist/api/index.d.ts",
-      "default": "./dist/api/index.js"
+      "require": "./dist/cjs/api/index.js",
+      "import": "./dist/esm/api/index.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "api": [
-        "./dist/api/index.d.ts"
-      ]
-    }
-  },
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/esm/api/index.d.ts",
   "devDependencies": {
     "@kyd/typescript-config": "workspace:*",
     "typescript": "^5.0.0"

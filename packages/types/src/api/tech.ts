@@ -1,4 +1,4 @@
-import { CategoryType, ScopeType, TechCode, TrendType } from "./constants";
+import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
 
 export type TechCodeType = string;
 export type TechType = {
