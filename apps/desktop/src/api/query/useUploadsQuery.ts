@@ -35,12 +35,12 @@ export const useUploadsQuery = () => {
     };
 }
 
-export const useUploadProfileQuery = ({uploadId}: { uploadId: string }) => {
+export const useUploadProfileQuery = ({uploadId}: { uploadId?: string }) => {
     const [showError, setShowError] = useState(false);
     const {data, isError, error, ...rest} = useQuery<ProcessedUploadProfile, Error>(
         {
-            queryKey: uploadsKeys.profile(uploadId), // we dont use the query params for now so default it to 0
-            queryFn: () => getUploadProfile({uploadId}).then(
+            queryKey: uploadsKeys.profile(uploadId!), // we dont use the query params for now so default it to 0
+            queryFn: () => getUploadProfile({uploadId: uploadId!}).then(
                 (data) => ({
                     ...data,
                     jobs: data.jobs?.map<Job>(
@@ -49,6 +49,7 @@ export const useUploadProfileQuery = ({uploadId}: { uploadId: string }) => {
                         })) || []
                 })),
             retry: TIMES_THREE,
+            enabled: !!uploadId,
         },
     );
 
@@ -61,7 +62,7 @@ export const useUploadProfileQuery = ({uploadId}: { uploadId: string }) => {
 
 
     return {
-        data,
+        profile: data,
         isError,
         error,
         showError,

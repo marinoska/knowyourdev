@@ -6,21 +6,22 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { useMemo } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
-import { UploadTechProfileResponse } from "@kyd/common/api";
 import { CareerTimelineChart } from "@/pages/Analisys/Career/CareerTimelineChart.tsx";
 import JobChart from "@/pages/Analisys/popularuty/PopularityTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
+import { ChartProvider } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
+import { ProcessedUploadProfile } from "@/api/query/types.ts";
 
-type UploadedCVProfileParams = {
+type UploadedProfileParams = {
     id: string;
 };
 
-const getTabItems = (upload: UploadTechProfileResponse): TabItem[] => ([
+const getTabItems = (upload: ProcessedUploadProfile): TabItem[] => ([
     {
         label: "Career Timeline",
         content: (<>
                 {/*<TechStackChart jobs={upload.jobs}/>*/}
-                {upload.jobs && <CareerTimelineChart jobs={upload.jobs}/>}
+                <CareerTimelineChart/>
             </>
         )
     },
@@ -37,18 +38,28 @@ const getTabItems = (upload: UploadTechProfileResponse): TabItem[] => ([
     },
 ]);
 
-export const UploadedCVProfile = () => {
-    const {id} = useParams<UploadedCVProfileParams>();
+export const UploadedProfile = () => {
+    const {id} = useParams<UploadedProfileParams>();
 
-    const {data: upload, isError, isLoading, showError, dismissError} = useUploadProfileQuery({uploadId: id || ''});
+    const query = useUploadProfileQuery({uploadId: id});
+
+    return (
+        <ChartProvider profile={query.profile}>
+            <UploadPage query={query}/>
+        </ChartProvider>
+    );
+}
+
+const UploadPage = ({query}: { query: ReturnType<typeof useUploadProfileQuery> }) => {
+    const {profile, isError, isLoading, showError, dismissError} = query;
     const header = useMemo(() => (
-        <PageHeader subtitle={`${upload?.position} • 8 years experience`}
-                    title={upload?.fullName}/>), [upload?.fullName, upload?.position])
+        <PageHeader subtitle={`${profile?.position} • 8 years experience`}
+                    title={profile?.fullName}/>), [profile?.fullName, profile?.position])
     return (<>
         <NavigateBackLink/>
         {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
-        <BasePage isLoading={isLoading} isError={isError} showEmpty={!upload} header={header} component={Box}>
-            {upload && <AnalysisTabs tabs={getTabItems(upload)}/>}
+        <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile} header={header} component={Box}>
+            {profile && <AnalysisTabs tabs={getTabItems(profile!)}/>}
         </BasePage>
     </>)
 }

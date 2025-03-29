@@ -9,7 +9,7 @@ import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useMemo } from "react";
 
-export const UploadedCVList = () => {
+export const UploadedList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
     const {data: uploads, isLoading, isError, showError, dismissError} = useUploadsQuery();

@@ -5,8 +5,8 @@ import theme from './theme';
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import { UploadedCVList } from "./pages/UploadedCVList.js";
-import { UploadedCVProfile } from "@/pages/UploadedCVProfile.tsx";
+import { UploadedList } from "./pages/UploadedList.tsx";
+import { UploadedProfile } from "@/pages/UploadedProfile.tsx";
 
 const NotFound = () => {
     return <div>Not Found</div>
@@ -47,8 +47,8 @@ export default function App() {
                     <Routes>
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
-                        <Route path="/uploads" element={<UploadedCVList/>}/>
-                        <Route path="/uploads/:id" element={<UploadedCVProfile/>}/>
+                        <Route path="/uploads" element={<UploadedList/>}/>
+                        <Route path="/uploads/:id" element={<UploadedProfile/>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </Box>

@@ -2,21 +2,13 @@ import React, { useMemo, useRef, useState } from "react";
 import { Chart, ReactGoogleChartEvent } from "react-google-charts";
 import { Box, Typography } from "@mui/joy";
 import { useGoogleChartAutoHeight } from "@/pages/Analisys/useGoogleChartAutoHeight.ts";
-import { Job } from "@/api/query/types.ts";
-import { getJobGaps } from "@/pages/Analisys/Career/ranges.ts";
-import { GAP_JOB, GAP_ROLE } from "@kyd/common";
+import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
 
-interface TechTimelineProps {
-    jobs: Job[];
-}
-
-type Gap = Pick<Job, 'job' | 'role' | 'months' | 'start' | 'end' | 'popularity'>;
-
-export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs = []}) => {
-    const [hasGaps, setHasGaps] = useState(false);
+export const CareerTimelineChart = () => {
     const chartRef = useRef(null);
     const {chartHeight, handleChartReady} = useGoogleChartAutoHeight(chartRef);
 
+    const chartContext = useChartContext();
     const chartEvents: ReactGoogleChartEvent[] = [
         {
             eventName: "ready",
@@ -24,40 +16,27 @@ export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs = []}) =>
         },
     ];
 
-    const jobsAndGaps = useMemo<(Job | Gap)[]>(() => {
-        const sortedJobs = jobs.sort((a, b) => a.start.getTime() - b.start.getTime());
-        const gapsRanges = getJobGaps(sortedJobs);
-        gapsRanges.length && setHasGaps(true);
+    const chartData = useMemo(() => {
+        chartContext.jobGaps;
+
+        const sortedJobs = chartContext.profile?.jobs.sort((a, b) => a.start.getTime() - b.start.getTime()) || [];
+        const gapsAndJobs = [...chartContext.jobGaps, ...sortedJobs];
+        const data = gapsAndJobs.map((job) => ([
+            job.role || "Undefined Role",
+            job.job || "Undefined Name",
+            job.start,
+            job.end,
+        ]));
 
         return [
-            ...gapsRanges.map((range) => ({
-                role: GAP_ROLE,
-                job: GAP_JOB,
-                start: range.start,
-                end: range.end,
-                months: range.months,
-                popularity: 0,
-            })),
-            ...sortedJobs,
+            ["Role", "Name", "Start Date", "End Date"], // Header row with style column
+            ...data
         ];
-    }, [jobs]);
-
-    const chartData = useMemo(() => ([
-        ["Role", "Name", "Start Date", "End Date"], // Header row with style column
-        ...jobsAndGaps.map((job) => {
-
-            return [
-                job.role || "Undefined Role", // Role fallback
-                job.job || "Undefined Name", // Name fallback
-                job.start,
-                job.end,
-            ]
-        }),
-    ]), [jobsAndGaps]);
+    }, [chartContext.jobGaps, chartContext.profile?.jobs]);
 
     const options = useMemo(() => {
         // '#E57373', // Gaps color
-        const firstGapsColor = hasGaps ? ['#FFD800'] : [];
+        const firstGapsColor = chartContext.jobGaps.length ? ['#FFD800'] : [];
         return {
             colors: [
                 ...firstGapsColor, // Gaps color (first row)
@@ -70,12 +49,11 @@ export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs = []}) =>
             },
         };
 
-    }, [chartData.length, hasGaps]);
+    }, [chartData.length]);
 
     return (
         <Box
             sx={{
-                p: 4,
                 backgroundColor: "#fff",
             }}
         >
@@ -83,23 +61,20 @@ export const CareerTimelineChart: React.FC<TechTimelineProps> = ({jobs = []}) =>
                 Tech Timeline
             </Typography>
 
-            {jobsAndGaps.length === 0 ? (
+            {chartContext.profile?.jobs.length === 0 ? (
                 <Typography>No data available to display the timeline chart.</Typography>
             ) : (
-                <>
-                    <div ref={chartRef}>
-                        <Chart
-                            chartType="Timeline"
-                            width="100%"
-                            // height="auto"
-                            height={chartHeight}
-                            options={options}
-                            chartEvents={chartEvents}
-                            data={chartData}
-                            loader={<Typography>Loading Chart...</Typography>}
-                        />
-                    </div>
-                </>
+                <div ref={chartRef}>
+                    <Chart
+                        chartType="Timeline"
+                        width="100%"
+                        height={chartHeight}
+                        options={options}
+                        chartEvents={chartEvents}
+                        data={chartData}
+                        loader={<Typography>Loading Chart...</Typography>}
+                    />
+                </div>
             )}
         </Box>
     );
