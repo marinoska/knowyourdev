@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
 import { format } from "date-fns"; // Import date-fns for formatting
-import { getRedToGreenThroughYellowWithOpacity } from "@/pages/Analisys/popularuty/normalizedColorsForValues.ts"; // Importing type definition
-import { UploadTechProfileJobEntry } from "@kyd/common/api";
+import { getRedToGreenThroughYellowWithOpacity } from "@/pages/Analisys/Popularuty/normalizedColorsForValues.ts"; // Importing type definition
+import { Job } from "@/api/query/types.ts";
 
 const getYellowToGreen = (
     popularity: number,
@@ -67,7 +67,7 @@ const CustomTooltip = ({active, payload}: any) => {
 //     ...(jobsAndGaps || []).map((job) => job.popularity || 0)
 // ), [jobsAndGaps]);
 
-const PopularityTimelineChart = ({jobs}: { jobs: UploadTechProfileJobEntry[] }) => {
+const PopularityTimelineChart = ({jobs}: { jobs: Job[] }) => {
     const [transformedData, segments] = useMemo(() => {
         const transformedData: any[] = [];
         const segments: any[] = [];

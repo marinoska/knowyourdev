@@ -1,8 +1,17 @@
-import React, { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { Chart, ReactGoogleChartEvent } from "react-google-charts";
 import { Box, Typography } from "@mui/joy";
 import { useGoogleChartAutoHeight } from "@/pages/Analisys/useGoogleChartAutoHeight.ts";
 import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
+import { GreenLegendColor, YellowLegendColor } from "@/utils/const";
+import { RedLegendColor } from "@/utils/const.ts";
+import { Legend } from "@/components/Legend.tsx";
+
+const LegendItems = [
+    {label: 'Software Development Jobs', color: GreenLegendColor},
+    {label: 'Gaps', color: YellowLegendColor},
+    {label: 'Irrelevant Jobs (not in development)', color: RedLegendColor},
+];
 
 export const CareerTimelineChart = () => {
     const chartRef = useRef(null);
@@ -19,8 +28,7 @@ export const CareerTimelineChart = () => {
     const chartData = useMemo(() => {
         chartContext.jobGaps;
 
-        const sortedJobs = chartContext.profile?.jobs.sort((a, b) => a.start.getTime() - b.start.getTime()) || [];
-        const gapsAndJobs = [...chartContext.jobGaps, ...sortedJobs];
+        const gapsAndJobs = [...chartContext.jobGaps, ...chartContext.irrelevantJobs, ...chartContext.softwareDevelopmentJobs];
         const data = gapsAndJobs.map((job) => ([
             job.role || "Undefined Role",
             job.job || "Undefined Name",
@@ -32,15 +40,18 @@ export const CareerTimelineChart = () => {
             ["Role", "Name", "Start Date", "End Date"], // Header row with style column
             ...data
         ];
-    }, [chartContext.jobGaps, chartContext.profile?.jobs]);
+    }, [chartContext.irrelevantJobs, chartContext.jobGaps, chartContext.softwareDevelopmentJobs]);
 
     const options = useMemo(() => {
-        // '#E57373', // Gaps color
-        const firstGapsColor = chartContext.jobGaps.length ? ['#FFD800'] : [];
+        const irrelevantJobsRowsCount = new Set(chartContext.irrelevantJobs.map((job) => job.role)).size;
+        const softwareJobsRowsCount = new Set(chartContext.softwareDevelopmentJobs.map((job) => job.role)).size;
+
+        const firstGapsColor = chartContext.jobGaps.length ? [YellowLegendColor] : [];
         return {
             colors: [
                 ...firstGapsColor, // Gaps color (first row)
-                ...Array(chartData.length - 1).fill('#4CAF50')
+                ...Array(irrelevantJobsRowsCount).fill(RedLegendColor), // irrelevant jobs color
+                ...Array(softwareJobsRowsCount).fill(GreenLegendColor)
             ],
             timeline: {
                 showRowLabels: true,
@@ -49,7 +60,7 @@ export const CareerTimelineChart = () => {
             },
         };
 
-    }, [chartData.length]);
+    }, [chartContext.irrelevantJobs, chartContext.jobGaps.length, chartContext.softwareDevelopmentJobs]);
 
     return (
         <Box
@@ -76,6 +87,8 @@ export const CareerTimelineChart = () => {
                     />
                 </div>
             )}
+
+            <Legend title={'Legend'} items={LegendItems}/>
         </Box>
     );
 };

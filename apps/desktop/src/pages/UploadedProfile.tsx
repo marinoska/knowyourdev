@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Career/CareerTimelineChart.tsx";
-import JobChart from "@/pages/Analisys/popularuty/PopularityTimelineChart.tsx";
+import JobChart from "@/pages/Analisys/Popularuty/PopularityTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import { ChartProvider } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
 import { ProcessedUploadProfile } from "@/api/query/types.ts";
