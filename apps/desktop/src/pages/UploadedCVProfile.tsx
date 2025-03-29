@@ -1,14 +1,14 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { PageHeader } from "@/pages/PageHeader.tsx";
-import { useUploadProfileQuery } from "@/api/query/useUploadListQuery.ts";
+import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useMemo } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
-import { UploadTechProfileResponse } from "@kyd/types/api";
-import { CareerTimelineChart } from "@/pages/Analisys/CareerTimelineChart.tsx";
-import JobChart from "@/pages/Analisys/PopularityTimelineChart.tsx";
+import { UploadTechProfileResponse } from "@kyd/common/api";
+import { CareerTimelineChart } from "@/pages/Analisys/Career/CareerTimelineChart.tsx";
+import JobChart from "@/pages/Analisys/popularuty/PopularityTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 
 type UploadedCVProfileParams = {
@@ -20,14 +20,16 @@ const getTabItems = (upload: UploadTechProfileResponse): TabItem[] => ([
         label: "Career Timeline",
         content: (<>
                 {/*<TechStackChart jobs={upload.jobs}/>*/}
-                <CareerTimelineChart jobs={upload.jobs}/>
-                <JobChart jobs={upload.jobs}/>
+                {upload.jobs && <CareerTimelineChart jobs={upload.jobs}/>}
             </>
         )
     },
     {
-        label: "Red Flags",
-        content: <div>Content for Red Flags</div>,
+        label: "Tech stack popularity",
+        content: (<>
+                {upload.jobs && <JobChart jobs={upload.jobs}/>}
+            </>
+        ),
     },
     {
         label: "Strengths & Suitability",

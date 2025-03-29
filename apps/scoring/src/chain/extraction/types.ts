@@ -1,7 +1,7 @@
 import { TechDocument, TechProfileDocumentType } from "@/models/types";
 import { UploadDataDocumentType } from "@/models/uploadData.model";
 import { Schema } from "mongoose";
-import { ExtractedCVData } from "@kyd/types/api";
+import { ExtractedCVData } from "@kyd/common/api";
 
 export type ExtractionChainInput = {
     cvText: string, techCollection: TechDocument[], uploadId: Schema.Types.ObjectId

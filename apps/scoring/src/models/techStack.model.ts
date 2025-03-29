@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 import { TECH_STACK_CATEGORY, TechStackDocumentType, TechStackModelType } from "./types";
 import { identifyStack } from "./techStack.statics";
 import { matchTechList } from "./techStack.methods";
-import { TREND } from "@kyd/types/api";
+import { TREND } from "@kyd/common/api";
 
 export const TechStackSchema = new Schema<TechStackDocumentType, TechStackModelType>(
     {

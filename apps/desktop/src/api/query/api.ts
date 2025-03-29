@@ -2,8 +2,9 @@ import { apiClient } from "@/api";
 import {
     DocumentUploadRequestType,
     DocumentUploadResponse,
-    GetUploadsListResponse, UploadTechProfileResponse
-} from "@kyd/types/api";
+    GetUploadsListResponse,
+    UploadTechProfileResponse
+} from "@kyd/common/api";
 
 export const uploadCV = ({file, name, role}: DocumentUploadRequestType) => {
     const formData = new FormData();

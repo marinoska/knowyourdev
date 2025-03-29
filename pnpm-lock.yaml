@@ -26,6 +26,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.0
         version: 11.14.0(@emotion/react@11.14.0(@types/react@19.0.10)(react@19.0.0))(@types/react@19.0.10)(react@19.0.0)
+      '@kyd/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@mui/icons-material':
         specifier: ^6.4.7
         version: 6.4.7(@mui/material@6.4.7(@emotion/react@11.14.0(@types/react@19.0.10)(react@19.0.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.0.10)(react@19.0.0))(@types/react@19.0.10)(react@19.0.0))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@types/react@19.0.10)(react@19.0.0)
@@ -69,9 +72,6 @@ importers:
       '@eslint/js':
         specifier: ^9.21.0
         version: 9.21.0
-      '@kyd/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@types/d3-scale':
         specifier: ^4.0.9
         version: 4.0.9
@@ -181,9 +181,9 @@ importers:
         specifier: ^3.17.0
         version: 3.17.0
     devDependencies:
-      '@kyd/types':
+      '@kyd/common':
         specifier: workspace:*
-        version: link:../../packages/types
+        version: link:../../packages/common
       '@kyd/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -230,6 +230,19 @@ importers:
         specifier: ^6.1.0
         version: 6.2.0(@types/node@22.13.10)(tsx@4.19.3)(yaml@2.7.0)
 
+  packages/common:
+    dependencies:
+      mongoose:
+        specifier: ^8.10.1
+        version: 8.10.1(socks@2.8.3)
+    devDependencies:
+      '@kyd/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.0.0
+        version: 5.7.3
+
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
@@ -265,19 +278,6 @@ importers:
       typescript-eslint:
         specifier: ^8.23.0
         version: 8.23.0(eslint@9.20.0)(typescript@5.7.3)
-
-  packages/types:
-    dependencies:
-      mongoose:
-        specifier: ^8.10.1
-        version: 8.10.1(socks@2.8.3)
-    devDependencies:
-      '@kyd/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      typescript:
-        specifier: ^5.0.0
-        version: 5.7.3
 
   packages/typescript-config: {}
 

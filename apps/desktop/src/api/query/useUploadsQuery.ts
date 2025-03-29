@@ -3,8 +3,10 @@ import { uploadsKeys } from "./keys.ts";
 import { getUploadProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { useEffect, useState } from "react";
+import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
+import { endOfMonth, startOfMonth } from "date-fns";
 
-export const useUploadListQuery = () => {
+export const useUploadsQuery = () => {
     const [showError, setShowError] = useState(false);
     const {data, isError, error, ...rest} = useQuery(
         {
@@ -33,13 +35,19 @@ export const useUploadListQuery = () => {
     };
 }
 
-
 export const useUploadProfileQuery = ({uploadId}: { uploadId: string }) => {
     const [showError, setShowError] = useState(false);
-    const {data, isError, error, ...rest} = useQuery(
+    const {data, isError, error, ...rest} = useQuery<ProcessedUploadProfile, Error>(
         {
             queryKey: uploadsKeys.profile(uploadId), // we dont use the query params for now so default it to 0
-            queryFn: () => getUploadProfile({uploadId}),
+            queryFn: () => getUploadProfile({uploadId}).then(
+                (data) => ({
+                    ...data,
+                    jobs: data.jobs?.map<Job>(
+                        job => ({
+                            ...job, start: startOfMonth(new Date(job.start)), end: endOfMonth(new Date(job.end))
+                        })) || []
+                })),
             retry: TIMES_THREE,
         },
     );

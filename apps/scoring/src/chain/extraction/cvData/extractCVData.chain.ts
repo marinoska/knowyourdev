@@ -6,7 +6,7 @@ import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
 import { gpt4oMini } from "@/app/aiModel";
 import { ExtractionChainInput, ExtractionChainParam } from "@/chain/extraction/types";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
-import { ExtractedCVData, JobEntry, SECTIONS, SectionsNames } from "@kyd/types/api";
+import { ExtractedCVData, JobEntry, SECTIONS, SectionsNames } from "@kyd/common/api";
 
 type OutputType = {
     fullName: string;

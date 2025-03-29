@@ -4,7 +4,7 @@ import {
     TrendType,
     TechType,
     TechCodeType, TechStack, JobEntry
-} from "@kyd/types/api";
+} from "@kyd/common/api";
 
 
 export type TechDocument = Document<unknown, unknown, TechType> & TechType & {

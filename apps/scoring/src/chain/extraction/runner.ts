@@ -11,7 +11,7 @@ import { env } from "@/app/env";
 import path from "node:path";
 import mammoth from "mammoth";
 import { Schema } from "mongoose";
-import { ExtractedCVData } from "@kyd/types/api";
+import { ExtractedCVData } from "@kyd/common/api";
 
 const log = logger('DataExtraction');
 const dir = env('UPLOAD_DIR');

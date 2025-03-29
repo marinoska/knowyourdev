@@ -7,7 +7,7 @@ import { ValidationError } from "@/app/errors";
 import { createHash } from "@/utils/crypto";
 import { TUploadDocument, UploadModel } from "@/models/upload.model";
 import * as fs from "node:fs";
-import { DocumentUploadRequestBody, DocumentUploadResponse } from "@kyd/types/api";
+import { DocumentUploadRequestBody, DocumentUploadResponse } from "@kyd/common/api";
 import { processUpload, runCVDataExtraction } from "@/chain/extraction/runner";
 import { env } from "@/app/env";
 

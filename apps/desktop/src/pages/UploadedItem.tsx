@@ -3,7 +3,7 @@ import DocumentIcon from '@mui/icons-material/Grading';
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { format } from "date-fns";
-import { ParsedStatus, UploadItem } from "@kyd/types/api";
+import { ParsedStatus, UploadItem } from "@kyd/common/api";
 import { CircularProgress } from "@mui/joy";
 import * as React from "react";
 import { Done, ReportProblem } from "@mui/icons-material";

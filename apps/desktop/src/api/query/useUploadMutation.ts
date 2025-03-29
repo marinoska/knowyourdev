@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { uploadCV } from "./api.js";
-import { DocumentUploadRequestType, DocumentUploadResponse, UploadItem } from "@kyd/types/api";
+import { DocumentUploadRequestType, DocumentUploadResponse, UploadItem } from "@kyd/common/api";
 import { MAXIMUM_UPLOAD_SIZE_BYTES } from "@/utils/const.ts";
 import { uploadsKeys } from "@/api/query/keys.ts";
 

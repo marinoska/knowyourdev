@@ -7,11 +7,11 @@ import TabPanel from "@mui/joy/TabPanel";
 
 export type TabItem = {
     label: string;
-    content: ReactNode; // Allows any valid React renderable element
+    content: ReactNode;
 };
 
 export const AnalysisTabs = ({tabs}: { tabs: TabItem[] }) => {
-    const [activeTab, setActiveTab] = useState(1); // Default to Red Flags tab
+    const [activeTab, setActiveTab] = useState(0);
 
     return (
         <Box id="analysis-tabs" sx={{mb: 8}}>

@@ -4,7 +4,7 @@ import { UploadedItem } from "./UploadedItem";
 import UploadFile from '@mui/icons-material/Upload';
 import * as React from "react";
 import { UploadModal } from "./UploadModal.js";
-import { useUploadListQuery } from "@/api/query/useUploadListQuery.ts";
+import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useMemo } from "react";
@@ -12,7 +12,7 @@ import { useMemo } from "react";
 export const UploadedCVList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
-    const {data: uploads, isLoading, isError, showError, dismissError} = useUploadListQuery();
+    const {data: uploads, isLoading, isError, showError, dismissError} = useUploadsQuery();
 
     const header = useMemo(() => (<PageHeader title="Uploaded CVs" buttonLabel="Upload CV" icon={UploadFile}
                                               action={() => setOpenUploadModal(true)}/>), [])

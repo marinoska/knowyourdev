@@ -52,4 +52,4 @@ export type UploadTechProfileResponse = {
     uploadId: string;
     createdAt: string;
     updatedAt: string;
-} & Partial<UploadTechProfileType>;
+} & UploadTechProfileType;

@@ -1,5 +1,5 @@
 import { Document, Model, model, Schema } from 'mongoose';
-import { ExtractedCVData, JobEntry, TechnologyEntry } from "@kyd/types/api";
+import { ExtractedCVData, JobEntry, TechnologyEntry } from "@kyd/common/api";
 
 
 export type UploadDataDocumentType = Document & ExtractedCVData & {

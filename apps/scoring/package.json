@@ -11,7 +11,7 @@
     "format": "prettier --write ./**/*.{ts,json}"
   },
   "devDependencies": {
-    "@kyd/types": "workspace:*",
+    "@kyd/common": "workspace:*",
     "@kyd/typescript-config": "workspace:*",
     "@swc/core": "^1.11.9",
     "@types/body-parser": "^1.19.5",

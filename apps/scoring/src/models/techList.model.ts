@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { TechDocument, TechModelType } from "./types";
-import { CATEGORY, SCOPE, TREND } from "@kyd/types/api";
+import { CATEGORY, SCOPE, TREND } from "@kyd/common/api";
 
 const techSchema = new Schema<TechDocument, TechModelType>(
     {

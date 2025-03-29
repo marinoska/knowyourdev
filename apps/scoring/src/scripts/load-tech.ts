@@ -9,7 +9,7 @@ import { TechStackModel } from "@/models/techStack.model";
 // import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names";
 import { TechListModel } from "@/models/techList.model";
 import { generateTechCode } from "@/utils/func";
-import { CategoryType, ScopeType, TrendType } from "@kyd/types/api";
+import { CategoryType, ScopeType, TrendType } from "@kyd/common/api";
 
 // Path to the CSV file
 const CSV_FILE_PATH = path.resolve(process.cwd() + '/files/');

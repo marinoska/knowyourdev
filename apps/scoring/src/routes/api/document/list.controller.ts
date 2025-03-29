@@ -2,7 +2,7 @@ import { Joi, Segments } from 'celebrate';
 
 import { Request, Response, RequestHandler } from 'express';
 import { UploadModel } from "@/models/upload.model";
-import { GetUploadsListQueryParams, GetUploadsListResponse } from "@kyd/types/api";
+import { GetUploadsListQueryParams, GetUploadsListResponse } from "@kyd/common/api";
 
 // Define the controller
 export const getUploadsListController: RequestHandler<

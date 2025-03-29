@@ -14,7 +14,7 @@ import {
     UploadTechProfileTechnologiesEntry,
     UploadTechProfileTechnologiesJobEntry,
     TREND_MAP, TechnologyEntry
-} from "@kyd/types/api";
+} from "@kyd/common/api";
 
 const log = logger('extraction:extraction:runner');
 

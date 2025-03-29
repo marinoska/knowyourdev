@@ -3,7 +3,7 @@ import { UploadTechProfileModel } from "@/models/uploadTechProfile.model";
 import { Joi, Segments } from "celebrate";
 import {
     UploadTechProfileResponse,
-} from "@kyd/types/api";
+} from "@kyd/common/api";
 import { NotFound, ValidationError } from "@/app/errors";
 import { Types } from "mongoose";
 

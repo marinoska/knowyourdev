@@ -7,7 +7,7 @@ import {
     UploadTechProfileTechnologiesEntry,
     TREND,
     UploadTechProfileType
-} from "@kyd/types/api";
+} from "@kyd/common/api";
 
 const JobSchema =
     {

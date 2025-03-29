@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export function useAutoChartHeight(chartContainerRef: React.RefObject<HTMLElement>) {
+export function useGoogleChartAutoHeight(chartContainerRef: React.RefObject<HTMLElement | null>) {
     const [chartHeight, setChartHeight] = useState<string>("200px");
     const observerRef = useRef<MutationObserver | null>(null);
 

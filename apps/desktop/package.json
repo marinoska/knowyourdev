@@ -24,11 +24,11 @@
     "react-google-charts": "^5.2.1",
     "react-router-dom": "^7.3.0",
     "recharts": "^2.15.1",
+    "@kyd/common": "workspace:*",
     "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
-    "@kyd/types": "workspace:*",
     "@types/d3-scale": "^4.0.9",
     "@types/qs": "^6.9.18",
     "@types/react": "^19.0.10",
