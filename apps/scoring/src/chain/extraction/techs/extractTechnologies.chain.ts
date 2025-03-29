@@ -1,14 +1,14 @@
 import { RunnableSequence } from "@langchain/core/runnables";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { gpt4oMini } from "@/app/aiModel";
-import { parseJsonOutput } from "@/utils/json";
-import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
-import { extractTechnologiesPrompt } from "./extractTechnologies.prompt";
-import { normalizeTechList } from "./sub/normaliseTechNameList.chain";
-import { RoleType } from "@/models/types";
-import { ExtractionChainParam } from "@/chain/extraction/types";
-import { extractTechProficiency } from "@/chain/extraction/techs/sub/extractTechProficiency.chain";
-import { TechStackModel } from "@/models/techStack.model";
+import { gpt4oMini } from "@/app/aiModel.js";
+import { parseJsonOutput } from "@/utils/json.js";
+import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
+import { extractTechnologiesPrompt } from "./extractTechnologies.prompt.js";
+import { normalizeTechList } from "./sub/normaliseTechNameList.chain.js";
+import { RoleType } from "@/models/types.js";
+import { ExtractionChainParam } from "@/chain/extraction/types.js";
+import { extractTechProficiency } from "@/chain/extraction/techs/sub/extractTechProficiency.chain.js";
+import { TechStackModel } from "@/models/techStack.model.js";
 import { JobEntry, TechnologyEntry } from "@kyd/common/api";
 
 const prompt = PromptTemplate.fromTemplate(`

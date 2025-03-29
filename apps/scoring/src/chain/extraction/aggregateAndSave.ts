@@ -1,19 +1,20 @@
-import { ExtractionChainParam } from "@/chain/extraction/types";
-import { UploadDataModel } from "@/models/uploadData.model";
+import { ExtractionChainParam } from "@/chain/extraction/types.js";
+import { UploadDataModel } from "@/models/uploadData.model.js";
 import {
     TechDocument,
-} from "@/models/types";
+} from "@/models/types.js";
 import { isValid, parse, subYears } from "date-fns";
-import logger from '@/app/logger';
+import logger from '@/app/logger.js';
 import { Schema } from "mongoose";
-import { UploadTechProfileModel } from "@/models/uploadTechProfile.model";
-import { isNotNull } from "@/utils/types.utils";
+import { UploadTechProfileModel } from "@/models/uploadTechProfile.model.js";
+import { isNotNull } from "@/utils/types.utils.js";
 import {
     TechCode,
     UploadTechProfileJobEntry,
     UploadTechProfileTechnologiesEntry,
     UploadTechProfileTechnologiesJobEntry,
-    TREND_MAP, TechnologyEntry
+    TREND_MAP, TechnologyEntry,
+    JobEntry
 } from "@kyd/common/api";
 
 const log = logger('extraction:extraction:runner');
@@ -132,7 +133,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
     enrich(updatedCV.skillSection.technologies, {inSkillsSection: true});
     enrich(updatedCV.profileSection.technologies, {inProfileSection: true});
 
-    const techProfileJobs = updatedCV.jobs.map<UploadTechProfileJobEntry>(job => {
+    const techProfileJobs = updatedCV.jobs.map<UploadTechProfileJobEntry>((job: JobEntry) => {
         const technologies = job.technologies.map(tech => {
             if (!tech.techReference) return null;
 
@@ -149,18 +150,18 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         }).filter(isNotNull);
 
         const start = parse(job.start, FormatString, new Date());
-        // TODO date cannot be empty
+        // TODO date cannot be empty - process error
         if (!isValid(start)) {
-            log.warn(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
+            log.error(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
         }
         const end = parse(job.end, FormatString, new Date());
         if (!isValid(end)) {
-            log.warn(`Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`);
+            log.error(`Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`);
         }
 
         return {
-            start: isValid(start) ? start : undefined,
-            end: isValid(end) ? end : undefined,
+            start: isValid(start) ? job.start : (new Date()).toISOString(),
+            end: isValid(end) ? job.end : (new Date()).toISOString(),
             months: job.months,
             role: job.role,
             job: job.job,

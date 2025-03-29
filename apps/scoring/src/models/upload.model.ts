@@ -1,5 +1,4 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import { UploadDataDocumentType } from "@/models/uploadData.model";
 import { ParsedStatus } from "@kyd/common/api";
 
 export type TUpload = {

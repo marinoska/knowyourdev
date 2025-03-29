@@ -1,15 +1,15 @@
 import { Joi, Segments } from 'celebrate';
 import multer, { FileFilterCallback } from "multer";
-import logger from "@/app/logger";
+import logger from "@/app/logger.js";
 import { IncomingMessage } from 'http';
 import type { Response, Request, RequestHandler } from "express";
-import { ValidationError } from "@/app/errors";
-import { createHash } from "@/utils/crypto";
-import { TUploadDocument, UploadModel } from "@/models/upload.model";
+import { ValidationError } from "@/app/errors.js";
+import { createHash } from "@/utils/crypto.js";
+import { TUploadDocument, UploadModel } from "@/models/upload.model.js";
 import * as fs from "node:fs";
 import { DocumentUploadRequestBody, DocumentUploadResponse } from "@kyd/common/api";
-import { processUpload, runCVDataExtraction } from "@/chain/extraction/runner";
-import { env } from "@/app/env";
+import { processUpload, runCVDataExtraction } from "@/chain/extraction/runner.js";
+import { env } from "@/app/env.js";
 
 const log = logger('UploadController');
 const MAX_FILE_SIZE = 3 * 1024 * 1024;  // Max file size: 3MB

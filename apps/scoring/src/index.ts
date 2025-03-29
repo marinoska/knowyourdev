@@ -1,11 +1,11 @@
 import 'dotenv/config';
-import { env } from "@/app/env";
+import { env } from "@/app/env.js";
 import https from 'node:https';
 import fs from 'node:fs';
 
-import logger from "@/app/logger";
-import app from "@/app/express";
-import { stopMongoClient } from "@/app/mongo";
+import logger from "@/app/logger.js";
+import app from "@/app/express.js";
+import { stopMongoClient } from "@/app/mongo.js";
 
 const log = logger('Server');
 const key = fs.readFileSync('./src/cert/key.pem');

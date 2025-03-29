@@ -3,12 +3,12 @@ import csvParser from 'csv-parser';
 import fs from 'fs';
 import path from 'path';
 
-import { connected, db, stopMongoClient } from "@/app/mongo";
-import { StackComponents, TechStackCategory } from "@/models/types";
-import { TechStackModel } from "@/models/techStack.model";
+import { connected, db, stopMongoClient } from "@/app/mongo.js";
+import { StackComponents, TechStackCategory } from "@/models/types.js";
+import { TechStackModel } from "@/models/techStack.model.js";
 // import { saveTechNamesToFile, saveTechStackNamesToFile } from "./export-tech-names";
-import { TechListModel } from "@/models/techList.model";
-import { generateTechCode } from "@/utils/func";
+import { TechListModel } from "@/models/techList.model.js";
+import { generateTechCode } from "@/utils/func.js";
 import { CategoryType, ScopeType, TrendType } from "@kyd/common/api";
 
 // Path to the CSV file

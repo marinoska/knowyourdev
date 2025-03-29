@@ -1,11 +1,11 @@
 import { RunnableSequence } from "@langchain/core/runnables";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { parseJsonOutput } from "@/utils/json";
-import { ExtractCVDataPrompt } from "./extractCVData.prompt";
-import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt";
-import { gpt4oMini } from "@/app/aiModel";
-import { ExtractionChainInput, ExtractionChainParam } from "@/chain/extraction/types";
-import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity";
+import { parseJsonOutput } from "@/utils/json.js";
+import { ExtractCVDataPrompt } from "./extractCVData.prompt.js";
+import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
+import { gpt4oMini } from "@/app/aiModel.js";
+import { ExtractionChainInput, ExtractionChainParam } from "@/chain/extraction/types.js";
+import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.js";
 import { ExtractedCVData, JobEntry, SECTIONS, SectionsNames } from "@kyd/common/api";
 
 type OutputType = {

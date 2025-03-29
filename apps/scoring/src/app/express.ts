@@ -1,10 +1,10 @@
 import express, { ErrorRequestHandler } from "express";
 import "express-async-errors";
 import bodyParser from "body-parser";
-import logger from './logger';
-import { normalizeError } from './errors';
+import logger from './logger.js';
+import { normalizeError } from './errors.js';
 import cors from "cors";
-import routes from '@/routes/index';
+import routes from '@/routes/index.js';
 // Init Mongo connection
 import './mongo';
 import multer from "multer";

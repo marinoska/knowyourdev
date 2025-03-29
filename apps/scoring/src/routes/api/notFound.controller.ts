@@ -1,4 +1,4 @@
-import { NotFound } from '@/app/errors';
+import { NotFound } from '@/app/errors.js';
 import { RequestHandler } from 'express';
 
 export const notFoundController: RequestHandler = (_req, _res, next) => {

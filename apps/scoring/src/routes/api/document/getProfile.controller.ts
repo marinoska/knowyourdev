@@ -1,10 +1,10 @@
 import { RequestHandler, Response } from "express";
-import { UploadTechProfileModel } from "@/models/uploadTechProfile.model";
+import { UploadTechProfileModel } from "@/models/uploadTechProfile.model.js";
 import { Joi, Segments } from "celebrate";
 import {
     UploadTechProfileResponse,
 } from "@kyd/common/api";
-import { NotFound, ValidationError } from "@/app/errors";
+import { NotFound, ValidationError } from "@/app/errors.js";
 import { Types } from "mongoose";
 
 export type UploadTechProfileController = RequestHandler<

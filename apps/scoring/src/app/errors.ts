@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import boom, { Boom } from '@hapi/boom';
 import { isCelebrateError } from 'celebrate';
-import logger from './logger';
+import logger from './logger.js';
 import { MulterError } from "multer";
 
 logger('Error handler');

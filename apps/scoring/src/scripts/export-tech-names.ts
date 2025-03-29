@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { TechStackModel } from "@/models/techStack.model";
-import { TechListModel } from "@/models/techList.model"; // Assuming this model interacts with your database
+import { TechStackModel } from "@/models/techStack.model.js";
+import { TechListModel } from "@/models/techList.model.js"; // Assuming this model interacts with your database
 
 export const saveTechNamesToFile = async (outputFilePath: string) => {
     try {
