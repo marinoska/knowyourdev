@@ -7,33 +7,38 @@ import { useMemo } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Career/CareerTimelineChart.tsx";
-import JobChart from "@/pages/Analisys/Popularuty/PopularityTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import { ChartProvider } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
-import { ProcessedUploadProfile } from "@/api/query/types.ts";
+import { CareerTechChart } from "@/pages/Analisys/Career/CareerTechChart.tsx";
+import Stack from "@mui/joy/Stack";
+import Divider from "@mui/joy/Divider";
 
 type UploadedProfileParams = {
     id: string;
 };
 
-const getTabItems = (upload: ProcessedUploadProfile): TabItem[] => ([
+const getTabItems = (): TabItem[] => ([
     {
         label: "Career Timeline",
-        content: (<>
-                {/*<TechStackChart jobs={upload.jobs}/>*/}
+        content: (<Stack gap={6}>
                 <CareerTimelineChart/>
-            </>
+                <Divider/>
+                <CareerTechChart/>
+            </Stack>
         )
     },
     {
-        label: "Tech stack popularity",
+        label: "Career Tech Stack",
         content: (<>
-                {upload.jobs && <JobChart jobs={upload.jobs}/>}
             </>
         ),
     },
     {
-        label: "Strengths & Suitability",
+        label: "Technologies",
+        content: <div>Content for Strengths & Suitability</div>,
+    },
+    {
+        label: "Tech popularity and trends",
         content: <div>Content for Strengths & Suitability</div>,
     },
 ]);
@@ -59,7 +64,7 @@ const UploadPage = ({query}: { query: ReturnType<typeof useUploadProfileQuery> }
         <NavigateBackLink/>
         {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
         <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile} header={header} component={Box}>
-            {profile && <AnalysisTabs tabs={getTabItems(profile!)}/>}
+            {profile && <AnalysisTabs tabs={getTabItems()}/>}
         </BasePage>
     </>)
 }

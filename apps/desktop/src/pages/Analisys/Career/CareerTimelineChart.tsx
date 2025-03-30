@@ -1,6 +1,6 @@
 import { useMemo, useRef } from "react";
 import { Chart, ReactGoogleChartEvent } from "react-google-charts";
-import { Box, Typography } from "@mui/joy";
+import { Stack, Typography } from "@mui/joy";
 import { useGoogleChartAutoHeight } from "@/pages/Analisys/useGoogleChartAutoHeight.ts";
 import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
 import { GreenLegendColor, YellowLegendColor } from "@/utils/const";
@@ -63,14 +63,16 @@ export const CareerTimelineChart = () => {
     }, [chartContext.irrelevantJobs, chartContext.jobGaps.length, chartContext.softwareDevelopmentJobs]);
 
     return (
-        <Box
-            sx={{
-                backgroundColor: "#fff",
-            }}
+        <Stack gap={2}
+               sx={{
+                   backgroundColor: "#fff",
+                   mt: 2
+               }}
         >
-            <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600, mb: 2}}>
-                Tech Timeline
+            <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600}}>
+                Career Timeline
             </Typography>
+            <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (
                 <Typography>No data available to display the timeline chart.</Typography>
@@ -87,8 +89,6 @@ export const CareerTimelineChart = () => {
                     />
                 </div>
             )}
-
-            <Legend title={'Legend'} items={LegendItems}/>
-        </Box>
+        </Stack>
     );
 };

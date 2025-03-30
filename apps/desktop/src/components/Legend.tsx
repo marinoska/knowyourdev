@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/joy";
+import Stack from "@mui/joy/Stack";
 
 const getColorFromPercentage = (percentage: number): string => {
     const r = percentage < 0.5 ? 255 : Math.round(255 - (percentage - 0.5) * 2 * 255);
@@ -26,9 +27,8 @@ export type LegendProps = {
 };
 
 export const Legend = ({title, items}: LegendProps) => {
-    return (<Box sx={{mt: 4, display: "flex", flexDirection: "column", gap: 2}}>
-        <Typography sx={{fontWeight: 600}}>{title}:</Typography>
-        <Box sx={{display: "flex", gap: 4}}>
+    return (
+        <Stack direction='row' gap={4}>
             {items.map((item) => (
                 <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
                     <Box
@@ -39,9 +39,9 @@ export const Legend = ({title, items}: LegendProps) => {
                             borderRadius: "50%",
                         }}
                     />
-                    <Typography>{item.label}</Typography>
+                    <Typography level="body-sm">{item.label}</Typography>
                 </Box>
             ))}
-        </Box>
-    </Box>)
+        </Stack>
+    )
 }

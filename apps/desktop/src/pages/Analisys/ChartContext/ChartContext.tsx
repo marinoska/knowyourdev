@@ -8,6 +8,8 @@ type ChartContextType = {
     jobGaps: Gap[];
     softwareDevelopmentJobs: Job[],
     irrelevantJobs: Job[],
+    jobsWithMissingTech: Job[],
+    jobsWithFilledTech: Job[],
     profile?: ProcessedUploadProfile;
 };
 
@@ -15,6 +17,8 @@ const ChartContext = createContext<ChartContextType>({
     jobGaps: [],
     softwareDevelopmentJobs: [],
     irrelevantJobs: [],
+    jobsWithMissingTech: [],
+    jobsWithFilledTech: [],
     profile: undefined,
 });
 
@@ -43,28 +47,44 @@ export function ChartProvider({children, profile}: { children: ReactNode, profil
         ];
     }, [profile?.jobs]);
 
-    const [softwareDevelopmentJobs, irrelevantJobs] = useMemo<[Job[], Job[]]>(() => {
+    const [softwareDevelopmentJobs, irrelevantJobs, jobsWithMissingTech, jobsWithFilledTech] = useMemo(() => {
         const devJobs: Job[] = [];
         const otherJobs: Job[] = [];
+        const jobsWithMissingTech: Job[] = [];
+        const jobsWithFilledTech: Job[] = [];
+
         const sortedJobs = profile?.jobs.sort((a, b) => a.start.getTime() - b.start.getTime());
 
         for (const job of (sortedJobs || [])) {
-            job.isSoftwareDevelopmentRole ? devJobs.push(job) : otherJobs.push(job);
+            if (job.isSoftwareDevelopmentRole) {
+                devJobs.push(job);
+                if (!job.technologies.length) {
+                    jobsWithMissingTech.push(job);
+                } else {
+                    jobsWithFilledTech.push(job);
+                }
+            } else {
+                otherJobs.push(job);
+            }
         }
 
-        return [devJobs, otherJobs];
+        return [devJobs, otherJobs, jobsWithMissingTech, jobsWithFilledTech];
     }, [profile?.jobs]);
 
     const context = useMemo(() => ({
-        jobGaps,
         profile,
+        jobGaps,
         softwareDevelopmentJobs,
-        irrelevantJobs
+        irrelevantJobs,
+        jobsWithMissingTech,
+        jobsWithFilledTech
     }), [
+        profile,
         jobGaps,
         irrelevantJobs,
-        profile,
-        softwareDevelopmentJobs
+        softwareDevelopmentJobs,
+        jobsWithMissingTech,
+        jobsWithFilledTech
     ]);
 
     return (
