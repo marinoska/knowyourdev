@@ -56,12 +56,14 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             // TODO date cannot be empty
             if (!isValid(start)) {
                 log.warn(`Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`);
+                jobEntry.start = new Date();
             } else {
                 jobEntry.start = start;
             }
             const end = parse(job.end, FormatString, new Date());
             if (!isValid(end)) {
                 log.warn(`Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`);
+                jobEntry.end = new Date();
             } else {
                 jobEntry.end = end;
             }
@@ -81,7 +83,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         ...acc, [doc.code]: doc
     }), {});
 
-    const withTotalMonth = Object.values(aggTechs).map<UploadTechProfileTechnologiesEntry | null>(tech => {
+    const techWithTotals = Object.values(aggTechs).map<UploadTechProfileTechnologiesEntry | null>(tech => {
         const mergedRanges = mergeRanges(tech.jobs as Range[]); // Merge the overlapping ranges
         const totalMonths = calculateTotalMonths(mergedRanges); // Calculate total unique months
         const recentMonths = calculateTotalMonths(mergedRanges, 3); // Calculate total unique months
@@ -116,15 +118,14 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
                 continue;
             }
 
-            withTotalMonth[tech.code] = {
-                ...(withTotalMonth[tech.code] || {}),
+            techWithTotals[tech.code] = {
+                ...(techWithTotals[tech.code] || {}),
                 techReference: tech.techReference as Schema.Types.ObjectId,
                 code: tech.code,
                 name: techCollectionObj[tech.code].name,
                 trend: techCollectionObj[tech.code].trend,
                 category: techCollectionObj[tech.code].category,
                 scope: techCollectionObj[tech.code].scope,
-                jobs: [],
                 ...props,
             }
         }
@@ -160,8 +161,8 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         }
 
         return {
-            start: isValid(start) ? job.start : (new Date()).toISOString(),
-            end: isValid(end) ? job.end : (new Date()).toISOString(),
+            start: isValid(start) ? start : (new Date()).toISOString(),
+            end: isValid(end) ? end : (new Date()).toISOString(),
             months: job.months,
             role: job.role,
             job: job.job,
@@ -187,7 +188,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
                 uploadRef: updatedCV.uploadRef,
                 fullName: updatedCV.fullName,
                 position: updatedCV.position,
-                technologies: Object.values(withTotalMonth),
+                technologies: Object.values(techWithTotals),
                 jobs: techProfileJobs,
             },
         }, // Set new or updated fields

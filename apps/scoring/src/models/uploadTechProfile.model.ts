@@ -12,8 +12,8 @@ import {
 const JobSchema =
     {
         _id: false, // No separate _id for sub-documents
-        start: {type: Date, required: false},
-        end: {type: Date, required: false},
+        start: {type: Date, required: true},
+        end: {type: Date, required: true},
         role: {type: String, required: true},
         company: {type: String, required: true},
     };
@@ -54,7 +54,7 @@ const UploadTechProfileTechnologiesEntrySchema = new Schema<UploadTechProfileTec
     {
         techReference: {type: Schema.Types.ObjectId, ref: 'TechList', required: true},
         code: {type: String, required: true}, // Assuming TechCode is a string
-        jobs: {type: [JobSchema], required: false},
+        jobs: {type: [JobSchema], required: true},
         totalMonths: {type: Number, required: false},
         recentMonths: {type: Number, required: false},
         name: {type: String, required: true},

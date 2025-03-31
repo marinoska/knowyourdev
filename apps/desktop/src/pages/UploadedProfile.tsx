@@ -6,10 +6,10 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { useMemo } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
-import { CareerTimelineChart } from "@/pages/Analisys/Career/CareerTimelineChart.tsx";
+import { CareerTimelineChart } from "@/pages/Analisys/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import { ChartProvider } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
-import { CareerTechChart } from "@/pages/Analisys/Career/CareerTechChart.tsx";
+import { CareerTechChart } from "@/pages/Analisys/Chart/CareerTechChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 
@@ -26,12 +26,6 @@ const getTabItems = (): TabItem[] => ([
                 <CareerTechChart/>
             </Stack>
         )
-    },
-    {
-        label: "Career Tech Stack",
-        content: (<>
-            </>
-        ),
     },
     {
         label: "Technologies",
