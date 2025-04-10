@@ -77,14 +77,14 @@ export function ChartProvider({children, profile}: { children: ReactNode, profil
         softwareDevelopmentJobs,
         irrelevantJobs,
         jobsWithMissingTech,
-        jobsWithFilledTech
+        jobsWithFilledTech,
     }), [
         profile,
         jobGaps,
         irrelevantJobs,
         softwareDevelopmentJobs,
         jobsWithMissingTech,
-        jobsWithFilledTech
+        jobsWithFilledTech,
     ]);
 
     return (

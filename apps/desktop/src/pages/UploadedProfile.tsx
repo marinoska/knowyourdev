@@ -3,7 +3,7 @@ import { PageHeader } from "@/pages/PageHeader.tsx";
 import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Chart/CareerTimelineChart.tsx";
@@ -12,10 +12,24 @@ import { ChartProvider } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
 import { CareerTechChart } from "@/pages/Analisys/Chart/CareerTechChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
+import { TechSkillsTimelineChart } from "@/pages/Analisys/Chart/TechSkillsTimelineChart.tsx";
+import { TechSkillsDurationPieChart } from "@/pages/Analisys/Chart/TechSkillsDurationPieChart.tsx";
+import { TechMentionsPieChart } from "@/pages/Analisys/Chart/TechMentionsPieChart.tsx";
 
 type UploadedProfileParams = {
     id: string;
 };
+
+const TechnologiesChartGroup = () => {
+    // to not render the lower chart while the upper chat is being recalculated - to prevent flickering
+    const [chartIsReady, setChartIsReady] = useState(false);
+    const [chartIsEmpty, setChartIsEmpty] = useState(false);
+    return (<>
+        <TechSkillsTimelineChart setChartIsReady={setChartIsReady} setChartIsEmpty={setChartIsEmpty}/>
+        {chartIsReady && <TechSkillsDurationPieChart/>}
+        {(chartIsReady || chartIsEmpty) && <TechMentionsPieChart/>}
+    </>)
+}
 
 const getTabItems = (): TabItem[] => ([
     {
@@ -29,10 +43,10 @@ const getTabItems = (): TabItem[] => ([
     },
     {
         label: "Technologies",
-        content: <div>Content for Strengths & Suitability</div>,
+        content: <TechnologiesChartGroup/>,
     },
     {
-        label: "Tech popularity and trends",
+        label: "Tech insights",
         content: <div>Content for Strengths & Suitability</div>,
     },
 ]);
@@ -52,7 +66,7 @@ export const UploadedProfile = () => {
 const UploadPage = ({query}: { query: ReturnType<typeof useUploadProfileQuery> }) => {
     const {profile, isError, isLoading, showError, dismissError} = query;
     const header = useMemo(() => (
-        <PageHeader subtitle={`${profile?.position} • 8 years experience`}
+        <PageHeader subtitle={`${profile?.position} • ----- years experience`}
                     title={profile?.fullName}/>), [profile?.fullName, profile?.position])
     return (<>
         <NavigateBackLink/>

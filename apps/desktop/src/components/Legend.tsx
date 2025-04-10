@@ -1,32 +1,17 @@
 import { Box, Typography } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
-
-const getColorFromPercentage = (percentage: number): string => {
-    const r = percentage < 0.5 ? 255 : Math.round(255 - (percentage - 0.5) * 2 * 255);
-    const g = percentage < 0.5 ? Math.round(percentage * 2 * 255) : 255;
-    const b = 0; // No blue component in the gradient
-    return `rgb(${r}, ${g}, ${b})`; // Generate RGB color
-};
-
-// @ts-ignore
-const getColorByPopularity = (popularity: number = 0, maxPopularity: number, minPopularity: number): string => {
-    if (!popularity || maxPopularity === minPopularity) {
-        return getColorFromPercentage(0); // Default to min (red) if undefined or no range
-    }
-    const percentage =
-        (popularity - minPopularity) / (maxPopularity - minPopularity); // Normalize 0 to 1
-    return getColorFromPercentage(percentage);
-};
+import { Tooltip } from "@/components/Tooltip.tsx";
 
 export type LegendProps = {
     title: string;
     items: {
         label: string;
         color: string;
+        tooltipText?: string;
     }[];
 };
 
-export const Legend = ({title, items}: LegendProps) => {
+export const Legend = ({items}: LegendProps) => {
     return (
         <Stack direction='row' gap={4}>
             {items.map((item) => (
@@ -40,6 +25,7 @@ export const Legend = ({title, items}: LegendProps) => {
                         }}
                     />
                     <Typography level="body-sm">{item.label}</Typography>
+                    {item.tooltipText && <Tooltip title={item.tooltipText}/>}
                 </Box>
             ))}
         </Stack>

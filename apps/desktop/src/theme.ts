@@ -21,6 +21,8 @@ declare module '@mui/joy/Button' {
 }
 
 const DarkBlue = '#003366';
+const DeepGreen = '#007750';
+
 const theme = extendTheme({
     fontSize: {
         sm: '16px', // Example font sizes
@@ -40,6 +42,9 @@ const theme = extendTheme({
     colorSchemes: {
         light: {
             palette: {
+                neutral: {
+                    outlinedBorder: DeepGreen, // Custom red
+                },
                 text: {
                     secondary: DarkBlue,
 // @ts-ignore

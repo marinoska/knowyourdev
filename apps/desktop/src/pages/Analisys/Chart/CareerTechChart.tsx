@@ -29,13 +29,13 @@ export const tooltip = (job: Job) => `<div style="padding: 0.5rem;">
 
 export const CareerTechChart = () => {
     const chartRef = useRef(null);
-    const {chartHeight, handleChartReady} = useGoogleChartAutoHeight(chartRef);
+    const {chartHeight, handleChartResize} = useGoogleChartAutoHeight(chartRef);
 
     const chartContext = useChartContext();
     const chartEvents: ReactGoogleChartEvent[] = [
         {
             eventName: "ready",
-            callback: handleChartReady
+            callback: handleChartResize
         },
     ];
 
@@ -78,9 +78,6 @@ export const CareerTechChart = () => {
     const missingTechJobsRowCount = new Set(chartContext.jobsWithMissingTech.map(job => job.job)).size;
     const jobsWithFilledTechRowCount = new Set(chartContext.jobsWithFilledTech.map(job => job.job)).size;
 
-    const techList = new Set(chartContext.jobsWithFilledTech
-        .map(job => job.technologies.map(tech => tech.name)).flat());
-    console.log({techList});
     const options = useMemo(() => {
         return {
             allowHtml: true,
@@ -92,6 +89,8 @@ export const CareerTechChart = () => {
                 showRowLabels: true,
                 groupByRowLabel: true,
                 colorByRowLabel: true,
+                rowLabelStyle: {fontSize: 14},
+                barLabelStyle: {fontSize: 14}
             },
         };
 

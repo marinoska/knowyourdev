@@ -15,13 +15,13 @@ const LegendItems = [
 
 export const CareerTimelineChart = () => {
     const chartRef = useRef(null);
-    const {chartHeight, handleChartReady} = useGoogleChartAutoHeight(chartRef);
+    const {chartHeight, handleChartResize} = useGoogleChartAutoHeight(chartRef);
 
     const chartContext = useChartContext();
     const chartEvents: ReactGoogleChartEvent[] = [
         {
             eventName: "ready",
-            callback: handleChartReady
+            callback: handleChartResize
         },
     ];
 
@@ -57,6 +57,9 @@ export const CareerTimelineChart = () => {
                 showRowLabels: true,
                 groupByRowLabel: true,
                 colorByRowLabel: true,
+                rowLabelStyle: {fontSize: 14},
+                barLabelStyle: {fontSize: 14}
+
             },
         };
 

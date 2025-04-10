@@ -46,7 +46,16 @@ export const useUploadProfileQuery = ({uploadId}: { uploadId?: string }) => {
                     jobs: data.jobs?.map<Job>(
                         job => ({
                             ...job, start: startOfMonth(new Date(job.start)), end: endOfMonth(new Date(job.end))
-                        })) || []
+                        })) || [],
+                    technologies: data.technologies.map(tech => ({
+                        ...tech,
+                        totalMonths: tech.totalMonths || 0,
+                        jobs: tech.jobs.map(job => ({
+                            ...job,
+                            start: startOfMonth(job.start ? new Date(job.start) : new Date()),
+                            end: endOfMonth(job.end ? new Date(job.end) : new Date())
+                        })) || [],
+                    }))
                 })),
             retry: TIMES_THREE,
             enabled: !!uploadId,
