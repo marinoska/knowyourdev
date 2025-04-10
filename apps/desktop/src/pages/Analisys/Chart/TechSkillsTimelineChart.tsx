@@ -3,7 +3,7 @@ import { Chart, ReactGoogleChartEvent } from "react-google-charts";
 import { Checkbox, FormControl, FormLabel, Stack, Typography } from "@mui/joy";
 import { useGoogleChartAutoHeight } from "@/pages/Analisys/useGoogleChartAutoHeight.ts";
 import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
-import { convertMonthsToYearsAndMonths } from "@/utils/dates.ts";
+import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { Tooltip } from "@/components/Tooltip.tsx";
 
 //* TODO add a position description via a tooltip
@@ -28,7 +28,7 @@ export const TechSkillsTimelineChart = ({setChartIsReady, setChartIsEmpty}: {
                 return skillSectionFilterPassed && jobsMentioned;
             }
         ).map((tech) => {
-            const {years, months} = convertMonthsToYearsAndMonths(tech.totalMonths);
+            const {years, months} = monthsToYearsAndMonths(tech.totalMonths);
             const totalLabel = tech.totalMonths ? `${years}y ${months}m` : 'No duration found';
 
             return tech.jobs.map(job => (

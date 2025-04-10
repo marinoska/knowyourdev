@@ -1,9 +1,14 @@
+import { differenceInMonths } from 'date-fns';
+
 export type Range = {
     start: Date,
     end: Date,
 };
 
 export function mergeRanges(ranges: Range[]): Range[] {
+    if (!ranges.length) {
+        return [];
+    }
     // Sort ranges by their start dates
     ranges.sort((a, b) => a.start.getTime() - b.start.getTime());
 
@@ -22,5 +27,14 @@ export function mergeRanges(ranges: Range[]): Range[] {
         }
     }
 
-    return merged; // Return the merged ranges
+    return merged;
+}
+
+// returns months total
+export function sumRanges(ranges: Range[]): number {
+    const mergedRanges = mergeRanges(ranges);
+    return mergedRanges.reduce<number>(
+        (acc, {start, end}) => {
+            return acc + differenceInMonths(end, start);
+        }, 0);
 }

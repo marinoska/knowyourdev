@@ -8,6 +8,7 @@ import { GreenLegendColor } from "@/utils/const.ts";
 import { Job } from "@/api/query/types.ts";
 import { format } from "date-fns";
 import { Legend } from "@/components/Legend.tsx";
+import { Tooltip } from "@/components/Tooltip.tsx";
 
 const LegendItems = [
     {label: 'Tech stack specified', color: GreenLegendColor},
@@ -103,9 +104,14 @@ export const CareerTechChart = () => {
                 backgroundColor: "#fff",
             }}
         >
-            <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600}}>
-                Tech Timeline
-            </Typography>
+            <Stack gap={0.5} direction="row" sx={{alignItems: "center"}}>
+
+                <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600}}>
+                    Tech Timeline
+                </Typography>
+                <Tooltip
+                    title='Tech timeline displays the roles and their associated technologies over time, based on job descriptions provided by the candidate.'/>
+            </Stack>
             <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (

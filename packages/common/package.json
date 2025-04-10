@@ -30,6 +30,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "mongoose": "^8.10.1"
   }
 }

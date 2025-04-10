@@ -10,7 +10,7 @@ import {
 } from "@/utils/const.ts";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { tooltip, tooltipField } from "@/utils/chart.ts";
-import { convertMonthsToYearsAndMonths } from "@/utils/dates.ts";
+import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 
 const LegendItems = [
     {
@@ -44,7 +44,7 @@ export const TechSkillsDurationPieChart = () => {
         const colors: string[] = [];
 
         [...inSkills, ...notInSkills].forEach((tech) => {
-            const {years, months} = convertMonthsToYearsAndMonths(tech.totalMonths);
+            const {years, months} = monthsToYearsAndMonths(tech.totalMonths);
             data.push([
                 `${tech.name}, ${years}y ${months}m`,
                 tech.totalMonths,

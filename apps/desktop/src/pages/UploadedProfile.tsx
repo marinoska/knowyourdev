@@ -8,13 +8,14 @@ import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
-import { ChartProvider } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
+import { ChartProvider, useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
 import { CareerTechChart } from "@/pages/Analisys/Chart/CareerTechChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import { TechSkillsTimelineChart } from "@/pages/Analisys/Chart/TechSkillsTimelineChart.tsx";
 import { TechSkillsDurationPieChart } from "@/pages/Analisys/Chart/TechSkillsDurationPieChart.tsx";
 import { TechMentionsPieChart } from "@/pages/Analisys/Chart/TechMentionsPieChart.tsx";
+import { monthsToYearsAndMonths } from "@/utils/dates";
 
 type UploadedProfileParams = {
     id: string;
@@ -65,9 +66,12 @@ export const UploadedProfile = () => {
 
 const UploadPage = ({query}: { query: ReturnType<typeof useUploadProfileQuery> }) => {
     const {profile, isError, isLoading, showError, dismissError} = query;
+    const {monthsActive} = useChartContext();
+
+    const {years, months} = monthsToYearsAndMonths(monthsActive)
     const header = useMemo(() => (
-        <PageHeader subtitle={`${profile?.position} • ----- years experience`}
-                    title={profile?.fullName}/>), [profile?.fullName, profile?.position])
+        <PageHeader subtitle={`${profile?.position} • ${years} years ${months} month net active time of experience`}
+                    title={profile?.fullName}/>), [profile?.position, profile?.fullName, years, months])
     return (<>
         <NavigateBackLink/>
         {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
