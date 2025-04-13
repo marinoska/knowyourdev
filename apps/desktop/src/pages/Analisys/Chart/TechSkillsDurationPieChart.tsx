@@ -9,7 +9,7 @@ import {
     SoftGrayColor,
 } from "@/utils/const.ts";
 import { Tooltip } from "@/components/Tooltip.tsx";
-import { tooltip, tooltipField } from "@/utils/chart.ts";
+import { pieTooltip, tooltipField } from "@/utils/chart.ts";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 
 const LegendItems = [
@@ -48,7 +48,7 @@ export const TechSkillsDurationPieChart = () => {
             data.push([
                 `${tech.name}, ${years}y ${months}m`,
                 tech.totalMonths,
-                tooltip(tech)
+                pieTooltip(tech)
             ]);
             colors.push(tech.inSkillsSection ? GreenLegendColor : SoftGrayColor); // Green if In Skills, Red otherwise
         });

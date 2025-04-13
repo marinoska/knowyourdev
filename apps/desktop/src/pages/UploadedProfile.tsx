@@ -70,7 +70,7 @@ const UploadPage = ({query}: { query: ReturnType<typeof useUploadProfileQuery> }
 
     const {years, months} = monthsToYearsAndMonths(monthsActive)
     const header = useMemo(() => (
-        <PageHeader subtitle={`${profile?.position} • ${years} years ${months} month net active time of experience`}
+        <PageHeader subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
                     title={profile?.fullName}/>), [profile?.position, profile?.fullName, years, months])
     return (<>
         <NavigateBackLink/>

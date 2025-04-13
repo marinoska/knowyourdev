@@ -24,6 +24,7 @@ const UploadTechProfileJobEntrySchema = new Schema<UploadTechProfileJobEntry>({
     months: {type: Number, required: true},
     popularity: Number,
     trending: Number,
+    summary: {type: String, required: true},
     techStack: {
         type: {
             ref: {type: Schema.Types.ObjectId, ref: 'TechStack', required: true},

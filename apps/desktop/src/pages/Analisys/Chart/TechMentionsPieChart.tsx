@@ -9,7 +9,7 @@ import {
     SoftGrayColor, YellowLegendColor,
 } from "@/utils/const.ts";
 import { Tooltip } from "@/components/Tooltip.tsx";
-import { tooltip, tooltipField } from "@/utils/chart.ts";
+import { pieTooltip, tooltipField, tooltipOptions } from "@/utils/chart.ts";
 
 const LegendItems = [
     {
@@ -61,7 +61,7 @@ export const TechMentionsPieChart = () => {
             data.push([
                 tech.name,
                 percent,
-                tooltip(tech)
+                pieTooltip(tech)
             ]);
             colors.push(color);
         };
@@ -80,13 +80,10 @@ export const TechMentionsPieChart = () => {
             backgroundColor: "#fff",
             legend: {position: "right"},
             pieSliceText: "label",
-            tooltip: {
-                trigger: "focus", // Tooltip appears on hover
-                isHtml: true, // Enables HTML tooltips for custom content
-            },
             pieSliceTextStyle: {
                 fontSize: 12, // Controls label font size
-            }
+            },
+            ...tooltipOptions
         }),
         [sliceColors]
     );

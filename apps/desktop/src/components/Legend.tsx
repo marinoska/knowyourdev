@@ -15,7 +15,7 @@ export const Legend = ({items}: LegendProps) => {
     return (
         <Stack direction='row' gap={4}>
             {items.map((item) => (
-                <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
+                <Box key={item.label} sx={{display: "flex", alignItems: "center", gap: 2}}>
                     <Box
                         sx={{
                             width: 16,

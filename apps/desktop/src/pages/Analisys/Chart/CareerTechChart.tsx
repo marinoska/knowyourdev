@@ -5,8 +5,6 @@ import { useGoogleChartAutoHeight } from "@/pages/Analisys/useGoogleChartAutoHei
 import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
 import { RedLegendColor } from "@/utils/const";
 import { GreenLegendColor } from "@/utils/const.ts";
-import { Job } from "@/api/query/types.ts";
-import { format } from "date-fns";
 import { Legend } from "@/components/Legend.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 
@@ -14,19 +12,6 @@ const LegendItems = [
     {label: 'Tech stack specified', color: GreenLegendColor},
     {label: 'Missing or unrecognized Tech Stack', color: RedLegendColor},
 ];
-
-export const tooltip = (job: Job) => `<div style="padding: 0.5rem;">
-                <h4>
-                    ${job.role}
-                    <br>
-                    ${format(job.start, 'MM-yyyy')} - ${job.present ? 'present' : format(job.end, 'MM-yyyy')}
-                </h4>
-                <p>
-                </p>
-                <p>
-                    ${job.technologies.map(({name}) => name).join(',')}
-                </p>
-            </div>`;
 
 export const CareerTechChart = () => {
     const chartRef = useRef(null);

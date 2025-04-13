@@ -14,6 +14,7 @@ export type UploadTechProfileTechnologiesEntry = {
     scope: ScopeType;
     inSkillsSection?: boolean;
     inProfileSection?: boolean;
+
 };
 
 export type UploadTechProfileTechnologiesJobEntry = {
@@ -28,6 +29,7 @@ export type UploadTechProfileJobEntry =
     & {
     popularity?: number;
     trending?: number;
+    summary: string;
     techStack?: {
         ref: Schema.Types.ObjectId;
         name: string;

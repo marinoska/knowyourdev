@@ -29,15 +29,22 @@ export const CareerTimelineChart = () => {
         chartContext.jobGaps;
 
         const gapsAndJobs = [...chartContext.jobGaps, ...chartContext.irrelevantJobs, ...chartContext.softwareDevelopmentJobs];
-        const data = gapsAndJobs.map((job) => ([
-            job.role || "Undefined Role",
-            job.job || "Undefined Name",
-            job.start,
-            job.end,
-        ]));
+        const data = gapsAndJobs.map((job) => {
+            const role = job.role || "Undefined Role";
+            const company = job.job || "Undefined Name";
+
+            return [
+                role,
+                company,
+                job.start,
+                job.end,
+                "Promotion to Senior"
+
+            ]
+        });
 
         return [
-            ["Role", "Name", "Start Date", "End Date"], // Header row with style column
+            ["Role", "Name", "Start Date", "End Date", {type: "string", role: "annotation"}],
             ...data
         ];
     }, [chartContext.irrelevantJobs, chartContext.jobGaps, chartContext.softwareDevelopmentJobs]);
@@ -59,7 +66,6 @@ export const CareerTimelineChart = () => {
                 colorByRowLabel: true,
                 rowLabelStyle: {fontSize: 14},
                 barLabelStyle: {fontSize: 14}
-
             },
         };
 

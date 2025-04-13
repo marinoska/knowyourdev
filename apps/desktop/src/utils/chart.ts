@@ -1,6 +1,7 @@
 import { TechProfile } from "@/api/query/types.ts";
+import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 
-export const tooltip = (tech: TechProfile) => `<div style="padding: 0.5rem;font-size: 14px;">
+export const pieTooltip = (tech: TechProfile) => `<div style="padding: 0.5rem;font-size: 14px;">
                 <p>
                     <span style="font-weight: bold;">${tech.name}</span>
                     <br>
@@ -8,8 +9,45 @@ export const tooltip = (tech: TechProfile) => `<div style="padding: 0.5rem;font-
                 </p>
             </div>`;
 
+
+export const timelineTooltip = ({
+                                    role,
+                                    company,
+                                    totalMonths,
+                                    start,
+                                    end,
+                                    summary
+                                }: {
+    role: string,
+    company: string,
+    totalMonths: number,
+    start: Date,
+    end: Date,
+    summary: string
+}) => {
+    const {years, months} = monthsToYearsAndMonths(totalMonths);
+    return `<div style="padding:0.5rem;margin:0;font-size: 14px;white-space: nowrap;">
+                <p style="padding:0;margin:0;">
+                    <strong>${company}</strong>
+                </p>                <p style="padding:0;margin:0;">
+                    <strong>${role}: -<strong>
+                </p>
+                    <br>
+                    <strong>Duration:</strong> <span>${years} years, ${months} months</span>
+                        ${summary ? `<strong>Summary:</strong> ${summary}` : ""}
+ 
+            </div>`
+};
+
 export const tooltipField = {
     role: "tooltip",
     type: "string",
     p: {html: true}
-}
+} as const;
+
+export const tooltipOptions = {
+    tooltip: {
+        trigger: "focus", // Tooltip appears on hover
+        isHtml: true, // Enables HTML tooltips for custom content
+    }
+} as const;

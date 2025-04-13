@@ -176,6 +176,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
                 ? technologies.reduce((acc, tech) => acc + tech.popularity, 0) / technologies.length
                 : 0,
             technologies,
+            summary: job.summary
             // TODO
             // techStack: {}
         }
