@@ -8,9 +8,9 @@ import {
     GreenLegendColor,
     SoftGrayColor,
 } from "@/utils/const.ts";
-import { Tooltip } from "@/components/Tooltip.tsx";
 import { pieTooltip, tooltipField } from "@/utils/chart.ts";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
+import { ChartTitle } from "@/pages/Analisys/Chart/Components/ChartTitle.tsx";
 
 const LegendItems = [
     {
@@ -87,14 +87,9 @@ export const TechSkillsDurationPieChart = () => {
                    mt: 2
                }}
         >
-            <Stack gap={1} direction="row" sx={{alignItems: "center"}}>
 
-                <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600}}>
-                    Technologies by duration
-                </Typography>
-                <Tooltip
-                    title="Displays the total time spent on each technology based on the durations clearly mentioned by the user in their job descriptions."/>
-            </Stack>
+            <ChartTitle title='Technologies by duration'
+                        tooltip="Displays the total time spent on each technology based on the durations clearly mentioned by the user in their job descriptions."/>
             <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (

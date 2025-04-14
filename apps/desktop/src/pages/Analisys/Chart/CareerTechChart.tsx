@@ -6,7 +6,7 @@ import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx"
 import { RedLegendColor } from "@/utils/const";
 import { GreenLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";
-import { Tooltip } from "@/components/Tooltip.tsx";
+import { ChartTitle } from "@/pages/Analisys/Chart/Components/ChartTitle.tsx";
 
 const LegendItems = [
     {label: 'Tech stack specified', color: GreenLegendColor},
@@ -89,14 +89,8 @@ export const CareerTechChart = () => {
                 backgroundColor: "#fff",
             }}
         >
-            <Stack gap={0.5} direction="row" sx={{alignItems: "center"}}>
-
-                <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600}}>
-                    Tech Timeline
-                </Typography>
-                <Tooltip
-                    title='Tech timeline displays the roles and their associated technologies over time, based on job descriptions provided by the candidate.'/>
-            </Stack>
+            <ChartTitle title='Tech Timeline'
+                        tooltip='Tech timeline displays the roles and their associated technologies over time, based on job descriptions provided by the candidate.'/>
             <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (

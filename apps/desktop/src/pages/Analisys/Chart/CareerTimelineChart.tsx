@@ -6,6 +6,7 @@ import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx"
 import { GreenLegendColor, YellowLegendColor } from "@/utils/const";
 import { RedLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";
+import { ChartTitle } from "./Components/ChartTitle";
 
 const LegendItems = [
     {label: 'Software Development Jobs', color: GreenLegendColor},
@@ -78,9 +79,7 @@ export const CareerTimelineChart = () => {
                    mt: 2
                }}
         >
-            <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600}}>
-                Career Timeline
-            </Typography>
+            <ChartTitle title={'Career Timeline'}/>
             <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (

@@ -8,8 +8,8 @@ import {
     GreenLegendColor, PaleYellowLegendColor,
     SoftGrayColor, YellowLegendColor,
 } from "@/utils/const.ts";
-import { Tooltip } from "@/components/Tooltip.tsx";
 import { pieTooltip, tooltipField, tooltipOptions } from "@/utils/chart.ts";
+import { ChartTitle } from "@/pages/Analisys/Chart/Components/ChartTitle.tsx";
 
 const LegendItems = [
     {
@@ -98,15 +98,8 @@ export const TechMentionsPieChart = () => {
                    mt: 2
                }}
         >
-            <Stack gap={1} direction="row" sx={{alignItems: "center"}}>
-
-                <Typography level="h2" sx={{fontSize: "1.25rem", fontWeight: 600}}>
-                    Technology mentions: skills section vs job descriptions
-                </Typography>
-                <Tooltip
-                    title="The chart categorizes technologies as: mentioned only in the skills section (not backed by job experience), mentioned only in job descriptions (not currently used by the candidate), or mentioned in both (key technologies).
-"/>
-            </Stack>
+            <ChartTitle title={'Technology mentions: skills section vs job descriptions'}
+                        tooltip='The chart categorizes technologies as: mentioned only in the skills section (not backed by job experience), mentioned only in job descriptions (not currently used by the candidate), or mentioned in both (key technologies).'/>
             <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (
