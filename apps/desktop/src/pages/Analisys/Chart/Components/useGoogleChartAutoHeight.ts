@@ -1,7 +1,17 @@
-import { useCallback, useState, RefObject } from "react";
+import { useCallback, useState, useEffect, useRef, RefObject } from "react";
+import { ReactGoogleChartEvent } from "react-google-charts";
 
-export function useGoogleChartAutoHeight(chartContainerRef: RefObject<HTMLElement | null>) {
-    const [chartHeight, setChartHeight] = useState<string>("20px");
+export function useGoogleChartAutoHeight(chartData: Array<unknown>) {
+    const chartContainerRef: RefObject<HTMLDivElement | null> = useRef(null);
+    const [chartHeight, setChartHeight] = useState<string>("50px");
+    const [chartIsReady, setChartIsReady] = useState(false);
+
+    // rerender chart to adapt height for new data row amount
+    // so the dependency on chartData is essential
+    useEffect(() => {
+        setChartIsReady(false);
+        setChartHeight('50px');
+    }, [setChartIsReady, setChartHeight, chartData]);
 
     const updateHeight = useCallback(() => {
         const scrollableDiv = chartContainerRef.current?.querySelector(
@@ -25,8 +35,14 @@ export function useGoogleChartAutoHeight(chartContainerRef: RefObject<HTMLElemen
         requestAnimationFrame(() => {
             updateHeight();
         });
+        setChartIsReady(true);
     }, [updateHeight]);
 
-
-    return {chartHeight, handleChartResize, setChartHeight};
+    const chartEvents: ReactGoogleChartEvent[] = [
+        {
+            eventName: "ready",
+            callback: handleChartResize
+        },
+    ];
+    return {chartHeight, handleChartResize, chartIsReady, chartContainerRef, chartEvents};
 }

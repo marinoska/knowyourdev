@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
-import { Typography, Stack } from "@mui/joy";
-import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
+import { Typography } from "@mui/joy";
+import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
 import { TechProfile } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/utils/const.ts";
 import { pieTooltip, tooltipField } from "@/utils/chart.ts";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
-import { ChartTitle } from "@/pages/Analisys/Chart/Components/ChartTitle.tsx";
+import { ChartContainer } from "@/pages/Analisys/Chart/Components/ChartContainer.tsx";
 
 const LegendItems = [
     {
@@ -81,15 +81,8 @@ export const TechSkillsDurationPieChart = () => {
     }
 
     return (
-        <Stack gap={2}
-               sx={{
-                   backgroundColor: "#fff",
-                   mt: 2
-               }}
-        >
-
-            <ChartTitle title='Technologies by duration'
-                        tooltip="Displays the total time spent on each technology based on the durations clearly mentioned by the user in their job descriptions."/>
+        <ChartContainer title='Technologies by duration'
+                        tooltip="Displays the total time spent on each technology based on the durations clearly mentioned by the user in their job descriptions.">
             <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (
@@ -104,6 +97,6 @@ export const TechSkillsDurationPieChart = () => {
                     loader={<Typography>Loading Chart...</Typography>}
                 />
             )}
-        </Stack>
+        </ChartContainer>
     );
 };

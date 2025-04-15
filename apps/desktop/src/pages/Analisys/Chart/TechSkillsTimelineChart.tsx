@@ -1,22 +1,19 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Chart, ReactGoogleChartEvent } from "react-google-charts";
-import { Checkbox, FormControl, FormLabel, Stack, Typography } from "@mui/joy";
-import { useGoogleChartAutoHeight } from "@/pages/Analisys/useGoogleChartAutoHeight.ts";
+import { useEffect, useMemo } from "react";
+import { Checkbox, FormControl, FormLabel } from "@mui/joy";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { ScopeSelect } from "@/pages/Analisys/Chart/Components/ScopeSelect.tsx";
-import { ChartTitle } from "@/pages/Analisys/Chart/Components/ChartTitle.tsx";
-import { useFilteredTechnologies } from "@/pages/Analisys/useFilteredTechnologies.ts";
+import { ChartContainer } from "@/pages/Analisys/Chart/Components/ChartContainer.tsx";
+import { useFilteredTechnologies } from "@/pages/Analisys/Chart/Core/useFilteredTechnologies.ts";
+import { defaultTimelineOptions } from "@/utils/chart.ts";
+import { TimelineChart } from "@/pages/Analisys/Chart/Components/TimelineChart.tsx";
 
 //* TODO add a position description via a tooltip
 
-export const TechSkillsTimelineChart = ({setChartIsReady, setChartIsEmpty}: {
-    setChartIsReady: (b: boolean) => void,
-    setChartIsEmpty: (b: boolean) => void
+export const TechSkillsTimelineChart = ({onChartIsReady, onChartIsEmpty}: {
+    onChartIsReady: (b: boolean) => void,
+    onChartIsEmpty: (b: boolean) => void
 }) => {
-    const chartRef = useRef(null);
-    const {chartHeight, handleChartResize, setChartHeight} = useGoogleChartAutoHeight(chartRef);
-
     const {
         allTechnologies,
         filteredTechnologies,
@@ -26,7 +23,20 @@ export const TechSkillsTimelineChart = ({setChartIsReady, setChartIsEmpty}: {
         setShowKeyTechOnly
     } = useFilteredTechnologies();
 
+    // todo handleTechnologiesLength instead
+    useEffect(() => {
+        if (!filteredTechnologies?.length) {
+            onChartIsEmpty(true)
+        } else {
+            onChartIsEmpty(false)
+        }
+    }, [filteredTechnologies?.length, onChartIsEmpty]);
+
     const chartData = useMemo(() => {
+        if (!filteredTechnologies?.length) {
+            return [];
+        }
+
         const data = filteredTechnologies.map((tech) => {
             const {years, months} = monthsToYearsAndMonths(tech.totalMonths);
             const totalLabel = tech.totalMonths ? `${years}y ${months}m` : 'No duration found';
@@ -41,11 +51,6 @@ export const TechSkillsTimelineChart = ({setChartIsReady, setChartIsEmpty}: {
             ));
         }).flat();
 
-        if (!filteredTechnologies?.length) {
-            setChartIsEmpty(true)
-            return [];
-        }
-
         return [
             [
                 "Role",
@@ -56,87 +61,43 @@ export const TechSkillsTimelineChart = ({setChartIsReady, setChartIsEmpty}: {
             // @ts-ignore
             ...data
         ]
-    }, [filteredTechnologies, setChartIsEmpty]);
-
-    // rerender chart to adapt height for new data row amount
-    useEffect(() => {
-        setChartIsReady(false);
-        setChartHeight('20px');
-    }, [setChartIsReady, setChartHeight, showKeyTechOnly, selectedScope]);
-
-    const chartEvents: ReactGoogleChartEvent[] = [
-        {
-            eventName: "ready",
-            callback: () => {
-                handleChartResize();
-                setChartIsReady(true);
-            }
-        },
-    ];
+    }, [filteredTechnologies]);
 
     const options = useMemo(() => {
         return {
             timeline: {
-                showRowLabels: true,
-                groupByRowLabel: true,
+                ...defaultTimelineOptions,
                 colorByRowLabel: false,
-                alternatingRowStyle: false,
-                avoidOverlappingGridLines: true,
-                rowLabelStyle: {fontSize: 14},
-                barLabelStyle: {fontSize: 14}
+                // alternatingRowStyle: false,
+                // avoidOverlappingGridLines: true,
             },
-            backgroundColor: "#fff",
         };
     }, []);
 
     return (
-        <Stack
-            gap={3}
-            sx={{
-                backgroundColor: "#fff",
-            }}
-        >
-            <ChartTitle title='Tech Timeline'/>
+        <ChartContainer title='Tech Timeline'>
+            <FormControl>
+                <FormLabel>
+                    <Checkbox
+                        checked={showKeyTechOnly}
+                        onChange={(e) => setShowKeyTechOnly(e.target.checked)}
+                        sx={{marginRight: 1, borderColor: 'neutral.outlinedBorder'}}
+                    />
+                    Show only key technologies (mentioned in skills section)
+                    <Tooltip
+                        title="Include only the technologies that the candidate explicitly mentioned in their skills section."/>
 
-            <>
-                <FormControl>
-                    <FormLabel>
-                        <Checkbox
-                            checked={showKeyTechOnly}
-                            onChange={(e) => setShowKeyTechOnly(e.target.checked)}
-                            sx={{marginRight: 1, borderColor: 'neutral.outlinedBorder'}}
-                        />
-                        Show only key technologies (mentioned in skills section)
-                        <Tooltip
-                            title="Include only the technologies that the candidate explicitly mentioned in their skills section."/>
+                </FormLabel>
+            </FormControl>
+            <ScopeSelect
+                label='Filter by Tech Scope'
+                data={allTechnologies}
+                selectedScope={selectedScope}
+                onScopeChange={setSelectedScope}
+                sx={{width: 200}}
+            />
 
-                    </FormLabel>
-                </FormControl>
-                <ScopeSelect
-                    label='Filter by Tech Scope'
-                    data={allTechnologies}
-                    selectedScope={selectedScope}
-                    onScopeChange={setSelectedScope}
-                    sx={{width: 200}}
-                />
-            </>
-
-            {!chartData.length ? (
-                <Typography>Insufficient data provided for the chart:
-                    no technologies found in the job descriptions or durations are not found or specified
-                </Typography>
-            ) : (<div ref={chartRef}>
-                <Chart
-                    chartType="Timeline"
-                    width="100%"
-                    height={chartHeight}
-                    options={options}
-                    chartEvents={chartEvents}
-                    data={chartData}
-                    loader={<Typography>Loading Chart...</Typography>}
-                />
-            </div>)
-            }
-        </Stack>
+            <TimelineChart chartData={chartData} options={options} onChartIsReady={onChartIsReady}/>
+        </ChartContainer>
     );
 };

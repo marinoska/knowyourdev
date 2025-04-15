@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
-import { Typography, Stack } from "@mui/joy";
-import { useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
+import { Typography } from "@mui/joy";
+import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
 import { TechProfile } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import {
@@ -9,7 +9,7 @@ import {
     SoftGrayColor, YellowLegendColor,
 } from "@/utils/const.ts";
 import { pieTooltip, tooltipField, tooltipOptions } from "@/utils/chart.ts";
-import { ChartTitle } from "@/pages/Analisys/Chart/Components/ChartTitle.tsx";
+import { ChartContainer } from "@/pages/Analisys/Chart/Components/ChartContainer.tsx";
 
 const LegendItems = [
     {
@@ -92,14 +92,8 @@ export const TechMentionsPieChart = () => {
         return <Typography level="h4">No technologies available to display.</Typography>;
     }
     return (
-        <Stack gap={2}
-               sx={{
-                   backgroundColor: "#fff",
-                   mt: 2
-               }}
-        >
-            <ChartTitle title={'Technology mentions: skills section vs job descriptions'}
-                        tooltip='The chart categorizes technologies as: mentioned only in the skills section (not backed by job experience), mentioned only in job descriptions (not currently used by the candidate), or mentioned in both (key technologies).'/>
+        <ChartContainer title={'Technology mentions: skills section vs job descriptions'}
+                        tooltip='The chart categorizes technologies as: mentioned only in the skills section (not backed by job experience), mentioned only in job descriptions (not currently used by the candidate), or mentioned in both (key technologies).'>
             <Legend title={'Legend'} items={LegendItems}/>
 
             {chartContext.profile?.jobs.length === 0 ? (
@@ -114,6 +108,6 @@ export const TechMentionsPieChart = () => {
                     loader={<Typography>Loading Chart...</Typography>}
                 />
             )}
-        </Stack>
+        </ChartContainer>
     );
 };

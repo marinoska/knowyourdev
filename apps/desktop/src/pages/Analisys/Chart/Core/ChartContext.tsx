@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useMemo } from "react";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
-import { getJobGaps } from "@/pages/Analisys/ChartContext/ranges.ts";
+import { getJobGaps } from "@/pages/Analisys/Chart/Core/ranges.ts";
 import { GAP_JOB, GAP_ROLE, sumRanges } from "@kyd/common";
 
 export type Gap = Pick<Job, 'job' | 'role' | 'months' | 'start' | 'end' | 'popularity'>;

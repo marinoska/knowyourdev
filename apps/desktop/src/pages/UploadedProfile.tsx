@@ -8,8 +8,8 @@ import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
-import { ChartProvider, useChartContext } from "@/pages/Analisys/ChartContext/ChartContext.tsx";
-import { CareerTechChart } from "@/pages/Analisys/Chart/CareerTechChart.tsx";
+import { ChartProvider, useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
+import { CareerTechTimelineChart } from "@/pages/Analisys/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import { TechSkillsTimelineChart } from "@/pages/Analisys/Chart/TechSkillsTimelineChart.tsx";
@@ -26,7 +26,7 @@ const TechnologiesChartGroup = () => {
     const [chartIsReady, setChartIsReady] = useState(false);
     const [chartIsEmpty, setChartIsEmpty] = useState(false);
     return (<>
-        <TechSkillsTimelineChart setChartIsReady={setChartIsReady} setChartIsEmpty={setChartIsEmpty}/>
+        <TechSkillsTimelineChart onChartIsReady={setChartIsReady} onChartIsEmpty={setChartIsEmpty}/>
         {chartIsReady && <TechSkillsDurationPieChart/>}
         {(chartIsReady || chartIsEmpty) && <TechMentionsPieChart/>}
     </>)
@@ -38,7 +38,7 @@ const getTabItems = (): TabItem[] => ([
         content: (<Stack gap={6}>
                 <CareerTimelineChart/>
                 <Divider/>
-                <CareerTechChart/>
+                <CareerTechTimelineChart/>
             </Stack>
         )
     },

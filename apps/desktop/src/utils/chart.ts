@@ -51,3 +51,12 @@ export const tooltipOptions = {
         isHtml: true, // Enables HTML tooltips for custom content
     }
 } as const;
+
+export const defaultTimelineOptions = {
+    showRowLabels: true,
+    groupByRowLabel: true,
+    colorByRowLabel: true,
+
+    rowLabelStyle: {fontSize: 14},
+    barLabelStyle: {fontSize: 14}
+}
