@@ -24,7 +24,7 @@ export const ScopeSelect = ({label, data, selectedScope, onScopeChange, sx}: Sco
     };
 
     return (
-        <FormControl sx={sx}>
+        <FormControl sx={sx || {width: 200}}>
             <FormLabel>{label}</FormLabel>
 
             <Select

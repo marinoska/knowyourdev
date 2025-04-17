@@ -64,6 +64,10 @@ const UploadTechProfileTechnologiesEntrySchema = new Schema<UploadTechProfileTec
             enum: Object.values(TREND), // Enum for TrendType
             required: true,
         },
+        popularity: {
+            type: Number,
+            required: true,
+        },
         category: {
             type: String,
             enum: Object.values(CATEGORY), // Enum for CategoryType

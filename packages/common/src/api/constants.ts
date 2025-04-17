@@ -23,7 +23,7 @@ export const SCOPE_NAMES: Record<ScopeType, string> = {
 
 export type TechCode = string;
 export type TrendType = typeof TREND[number];
-export type CategoryType = typeof CATEGORY;
+export type CategoryType = typeof CATEGORY[number];
 export type ScopeType = typeof SCOPE[number];
 export type ProficiencyType = typeof PROFICIENCY[ number];
 

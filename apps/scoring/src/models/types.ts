@@ -3,7 +3,8 @@ import {
     TechCode,
     TrendType,
     TechType,
-    TechCodeType, TechStack, JobEntry
+    TechCodeType, TechStack, JobEntry,
+    CategoryType
 } from "@kyd/common/api";
 
 
@@ -55,7 +56,9 @@ export type TechStackModelType = Model<TechStackDocumentType> & {
     identifyStack: (techNames: TechCode[]) => Promise<TechStack[]>;
 };
 
-export type TechModelType = Model<TechDocument>;
+export type TechModelType = Model<TechDocument> & {
+    getMaxPopularity: () => Promise<Record<CategoryType, number>>;
+}
 
 export type RoleType = JobEntry["roleType"];
 

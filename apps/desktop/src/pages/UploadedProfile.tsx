@@ -12,10 +12,11 @@ import { ChartProvider, useChartContext } from "@/pages/Analisys/Chart/Core/Char
 import { CareerTechTimelineChart } from "@/pages/Analisys/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
-import { TechSkillsTimelineChart } from "@/pages/Analisys/Chart/TechSkillsTimelineChart.tsx";
-import { TechSkillsDurationPieChart } from "@/pages/Analisys/Chart/TechSkillsDurationPieChart.tsx";
+import { TechTimelineChart } from "@/pages/Analisys/Chart/TechTimelineChart.tsx";
+import { TechDurationPieChart } from "@/pages/Analisys/Chart/TechDurationPieChart.tsx";
 import { TechMentionsPieChart } from "@/pages/Analisys/Chart/TechMentionsPieChart.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates";
+import { TechPopularityTimelineChart } from "@/pages/Analisys/Chart/TechPopularityTimelineChart.tsx";
 
 type UploadedProfileParams = {
     id: string;
@@ -26,8 +27,8 @@ const TechnologiesChartGroup = () => {
     const [chartIsReady, setChartIsReady] = useState(false);
     const [chartIsEmpty, setChartIsEmpty] = useState(false);
     return (<>
-        <TechSkillsTimelineChart onChartIsReady={setChartIsReady} onChartIsEmpty={setChartIsEmpty}/>
-        {chartIsReady && <TechSkillsDurationPieChart/>}
+        <TechTimelineChart onChartIsReady={setChartIsReady} onChartIsEmpty={setChartIsEmpty}/>
+        {chartIsReady && <TechDurationPieChart/>}
         {(chartIsReady || chartIsEmpty) && <TechMentionsPieChart/>}
     </>)
 }
@@ -48,7 +49,7 @@ const getTabItems = (): TabItem[] => ([
     },
     {
         label: "Tech insights",
-        content: <div>Content for Strengths & Suitability</div>,
+        content: <TechPopularityTimelineChart/>,
     },
 ]);
 

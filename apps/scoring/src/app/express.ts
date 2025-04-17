@@ -7,9 +7,11 @@ import cors from "cors";
 import routes from '@/routes/index.js';
 // Init Mongo connection
 import './mongo';
+import { globals } from './globals.js';
 import multer from "multer";
 
 const log = logger('Application');
+void globals.init();
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     if (!err) {
@@ -27,6 +29,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
     res.status(statusCode).json(error.json());
 };
+
 
 const app = express();
 app.use(cors());

@@ -14,12 +14,16 @@ import {
     UploadTechProfileTechnologiesEntry,
     UploadTechProfileTechnologiesJobEntry,
     TREND_MAP, TechnologyEntry,
-    JobEntry
+    JobEntry,
+    TechType
 } from "@kyd/common/api";
+import { normalizePopularityLevel } from "@/chain/normalizer/popularityLevel.js";
+import { env } from "@/app/env.js";
 
 const log = logger('extraction:extraction:runner');
 
 const FormatString = "MM-yyyy"; // Specify the format
+const currentUsageFieldName = env('CURRENT_USAGE_FIELD_NAME') as keyof TechType;
 
 export const aggregateAndSave = async (params: ExtractionChainParam): Promise<ExtractionChainParam> => {
     if (!("extractedData" in params))
@@ -88,7 +92,8 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
         const totalMonths = calculateTotalMonths(mergedRanges); // Calculate total unique months
         const recentMonths = calculateTotalMonths(mergedRanges, 3); // Calculate total unique months
 
-        if (!techCollectionObj[tech.code]) {
+        const technology = techCollectionObj[tech.code];
+        if (!technology) {
             return null;
         }
 
@@ -98,10 +103,11 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             jobs: tech.jobs,
             totalMonths,
             recentMonths,
-            name: techCollectionObj[tech.code].name,
-            trend: techCollectionObj[tech.code].trend,
-            category: techCollectionObj[tech.code].category,
-            scope: techCollectionObj[tech.code].scope
+            name: technology.name,
+            trend: technology.trend,
+            popularity: normalizePopularityLevel(technology),
+            category: technology.category,
+            scope: technology.scope
         } satisfies UploadTechProfileTechnologiesEntry;
     }).filter<UploadTechProfileTechnologiesEntry>(isNotNull)
         .reduce<Record<TechCode, UploadTechProfileTechnologiesEntry>>((acc, doc) => ({
@@ -114,7 +120,9 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             if (!tech.code) {
                 continue;
             }
-            if (!techCollectionObj[tech.code]) {
+            const technology = techCollectionObj[tech.code];
+
+            if (!technology) {
                 continue;
             }
 
@@ -122,10 +130,11 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
                 ...(techWithTotals[tech.code] || {}),
                 techReference: tech.techReference as Schema.Types.ObjectId,
                 code: tech.code,
-                name: techCollectionObj[tech.code].name,
-                trend: techCollectionObj[tech.code].trend,
-                category: techCollectionObj[tech.code].category,
-                scope: techCollectionObj[tech.code].scope,
+                name: technology.name,
+                trend: technology.trend,
+                popularity: normalizePopularityLevel(technology),
+                category: technology.category,
+                scope: technology.scope,
                 ...props,
             }
         }
@@ -145,7 +154,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             return {
                 ref: tech.techReference._id as Schema.Types.ObjectId,
                 name: tech.techReference.name,
-                popularity: tech.techReference.usage2024 || 0,
+                popularity: normalizePopularityLevel(tech.techReference),
                 trending: TREND_MAP[tech.techReference.trend],
             }
         }).filter(isNotNull);
@@ -160,6 +169,10 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             log.error(`Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`);
         }
 
+        const avgPopularity = technologies.length
+            ? technologies.reduce((acc, tech) => acc + tech.popularity, 0) / technologies.length
+            : 0;
+
         return {
             start: isValid(start) ? start : (new Date()).toISOString(),
             end: isValid(end) ? end : (new Date()).toISOString(),
@@ -172,9 +185,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             trending: technologies.length
                 ? technologies.reduce((acc, tech) => acc + tech.trending, 0) / technologies.length
                 : 0,
-            popularity: technologies.length
-                ? technologies.reduce((acc, tech) => acc + tech.popularity, 0) / technologies.length
-                : 0,
+            popularity: avgPopularity,
             technologies,
             summary: job.summary
             // TODO

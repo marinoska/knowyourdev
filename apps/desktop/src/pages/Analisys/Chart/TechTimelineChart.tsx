@@ -10,7 +10,7 @@ import { TimelineChart } from "@/pages/Analisys/Chart/Components/TimelineChart.t
 
 //* TODO add a position description via a tooltip
 
-export const TechSkillsTimelineChart = ({onChartIsReady, onChartIsEmpty}: {
+export const TechTimelineChart = ({onChartIsReady, onChartIsEmpty}: {
     onChartIsReady: (b: boolean) => void,
     onChartIsEmpty: (b: boolean) => void
 }) => {
@@ -23,7 +23,7 @@ export const TechSkillsTimelineChart = ({onChartIsReady, onChartIsEmpty}: {
         setShowKeyTechOnly
     } = useFilteredTechnologies();
 
-    // todo handleTechnologiesLength instead
+    // todo handleTechnologiesLength instead - ideally get rid of this
     useEffect(() => {
         if (!filteredTechnologies?.length) {
             onChartIsEmpty(true)
@@ -53,10 +53,7 @@ export const TechSkillsTimelineChart = ({onChartIsReady, onChartIsEmpty}: {
 
         return [
             [
-                "Role",
-                "Name",
-                "Start",
-                "End",
+                "Role", "Name", "Start", "End",
             ],
             // @ts-ignore
             ...data
@@ -75,7 +72,7 @@ export const TechSkillsTimelineChart = ({onChartIsReady, onChartIsEmpty}: {
     }, []);
 
     return (
-        <ChartContainer title='Tech Timeline'>
+        <ChartContainer title='Tech stack timeline'>
             <FormControl>
                 <FormLabel>
                     <Checkbox
@@ -94,7 +91,6 @@ export const TechSkillsTimelineChart = ({onChartIsReady, onChartIsEmpty}: {
                 data={allTechnologies}
                 selectedScope={selectedScope}
                 onScopeChange={setSelectedScope}
-                sx={{width: 200}}
             />
 
             <TimelineChart chartData={chartData} options={options} onChartIsReady={onChartIsReady}/>

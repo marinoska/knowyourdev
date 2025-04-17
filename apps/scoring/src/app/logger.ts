@@ -16,7 +16,7 @@ const formatter = ({error, ...logEntry}: any) => {
     const enhanced = {
         ...logEntry,
         timestamp: new Date().toISOString(),
-        loggerName: `ingesting`,
+        // loggerName: `ingesting`,
         uuid: v4()
     };
 

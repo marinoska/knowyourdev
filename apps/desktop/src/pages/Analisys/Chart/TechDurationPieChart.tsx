@@ -25,7 +25,7 @@ const LegendItems = [
     },
 ];
 
-export const TechSkillsDurationPieChart = () => {
+export const TechDurationPieChart = () => {
     const chartContext = useChartContext();
 
     const {chartData, sliceColors}

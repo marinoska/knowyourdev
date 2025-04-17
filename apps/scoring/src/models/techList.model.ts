@@ -1,8 +1,9 @@
 import { model, Schema } from 'mongoose';
 import { TechDocument, TechModelType } from "./types.js";
 import { CATEGORY, SCOPE, TREND } from "@kyd/common/api";
+import { getMaxPopularity } from "@/models/techList.statics.js";
 
-const techSchema = new Schema<TechDocument, TechModelType>(
+const TechSchema = new Schema<TechDocument, TechModelType>(
     {
         name: {type: String, required: true, immutable: true, unique: true},
         code: {type: String, required: true, immutable: true, unique: true},
@@ -15,6 +16,9 @@ const techSchema = new Schema<TechDocument, TechModelType>(
     {timestamps: true, collection: 'TechList', autoIndex: true}
 );
 
-techSchema.index({category: 1});
+TechSchema.index({category: 1, usage2024: -1});
 
-export const TechListModel = model<TechDocument, TechModelType>('TechList', techSchema);
+TechSchema.static('getMaxPopularity', getMaxPopularity);
+
+export const TechListModel = model<TechDocument, TechModelType>('TechList', TechSchema);
+

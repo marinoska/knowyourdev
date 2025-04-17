@@ -10,11 +10,11 @@ export type UploadTechProfileTechnologiesEntry = {
     recentMonths?: number;
     name: string;
     trend: TrendType;
+    popularity: number;
     category: CategoryType;
     scope: ScopeType;
     inSkillsSection?: boolean;
     inProfileSection?: boolean;
-
 };
 
 export type UploadTechProfileTechnologiesJobEntry = {
