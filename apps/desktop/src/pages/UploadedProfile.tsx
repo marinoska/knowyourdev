@@ -49,7 +49,9 @@ const getTabItems = (): TabItem[] => ([
     },
     {
         label: "Tech insights",
-        content: <TechPopularityTimelineChart/>,
+        content: <Stack gap={6}>
+            <TechPopularityTimelineChart/>
+        </Stack>,
     },
 ]);
 

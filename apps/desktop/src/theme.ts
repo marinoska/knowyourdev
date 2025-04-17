@@ -20,8 +20,9 @@ declare module '@mui/joy/Button' {
     }
 }
 
-const DarkBlue = '#003366';
-const DeepGreen = '#007750';
+export const DarkBlue = '#003366';
+export const Blue = '#004080';
+export const DeepGreen = '#007750';
 
 const theme = extendTheme({
     fontSize: {
@@ -59,14 +60,14 @@ const theme = extendTheme({
                 },
                 secondary: {
                     solidBg: DarkBlue,       // Normal primary action button background
-                    solidHoverBg: '#004080',   // Slightly lighter for hover state
+                    solidHoverBg: Blue,   // Slightly lighter for hover state
                     solidActiveBg: '#002244',  // Slightly darker for active state
 // @ts-ignore
                     solidColor: '#FFFFFF',    // Text color for the button
                 },
                 background: {
                     level2: DarkBlue, // New sidebar color (Dark Blue)
-                    level1: '#004480', // New sidebar color (Dark Blue)
+                    level1: Blue, // New sidebar color (Dark Blue)
                     body: '#F0F0F5', // Default body background color
                     surface: '#ffffff', // Background for surfaces like cards or sheets
                 },

@@ -1,27 +1,61 @@
 import { useFilteredTechnologies } from "@/pages/Analisys/Chart/Core/useFilteredTechnologies.ts";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { ChartContainer } from "@/pages/Analisys/Chart/Components/ChartContainer.tsx";
 import { ScopeSelect } from "@/pages/Analisys/Chart/Components/ScopeSelect.tsx";
 import { TimelineChart } from "@/pages/Analisys/Chart/Components/TimelineChart.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
+import { TREND_MAP, TrendType } from "@kyd/common/api";
+import { TechProfile } from "@/api/query/types.ts";
+import Typography from "@mui/joy/Typography";
+import { DeepGreenLegendColor, GreenLegendColor, NiceBlue, RedLegendColor, YellowLegendColor } from "@/utils/const.ts";
 
 const PopularityMapping: Record<number, string> = {
-    20: 'Very Low',
-    40: 'Low',
-    60: 'Medium',
-    80: 'High',
-    100: 'Very High',
-}
+    15: 'Uncommon',
+    30: 'Less popular',
+    50: 'Moderately popular',
+    80: 'Very popular',
+    100: 'Extremely popular',
+} as const;
+
+const TrendMapping: Record<TrendType, string> = {
+    SD: 'Strong declining',
+    D: 'Declining',
+    S: 'Steady',
+    T: 'Trending',
+    HT: 'Highly trending',
+} as const;
+
+const Colors = [RedLegendColor, YellowLegendColor, NiceBlue, GreenLegendColor, DeepGreenLegendColor]
+const PopularityColors = Object.values(PopularityMapping).reduce((acc, label, index) => {
+    return {...acc, [label]: Colors[index]};
+}, {})
+const TrendColors = Object.values(TrendMapping).reduce((acc, label, index) => {
+    return {...acc, [label]: Colors[index]};
+}, {})
 
 const getPopularityLabel = (popularity: number) => {
     for (const limit of Object.keys(PopularityMapping).map(Number)) {
         if (popularity <= limit) {
-            return PopularityMapping[limit];
+            const label = PopularityMapping[limit]
+            // @ts-ignore
+            return {label, color: PopularityColors[label]};
         }
     }
 }
 
+const sortByPopularity = (a: TechProfile, b: TechProfile) => b.popularity - a.popularity
+const getTrendLabel = (trend: TrendType) => {
+    const label = TrendMapping[trend];
+    // @ts-ignore
+    return {label, color: TrendColors[label]};
+}
+const sortByTrend = (a: TechProfile, b: TechProfile) => {
+    if (TREND_MAP[a.trend] === TREND_MAP[b.trend]) return 0;
+    return TREND_MAP[a.trend] < TREND_MAP[b.trend] ? 1 : -1;
+}
+
 export const TechPopularityTimelineChart = () => {
+
     const {
         allTechnologies,
         filteredTechnologies,
@@ -34,17 +68,23 @@ export const TechPopularityTimelineChart = () => {
         setShowKeyTechOnly(true);
     }, [setShowKeyTechOnly]);
 
-    const chartData = useMemo(() => {
+    const createChartData = useCallback(({fieldName}: { fieldName: 'popularity' | 'trend' }) => {
+        const getLabelFn = fieldName === 'popularity' ? getPopularityLabel : getTrendLabel;
+        const sortFn = fieldName === 'popularity' ? sortByPopularity : sortByTrend;
         if (!filteredTechnologies?.length) {
-            return [];
+            return {chartDats: [], colors: []};
         }
 
-        const data = filteredTechnologies.sort((a, b) => b.popularity - a.popularity)
+        const colorsSet = new Set<string>();
+        const data = filteredTechnologies.sort(sortFn)
             .map((tech) => {
-                const popularity = getPopularityLabel(tech.popularity);
+                // @ts-ignore
+                const {label, color} = getLabelFn(tech[fieldName]);
+                colorsSet.add(color);
+                console.log(label, color);
                 return tech.jobs.map(job => (
                     [
-                        popularity,
+                        label,
                         tech.name,
                         job.start,
                         job.end,
@@ -52,14 +92,31 @@ export const TechPopularityTimelineChart = () => {
                 ));
             }).flat();
 
-        return [
-            [
-                "Popularity", "Tech", "Start", "End",
+        // colors in the correct order
+        const colors = Array.from(colorsSet)
+
+        return {
+            chartData: [
+                [
+                    "fieldName", "Tech", "Start", "End",
+                ],
+                // @ts-ignore
+                ...data
             ],
-            // @ts-ignore
-            ...data
-        ]
+            colors
+        }
     }, [filteredTechnologies]);
+
+    const [popChartData, trendChartData, popColors, trendColors] = useMemo(() => {
+        const {chartData: popChartData, colors: popColors} = createChartData({fieldName: 'popularity'});
+        const {chartData: trendChartData, colors: trendColors} = createChartData({fieldName: 'trend'});
+        return [
+            popChartData,
+            trendChartData,
+            popColors,
+            trendColors
+        ]
+    }, [createChartData]);
 
     const options = useMemo(() => {
         return {
@@ -68,7 +125,7 @@ export const TechPopularityTimelineChart = () => {
             },
         };
     }, []);
-
+    console.log({popColors});
     return (
         <ChartContainer title='Key tech popularity timeline'>
             <ScopeSelect
@@ -79,7 +136,10 @@ export const TechPopularityTimelineChart = () => {
                 sx={{width: 200}}
             />
 
-            <TimelineChart chartData={chartData} options={options}/>
+            <Typography level="h4">World usage</Typography>
+            <TimelineChart chartData={popChartData} options={{...options, colors: popColors}}/>
+            <Typography level="h4">Trends</Typography>
+            <TimelineChart chartData={trendChartData} options={{...options, colors: trendColors}}/>
         </ChartContainer>
     );
 }
