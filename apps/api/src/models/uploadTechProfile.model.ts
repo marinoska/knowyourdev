@@ -8,6 +8,7 @@ import {
     TREND,
     UploadTechProfileType
 } from "@kyd/common/api";
+import { TUploadDocument } from "@/models/upload.model.js";
 
 const JobSchema =
     {
@@ -84,15 +85,15 @@ const UploadTechProfileTechnologiesEntrySchema = new Schema<UploadTechProfileTec
         _id: false, // No separate _id for sub-documents;
     });
 
-export type UploadTechProfileDocumentType = Document & UploadTechProfileType & {
-    uploadRef: Schema.Types.ObjectId;
+export type TUploadTechProfileDocument = Document & UploadTechProfileType & {
+    uploadRef: Schema.Types.ObjectId | TUploadDocument;
     createdAt: Date;
     updatedAt: Date;
 };
 
-export type UploadTechProfileModelType = Model<UploadTechProfileDocumentType>;
+export type TUploadTechProfileModel = Model<TUploadTechProfileDocument>;
 
-const UploadTechProfileSchema = new Schema<UploadTechProfileDocumentType, UploadTechProfileModelType>(
+const UploadTechProfileSchema = new Schema<TUploadTechProfileDocument, TUploadTechProfileModel>(
     {
         uploadRef: {
             type: Schema.Types.ObjectId, // Refers to ObjectId type in MongoDB
@@ -108,4 +109,4 @@ const UploadTechProfileSchema = new Schema<UploadTechProfileDocumentType, Upload
     {timestamps: true, collection: 'UploadTechProfile'} // Automatically adds createdAt and updatedAt
 );
 
-export const UploadTechProfileModel = model<UploadTechProfileDocumentType, UploadTechProfileModelType>('UploadTechProfile', UploadTechProfileSchema);
+export const UploadTechProfileModel = model<TUploadTechProfileDocument, TUploadTechProfileModel>('UploadTechProfile', UploadTechProfileSchema);

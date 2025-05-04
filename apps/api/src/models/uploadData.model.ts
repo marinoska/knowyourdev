@@ -1,11 +1,13 @@
 import { Document, Model, model, Schema } from 'mongoose';
 import { ExtractedCVData, JobEntry, TechnologyEntry } from "@kyd/common/api";
+import { TUploadDocument } from "@/models/upload.model.js";
 
 
-export type UploadDataDocumentType = Document & ExtractedCVData & {
-    uploadRef: Schema.Types.ObjectId;
+export type TUploadDataDocument = Document & ExtractedCVData & {
+    uploadRef: Schema.Types.ObjectId | TUploadDocument;
 };
-export type UploadDataModelType = Model<UploadDataDocumentType>;
+
+export type TUploadDataModel = Model<TUploadDataDocument>;
 
 const TechnologyEntrySchema = new Schema<TechnologyEntry>({
     original: {type: String, required: true},
@@ -50,7 +52,7 @@ const JobEntrySchema = new Schema<JobEntry>(
         ],
     });
 
-const uploadDataSchema = new Schema<UploadDataDocumentType, UploadDataModelType>(
+const uploadDataSchema = new Schema<TUploadDataDocument, TUploadDataModel>(
     {
         uploadRef: {
             type: Schema.Types.ObjectId, // Refers to ObjectId type in MongoDB
@@ -88,4 +90,4 @@ const uploadDataSchema = new Schema<UploadDataDocumentType, UploadDataModelType>
     {timestamps: true, collection: 'UploadData', autoIndex: true}
 );
 
-export const UploadDataModel = model<UploadDataDocumentType, UploadDataModelType>('UploadData', uploadDataSchema);
+export const UploadDataModel = model<TUploadDataDocument, TUploadDataModel>('UploadData', uploadDataSchema);

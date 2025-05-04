@@ -3,6 +3,8 @@ export type UploadItem = {
     _id: string;
     name: string;
     role: string;
+    fullName: string;
+    position: string;
     size: number;
     parseStatus: ParsedStatus;
     createdAt: string;
