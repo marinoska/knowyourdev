@@ -1,53 +1,40 @@
 import { Joi, Segments } from 'celebrate';
 
 import { Request, Response, RequestHandler } from 'express';
-import { TUploadDocument, UploadModel } from "@/models/upload.model.js";
 import { GetUploadsListQueryParams, GetUploadsListResponse } from "@kyd/common/api";
-import { UploadDataModel } from "@/models/uploadData.model.js";
+import { getUploadsWithDetails } from "@/models/upload.repository.js";
 
-// Define the controller
 export const getUploadsListController: RequestHandler<
     any,
     GetUploadsListResponse,
     any,
     GetUploadsListQueryParams
 > = async (req: Request<any, GetUploadsListResponse, any, GetUploadsListQueryParams>, res: Response<GetUploadsListResponse>) => {
-    const {page, limit} = req.query;
+    const {page = 1, limit = 10} = req.query;
 
-    const skip = (page - 1) * limit;
-
-    const uploadDataRecords = await UploadDataModel.find()
-        .sort({createdAt: -1})
-        .skip(skip)
-        .limit(limit)
-        .select('fullName position uploadRef')
-        .populate({
-            path: 'uploadRef',
-            select: 'metadata.size metadata.name metadata.role size parseStatus createdAt', // Fetch required fields from Upload
-        })
-        .lean();
-
-    const totalRecords = await UploadModel.countDocuments();
-
+    const {uploads, totalRecords, totalPages, currentPage} = await getUploadsWithDetails({
+        page: Number(page),
+        limit: Number(limit),
+    });
 
     const responseData = {
-        uploads: uploadDataRecords.map((record) => {
-            const uploadRef = <TUploadDocument>record.uploadRef;
-
+        uploads: uploads.map((record) => {
             return {
-                _id: uploadRef?._id?.toString(),
-                name: uploadRef?.metadata?.name || '',
-                role: uploadRef?.metadata?.role || '',
-                size: uploadRef?.size || '',
-                parseStatus: uploadRef?.parseStatus,
-                createdAt: uploadRef?.createdAt?.toISOString(),
-                fullName: record.fullName || '',
-                position: record.position || '',
+                _id: record._id?.toString(),
+                name: record.metadata?.name || '',
+                role: record.metadata?.role,
+                size: record.size,
+                parseStatus: record.parseStatus,
+                hash: record.hash,
+                contentType: record.contentType,
+                createdAt: record.createdAt?.toISOString(),
+                fullName: record.uploadData?.fullName,
+                position: record.uploadData?.position,
             }
         }),
         totalRecords,
-        currentPage: page,
-        totalPages: Math.ceil(totalRecords / limit),
+        currentPage,
+        totalPages,
     };
 
 

@@ -2,9 +2,11 @@ export type ParsedStatus = 'pending' | 'failed' | 'processed';
 export type UploadItem = {
     _id: string;
     name: string;
-    role: string;
-    fullName: string;
-    position: string;
+    role: string | null;
+    fullName: string | null;
+    position: string | null;
+    hash: string;
+    contentType: string
     size: number;
     parseStatus: ParsedStatus;
     createdAt: string;

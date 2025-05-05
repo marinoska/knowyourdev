@@ -31,9 +31,10 @@ export const UploadedItem = ({item}: { item: UploadItem }) => {
         }
     };
 
+    const {role, name, fullName, position, createdAt, parseStatus, _id} = item;
     return (
-        <Box key={item._id} onClick={
-            hasDetails ? () => navigate(`/uploads/${item._id}`) : undefined
+        <Box key={_id} onClick={
+            hasDetails ? () => navigate(`/uploads/${_id}`) : undefined
         }
              sx={
                  hasDetails ? {...style, ...hoverStyle} : {...style}
@@ -42,11 +43,11 @@ export const UploadedItem = ({item}: { item: UploadItem }) => {
                 <Typography level="body-md"><DocumentIcon/></Typography>
                 <Stack>
 
-                    <Typography>{item.name} {item.role && ` - ${item.role}`}</Typography>
+                    <Typography>{fullName ? fullName : name} {position && ` - ${position}`}</Typography>
                     <Typography level="body-xs">Uploaded
-                        on {format(new Date(item.createdAt), "MMMM d, yyyy")}</Typography>
+                        on {format(new Date(createdAt), "MMMM d, yyyy")} {role && ` for ${role}`} ({name})</Typography>
                 </Stack>
-                <Typography sx={{marginLeft: "auto"}} level="body-md">{StatusIcon[item.parseStatus]}</Typography>
+                <Typography sx={{marginLeft: "auto"}} level="body-md">{StatusIcon[parseStatus]}</Typography>
             </Stack>
         </Box>
     )

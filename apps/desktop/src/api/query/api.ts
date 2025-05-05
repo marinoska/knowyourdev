@@ -18,9 +18,15 @@ export const uploadCV = ({file, name, role}: DocumentUploadRequestType) => {
     });
 };
 
-export const listUploads = async () => {
-    const response = await apiClient.get<GetUploadsListResponse>('/document/uploads');
-    return response?.uploads || response;
+export type ListUploadsParams = {
+    page: number;
+    limit: number;
+};
+
+export const listUploads = async ({page, limit}: ListUploadsParams) => {
+    return apiClient.get<GetUploadsListResponse>("/document/uploads", {
+        params: {page, limit},
+    });
 }
 
 export const getUploadProfile = async ({uploadId}: { uploadId: string }) => {

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { uploadsKeys } from "./keys.ts";
 import { getUploadProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
@@ -6,15 +6,23 @@ import { useEffect, useState } from "react";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
 import { endOfMonth, startOfMonth } from "date-fns";
 
-export const useUploadsQuery = () => {
+export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) => {
     const [showError, setShowError] = useState(false);
-    const {data, isError, error, ...rest} = useQuery(
+
+    const {data, isError, error, ...rest} = useInfiniteQuery(
         {
-            queryKey: uploadsKeys.list(), // we dont use the query params for now so default it to 0
-            queryFn: () => listUploads(),
+            queryKey: uploadsKeys.paginate(page, limit),
+            queryFn: ({pageParam}) => listUploads({page: pageParam, limit}),
+            initialPageParam: 1,
             retry: TIMES_THREE,
+            getNextPageParam: (lastPage) =>
+                lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined,
+            getPreviousPageParam: (firstPage) =>
+                firstPage.currentPage > 1 ? firstPage.currentPage - 1 : undefined,
         },
     );
+
+    console.log('pages:', data?.pages);
 
     useEffect(() => {
         if (isError) {
