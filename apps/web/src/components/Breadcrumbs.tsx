@@ -8,7 +8,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 const routeMapping: { [key: string]: string } = {
     dashboard: 'Dashboard',
-    uploads: 'Uploaded CVs',
+    uploads: 'CV List',
 };
 
 const BreadcrumbsComponent = () => {

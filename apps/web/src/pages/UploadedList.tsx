@@ -12,15 +12,15 @@ import { useMemo } from "react";
 export const UploadedList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
-    const {data, isLoading, isError, showError, dismissError} = useUploadsQuery({page: 1, limit: 3});
+    const {data: uploads, isLoading, isError, showError, dismissError} = useUploadsQuery({page: 1, limit: 3});
 
-    const header = useMemo(() => (<PageHeader title="Uploaded CVs" buttonLabel="Upload CV" icon={UploadFile}
+    const header = useMemo(() => (<PageHeader title="Uploaded CV list" buttonLabel="Upload CV" icon={UploadFile}
                                               action={() => setOpenUploadModal(true)}/>), [])
     return (<>
         {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
-        <BasePage isLoading={isLoading} isError={isError} showEmpty={!data?.pages?.length} header={header}>
+        <BasePage isLoading={isLoading} isError={isError} showEmpty={!uploads?.length} header={header}>
             <Stack spacing={2}>
-                {data?.pages[0].uploads?.map((upload) => (
+                {uploads?.map((upload) => (
                     <UploadedItem key={upload._id} item={upload}/>
                 ))}
             </Stack>

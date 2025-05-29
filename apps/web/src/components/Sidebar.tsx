@@ -2,26 +2,21 @@ import React from "react";
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Card from '@mui/joy/Card';
 import Divider from '@mui/joy/Divider';
 import IconButton from '@mui/joy/IconButton';
-import LinearProgress from '@mui/joy/LinearProgress';
 import List from '@mui/joy/List';
 import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
-import Stack from '@mui/joy/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DashboardIcon from '@mui/icons-material/BarChart';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { closeSidebar } from '../utils';
+import KnowYourDevIcon from "./KnowYourDevIcon";
 
 // Navigation Configuration
 const routes = [
@@ -32,7 +27,7 @@ const routes = [
     },
     {
         path: '/uploads',
-        label: 'Uploaded CVs',
+        label: 'CV List',
         icon: UploadFileIcon
     },
     {
@@ -135,11 +130,18 @@ export default function Sidebar() {
                 }}
                 onClick={() => closeSidebar()}
             />
-            <Box sx={{display: 'flex', gap: 1, pt: 2, pb: 2, alignItems: 'center'}}>
-                <IconButton variant="soft" size="sm">
-                    <BrightnessAutoRoundedIcon/>
-                </IconButton>
-                <Typography level="title-lg">KnowYourDev.</Typography>
+            <Box sx={{display: 'flex', gap: 1.5, pt: 2, pl: 2, alignItems: 'center'}}>
+                {/*<IconButton variant="plain" size="lg" sx={{*/}
+                {/*    p: 0,*/}
+                {/*    m: 0,*/}
+                {/*    // minWidth: 'unset',*/}
+                {/*    // width: 32,*/}
+                {/*    // height: 32,*/}
+                {/*    borderRadius: '50%',*/}
+                {/*}} component={RouterLink} to="#as-link">*/}
+                {/*</IconButton>*/}
+                <KnowYourDevIcon fontSize="xl4"/>
+                <Typography level="title-lg">KnowYourDev</Typography>
             </Box>
             <Box
                 sx={{
@@ -166,39 +168,38 @@ export default function Sidebar() {
                     <Divider/>
                 </List>
 
-                <Box sx={{p: 3}}>
+                {/*<Box sx={{p: 3}}>*/}
 
-                    <Card
-                        invertedColors
-                        variant="soft"
-                        color="warning"
-                        size="sm"
-                        sx={{boxShadow: 'none'}}
-                    >
-                        <Stack
-                            direction="row"
-                            sx={{justifyContent: 'space-between', alignItems: 'center'}}
-                        >
-                            <Typography level="title-sm">Used space</Typography>
-                            <IconButton size="sm">
-                                <CloseRoundedIcon/>
-                            </IconButton>
-                        </Stack>
-                        <Typography level="body-xs">
-                            Your team has used 80% of your available space. Need more?
-                        </Typography>
-                        <LinearProgress variant="outlined" value={80} determinate sx={{my: 1}}/>
-                        <Button size="sm" variant="solid">
-                            Upgrade plan
-                        </Button>
-                    </Card>
-                </Box>
+                {/*    <Card*/}
+                {/*        invertedColors*/}
+                {/*        variant="soft"*/}
+                {/*        color="warning"*/}
+                {/*        size="sm"*/}
+                {/*        sx={{boxShadow: 'none'}}*/}
+                {/*    >*/}
+                {/*        <Stack*/}
+                {/*            direction="row"*/}
+                {/*            sx={{justifyContent: 'space-between', alignItems: 'center'}}*/}
+                {/*        >*/}
+                {/*            <Typography level="title-sm">Used space</Typography>*/}
+                {/*            <IconButton size="sm">*/}
+                {/*                <CloseRoundedIcon/>*/}
+                {/*            </IconButton>*/}
+                {/*        </Stack>*/}
+                {/*        <Typography level="body-xs">*/}
+                {/*            Your team has used 80% of your available space. Need more?*/}
+                {/*        </Typography>*/}
+                {/*        <LinearProgress variant="outlined" value={80} determinate sx={{my: 1}}/>*/}
+                {/*        <Button size="sm" variant="solid">*/}
+                {/*            Upgrade plan*/}
+                {/*        </Button>*/}
+                {/*    </Card>*/}
+                {/*</Box>*/}
                 <Divider/>
                 <Box sx={{display: 'flex', gap: 1, p: 2, alignItems: 'center'}}>
                     <Avatar
                         variant="outlined"
-                        size="sm"
-                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
+                        size="md"
                     />
                     <Box sx={{minWidth: 0, flex: 1}}>
                         <Typography level="title-sm">Siriwat K.</Typography>

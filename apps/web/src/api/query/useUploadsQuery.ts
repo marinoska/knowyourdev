@@ -11,7 +11,7 @@ export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) 
 
     const {data, isError, error, ...rest} = useInfiniteQuery(
         {
-            queryKey: uploadsKeys.paginate(page, limit),
+            queryKey: uploadsKeys.list(),
             queryFn: ({pageParam}) => listUploads({page: pageParam, limit}),
             initialPageParam: 1,
             retry: TIMES_THREE,
@@ -23,10 +23,11 @@ export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) 
     );
 
     console.log('pages:', data?.pages);
+    const allData = data?.pages.flatMap((page) => page.uploads) || [];
 
     useEffect(() => {
         if (isError) {
-            console.error(error);
+            console.error('Upload Error:', error);
             setShowError(true);
         }
     }, [isError, error])
@@ -34,7 +35,7 @@ export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) 
     // if (data) console.log({data});
 
     return {
-        data,
+        data: allData,
         isError,
         error,
         showError,
