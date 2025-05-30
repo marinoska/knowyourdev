@@ -12,14 +12,14 @@ export const BasePage = ({
                              component: Component = Sheet,
                              header
                          }:
-                             {
-                                 children: React.ReactNode,
-                                 header: React.ReactNode,
-                                 isError: boolean,
-                                 isLoading: boolean,
-                                 showEmpty: boolean,
-                                 component?: React.ElementType,
-                             }) => {
+                         {
+                             children: React.ReactNode,
+                             header: React.ReactNode,
+                             isError: boolean,
+                             isLoading: boolean,
+                             showEmpty: boolean,
+                             component?: React.ElementType,
+                         }) => {
     if (isLoading) {
         return <CenteredLoader/>;
     }
@@ -27,7 +27,7 @@ export const BasePage = ({
         <Box
             sx={{
                 maxHeight: "100vh", // Restrict height to viewport
-                overflow: "auto", // Enable scrolling when content overflows
+                overflow: "hidden", // Enable scrolling when content overflows
                 minWidth: {
                     xs: 'auto', // No minimum width on small screens
                     md: '900px', // Minimum width of 800px for desktop (from "md" breakpoint)
@@ -35,13 +35,11 @@ export const BasePage = ({
                 borderRadius: "sm",
             }}>
             {header}
-            <Component
-                sx={{
-                    p: 3,
-                }}
-            >
-                {showEmpty ? <EmptyPage isError={isError}/> : children}
-            </Component>
+            <Box sx={{height: "calc(100vh - 100px)", overflow: "auto", padding: 2}}>
+                <Component sx={{p: 3}}>
+                    {showEmpty ? <EmptyPage isError={isError}/> : children}
+                </Component>
+            </Box>
         </Box>
     )
 }

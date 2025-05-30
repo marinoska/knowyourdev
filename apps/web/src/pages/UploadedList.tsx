@@ -8,11 +8,22 @@ import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useMemo } from "react";
+import { CircularProgress } from "@mui/joy";
+import Button from "@mui/joy/Button";
 
 export const UploadedList = () => {
     const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
-    const {data: uploads, isLoading, isError, showError, dismissError} = useUploadsQuery({page: 1, limit: 3});
+    const {
+        data: uploads,
+        isLoading,
+        isError,
+        showError,
+        dismissError,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useUploadsQuery({page: 1, limit: 300});
 
     const header = useMemo(() => (<PageHeader title="Uploaded CV list" buttonLabel="Upload CV" icon={UploadFile}
                                               action={() => setOpenUploadModal(true)}/>), [])
@@ -24,6 +35,25 @@ export const UploadedList = () => {
                     <UploadedItem key={upload._id} item={upload}/>
                 ))}
             </Stack>
+
+            {hasNextPage && (
+                <Stack direction="row" justifyContent="center" padding={2}>
+                    <Button
+                        variant="solid"
+                        onClick={() => fetchNextPage()}
+                        disabled={isFetchingNextPage}
+                    >
+                        {isFetchingNextPage ? (
+                            <>
+                                <CircularProgress size="sm" sx={{marginRight: 1}}/>
+                                Loading...
+                            </>
+                        ) : (
+                            "Load More"
+                        )}
+                    </Button>
+                </Stack>
+            )}
 
         </BasePage>
         {openUploadModal && <UploadModal setOpen={setOpenUploadModal} open={openUploadModal}/>}
