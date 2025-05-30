@@ -13,7 +13,7 @@ export type UploadItem = {
 };
 
 export type GetUploadsListResponse = {
-    uploads: UploadItem[];
+    pages: Array<{ uploads: UploadItem[] }>;
     totalRecords: number;
     currentPage: number;
     totalPages: number;

@@ -8,10 +8,10 @@ import { endOfMonth, startOfMonth } from "date-fns";
 
 export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) => {
     const [showError, setShowError] = useState(false);
-
+    console.log("useUploadsQuery", uploadsKeys.paginate(page));
     const {data, isError, error, ...rest} = useInfiniteQuery(
         {
-            queryKey: uploadsKeys.list(),
+            queryKey: uploadsKeys.paginate(page),
             queryFn: ({pageParam}) => listUploads({page: pageParam, limit}),
             initialPageParam: 1,
             retry: TIMES_THREE,
@@ -22,7 +22,6 @@ export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) 
         },
     );
 
-    console.log('pages:', data?.pages);
     const allData = data?.pages.flatMap((page) => page.uploads) || [];
 
     useEffect(() => {
@@ -31,8 +30,6 @@ export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) 
             setShowError(true);
         }
     }, [isError, error])
-
-    // if (data) console.log({data});
 
     return {
         data: allData,
