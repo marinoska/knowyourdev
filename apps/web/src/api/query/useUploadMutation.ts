@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { uploadCV } from "./api.js";
-import { DocumentUploadRequestType, DocumentUploadResponse, GetUploadsListResponse } from "@kyd/common/api";
+import { InfiniteUploadList, uploadCV } from "./api.js";
+import { DocumentUploadRequestType, DocumentUploadResponse } from "@kyd/common/api";
 import { MAXIMUM_UPLOAD_SIZE_BYTES } from "@/utils/const.ts";
 import { uploadsKeys } from "@/api/query/keys.ts";
-
 
 export const useUploadMutation = () => {
     const queryClient = useQueryClient();
@@ -18,28 +17,25 @@ export const useUploadMutation = () => {
                 void queryClient.setQueryData(
                     uploadsKeys.paginate(1),
 
-                    (uploadsPages: GetUploadsListResponse | null) => {
+                    (uploadsPages: InfiniteUploadList | null) => {
 
-                        console.log("Uploads", uploadsPages);
-                        if (!uploadsPages) return uploadsPages; // If no data exists yet, return it untouched
+                        if (!uploadsPages) return uploadsPages;
 
                         return {
-                            ...uploadsPages, // Keep the overall structure of the data
+                            ...uploadsPages,
                             pages: uploadsPages.pages.map((page, index) => {
                                 // Only modify the first page (index 0)
                                 if (index === 0) {
                                     return {
                                         ...page,
-                                        uploads: [newUpload, ...page.uploads], // Prepend the new upload to the first page
+                                        uploads: [newUpload, ...page.uploads],
                                     };
                                 }
-                                return page; // Leave other pages unchanged
+                                return page;
                             }),
                         };
 
-
-                    }
-                )
+                    })
             }
         }
     );

@@ -21,7 +21,7 @@ export default function KnowYourDevIcon(props: React.ComponentProps<typeof SvgIc
             {/* White sector from 0° to 35° */}
             <path
                 d="
-          M 40 50
+          M 50 50
           L 95 50
           A 45 45 0 0 1 86.8 23.6
           Z

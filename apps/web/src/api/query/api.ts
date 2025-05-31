@@ -3,8 +3,11 @@ import {
     DocumentUploadRequestType,
     DocumentUploadResponse,
     GetUploadsListResponse,
+    TUploadsPage,
+    UploadItem,
     UploadTechProfileResponse
 } from "@kyd/common/api";
+import { InfiniteData } from "@tanstack/react-query";
 
 export const uploadCV = ({file, name, role}: DocumentUploadRequestType) => {
     const formData = new FormData();
@@ -18,12 +21,14 @@ export const uploadCV = ({file, name, role}: DocumentUploadRequestType) => {
     });
 };
 
-export type ListUploadsParams = {
+export type UploadsListParams = {
     page: number;
     limit: number;
 };
 
-export const listUploads = async ({page, limit}: ListUploadsParams) => {
+export type InfiniteUploadList = InfiniteData<TUploadsPage>;
+
+export const listUploads = async ({page, limit}: UploadsListParams) => {
     return apiClient.get<GetUploadsListResponse>("/document/uploads", {
         params: {page, limit},
     });

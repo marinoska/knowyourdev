@@ -12,8 +12,10 @@ export type UploadItem = {
     createdAt: string;
 };
 
+export type TUploadsPage = { uploads: UploadItem[] };
+
 export type GetUploadsListResponse = {
-    pages: Array<{ uploads: UploadItem[] }>;
+    pages: TUploadsPage[];
     totalRecords: number;
     currentPage: number;
     totalPages: number;
