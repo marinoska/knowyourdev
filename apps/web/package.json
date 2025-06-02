@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.3.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@kyd/common": "workspace:*",
     "@mui/icons-material": "^6.4.7",
     "@mui/joy": "5.0.0-beta.51",
     "@tanstack/react-query": "^5.67.2",
@@ -24,7 +26,6 @@
     "react-google-charts": "^5.2.1",
     "react-router-dom": "^7.3.0",
     "recharts": "^2.15.1",
-    "@kyd/common": "workspace:*",
     "uuid": "^11.0.5"
   },
   "devDependencies": {

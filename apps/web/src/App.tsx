@@ -7,6 +7,10 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { UploadedList } from "./pages/UploadedList.tsx";
 import { UploadedProfile } from "@/pages/UploadedProfile.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
+import Button from "@mui/joy/Button";
+import KnowYourDevIcon from "@/components/KnowYourDevIcon.tsx";
 
 const NotFound = () => {
     return <div>Not Found</div>
@@ -17,6 +21,17 @@ const Dashboard = () => {
 }
 
 export default function App() {
+    const {loginWithRedirect, isAuthenticated} = useAuth0();
+
+    if (!isAuthenticated) {
+        return (
+            <Box alignItems="center" width="100%" display="flex" justifyContent="center" pt={10}>
+                <Button size="lg" onClick={() => loginWithRedirect()} startDecorator={<KnowYourDevIcon/>}>
+                    Log In
+                </Button>
+            </Box>
+        );
+    }
 
     return (
         <CssVarsProvider theme={theme} defaultMode="light" disableTransitionOnChange>

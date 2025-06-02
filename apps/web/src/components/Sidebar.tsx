@@ -17,6 +17,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { closeSidebar } from '../utils';
 import KnowYourDevIcon from "./KnowYourDevIcon";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // Navigation Configuration
 const routes = [
@@ -73,6 +74,8 @@ const NavigationItem = ({
 
 export default function Sidebar() {
     const location = useLocation();
+    const {logout, user} = useAuth0();
+
     return (
         <Sheet
             className="Sidebar"
@@ -202,10 +205,18 @@ export default function Sidebar() {
                         size="md"
                     />
                     <Box sx={{minWidth: 0, flex: 1}}>
-                        <Typography level="title-sm">Siriwat K.</Typography>
-                        <Typography level="body-xs">siriwatk@test.com</Typography>
+                        <Typography level="title-sm">{user?.name}</Typography>
+                        <Typography level="body-xs">{user?.email}</Typography>
                     </Box>
-                    <IconButton size="sm" variant="plain" color="neutral">
+                    <IconButton size="md" variant="plain" color="neutral"
+                                sx={{
+                                    '&:hover': {
+                                        backgroundColor: 'transparent', // Or any option above
+                                        transition: 'transform 0.3s ease',
+                                        transform: 'translateX(4px)'
+                                    }
+                                }}
+                                onClick={() => logout()}>
                         <LogoutRoundedIcon/>
                     </IconButton>
                 </Box>
