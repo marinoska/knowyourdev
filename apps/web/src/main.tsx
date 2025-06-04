@@ -12,14 +12,18 @@ import { Auth0Provider } from "@auth0/auth0-react";
 
 const queryClient = new QueryClient();
 
+const auth0Domain = import.meta.env.VITE_AUTH0_DOMAIN; // Auth0 domain from Vite env
+const auth0ClientId = import.meta.env.VITE_AUTH0_CLIENT_ID; // Add this to your .env file
+
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <Auth0Provider
-            domain="mo-14.eu.auth0.com"
-            clientId="LBfq1eop6G9I44e6ZBwfVRIy2WOLJdAp"
+            domain={auth0Domain}
+            clientId={auth0ClientId}
             authorizationParams={{
-                redirect_uri: "http://localhost:5173",
-                // redirect_uri: window.location.origin,
+                redirect_uri: window.location.origin,
+                audience: import.meta.env.VITE_KYD_API_AUDIENCE,
+                scope: 'openid profile email'
             }}
         >
             <QueryClientProvider client={queryClient}>

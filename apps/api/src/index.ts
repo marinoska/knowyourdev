@@ -11,11 +11,11 @@ const log = logger('Server');
 const key = fs.readFileSync('./src/cert/key.pem');
 const cert = fs.readFileSync('./src/cert/cert.pem');
 
-const PORT = env('PORT');
+const PORT = Number(env('PORT'));
 
 const server = https.createServer({key, cert}, app);
 
-server.listen(PORT, () => log.info(`⚡️ Server is running at https://localhost:${PORT}`));
+server.listen(PORT, 'knowyourdev.local', () => log.info(`⚡️ Server is running at https://localhost:${PORT}`));
 
 const gracefulExit = () => {
     log.info('Server is running at http://localhost:${PORT} Application is being terminated');

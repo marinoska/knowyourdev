@@ -1,5 +1,7 @@
 import { stringify } from 'qs';
 
+export const UNAUTHORIZED = 401;
+
 export const CONTENT_TYPE = 'Content-Type';
 const defaultHeaders = {
     [CONTENT_TYPE]: 'application/json'
@@ -24,9 +26,15 @@ type PostParams = {
     isFormData?: boolean;
 };
 
+type ErrorOptions = {
+    host: string;
+    url: string;
+    status: number;
+};
+
 class Client {
     private authHeader: { Authorization?: string } = {};
-    private onError?: (options: object) => void;
+    private onError?: (options: ErrorOptions) => void;
 
     constructor(private readonly host: string) {
         if (!host) throw new Error("No remote host provided");
@@ -110,7 +118,7 @@ class Client {
         }
     }
 
-    public setOnError(callback: (options?: unknown) => void) {
+    public setOnError(callback: (options: ErrorOptions) => void) {
         this.onError = callback;
     }
 }
