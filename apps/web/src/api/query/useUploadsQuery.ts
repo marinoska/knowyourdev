@@ -10,26 +10,25 @@ import { GetUploadsListResponse } from "@kyd/common/api";
 export const useUploadsQuery = ({page, limit}: { page: number, limit: number }) => {
     const [showError, setShowError] = useState(false);
 
-    const {data, isError, error, ...rest} = useInfiniteQuery<GetUploadsListResponse>(
+    const {data, isError, error, ...rest} = useInfiniteQuery<GetUploadsListResponse, Error>(
         {
             queryKey: uploadsKeys.paginate(page),
-            queryFn: ({pageParam}) => listUploads({page: pageParam, limit}),
+            queryFn: ({pageParam}: { pageParam: number | unknown }) => listUploads({page: Number(pageParam), limit}),
             initialPageParam: 1,
             retry: TIMES_THREE,
-            refetchInterval: ({state}) => {
-                const data = state.data as GetUploadsListResponse | undefined;
-                const allUploads = data?.pages.flatMap((page) => page.uploads) || [];
+            refetchInterval: (query) => {
+                const data = query.state.data;
+                const allUploads = data?.pages?.flatMap(page => page.uploads) || [];
                 const hasPendingUploads = allUploads.some((upload) => upload.parseStatus === "pending");
                 return hasPendingUploads ? 5000 : false; // Poll every 5 seconds if needed
             },
-            getNextPageParam: (lastPage) =>
+            getNextPageParam: lastPage =>
                 lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined,
             getPreviousPageParam: (firstPage) =>
                 firstPage.currentPage > 1 ? firstPage.currentPage - 1 : undefined,
         },
     );
 
-    // @ts-ignore
     const allData = data ? data.pages.flatMap((page) => page.uploads) : [];
 
     useEffect(() => {

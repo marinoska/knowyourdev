@@ -14,15 +14,11 @@ export const timelineTooltip = ({
                                     role,
                                     company,
                                     totalMonths,
-                                    start,
-                                    end,
                                     summary
                                 }: {
     role: string,
     company: string,
     totalMonths: number,
-    start: Date,
-    end: Date,
     summary: string
 }) => {
     const {years, months} = monthsToYearsAndMonths(totalMonths);

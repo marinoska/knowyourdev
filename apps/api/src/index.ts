@@ -15,7 +15,7 @@ const PORT = Number(env('PORT'));
 
 const server = https.createServer({key, cert}, app);
 
-server.listen(PORT, 'knowyourdev.local', () => log.info(`⚡️ Server is running at https://localhost:${PORT}`));
+server.listen(PORT, () => log.info(`⚡️ Server is running at https://localhost:${PORT}`));
 
 const gracefulExit = () => {
     log.info('Server is running at http://localhost:${PORT} Application is being terminated');

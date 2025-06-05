@@ -8,7 +8,8 @@ import routes from '@/routes/index.js';
 // Init Mongo connection
 import './mongo';
 import { globals } from './globals.js';
-import multer from "multer";
+import { auth, requiredScopes } from 'express-oauth2-jwt-bearer';
+import { env } from "@/app/env.js";
 
 const log = logger('Application');
 void globals.init();
@@ -32,7 +33,17 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
 
 const app = express();
-app.use(cors({origin: 'http://localhost:5173', credentials: true}));
+
+const checkJwt = auth({
+    audience: env('AUTH0_API_AUDIENCE'),
+    issuerBaseURL: env('AUTH0_API_ISSUER'),
+    tokenSigningAlg: 'RS256'
+});
+
+console.log('eee', env('AUTH0_API_AUDIENCE'));
+app.use(cors({origin: env('ALLOWED_ORIGIN'), credentials: true}));
+
+app.use(checkJwt);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

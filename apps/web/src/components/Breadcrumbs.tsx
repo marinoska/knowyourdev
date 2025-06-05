@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import Breadcrumbs from "@mui/joy/Breadcrumbs";
+import MUIBreadcrumbs from "@mui/joy/Breadcrumbs";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import Link from "@mui/joy/Link";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
@@ -28,7 +28,7 @@ const BreadcrumbsComponent = () => {
     }, [location]);
 
     return (
-        <Breadcrumbs
+        <MUIBreadcrumbs
             size="sm"
             separator={<ChevronRightRoundedIcon fontSize="small"/>}
             sx={{pl: 0}}
@@ -59,7 +59,8 @@ const BreadcrumbsComponent = () => {
                     </Link>
                 )
             )}
-        </Breadcrumbs>
+        </MUIBreadcrumbs>
     );
 };
+
 export const Breadcrumbs = BreadcrumbsComponent;

@@ -40,6 +40,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-async-errors": "^3.1.1",
+    "express-oauth2-jwt-bearer": "^1.6.1",
     "fs-extra": "^11.3.0",
     "langchain": "^0.3.15",
     "mammoth": "^1.9.0",

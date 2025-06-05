@@ -4,7 +4,6 @@ import {
     DocumentUploadResponse,
     GetUploadsListResponse,
     TUploadsPage,
-    UploadItem,
     UploadTechProfileResponse
 } from "@kyd/common/api";
 import { InfiniteData } from "@tanstack/react-query";

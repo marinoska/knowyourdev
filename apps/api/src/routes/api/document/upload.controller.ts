@@ -57,12 +57,6 @@ export const documentUploadController: DocumentUploadController = async (req: Do
     }
 
     const hash = createHash(buffer);
-    // const existingFile = await UploadModel.findOne({hash});
-    // if (existingFile) {
-    //     res.status(409).json({error: 'File already exists', fileId: existingFile._id});
-    //
-    //     return;
-    // }
 
     const newUpload: TUploadDocument = new UploadModel({
         originalName: originalname,
@@ -87,6 +81,7 @@ export const documentUploadController: DocumentUploadController = async (req: Do
         name: newUpload.metadata.name,
         role: newUpload.metadata.role,
         size: newUpload.size,
+        contentType: newUpload.contentType,
         parseStatus: newUpload.parseStatus,
         createdAt: newUpload.createdAt.toISOString()
     });

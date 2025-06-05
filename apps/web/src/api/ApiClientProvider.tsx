@@ -17,10 +17,15 @@ export function ApiClientProvider({children}: { children: ReactNode }) {
 
     const fetchAccessToken = useCallback(async () => {
         try {
-            const accessToken = await getAccessTokenSilently();
+            const accessToken = await getAccessTokenSilently({
+                authorizationParams: {
+                    audience: import.meta.env.VITE_AUTH0_API_AUDIENCE,
+                    // scope: 'openid profile email'
+                },
+                detailedResponse: true
+            });
 
-            console.log('Got access token:', accessToken);
-            client.setAccessToken(accessToken);
+            client.setAccessToken(accessToken.access_token);
         } catch (e) {
             console.error('Get access token error:', e);
             setError('API access error:' + (e instanceof Error ? e.message : e?.toString()));

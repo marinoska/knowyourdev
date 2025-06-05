@@ -143,7 +143,7 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
     enrich(updatedCV.skillSection.technologies, {inSkillsSection: true});
     enrich(updatedCV.profileSection.technologies, {inProfileSection: true});
 
-    const techProfileJobs = updatedCV.jobs.map<UploadTechProfileJobEntry>((job: JobEntry) => {
+    const techProfileJobs = updatedCV.jobs.map<UploadTechProfileJobEntry>((job) => {
         const technologies = job.technologies.map(tech => {
             if (!tech.techReference) return null;
 
@@ -174,8 +174,8 @@ export const aggregateAndSave = async (params: ExtractionChainParam): Promise<Ex
             : 0;
 
         return {
-            start: isValid(start) ? start : (new Date()).toISOString(),
-            end: isValid(end) ? end : (new Date()).toISOString(),
+            start: isValid(start) ? start.toISOString() : (new Date()).toISOString(),
+            end: isValid(end) ? end.toISOString() : (new Date()).toISOString(),
             months: job.months,
             role: job.role,
             job: job.job,

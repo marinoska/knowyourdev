@@ -72,7 +72,7 @@ export const TechPopularityTimelineChart = () => {
         const getLabelFn = fieldName === 'popularity' ? getPopularityLabel : getTrendLabel;
         const sortFn = fieldName === 'popularity' ? sortByPopularity : sortByTrend;
         if (!filteredTechnologies?.length) {
-            return {chartDats: [], colors: []};
+            return {chartData: [], colors: []};
         }
 
         const colorsSet = new Set<string>();
@@ -100,8 +100,7 @@ export const TechPopularityTimelineChart = () => {
                 [
                     "fieldName", "Tech", "Start", "End",
                 ],
-                // @ts-ignore
-                ...data
+                ...(data ?? [])
             ],
             colors
         }
@@ -125,7 +124,7 @@ export const TechPopularityTimelineChart = () => {
             },
         };
     }, []);
-    console.log({popColors});
+
     return (
         <ChartContainer title='Key tech popularity timeline'>
             <ScopeSelect

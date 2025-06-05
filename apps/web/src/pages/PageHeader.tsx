@@ -23,7 +23,7 @@ export const PageHeader = ({title, subtitle, buttonLabel, icon: Icon, action}: {
             }}
         >
             <Stack>
-                <Typography color="secondary" level="h2" component="h1">
+                <Typography textColor="text.secondary" level="h2" component="h1">
                     {title}
                 </Typography>
                 {subtitle &&

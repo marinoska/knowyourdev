@@ -14,8 +14,7 @@ export type UploadItem = {
 
 export type TUploadsPage = { uploads: UploadItem[] };
 
-export type GetUploadsListResponse = {
-    pages: TUploadsPage[];
+export type GetUploadsListResponse = TUploadsPage & {
     totalRecords: number;
     currentPage: number;
     totalPages: number;
@@ -28,7 +27,7 @@ export type GetUploadsListQueryParams = {
     // sortOrder?: 'asc' | 'desc';
 };
 
-export type DocumentUploadResponse = UploadItem;
+export type DocumentUploadResponse = Omit<UploadItem, 'fullName' | 'position' | 'hash'>;
 
 export type DocumentUploadRequestBody = {
     name: string;
