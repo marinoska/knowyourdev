@@ -6,7 +6,7 @@ import { normalizeError } from "./errors.js";
 import cors from "cors";
 import routes from "@/routes/index.js";
 // Init Mongo connection
-import "./mongo";
+import "./mongo.js";
 import { globals } from "./globals.js";
 import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import { env } from "@/app/env.js";
