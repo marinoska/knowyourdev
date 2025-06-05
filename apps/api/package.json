@@ -12,7 +12,6 @@
     "format": "prettier --write ./**/*.{ts,json}"
   },
   "devDependencies": {
-    "@kyd/common": "workspace:*",
     "@kyd/typescript-config": "workspace:*",
     "@swc/core": "^1.11.9",
     "@types/body-parser": "^1.19.5",
@@ -25,13 +24,14 @@
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.19.3",
     "typescript": "~5.7.3"
+    "@types/multer": "^1.4.12",
   },
   "dependencies": {
+    "@kyd/common": "workspace:*",
     "@hapi/boom": "^10.0.1",
     "@langchain/community": "^0.3.30",
     "@langchain/core": "^0.3.40",
     "@langchain/openai": "^0.4.4",
-    "@types/multer": "^1.4.12",
     "body-parser": "^1.20.3",
     "celebrate": "^15.0.3",
     "cors": "^2.8.5",
