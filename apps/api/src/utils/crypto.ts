@@ -1,3 +1,4 @@
-import crypto, { BinaryLike } from 'node:crypto';
+import crypto, { BinaryLike } from "node:crypto";
 
-export const createHash = (buffer: BinaryLike) => crypto.createHash('sha256').update(buffer).digest('hex')
+export const createHash = (buffer: BinaryLike) =>
+  crypto.createHash("sha256").update(buffer).digest("hex");

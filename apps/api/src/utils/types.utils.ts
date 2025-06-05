@@ -1,1 +1,2 @@
-export const isNotNull = <T>(value: T | null): value is T => (value !== null) && (value !== undefined);
+export const isNotNull = <T>(value: T | null): value is T =>
+  value !== null && value !== undefined;

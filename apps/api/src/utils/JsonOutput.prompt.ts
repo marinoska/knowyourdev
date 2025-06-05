@@ -1,6 +1,6 @@
 //  function that replaces single { with {{ and single } with }}
 function replaceBraces(str: string) {
-    return str.replace(/(?<!{){(?!{)/g, '{{').replace(/(?<!})}(?!})/g, '}}');
+  return str.replace(/(?<!{){(?!{)/g, "{{").replace(/(?<!})}(?!})/g, "}}");
 }
 
 export const jsonOutputPrompt = (schema: Record<string, any>) => `

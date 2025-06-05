@@ -5,15 +5,18 @@ import { ExtractedCVData } from "@kyd/common/api";
 import { TUploadTechProfileDocument } from "@/models/uploadTechProfile.model.js";
 
 export type ExtractionChainInput = {
-    cvText: string, techCollection: TechDocument[], uploadId: Schema.Types.ObjectId
+  cvText: string;
+  techCollection: TechDocument[];
+  uploadId: Schema.Types.ObjectId;
 };
 export type ExtractionChainOutput = {
-    cvData: TUploadDataDocument,
-    techProfile: TUploadTechProfileDocument
+  cvData: TUploadDataDocument;
+  techProfile: TUploadTechProfileDocument;
 };
 
 export type ExtractionChainParam =
-    ExtractionChainInput
-    | ExtractionChainInput & { extractedData: ExtractedCVData }
-    | ExtractionChainInput & { extractedData: ExtractedCVData } & ExtractionChainOutput;
-
+  | ExtractionChainInput
+  | (ExtractionChainInput & { extractedData: ExtractedCVData })
+  | (ExtractionChainInput & {
+      extractedData: ExtractedCVData;
+    } & ExtractionChainOutput);

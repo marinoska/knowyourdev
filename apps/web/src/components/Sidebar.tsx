@@ -1,227 +1,229 @@
 import React from "react";
-import GlobalStyles from '@mui/joy/GlobalStyles';
-import Avatar from '@mui/joy/Avatar';
-import Box from '@mui/joy/Box';
-import Divider from '@mui/joy/Divider';
-import IconButton from '@mui/joy/IconButton';
-import List from '@mui/joy/List';
-import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
-import ListItemContent from '@mui/joy/ListItemContent';
-import Typography from '@mui/joy/Typography';
-import Sheet from '@mui/joy/Sheet';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import DashboardIcon from '@mui/icons-material/BarChart';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import GlobalStyles from "@mui/joy/GlobalStyles";
+import Avatar from "@mui/joy/Avatar";
+import Box from "@mui/joy/Box";
+import Divider from "@mui/joy/Divider";
+import IconButton from "@mui/joy/IconButton";
+import List from "@mui/joy/List";
+import ListItemButton, { listItemButtonClasses } from "@mui/joy/ListItemButton";
+import ListItemContent from "@mui/joy/ListItemContent";
+import Typography from "@mui/joy/Typography";
+import Sheet from "@mui/joy/Sheet";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import DashboardIcon from "@mui/icons-material/BarChart";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import { closeSidebar } from '../utils';
+import { closeSidebar } from "../utils";
 import KnowYourDevIcon from "./KnowYourDevIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 
 // Navigation Configuration
 const routes = [
-    {
-        path: '/dashboard',
-        label: 'Dashboard',
-        icon: HomeRoundedIcon
-    },
-    {
-        path: '/uploads',
-        label: 'CV List',
-        icon: UploadFileIcon
-    },
-    {
-        path: '/support',
-        label: 'Support',
-        icon: DashboardIcon
-    }
+  {
+    path: "/dashboard",
+    label: "Dashboard",
+    icon: HomeRoundedIcon,
+  },
+  {
+    path: "/uploads",
+    label: "CV List",
+    icon: UploadFileIcon,
+  },
+  {
+    path: "/support",
+    label: "Support",
+    icon: DashboardIcon,
+  },
 ];
 
 const NavigationItem = ({
-                            icon: Icon,
-                            label,
-                            path,
-                            selected,
-                        }: {
-    icon: React.ElementType;
-    label: string;
-    path: string;
-    selected?: boolean;
+  icon: Icon,
+  label,
+  path,
+  selected,
+}: {
+  icon: React.ElementType;
+  label: string;
+  path: string;
+  selected?: boolean;
 }) => {
-    const selectedColor = 'var(--joy-palette-background-level1) !important';
-    const styles = {
-        backgroundColor: 'inherit',
-    };
-    if (selected) {
-        styles.backgroundColor = selectedColor;
-    }
+  const selectedColor = "var(--joy-palette-background-level1) !important";
+  const styles = {
+    backgroundColor: "inherit",
+  };
+  if (selected) {
+    styles.backgroundColor = selectedColor;
+  }
 
-    return (
-        <ListItemButton
-            component={RouterLink}
-            to={path}
-            selected={selected}
-            sx={{...styles, '&:hover': {backgroundColor: selectedColor}}}
-        >
-            <Icon/>
-            <ListItemContent>
-                <Typography level="body-md">{label}</Typography>
-            </ListItemContent>
-        </ListItemButton>
-    );
+  return (
+    <ListItemButton
+      component={RouterLink}
+      to={path}
+      selected={selected}
+      sx={{ ...styles, "&:hover": { backgroundColor: selectedColor } }}
+    >
+      <Icon />
+      <ListItemContent>
+        <Typography level="body-md">{label}</Typography>
+      </ListItemContent>
+    </ListItemButton>
+  );
 };
 
 export default function Sidebar() {
-    const location = useLocation();
-    const {logout, user} = useAuth0();
+  const location = useLocation();
+  const { logout, user } = useAuth0();
 
-    return (
-        <Sheet
-            className="Sidebar"
+  return (
+    <Sheet
+      className="Sidebar"
+      sx={{
+        position: { xs: "fixed", md: "sticky" },
+        transform: {
+          xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))",
+          md: "none",
+        },
+        transition: "transform 0.4s, width 0.4s",
+        zIndex: 10000,
+        height: "100dvh",
+        // width: '288px',
+        width: "var(--Sidebar-width)",
+        top: 0,
+        p: 0,
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        borderRight: "1px solid",
+        borderColor: "divider",
+        backgroundColor: "var(--joy-palette-background-level2)",
+        color: "var(--joy-palette-text-level1Contrast)", // Use the secondary color from the theme
+        "& *": {
+          color: "inherit !important",
+        },
+      }}
+    >
+      <GlobalStyles
+        styles={(theme) => ({
+          ":root": {
+            "--Sidebar-width": "240 px",
+            [theme.breakpoints.up("lg")]: {
+              "--Sidebar-width": "288px",
+            },
+          },
+        })}
+      />
+      <Box
+        className="Sidebar-overlay"
+        sx={{
+          position: "fixed",
+          zIndex: 9998,
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          opacity: "var(--SideNavigation-slideIn)",
+          transition: "opacity 0.4s",
+          transform: {
+            xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))",
+            lg: "translateX(-100%)",
+          },
+        }}
+        onClick={() => closeSidebar()}
+      />
+      <Box
+        sx={{ display: "flex", gap: 1.5, pt: 2, pl: 2, alignItems: "center" }}
+      >
+        {/*<IconButton variant="plain" size="lg" sx={{*/}
+        {/*    p: 0,*/}
+        {/*    m: 0,*/}
+        {/*    // minWidth: 'unset',*/}
+        {/*    // width: 32,*/}
+        {/*    // height: 32,*/}
+        {/*    borderRadius: '50%',*/}
+        {/*}} component={RouterLink} to="#as-link">*/}
+        {/*</IconButton>*/}
+        <KnowYourDevIcon fontSize="xl4" />
+        <Typography level="title-lg">KnowYourDev</Typography>
+      </Box>
+      <Box
+        sx={{
+          minHeight: 0,
+          overflow: "hidden auto",
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          [`& .${listItemButtonClasses.root}`]: {
+            gap: 2,
+          },
+        }}
+      >
+        <List size="lg">
+          {routes.map((route) => (
+            <NavigationItem
+              key={route.path} // Unique key for each route
+              label={route.label}
+              icon={route.icon}
+              path={route.path}
+              selected={location.pathname === route.path} // Dynamically check if the route matches the current path
+            />
+          ))}
+          <Divider />
+        </List>
+
+        {/*<Box sx={{p: 3}}>*/}
+
+        {/*    <Card*/}
+        {/*        invertedColors*/}
+        {/*        variant="soft"*/}
+        {/*        color="warning"*/}
+        {/*        size="sm"*/}
+        {/*        sx={{boxShadow: 'none'}}*/}
+        {/*    >*/}
+        {/*        <Stack*/}
+        {/*            direction="row"*/}
+        {/*            sx={{justifyContent: 'space-between', alignItems: 'center'}}*/}
+        {/*        >*/}
+        {/*            <Typography level="title-sm">Used space</Typography>*/}
+        {/*            <IconButton size="sm">*/}
+        {/*                <CloseRoundedIcon/>*/}
+        {/*            </IconButton>*/}
+        {/*        </Stack>*/}
+        {/*        <Typography level="body-xs">*/}
+        {/*            Your team has used 80% of your available space. Need more?*/}
+        {/*        </Typography>*/}
+        {/*        <LinearProgress variant="outlined" value={80} determinate sx={{my: 1}}/>*/}
+        {/*        <Button size="sm" variant="solid">*/}
+        {/*            Upgrade plan*/}
+        {/*        </Button>*/}
+        {/*    </Card>*/}
+        {/*</Box>*/}
+        <Divider />
+        <Box sx={{ display: "flex", gap: 1, p: 2, alignItems: "center" }}>
+          <Avatar variant="outlined" size="md" />
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <Typography level="title-sm">{user?.name}</Typography>
+            <Typography level="body-xs">{user?.email}</Typography>
+          </Box>
+          <IconButton
+            size="md"
+            variant="plain"
+            color="neutral"
             sx={{
-                position: {xs: 'fixed', md: 'sticky'},
-                transform: {
-                    xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
-                    md: 'none',
-                },
-                transition: 'transform 0.4s, width 0.4s',
-                zIndex: 10000,
-                height: '100dvh',
-                // width: '288px',
-                width: 'var(--Sidebar-width)',
-                top: 0,
-                p: 0,
-                flexShrink: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-                borderRight: '1px solid',
-                borderColor: 'divider',
-                backgroundColor: 'var(--joy-palette-background-level2)',
-                color: 'var(--joy-palette-text-level1Contrast)',   // Use the secondary color from the theme
-                '& *': {
-                    color: 'inherit !important',
-                },
+              "&:hover": {
+                backgroundColor: "transparent", // Or any option above
+                transition: "transform 0.3s ease",
+                transform: "translateX(4px)",
+              },
             }}
-        >
-            <GlobalStyles
-                styles={(theme) => ({
-                    ':root': {
-                        '--Sidebar-width': '240 px',
-                        [theme.breakpoints.up('lg')]: {
-                            '--Sidebar-width': '288px',
-                        },
-                    },
-                })}
-            />
-            <Box
-                className="Sidebar-overlay"
-                sx={{
-                    position: 'fixed',
-                    zIndex: 9998,
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    opacity: 'var(--SideNavigation-slideIn)',
-                    transition: 'opacity 0.4s',
-                    transform: {
-                        xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))',
-                        lg: 'translateX(-100%)',
-                    },
-                }}
-                onClick={() => closeSidebar()}
-            />
-            <Box sx={{display: 'flex', gap: 1.5, pt: 2, pl: 2, alignItems: 'center'}}>
-                {/*<IconButton variant="plain" size="lg" sx={{*/}
-                {/*    p: 0,*/}
-                {/*    m: 0,*/}
-                {/*    // minWidth: 'unset',*/}
-                {/*    // width: 32,*/}
-                {/*    // height: 32,*/}
-                {/*    borderRadius: '50%',*/}
-                {/*}} component={RouterLink} to="#as-link">*/}
-                {/*</IconButton>*/}
-                <KnowYourDevIcon fontSize="xl4"/>
-                <Typography level="title-lg">KnowYourDev</Typography>
-            </Box>
-            <Box
-                sx={{
-                    minHeight: 0,
-                    overflow: 'hidden auto',
-                    flexGrow: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    [`& .${listItemButtonClasses.root}`]: {
-                        gap: 2,
-                    },
-                }}
-            >
-                <List size="lg">
-                    {routes.map((route) => (
-                        <NavigationItem
-                            key={route.path} // Unique key for each route
-                            label={route.label}
-                            icon={route.icon}
-                            path={route.path}
-                            selected={location.pathname === route.path} // Dynamically check if the route matches the current path
-                        />
-                    ))}
-                    <Divider/>
-                </List>
-
-                {/*<Box sx={{p: 3}}>*/}
-
-                {/*    <Card*/}
-                {/*        invertedColors*/}
-                {/*        variant="soft"*/}
-                {/*        color="warning"*/}
-                {/*        size="sm"*/}
-                {/*        sx={{boxShadow: 'none'}}*/}
-                {/*    >*/}
-                {/*        <Stack*/}
-                {/*            direction="row"*/}
-                {/*            sx={{justifyContent: 'space-between', alignItems: 'center'}}*/}
-                {/*        >*/}
-                {/*            <Typography level="title-sm">Used space</Typography>*/}
-                {/*            <IconButton size="sm">*/}
-                {/*                <CloseRoundedIcon/>*/}
-                {/*            </IconButton>*/}
-                {/*        </Stack>*/}
-                {/*        <Typography level="body-xs">*/}
-                {/*            Your team has used 80% of your available space. Need more?*/}
-                {/*        </Typography>*/}
-                {/*        <LinearProgress variant="outlined" value={80} determinate sx={{my: 1}}/>*/}
-                {/*        <Button size="sm" variant="solid">*/}
-                {/*            Upgrade plan*/}
-                {/*        </Button>*/}
-                {/*    </Card>*/}
-                {/*</Box>*/}
-                <Divider/>
-                <Box sx={{display: 'flex', gap: 1, p: 2, alignItems: 'center'}}>
-                    <Avatar
-                        variant="outlined"
-                        size="md"
-                    />
-                    <Box sx={{minWidth: 0, flex: 1}}>
-                        <Typography level="title-sm">{user?.name}</Typography>
-                        <Typography level="body-xs">{user?.email}</Typography>
-                    </Box>
-                    <IconButton size="md" variant="plain" color="neutral"
-                                sx={{
-                                    '&:hover': {
-                                        backgroundColor: 'transparent', // Or any option above
-                                        transition: 'transform 0.3s ease',
-                                        transform: 'translateX(4px)'
-                                    }
-                                }}
-                                onClick={() => logout()}>
-                        <LogoutRoundedIcon/>
-                    </IconButton>
-                </Box>
-            </Box>
-
-        </Sheet>
-    );
+            onClick={() => logout()}
+          >
+            <LogoutRoundedIcon />
+          </IconButton>
+        </Box>
+      </Box>
+    </Sheet>
+  );
 }

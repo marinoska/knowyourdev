@@ -1,6 +1,6 @@
-import { NotFound } from '@/app/errors.js';
-import { RequestHandler } from 'express';
+import { NotFound } from "@/app/errors.js";
+import { RequestHandler } from "express";
 
 export const notFoundController: RequestHandler = (_req, _res, next) => {
-    next(new NotFound('route not found'));
+  next(new NotFound("route not found"));
 };

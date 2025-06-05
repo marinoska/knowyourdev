@@ -3,55 +3,65 @@ import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
 import { ExtractedCVData, JobEntry } from "./uploadedData.js";
 
 export type UploadTechProfileTechnologiesEntry = {
-    techReference: Schema.Types.ObjectId;
-    code: TechCode;
-    jobs: UploadTechProfileTechnologiesJobEntry[];
-    totalMonths?: number;
-    recentMonths?: number;
-    name: string;
-    trend: TrendType;
-    popularity: number;
-    category: CategoryType;
-    scope: ScopeType;
-    inSkillsSection?: boolean;
-    inProfileSection?: boolean;
+  techReference: Schema.Types.ObjectId;
+  code: TechCode;
+  jobs: UploadTechProfileTechnologiesJobEntry[];
+  totalMonths?: number;
+  recentMonths?: number;
+  name: string;
+  trend: TrendType;
+  popularity: number;
+  category: CategoryType;
+  scope: ScopeType;
+  inSkillsSection?: boolean;
+  inProfileSection?: boolean;
 };
 
 export type UploadTechProfileTechnologiesJobEntry = {
-    start?: Date;
-    end?: Date;
-    role: string;
-    company: string;
+  start?: Date;
+  end?: Date;
+  role: string;
+  company: string;
 };
 
-export type UploadTechProfileJobEntry =
-    Pick<JobEntry, 'isSoftwareDevelopmentRole' | 'roleType' | 'present' | 'role' | 'job' | 'months' | 'start' | 'end'>
-    & {
-    popularity?: number;
-    trending?: number;
-    summary: string;
-    techStack?: {
-        ref: Schema.Types.ObjectId;
-        name: string;
-        popularity: number;
-        trending: number;
-    };
-    technologies: {
-        ref: Schema.Types.ObjectId;
-        name: string;
-        popularity: number;
-        trending: number;
-    }[]
+export type UploadTechProfileJobEntry = Pick<
+  JobEntry,
+  | "isSoftwareDevelopmentRole"
+  | "roleType"
+  | "present"
+  | "role"
+  | "job"
+  | "months"
+  | "start"
+  | "end"
+> & {
+  popularity?: number;
+  trending?: number;
+  summary: string;
+  techStack?: {
+    ref: Schema.Types.ObjectId;
+    name: string;
+    popularity: number;
+    trending: number;
+  };
+  technologies: {
+    ref: Schema.Types.ObjectId;
+    name: string;
+    popularity: number;
+    trending: number;
+  }[];
 };
 
-export type UploadTechProfileType =
-    Pick<ExtractedCVData, 'position' | 'fullName'> & {
-    technologies: UploadTechProfileTechnologiesEntry[],
-    jobs: UploadTechProfileJobEntry[],
+export type UploadTechProfileType = Pick<
+  ExtractedCVData,
+  "position" | "fullName"
+> & {
+  technologies: UploadTechProfileTechnologiesEntry[];
+  jobs: UploadTechProfileJobEntry[];
 };
 
 export type UploadTechProfileResponse = {
-    uploadId: string;
-    createdAt: string;
-    updatedAt: string;
+  uploadId: string;
+  createdAt: string;
+  updatedAt: string;
 } & UploadTechProfileType;

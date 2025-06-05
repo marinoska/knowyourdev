@@ -8,7 +8,10 @@ import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
-import { ChartProvider, useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
+import {
+  ChartProvider,
+  useChartContext,
+} from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
 import { CareerTechTimelineChart } from "@/pages/Analisys/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
@@ -19,67 +22,99 @@ import { monthsToYearsAndMonths } from "@/utils/dates";
 import { TechPopularityTimelineChart } from "@/pages/Analisys/Chart/TechPopularityTimelineChart.tsx";
 
 type UploadedProfileParams = {
-    id: string;
+  id: string;
 };
 
 const TechnologiesChartGroup = () => {
-    // to not render the lower chart while the upper chat is being recalculated - to prevent flickering
-    const [chartIsReady, setChartIsReady] = useState(false);
-    const [chartIsEmpty, setChartIsEmpty] = useState(false);
-    return (<>
-        <TechTimelineChart onChartIsReady={setChartIsReady} onChartIsEmpty={setChartIsEmpty}/>
-        {chartIsReady && <TechDurationPieChart/>}
-        {(chartIsReady || chartIsEmpty) && <TechMentionsPieChart/>}
-    </>)
-}
+  // to not render the lower chart while the upper chat is being recalculated - to prevent flickering
+  const [chartIsReady, setChartIsReady] = useState(false);
+  const [chartIsEmpty, setChartIsEmpty] = useState(false);
+  return (
+    <>
+      <TechTimelineChart
+        onChartIsReady={setChartIsReady}
+        onChartIsEmpty={setChartIsEmpty}
+      />
+      {chartIsReady && <TechDurationPieChart />}
+      {(chartIsReady || chartIsEmpty) && <TechMentionsPieChart />}
+    </>
+  );
+};
 
-const getTabItems = (): TabItem[] => ([
-    {
-        label: "Career Timeline",
-        content: (<Stack gap={6}>
-                <CareerTimelineChart/>
-                <Divider/>
-                <CareerTechTimelineChart/>
-            </Stack>
-        )
-    },
-    {
-        label: "Technologies",
-        content: <TechnologiesChartGroup/>,
-    },
-    {
-        label: "Tech insights",
-        content: <Stack gap={6}>
-            <TechPopularityTimelineChart/>
-        </Stack>,
-    },
-]);
+const getTabItems = (): TabItem[] => [
+  {
+    label: "Career Timeline",
+    content: (
+      <Stack gap={6}>
+        <CareerTimelineChart />
+        <Divider />
+        <CareerTechTimelineChart />
+      </Stack>
+    ),
+  },
+  {
+    label: "Technologies",
+    content: <TechnologiesChartGroup />,
+  },
+  {
+    label: "Tech insights",
+    content: (
+      <Stack gap={6}>
+        <TechPopularityTimelineChart />
+      </Stack>
+    ),
+  },
+];
 
 export const UploadedProfile = () => {
-    const {id} = useParams<UploadedProfileParams>();
+  const { id } = useParams<UploadedProfileParams>();
 
-    const query = useUploadProfileQuery({uploadId: id});
+  const query = useUploadProfileQuery({ uploadId: id });
 
-    return (
-        <ChartProvider profile={query.profile}>
-            <UploadPage query={query}/>
-        </ChartProvider>
-    );
-}
+  return (
+    <ChartProvider profile={query.profile}>
+      <UploadPage query={query} />
+    </ChartProvider>
+  );
+};
 
-const UploadPage = ({query}: { query: ReturnType<typeof useUploadProfileQuery> }) => {
-    const {profile, isError, isLoading, showError, dismissError} = query;
-    const {monthsActive} = useChartContext();
+const UploadPage = ({
+  query,
+}: {
+  query: ReturnType<typeof useUploadProfileQuery>;
+}) => {
+  const { profile, isError, isLoading, showError, dismissError } = query;
+  const { monthsActive } = useChartContext();
 
-    const {years, months} = monthsToYearsAndMonths(monthsActive)
-    const header = useMemo(() => (
-        <PageHeader subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
-                    title={profile?.fullName}/>), [profile?.position, profile?.fullName, years, months])
-    return (<>
-        <NavigateBackLink/>
-        {showError && <Snackbar type="danger" msg="Failed to load CV list." onClose={dismissError}/>}
-        <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile} header={header} component={Box}>
-            {profile && <AnalysisTabs tabs={getTabItems()}/>}
-        </BasePage>
-    </>)
-}
+  const { years, months } = monthsToYearsAndMonths(monthsActive);
+  const header = useMemo(
+    () => (
+      <PageHeader
+        subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
+        title={profile?.fullName}
+      />
+    ),
+    [profile?.position, profile?.fullName, years, months],
+  );
+  return (
+    <>
+      <NavigateBackLink />
+      {showError && (
+        <Snackbar
+          type="danger"
+          msg="Failed to load CV list."
+          onClose={dismissError}
+        />
+      )}
+      <BasePage
+        isLoading={isLoading}
+        isError={isError}
+        showEmpty={!profile}
+        header={header}
+        component={Box}
+      >
+        {profile && <AnalysisTabs tabs={getTabItems()} />}
+      </BasePage>
+    </>
+  );
+};

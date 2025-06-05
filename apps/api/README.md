@@ -1,6 +1,6 @@
 https://www.section.io/engineering-education/how-to-get-ssl-https-for-localhost/
 
-````
+```
 cd ./cert
 1. openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365
 2. openssl rsa -in keytmp.pem -out key.pem
@@ -17,7 +17,7 @@ OR
   passphrase: 'your-password-here' // Replace with the actual passphrase
 };
 
-````
+```
 
 The best solution
 
@@ -32,5 +32,7 @@ This automatically generates a valid certificate for localhost.
 
 ```
 
-$$ mongoose-encryption
+$$
+mongoose-encryption
 Generate secret: `openssl rand -base64 32`
+$$

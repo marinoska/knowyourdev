@@ -1,17 +1,17 @@
 import express, { ErrorRequestHandler } from "express";
 import "express-async-errors";
 import bodyParser from "body-parser";
-import logger from './logger.js';
-import { normalizeError } from './errors.js';
+import logger from "./logger.js";
+import { normalizeError } from "./errors.js";
 import cors from "cors";
-import routes from '@/routes/index.js';
+import routes from "@/routes/index.js";
 // Init Mongo connection
-import './mongo';
-import { globals } from './globals.js';
-import { auth, requiredScopes } from 'express-oauth2-jwt-bearer';
+import "./mongo";
+import { globals } from "./globals.js";
+import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import { env } from "@/app/env.js";
 
-const log = logger('Application');
+const log = logger("Application");
 void globals.init();
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
@@ -31,23 +31,22 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     res.status(statusCode).json(error.json());
 };
 
-
 const app = express();
 
 const checkJwt = auth({
-    audience: env('AUTH0_API_AUDIENCE'),
-    issuerBaseURL: env('AUTH0_API_ISSUER'),
-    tokenSigningAlg: 'RS256'
+    audience: env("AUTH0_API_AUDIENCE"),
+    issuerBaseURL: env("AUTH0_API_ISSUER"),
+    tokenSigningAlg: "RS256",
 });
 
-console.log('eee', env('AUTH0_API_AUDIENCE'));
-app.use(cors({origin: env('ALLOWED_ORIGIN'), credentials: true}));
+console.log("eee", env("AUTH0_API_AUDIENCE"));
+app.use(cors({origin: env("ALLOWED_ORIGIN"), credentials: true}));
 
 app.use(checkJwt);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use('/api', routes.apiRouter);
+app.use("/api", routes.apiRouter);
 // app.use('/', routes.publicRouter);
 app.use(errorHandler);
 
