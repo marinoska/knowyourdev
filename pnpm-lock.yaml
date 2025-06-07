@@ -23,6 +23,9 @@ importers:
       '@hapi/boom':
         specifier: ^10.0.1
         version: 10.0.1
+      '@kyd/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@langchain/community':
         specifier: ^0.3.30
         version: 0.3.30(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.12.0(@playwright/test@1.50.1)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.85.1(ws@8.18.2)(zod@3.24.2))(zod@3.24.2))(@ibm-cloud/watsonx-ai@1.5.0(@langchain/core@0.3.40(openai@4.85.1(ws@8.18.2)(zod@3.24.2))))(@langchain/core@0.3.40(openai@4.85.1(ws@8.18.2)(zod@3.24.2)))(axios@1.7.9)(handlebars@4.7.8)(ibm-cloud-sdk-core@5.1.2)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(mammoth@1.9.0)(mongodb@6.13.0(socks@2.8.3))(openai@4.85.1(ws@8.18.2)(zod@3.24.2))(pdf-parse@1.1.1)(pg@8.13.3)(playwright@1.50.1)(redis@4.7.0)(ws@8.18.2)
@@ -32,9 +35,6 @@ importers:
       '@langchain/openai':
         specifier: ^0.4.4
         version: 0.4.4(@langchain/core@0.3.40(openai@4.85.1(ws@8.18.2)(zod@3.24.2)))(ws@8.18.2)
-      '@types/multer':
-        specifier: ^1.4.12
-        version: 1.4.12
       body-parser:
         specifier: ^1.20.3
         version: 1.20.3
@@ -93,9 +93,6 @@ importers:
         specifier: ^3.17.0
         version: 3.17.0
     devDependencies:
-      '@kyd/common':
-        specifier: workspace:*
-        version: link:../../packages/common
       '@kyd/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -111,6 +108,9 @@ importers:
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
+      '@types/multer':
+        specifier: ^1.4.12
+        version: 1.4.12
       '@types/node':
         specifier: ^22.13.10
         version: 22.13.10
