@@ -82,9 +82,10 @@ export default function Sidebar() {
       sx={{
         position: { xs: "fixed", md: "sticky" },
         transform: {
-          xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))",
+          xs: "translateX(calc(-100% + var(--SideNavigation-slideIn, 0) * 100%))",
           md: "none",
         },
+        left: 0,
         transition: "transform 0.4s, width 0.4s",
         zIndex: 10000,
         height: "100dvh",
@@ -108,10 +109,14 @@ export default function Sidebar() {
       <GlobalStyles
         styles={(theme) => ({
           ":root": {
-            "--Sidebar-width": "240 px",
+            "--Sidebar-width": "240px",
+            "--Overlay-pointerEvents": "none",
             [theme.breakpoints.up("lg")]: {
               "--Sidebar-width": "288px",
             },
+          },
+          "html[data-sidebar-open='true']": {
+            "--Overlay-pointerEvents": "auto",
           },
         })}
       />
@@ -127,9 +132,10 @@ export default function Sidebar() {
           opacity: "var(--SideNavigation-slideIn)",
           transition: "opacity 0.4s",
           transform: {
-            xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))",
+            xs: "none",
             lg: "translateX(-100%)",
           },
+          pointerEvents: "var(--Overlay-pointerEvents)",
         }}
         onClick={() => closeSidebar()}
       />
