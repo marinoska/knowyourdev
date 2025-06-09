@@ -108,7 +108,7 @@ export default function Sidebar() {
       }}
     >
       <GlobalStyles
-        styles={(theme) => ({
+        styles={() => ({
           ":root": {
             "--Sidebar-width": "240px",
             "--Overlay-pointerEvents": "none",
@@ -134,6 +134,8 @@ export default function Sidebar() {
             lg: "translateX(-100%)",
           },
           pointerEvents: "var(--Overlay-pointerEvents)",
+          // Ensure the overlay doesn't cover the sidebar itself
+          marginLeft: "var(--Sidebar-width)",
         }}
         onClick={() => closeSidebar()}
       />
