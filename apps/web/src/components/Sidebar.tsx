@@ -90,7 +90,6 @@ export default function Sidebar() {
         transition: "transform 0.4s, width 0.4s",
         zIndex: 2,
         height: "100dvh",
-        // width: '288px',
         width: "var(--Sidebar-width)",
         top: 0,
         p: 0,
@@ -142,15 +141,6 @@ export default function Sidebar() {
       <Box
         sx={{ display: "flex", gap: 1.5, pt: 2, pl: 2, alignItems: "center" }}
       >
-        {/*<IconButton variant="plain" size="lg" sx={{*/}
-        {/*    p: 0,*/}
-        {/*    m: 0,*/}
-        {/*    // minWidth: 'unset',*/}
-        {/*    // width: 32,*/}
-        {/*    // height: 32,*/}
-        {/*    borderRadius: '50%',*/}
-        {/*}} component={RouterLink} to="#as-link">*/}
-        {/*</IconButton>*/}
         <KnowYourDevIcon fontSize="xl4" />
         <Typography level="title-lg">KnowYourDev</Typography>
       </Box>

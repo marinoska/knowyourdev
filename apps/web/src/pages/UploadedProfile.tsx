@@ -1,8 +1,8 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { PageHeader } from "@/pages/PageHeader.tsx";
 import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
+import { ScrollableBox } from "@/components/ScrollableBox.tsx";
 import { useMemo, useState } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
@@ -89,7 +89,7 @@ const UploadPage = ({
   const { years, months } = monthsToYearsAndMonths(monthsActive);
   const header = useMemo(
     () => (
-      <PageHeader
+      <BasePage.Header
         subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
         title={profile?.fullName}
       />
@@ -110,10 +110,13 @@ const UploadPage = ({
         isLoading={isLoading}
         isError={isError}
         showEmpty={!profile}
-        header={header}
-        component={Box}
       >
-        {profile && <AnalysisTabs tabs={getTabItems()} />}
+        <BasePage.Header>
+          {header}
+        </BasePage.Header>
+        <ScrollableBox>
+          {profile && <AnalysisTabs tabs={getTabItems()} />}
+        </ScrollableBox>
       </BasePage>
     </>
   );
