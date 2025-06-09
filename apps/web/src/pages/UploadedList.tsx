@@ -36,6 +36,7 @@ export const UploadedList = () => {
     ),
     [],
   );
+
   return (
     <>
       {showError && (
@@ -51,7 +52,7 @@ export const UploadedList = () => {
         showEmpty={!uploads?.length}
         header={header}
       >
-        <Stack spacing={2}>
+        <Stack spacing={2} padding={2}>
           {uploads?.map((upload) => (
             <UploadedItem key={upload._id} item={upload} />
           ))}

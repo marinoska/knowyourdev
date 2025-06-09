@@ -9,6 +9,7 @@ import ListItemButton, { listItemButtonClasses } from "@mui/joy/ListItemButton";
 import ListItemContent from "@mui/joy/ListItemContent";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
+import Tooltip from "@mui/joy/Tooltip";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import DashboardIcon from "@mui/icons-material/BarChart";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -87,7 +88,7 @@ export default function Sidebar() {
         },
         left: 0,
         transition: "transform 0.4s, width 0.4s",
-        zIndex: 10000,
+        zIndex: 2,
         height: "100dvh",
         // width: '288px',
         width: "var(--Sidebar-width)",
@@ -111,9 +112,6 @@ export default function Sidebar() {
           ":root": {
             "--Sidebar-width": "240px",
             "--Overlay-pointerEvents": "none",
-            [theme.breakpoints.up("lg")]: {
-              "--Sidebar-width": "288px",
-            },
           },
           "html[data-sidebar-open='true']": {
             "--Overlay-pointerEvents": "auto",
@@ -124,7 +122,7 @@ export default function Sidebar() {
         className="Sidebar-overlay"
         sx={{
           position: "fixed",
-          zIndex: 9998,
+          zIndex: 1,
           top: 0,
           left: 0,
           width: "100vw",
@@ -210,8 +208,48 @@ export default function Sidebar() {
         <Box sx={{ display: "flex", gap: 1, p: 2, alignItems: "center" }}>
           <Avatar variant="outlined" size="md" />
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Typography level="title-sm">{user?.name}</Typography>
-            <Typography level="body-xs">{user?.email}</Typography>
+            <Tooltip
+              title={user?.name || ""}
+              placement="top"
+              sx={{ zIndex: 5 }}
+              arrow
+              disableFocusListener
+            >
+              <div style={{ width: "100%" }}>
+                <Typography
+                  level="title-sm"
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    display: "block",
+                  }}
+                >
+                  {user?.name}
+                </Typography>
+              </div>
+            </Tooltip>
+            <Tooltip
+              title={user?.email || ""}
+              placement="top"
+              sx={{ zIndex: 5 }}
+              arrow
+              disableFocusListener
+            >
+              <div style={{ width: "100%" }}>
+                <Typography
+                  level="body-xs"
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    display: "block",
+                  }}
+                >
+                  {user?.email}
+                </Typography>
+              </div>
+            </Tooltip>
           </Box>
           <IconButton
             size="md"

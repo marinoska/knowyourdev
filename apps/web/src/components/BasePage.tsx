@@ -35,8 +35,8 @@ export const BasePage = ({
       }}
     >
       {header}
-      <Box sx={{ height: "calc(100vh - 100px)", overflow: "auto", padding: 2 }}>
-        <Component sx={{ p: 3 }}>
+      <Box sx={{ height: "calc(100vh - 100px)", overflow: "auto", pl: 2 }}>
+        <Component>
           {showEmpty ? <EmptyPage isError={isError} /> : children}
         </Component>
       </Box>

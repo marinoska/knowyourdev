@@ -29,14 +29,10 @@ export const PageHeader = ({
       }}
     >
       <Stack>
-        <Typography textColor="text.secondary" level="h2" component="h1">
+        <Typography textColor="text.secondary" level="h3">
           {title}
         </Typography>
-        {subtitle && (
-          <Typography level="title-md" component="h2">
-            {subtitle}
-          </Typography>
-        )}
+        {subtitle && <Typography level="title-md">{subtitle}</Typography>}
       </Stack>
       {buttonLabel && (
         <Button onClick={action} startDecorator={Icon && <Icon />} size="md">

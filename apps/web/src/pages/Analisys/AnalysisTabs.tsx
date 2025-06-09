@@ -44,9 +44,6 @@ export const AnalysisTabs = ({ tabs }: { tabs: TabItem[] }) => {
                 py: 2,
                 fontWeight: "md",
                 cursor: "pointer",
-                // "--Tab-background": "transparent", // Resets default Joy background styles
-                // "--Tab-hoverBackground": "transparent", // Prevent hover styles
-                // "--Tab-selectedBackground": "transparent", // Prevent active background
                 background: "transparent",
                 "&[aria-selected='true']": {
                   background: "transparent",
