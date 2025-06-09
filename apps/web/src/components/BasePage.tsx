@@ -26,11 +26,8 @@ export const BasePage = ({
     <Box
       sx={{
         maxHeight: "100vh", // Restrict height to viewport
-        overflow: "hidden", // Enable scrolling when content overflows
-        minWidth: {
-          xs: "auto", // No minimum width on small screens
-          md: "900px", // Minimum width of 800px for desktop (from "md" breakpoint)
-        },
+        overflow: "auto", // Enable scrolling when content overflows
+        minWidth: "auto", // Allow component to shrink with no fixed minimal width
         borderRadius: "sm",
       }}
     >
