@@ -106,9 +106,7 @@ const UploadPage = ({
       )}
       <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile}>
         <BasePage.Header>{header}</BasePage.Header>
-        <BasePage.Content>
-          {profile && <AnalysisTabs tabs={getTabItems()} />}
-        </BasePage.Content>
+        {profile && <AnalysisTabs tabs={getTabItems()} />}
       </BasePage>
     </>
   );

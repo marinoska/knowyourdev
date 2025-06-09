@@ -4,6 +4,7 @@ import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
+import { Container } from "@/components/Container.tsx";
 
 export type TabItem = {
   label: string;
@@ -60,18 +61,20 @@ export const AnalysisTabs = ({ tabs }: { tabs: TabItem[] }) => {
             </Tab>
           ))}
         </TabList>
-        {tabs.map((tab, index) => (
-          <TabPanel
-            key={index}
-            value={index}
-            sx={{
-              py: 2,
-              background: "var(--joy-palette-background-surface)",
-            }}
-          >
-            {tab.content}
-          </TabPanel>
-        ))}
+        <Container>
+          {tabs.map((tab, index) => (
+            <TabPanel
+              key={index}
+              value={index}
+              sx={{
+                py: 2,
+                background: "var(--joy-palette-background-surface)",
+              }}
+            >
+              {tab.content}
+            </TabPanel>
+          ))}
+        </Container>
       </Tabs>
     </Box>
   );

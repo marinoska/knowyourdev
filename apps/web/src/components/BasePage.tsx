@@ -5,6 +5,7 @@ import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
+import { useEffect, useRef, useState } from "react";
 
 export const BasePage = ({
   children,
@@ -19,20 +20,15 @@ export const BasePage = ({
 }) => {
   // Extract header and content from children
   let header: React.ReactNode = null;
-  let contentComponent: React.ReactNode = null;
-  const otherContent: React.ReactNode[] = [];
+  const content: React.ReactNode[] = [];
 
   React.Children.forEach(children, (child) => {
     if (React.isValidElement(child)) {
       if (child.type === BasePage.Header) {
         header = child;
-      } else if (child.type === BasePage.Content) {
-        contentComponent = child;
       } else {
-        otherContent.push(child);
+        content.push(child);
       }
-    } else {
-      otherContent.push(child);
     }
   });
 
@@ -40,27 +36,21 @@ export const BasePage = ({
     return <CenteredLoader />;
   }
 
-  // If there's no specific Content component, wrap other content in the default Box
-  const content =
-    contentComponent ||
-    (otherContent.length > 0 ? (
-      <BasePage.Content>{otherContent}</BasePage.Content>
-    ) : null);
-
   return (
-    <Box
+    <Stack
       sx={{
-        maxHeight: "100vh", // Restrict height to viewport
-        overflow: "auto", // Enable scrolling when content overflows
-        minWidth: "auto", // Allow component to shrink with no fixed minimal width
+        maxHeight: "100vh",
+        overflow: "hidden",
+        minWidth: "auto",
         borderRadius: "sm",
         pl: 2,
-        pt: 2, // Add top padding to increase distance from top
+        pt: 2,
+        gap: 2,
       }}
     >
       {header}
       {showEmpty ? <EmptyPage isError={isError} /> : content}
-    </Box>
+    </Stack>
   );
 };
 
@@ -110,10 +100,3 @@ BasePage.Header = ({
   );
 };
 
-BasePage.Content = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <Box sx={{ height: "calc(100vh - 100px)", overflow: "auto" }}>
-      {children}
-    </Box>
-  );
-};
