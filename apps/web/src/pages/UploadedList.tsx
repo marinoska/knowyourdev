@@ -6,7 +6,6 @@ import { UploadModal } from "./UploadModal.js";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
-import { ScrollableBox } from "@/components/ScrollableBox.tsx";
 import { CircularProgress } from "@mui/joy";
 import Button from "@mui/joy/Button";
 import Sheet from "@mui/joy/Sheet";
@@ -45,7 +44,7 @@ export const UploadedList = () => {
           icon={UploadFile}
           action={() => setOpenUploadModal(true)}
         />
-        <ScrollableBox>
+        <BasePage.Content>
           <Sheet
             sx={{
               padding: 2,
@@ -77,7 +76,7 @@ export const UploadedList = () => {
               </Button>
             </Stack>
           )}
-        </ScrollableBox>
+        </BasePage.Content>
       </BasePage>
       {openUploadModal && (
         <UploadModal setOpen={setOpenUploadModal} open={openUploadModal} />

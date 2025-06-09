@@ -2,7 +2,6 @@ import { Snackbar } from "@/components/Snackbar.tsx";
 import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
-import { ScrollableBox } from "@/components/ScrollableBox.tsx";
 import { useMemo, useState } from "react";
 import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
@@ -114,9 +113,9 @@ const UploadPage = ({
         <BasePage.Header>
           {header}
         </BasePage.Header>
-        <ScrollableBox>
+        <BasePage.Content>
           {profile && <AnalysisTabs tabs={getTabItems()} />}
-        </ScrollableBox>
+        </BasePage.Content>
       </BasePage>
     </>
   );

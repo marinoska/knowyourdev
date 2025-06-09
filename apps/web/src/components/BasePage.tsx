@@ -19,19 +19,34 @@ export const BasePage = ({
 }) => {
   // Extract header and content from children
   let header: React.ReactNode = null;
-  const content: React.ReactNode[] = [];
+  let contentComponent: React.ReactNode = null;
+  const otherContent: React.ReactNode[] = [];
 
   React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child) && child.type === BasePage.Header) {
-      header = child;
+    if (React.isValidElement(child)) {
+      if (child.type === BasePage.Header) {
+        header = child;
+      } else if (child.type === BasePage.Content) {
+        contentComponent = child;
+      } else {
+        otherContent.push(child);
+      }
     } else {
-      content.push(child);
+      otherContent.push(child);
     }
   });
 
   if (isLoading) {
     return <CenteredLoader />;
   }
+
+  // If there's no specific Content component, wrap other content in the default Box
+  const content =
+    contentComponent ||
+    (otherContent.length > 0 ? (
+      <BasePage.Content>{otherContent}</BasePage.Content>
+    ) : null);
+
   return (
     <Box
       sx={{
@@ -93,5 +108,13 @@ BasePage.Header = ({
         </Button>
       )}
     </Stack>
+  );
+};
+
+BasePage.Content = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Box sx={{ height: "calc(100vh - 100px)", overflow: "auto" }}>
+      {children}
+    </Box>
   );
 };
