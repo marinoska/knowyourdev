@@ -20,7 +20,6 @@ import { closeSidebar } from "../utils";
 import KnowYourDevIcon from "./KnowYourDevIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 
-// Navigation Configuration
 const routes = [
   {
     path: "/dashboard",

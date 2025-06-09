@@ -55,6 +55,7 @@ export const BasePage = ({
         minWidth: "auto", // Allow component to shrink with no fixed minimal width
         borderRadius: "sm",
         pl: 2,
+        pt: 2, // Add top padding to increase distance from top
       }}
     >
       {header}
@@ -87,8 +88,6 @@ BasePage.Header = ({
     <Stack
       sx={{
         display: "flex",
-        pt: 1,
-        pb: 3,
         gap: 3,
         flexDirection: { xs: "column", sm: "row" },
         alignItems: { xs: "start", sm: "center" },

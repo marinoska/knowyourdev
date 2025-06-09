@@ -3,7 +3,6 @@ import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useMemo, useState } from "react";
-import Box from "@mui/joy/Box";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
@@ -105,14 +104,8 @@ const UploadPage = ({
           onClose={dismissError}
         />
       )}
-      <BasePage
-        isLoading={isLoading}
-        isError={isError}
-        showEmpty={!profile}
-      >
-        <BasePage.Header>
-          {header}
-        </BasePage.Header>
+      <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile}>
+        <BasePage.Header>{header}</BasePage.Header>
         <BasePage.Content>
           {profile && <AnalysisTabs tabs={getTabItems()} />}
         </BasePage.Content>
