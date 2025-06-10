@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+ 
 import boom, { Boom } from "@hapi/boom";
 import { isCelebrateError } from "celebrate";
 import logger from "./logger.js";

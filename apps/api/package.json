@@ -17,6 +17,7 @@
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/formidable": "^3.4.0",
     "@types/node": "^22.13.10",
     "@types/pdf-parse": "^1.1.4",
     "nodemon": "^3.1.9",
@@ -27,11 +28,13 @@
     "@types/multer": "^1.4.12"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
     "@kyd/common": "workspace:*",
     "@hapi/boom": "^10.0.1",
     "@langchain/community": "^0.3.30",
     "@langchain/core": "^0.3.40",
     "@langchain/openai": "^0.4.4",
+    "formidable": "^3.5.1",
     "body-parser": "^1.20.3",
     "celebrate": "^15.0.3",
     "cors": "^2.8.5",

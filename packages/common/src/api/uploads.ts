@@ -10,6 +10,8 @@ export type UploadItem = {
   size: number;
   parseStatus: ParsedStatus;
   createdAt: string;
+  r2Key?: string; // Cloudflare R2 object key
+  r2Url?: string; // Cloudflare R2 object URL
 };
 
 export type TUploadsPage = { uploads: UploadItem[] };

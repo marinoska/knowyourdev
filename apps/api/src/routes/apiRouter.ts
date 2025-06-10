@@ -5,9 +5,8 @@ import { notFoundController } from "./api/notFound.controller.js";
 import {
   documentUploadController,
   documentUploadValidationSchema,
-  FILE_MULTIPART_PARAM,
-  upload,
 } from "@/routes/api/document/upload.controller.js";
+import { r2Upload } from "@/middleware/r2Upload.middleware.js";
 import {
   getUploadsListController,
   getUploadsListValidationSchema,
@@ -25,7 +24,7 @@ const apiRouter: Router = express.Router();
 
 apiRouter.post(
   "/document/upload",
-  upload.single(FILE_MULTIPART_PARAM),
+  r2Upload,
   celebrate(documentUploadValidationSchema, validateOptions),
   documentUploadController,
 );

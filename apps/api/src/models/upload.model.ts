@@ -8,6 +8,8 @@ export type TUpload = {
   contentType: string; // MIME type (e.g., application/pdf, image/png)
   // data: Buffer;          // Binary file data
   size: number; // File size in bytes
+  r2Key?: string; // Cloudflare R2 object key
+  r2Url?: string; // Cloudflare R2 object URL
   metadata: {
     name: string;
     role: string;
@@ -31,6 +33,8 @@ const UploadSchema = new Schema<TUploadDocument, TUploadModel>(
     contentType: { type: String, required: true, immutable: true },
     // data: {type: Buffer, required: true},
     size: { type: Number, required: true, immutable: true },
+    r2Key: { type: String },
+    r2Url: { type: String },
     metadata: {
       name: { type: String, required: true },
       role: { type: String, default: "" },

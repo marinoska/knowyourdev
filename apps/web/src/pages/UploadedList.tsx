@@ -5,10 +5,11 @@ import * as React from "react";
 import { UploadModal } from "./UploadModal.js";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { BasePage, Container } from "@/components/BasePage.tsx";
+import { BasePage } from "@/components/BasePage.tsx";
 import { CircularProgress } from "@mui/joy";
 import Button from "@mui/joy/Button";
 import Sheet from "@mui/joy/Sheet";
+import Container from "@/components/Container.tsx";
 
 export const UploadedList = () => {
   const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
