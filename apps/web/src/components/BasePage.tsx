@@ -1,11 +1,9 @@
-import * as React from "react";
 import CenteredLoader from "@/components/Loader.tsx";
 import EmptyPage from "@/components/EmptyPage.tsx";
-import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
-import { useEffect, useRef, useState } from "react";
+import { Children, ElementType, isValidElement, ReactNode } from "react";
 
 export const BasePage = ({
   children,
@@ -19,11 +17,11 @@ export const BasePage = ({
   showEmpty: boolean;
 }) => {
   // Extract header and content from children
-  let header: React.ReactNode = null;
-  const content: React.ReactNode[] = [];
+  let header: ReactNode = null;
+  const content: ReactNode[] = [];
 
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child)) {
+  Children.forEach(children, (child) => {
+    if (isValidElement(child)) {
       if (child.type === BasePage.Header) {
         header = child;
       } else {
@@ -63,11 +61,11 @@ BasePage.Header = ({
   icon: Icon,
   action,
 }: {
-  children?: React.ReactNode;
+  children?: ReactNode;
   title?: string;
   subtitle?: string;
   buttonLabel?: string;
-  icon?: React.ElementType;
+  icon?: ElementType;
   action?: VoidFunction;
 }) => {
   if (children) {
@@ -99,4 +97,3 @@ BasePage.Header = ({
     </Stack>
   );
 };
-
