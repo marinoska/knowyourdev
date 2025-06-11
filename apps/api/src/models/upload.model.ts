@@ -28,13 +28,12 @@ export type TUploadModel = Model<TUploadDocument>;
 const UploadSchema = new Schema<TUploadDocument, TUploadModel>(
   {
     originalName: { type: String, required: true, immutable: true },
-    filename: { type: String, required: true, immutable: true },
+    filename: { type: String, required: false, immutable: true },
     hash: { type: String, required: true, immutable: true },
     contentType: { type: String, required: true, immutable: true },
-    // data: {type: Buffer, required: true},
     size: { type: Number, required: true, immutable: true },
-    r2Key: { type: String },
-    r2Url: { type: String },
+    r2Key: { type: String, required: true, immutable: true },
+    r2Url: { type: String, required: true, immutable: true },
     metadata: {
       name: { type: String, required: true },
       role: { type: String, default: "" },

@@ -35,7 +35,7 @@ export const documentUploadController: DocumentUploadController = async (
 
   const newUpload: TUploadDocument = new UploadModel({
     originalName: originalname,
-    filename: "",
+    filename: r2Key,
     hash,
     contentType: mimetype,
     size,
