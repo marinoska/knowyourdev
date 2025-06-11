@@ -8,6 +8,10 @@ import {
 } from "@/routes/api/document/upload.controller.js";
 import { r2Upload } from "@/middleware/r2Upload.middleware.js";
 import {
+  FILE_MULTIPART_PARAM,
+  uploadFile,
+} from "@/middleware/uploadFile.middleware.js";
+import {
   getUploadsListController,
   getUploadsListValidationSchema,
 } from "@/routes/api/document/list.controller.js";
@@ -24,8 +28,9 @@ const apiRouter: Router = express.Router();
 
 apiRouter.post(
   "/document/upload",
-  r2Upload,
   celebrate(documentUploadValidationSchema, validateOptions),
+  uploadFile.single(FILE_MULTIPART_PARAM),
+  r2Upload,
   documentUploadController,
 );
 apiRouter.get(

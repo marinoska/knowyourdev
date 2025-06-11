@@ -1,7 +1,7 @@
 import { Joi, Segments } from "celebrate";
 import logger from "@/app/logger.js";
 import type { Response, Request, RequestHandler } from "express";
-import { ValidationError } from "@/app/errors.js";
+import { HttpError, ValidationError } from "@/app/errors.js";
 import { TUploadDocument, UploadModel } from "@/models/upload.model.js";
 import {
   DocumentUploadRequestBody,
@@ -32,19 +32,18 @@ export const documentUploadController: DocumentUploadController = async (
   res: Response<DocumentUploadResponse>,
 ) => {
   // r2Upload middleware should have added the file to `req.r2File`
-  if (!req.r2File) {
-    throw new ValidationError("No file provided.");
+  if (!req.r2File || !req.file) {
+    throw new Error("No file uploaded to R2. Please try again.");
   }
 
   const { name, role } = req.body;
-  // File metadata from r2File
-  const { originalname, mimetype, size, hash, r2Key, r2Url, buffer } =
-    req.r2File;
+  const { originalname, mimetype, size, buffer } = req.file;
+  const { hash, r2Key, r2Url } = req.r2File;
 
   // Create a new upload document
   const newUpload: TUploadDocument = new UploadModel({
     originalName: originalname,
-    filename: `${hash}-${originalname}`, // Generate a filename for backward compatibility
+    filename: hash, // Generate a filename for backward compatibility
     hash,
     contentType: mimetype,
     size,
