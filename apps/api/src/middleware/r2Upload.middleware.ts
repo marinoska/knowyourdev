@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { createHash } from "@/utils/crypto.js";
 import { uploadFileToR2 } from "@/services/r2Storage.service.js";
 import { HttpError, ValidationError } from "@/app/errors.js";
+import path from "path";
 
 // Extend the Express Request type to include our file data
 declare global {
@@ -28,12 +29,13 @@ export const r2Upload = async (
     throw new ValidationError("No file provided.");
   }
 
-  const { mimetype, buffer } = req.file;
+  const { mimetype, buffer, originalname } = req.file;
 
   const hash = createHash(buffer);
+  const fileExtension = path.extname(originalname);
 
   try {
-    const r2Key = `uploads/${hash}`;
+    const r2Key = `uploads/${hash}${fileExtension}`;
     const r2Url = await uploadFileToR2(buffer, r2Key, mimetype);
 
     req.r2File = {

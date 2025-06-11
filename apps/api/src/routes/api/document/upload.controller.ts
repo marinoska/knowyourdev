@@ -1,18 +1,11 @@
 import { Joi, Segments } from "celebrate";
-import logger from "@/app/logger.js";
 import type { Response, Request, RequestHandler } from "express";
-import { HttpError, ValidationError } from "@/app/errors.js";
 import { TUploadDocument, UploadModel } from "@/models/upload.model.js";
 import {
   DocumentUploadRequestBody,
   DocumentUploadResponse,
 } from "@kyd/common/api";
-import {
-  processUpload,
-  runCVDataExtraction,
-} from "@/chain/extraction/runner.js";
-
-const log = logger("UploadController");
+import { processUpload } from "@/chain/extraction/runner.js";
 
 export type DocumentUploadController = RequestHandler<
   any,
@@ -40,10 +33,9 @@ export const documentUploadController: DocumentUploadController = async (
   const { originalname, mimetype, size, buffer } = req.file;
   const { hash, r2Key, r2Url } = req.r2File;
 
-  // Create a new upload document
   const newUpload: TUploadDocument = new UploadModel({
     originalName: originalname,
-    filename: hash, // Generate a filename for backward compatibility
+    filename: "",
     hash,
     contentType: mimetype,
     size,
