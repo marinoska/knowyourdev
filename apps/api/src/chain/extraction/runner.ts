@@ -10,7 +10,7 @@ import logger from "@/app/logger.js";
 import mammoth from "mammoth";
 import { Schema } from "mongoose";
 import { ExtractedCVData } from "@kyd/common/api";
-import pdfParse from "pdf-parse";
+import pdfParse from "@/utils/pdf-parse-wrapper.js";
 import { downloadFileFromR2 } from "@/services/r2Storage.service.js";
 
 const log = logger("DataExtraction");
