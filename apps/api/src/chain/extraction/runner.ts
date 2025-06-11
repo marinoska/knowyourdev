@@ -15,33 +15,71 @@ import { downloadFileFromR2 } from "@/services/r2Storage.service.js";
 
 const log = logger("DataExtraction");
 
+/*
+Here are typical bullet symbols found in CVs:
+● (black circle)
+• (small black dot)
+– (en dash, often used as a fake bullet)
+- (hyphen)
+▪ (small square)
+* (asterisk)
+►, », → (arrow-like symbols)
+ */
+// const bulletRegex = /[\u2022\u25CF\u25AA\u25B6\u00BB\u2192\-–*]/;
+
+const cleanup = (text: string) => {
+  // Normalize all bullet-like lines to start with "●"
+  return text
+    .replace(/\f/g, " ") // Remove page breaks (PDF-specific)
+    .replace(/\n[\-–*•▪►»→]\s+/g, " ● ") // Normalize dashed/odd bullets
+    .replace(/\n●/g, " ●") // Rejoin broken bullet lines
+    .replace(/([^\n])\n(?=[^\n●])/g, "$1 ") // Merge broken sentences
+    .replace(/\n{2,}/g, "\n"); // Compact excessive newlines
+};
+
+async function processWordDocument(
+  filePathOrBuffer: string | Buffer,
+): Promise<string> {
+  if (Buffer.isBuffer(filePathOrBuffer)) {
+    // Use buffer directly with mammoth
+    const result = await mammoth.extractRawText({ buffer: filePathOrBuffer });
+    return result.value;
+  } else {
+    // Fallback to file path
+    const result = await mammoth.extractRawText({ path: filePathOrBuffer });
+    return result.value;
+  }
+}
+
+async function processPdfDocument(
+  filePathOrBuffer: string | Buffer,
+): Promise<string> {
+  if (Buffer.isBuffer(filePathOrBuffer)) {
+    // Use buffer directly with pdf-parse
+    const data = await pdfParse(filePathOrBuffer);
+    return data.text;
+  } else {
+    // Fallback to PDFLoader for file paths
+    const loader = new PDFLoader(filePathOrBuffer);
+    const docs = await loader.load();
+    return docs.map((doc) => doc.pageContent).join(" ");
+  }
+}
+
 async function extractCVText(
   filePathOrBuffer: string | Buffer,
   contentType: string,
 ): Promise<string> {
+  let text = "";
   if (contentType.includes("wordprocessingml.document")) {
-    // Handle .docx files
-    if (Buffer.isBuffer(filePathOrBuffer)) {
-      // Use buffer directly with mammoth
-      const result = await mammoth.extractRawText({ buffer: filePathOrBuffer });
-      return result.value;
-    } else {
-      // Fallback to file path
-      const result = await mammoth.extractRawText({ path: filePathOrBuffer });
-      return result.value;
-    }
+    text = await processWordDocument(filePathOrBuffer);
   }
   if (contentType.includes("pdf")) {
-    if (Buffer.isBuffer(filePathOrBuffer)) {
-      // Use buffer directly with pdf-parse
-      const data = await pdfParse(filePathOrBuffer);
-      return data.text;
-    } else {
-      // Fallback to PDFLoader for file paths
-      const loader = new PDFLoader(filePathOrBuffer);
-      const docs = await loader.load();
-      return docs.map((doc) => doc.pageContent).join(" ");
-    }
+    text = await processPdfDocument(filePathOrBuffer);
+  }
+
+  if (text) {
+    return cleanup(text);
   }
 
   throw new Error("Unknown file type: " + contentType);
