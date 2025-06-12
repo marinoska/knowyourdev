@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import { UploadedList } from "./pages/UploadedList.tsx";
 import { UploadedProfile } from "@/pages/UploadedProfile.tsx";
+import { Projects } from "@/pages/Projects.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@mui/joy/Button";
 import KnowYourDevIcon from "@/components/KnowYourDevIcon.tsx";
@@ -81,6 +82,7 @@ export default function App() {
                         <Routes>
                             <Route path="/" element={<Dashboard/>}/>
                             <Route path="/dashboard" element={<Dashboard/>}/>
+                            <Route path="/projects" element={<Projects/>}/>
                             <Route path="/uploads" element={<UploadedList/>}/>
                             <Route path="/uploads/:id" element={<UploadedProfile/>}/>
                             <Route path="*" element={<NotFound/>}/>

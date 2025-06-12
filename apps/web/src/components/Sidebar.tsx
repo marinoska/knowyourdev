@@ -13,6 +13,7 @@ import Tooltip from "@mui/joy/Tooltip";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import DashboardIcon from "@mui/icons-material/BarChart";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import FolderIcon from "@mui/icons-material/Folder";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
@@ -25,6 +26,11 @@ const routes = [
     path: "/dashboard",
     label: "Dashboard",
     icon: HomeRoundedIcon,
+  },
+  {
+    path: "/projects",
+    label: "Projects",
+    icon: FolderIcon,
   },
   {
     path: "/uploads",
