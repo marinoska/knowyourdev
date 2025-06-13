@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartProvider.tsx";
+import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.ts";
 import { GreenLegendColor, YellowLegendColor } from "@/utils/const";
 import { RedLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";

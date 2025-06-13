@@ -6,10 +6,7 @@ import { useMemo, useState } from "react";
 import AnalysisTabs, { TabItem } from "@/pages/Analisys/AnalysisTabs.tsx";
 import { CareerTimelineChart } from "@/pages/Analisys/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
-import {
-  ChartProvider,
-  useChartContext,
-} from "@/pages/Analisys/Chart/Core/ChartProvider.tsx";
+import { ChartProvider } from "@/pages/Analisys/Chart/Core/ChartProvider.tsx";
 import { CareerTechTimelineChart } from "@/pages/Analisys/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";

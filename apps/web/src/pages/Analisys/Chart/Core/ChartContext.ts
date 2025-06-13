@@ -16,7 +16,7 @@ type ChartContextType = {
   monthsActive: number;
 };
 
-const ChartContext = createContext<ChartContextType>({
+export const ChartContext = createContext<ChartContextType>({
   jobGaps: [],
   softwareDevelopmentJobs: [],
   irrelevantJobs: [],
@@ -29,5 +29,3 @@ const ChartContext = createContext<ChartContextType>({
 export const useChartContext = () => {
   return useContext(ChartContext);
 };
-
-export { ChartContext };
