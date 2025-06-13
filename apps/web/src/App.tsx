@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import { UploadedList } from "./pages/UploadedList.tsx";
 import { UploadedProfile } from "@/pages/UploadedProfile.tsx";
 import { Projects } from "@/pages/Projects.tsx";
+import { ProjectProfile } from "@/pages/ProjectProfile.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@mui/joy/Button";
 import KnowYourDevIcon from "@/components/KnowYourDevIcon.tsx";
@@ -83,6 +84,7 @@ export default function App() {
                             <Route path="/" element={<Dashboard/>}/>
                             <Route path="/dashboard" element={<Dashboard/>}/>
                             <Route path="/projects" element={<Projects/>}/>
+                            <Route path="/projects/:id" element={<ProjectProfile/>}/>
                             <Route path="/uploads" element={<UploadedList/>}/>
                             <Route path="/uploads/:id" element={<UploadedProfile/>}/>
                             <Route path="*" element={<NotFound/>}/>

@@ -1,9 +1,9 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { projectsKeys } from "./keys.ts";
-import { listProjects } from "./api.ts";
+import { getProjectProfile, listProjects } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { useEffect, useState } from "react";
-import { GetProjectsListResponse } from "@kyd/common/api";
+import { GetProjectsListResponse, ProjectsItem } from "@kyd/common/api";
 
 export const useProjectsQuery = ({
   page,
@@ -42,6 +42,35 @@ export const useProjectsQuery = ({
 
   return {
     data: allData,
+    isError,
+    error,
+    showError,
+    dismissError: () => setShowError(false),
+    ...rest,
+  };
+};
+
+export const useProjectProfileQuery = ({ projectId }: { projectId?: string }) => {
+  const [showError, setShowError] = useState(false);
+  const { data, isError, error, ...rest } = useQuery<
+    ProjectsItem,
+    Error
+  >({
+    queryKey: projectsKeys.profile(projectId!),
+    queryFn: () => getProjectProfile({ projectId: projectId! }),
+    retry: TIMES_THREE,
+    enabled: !!projectId,
+  });
+
+  useEffect(() => {
+    if (isError) {
+      console.error(error);
+      setShowError(true);
+    }
+  }, [isError, error]);
+
+  return {
+    profile: data,
     isError,
     error,
     showError,

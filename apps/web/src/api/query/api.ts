@@ -4,6 +4,7 @@ import {
   DocumentUploadResponse,
   GetProjectsListResponse,
   GetUploadsListResponse,
+  ProjectsItem,
   TProjectsPage,
   TUploadsPage,
   UploadTechProfileResponse,
@@ -60,4 +61,14 @@ export const getUploadProfile = async ({ uploadId }: { uploadId: string }) => {
   return apiClient.get<UploadTechProfileResponse>(
     `/document/uploads/${uploadId}`,
   );
+};
+
+export const getProjectProfile = async ({ projectId }: { projectId: string }): Promise<ProjectsItem> => {
+  const project = mockProjects.find((p) => p._id === projectId);
+
+  if (!project) {
+    throw new Error(`Project with ID ${projectId} not found`);
+  }
+
+  return Promise.resolve(project);
 };
