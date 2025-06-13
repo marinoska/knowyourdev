@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
 import { Typography } from "@mui/joy";
-import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
+import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartProvider.tsx";
 import { TechProfile } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import { GreenLegendColor, SoftGrayColor } from "@/utils/const.ts";

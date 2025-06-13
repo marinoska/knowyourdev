@@ -9,7 +9,7 @@ import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import {
   ChartProvider,
   useChartContext,
-} from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
+} from "@/pages/Analisys/Chart/Core/ChartProvider.tsx";
 import { CareerTechTimelineChart } from "@/pages/Analisys/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";

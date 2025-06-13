@@ -1,35 +1,8 @@
-import { createContext, ReactNode, useContext, useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
 import { getJobGaps } from "@/pages/Analisys/Chart/Core/ranges.ts";
 import { GAP_JOB, GAP_ROLE, sumRanges } from "@kyd/common";
-
-export type Gap = Pick<
-  Job,
-  "job" | "role" | "months" | "start" | "end" | "popularity"
->;
-type ChartContextType = {
-  jobGaps: Gap[];
-  softwareDevelopmentJobs: Job[];
-  irrelevantJobs: Job[];
-  jobsWithMissingTech: Job[];
-  jobsWithFilledTech: Job[];
-  profile?: ProcessedUploadProfile;
-  monthsActive: number;
-};
-
-const ChartContext = createContext<ChartContextType>({
-  jobGaps: [],
-  softwareDevelopmentJobs: [],
-  irrelevantJobs: [],
-  jobsWithMissingTech: [],
-  jobsWithFilledTech: [],
-  profile: undefined,
-  monthsActive: 0,
-});
-
-export const useChartContext = () => {
-  return useContext(ChartContext);
-};
+import { ChartContext, Gap } from "./ChartContext.ts";
 
 export function ChartProvider({
   children,

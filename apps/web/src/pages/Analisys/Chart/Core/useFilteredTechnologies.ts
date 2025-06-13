@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.tsx";
+import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartProvider.tsx";
 import { ScopeType } from "@kyd/common/api";
 
 export const useFilteredTechnologies = () => {

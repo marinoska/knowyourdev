@@ -8,7 +8,7 @@ import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { format } from "date-fns";
 
 type ProjectProfileParams = {
@@ -38,7 +38,7 @@ const ProjectPage = ({
         icon={BusinessCenterIcon}
       />
     ),
-    [profile?.name, profile?.createdAt],
+    [profile, profile?.name, profile?.createdAt],
   );
 
   return (
@@ -65,29 +65,33 @@ const ProjectPage = ({
             <Stack gap={2}>
               <Typography level="h4">Project Details</Typography>
               <Divider />
-              
-              <Typography level="h5">Description</Typography>
-              <Typography>{profile.settings?.description || "No description provided."}</Typography>
-              
-              <Typography level="h5">Technical Focus</Typography>
+
+              <Typography component="h5">Description</Typography>
+              <Typography>
+                {profile.settings?.description || "No description provided."}
+              </Typography>
+
+              <Typography component="h5">Technical Focus</Typography>
               <Stack direction="row" gap={1} flexWrap="wrap">
                 {profile.settings?.techFocus.map((tech) => (
-                  <Sheet 
-                    key={tech} 
-                    variant="outlined" 
-                    sx={{ 
-                      padding: 1, 
-                      borderRadius: 'sm',
-                      backgroundColor: 'var(--joy-palette-primary-softBg)'
+                  <Sheet
+                    key={tech}
+                    variant="outlined"
+                    sx={{
+                      padding: 1,
+                      borderRadius: "sm",
+                      backgroundColor: "var(--joy-palette-primary-softBg)",
                     }}
                   >
                     <Typography>{tech}</Typography>
                   </Sheet>
                 ))}
               </Stack>
-              
-              <Typography level="h5">Baseline Job Duration</Typography>
-              <Typography>{profile.settings?.baselineJobDuration} days</Typography>
+
+              <Typography component="h5">Baseline Job Duration</Typography>
+              <Typography>
+                {profile.settings?.baselineJobDuration} days
+              </Typography>
             </Stack>
           </Sheet>
         )}
