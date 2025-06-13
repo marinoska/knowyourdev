@@ -15,6 +15,7 @@ import { TechDurationPieChart } from "@/pages/Analisys/Chart/TechDurationPieChar
 import { TechMentionsPieChart } from "@/pages/Analisys/Chart/TechMentionsPieChart.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates";
 import { TechPopularityTimelineChart } from "@/pages/Analisys/Chart/TechPopularityTimelineChart.tsx";
+import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.ts";
 
 type UploadedProfileParams = {
   id: string;
