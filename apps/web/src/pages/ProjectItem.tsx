@@ -1,5 +1,5 @@
 import Box from "@mui/joy/Box";
-import FolderIcon from "@mui/icons-material/Folder";
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { format } from "date-fns";
@@ -38,7 +38,7 @@ export const ProjectItem = ({ item }: { item: ProjectItem }) => {
     >
       <Stack direction="row" gap={2} alignItems="center">
         <Typography level="body-md">
-          <FolderIcon />
+          <BusinessCenterIcon />
         </Typography>
         <Stack>
           <Typography>

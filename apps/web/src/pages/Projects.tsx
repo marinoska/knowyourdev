@@ -6,54 +6,24 @@ import { CircularProgress } from "@mui/joy";
 import Button from "@mui/joy/Button";
 import Sheet from "@mui/joy/Sheet";
 import Container from "@/components/Container.tsx";
-import FolderIcon from "@mui/icons-material/Folder";
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import { ProjectItem } from "./ProjectItem";
 import { ProjectModal } from "./ProjectModal";
+import { useProjectsQuery } from "@/api/query/useProjectsQuery.ts";
 
 export const Projects = () => {
   const [openProjectModal, setOpenProjectModal] = React.useState<boolean>(false);
-  const [projects, setProjects] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
-  const [showError, setShowError] = React.useState(false);
-  const [page, setPage] = React.useState(1);
-  const [hasNextPage, setHasNextPage] = React.useState(true);
-  const [isFetchingNextPage, setIsFetchingNextPage] = React.useState(false);
 
-  // Mock data for initial implementation
-  React.useEffect(() => {
-    // In a real implementation, this would be replaced with an API call
-    setProjects([
-      { _id: "1", name: "Project 1", description: "Description for Project 1", createdAt: new Date().toISOString() },
-      { _id: "2", name: "Project 2", description: "Description for Project 2", createdAt: new Date().toISOString() },
-    ]);
-
-    // Simulate having more pages
-    setHasNextPage(page < 3);
-  }, [page]);
-
-  const dismissError = () => {
-    setShowError(false);
-  };
-
-  const fetchNextPage = () => {
-    setIsFetchingNextPage(true);
-    // Simulate API call delay
-    setTimeout(() => {
-      setPage(prevPage => prevPage + 1);
-      setIsFetchingNextPage(false);
-
-      // Add more mock projects when loading next page
-      setProjects(prevProjects => [
-        ...prevProjects,
-        { _id: `${prevProjects.length + 1}`, name: `Project ${prevProjects.length + 1}`, description: `Description for Project ${prevProjects.length + 1}`, createdAt: new Date().toISOString() },
-        { _id: `${prevProjects.length + 2}`, name: `Project ${prevProjects.length + 2}`, description: `Description for Project ${prevProjects.length + 2}`, createdAt: new Date().toISOString() },
-      ]);
-
-      // Update hasNextPage based on the new page number
-      setHasNextPage(page + 1 < 3);
-    }, 1000);
-  };
+  const {
+    data: projects,
+    isError,
+    showError,
+    dismissError,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useProjectsQuery({ page: 1, limit: 300 });
 
   return (
     <>
@@ -72,7 +42,7 @@ export const Projects = () => {
         <BasePage.Header
           title="Projects"
           buttonLabel="Create Project"
-          icon={FolderIcon}
+          icon={BusinessCenterIcon}
           action={() => setOpenProjectModal(true)}
         />
         <Container>
@@ -85,7 +55,15 @@ export const Projects = () => {
             }}
           >
             {projects?.map((project) => (
-              <ProjectItem key={project._id} item={project} />
+              <ProjectItem 
+                key={project._id} 
+                item={{
+                  _id: project._id,
+                  name: project.name,
+                  description: project.settings?.description || '',
+                  createdAt: project.createdAt
+                }} 
+              />
             ))}
           </Sheet>
 

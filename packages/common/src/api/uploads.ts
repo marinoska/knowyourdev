@@ -1,3 +1,5 @@
+import { ScopeType } from "./constants.js";
+
 export type ParsedStatus = "pending" | "failed" | "processed";
 export type UploadItem = {
   _id: string;
@@ -16,11 +18,27 @@ export type UploadItem = {
 
 export type TUploadsPage = { uploads: UploadItem[] };
 
-export type GetUploadsListResponse = TUploadsPage & {
+export type ProjectsItem = {
+  _id: string;
+  name: string;
+  settings: {
+    baselineJobDuration: number;
+    techFocus: ScopeType[];
+    description: string;
+  };
+  createdAt: string;
+};
+
+export type TProjectsPage = { projects: ProjectsItem[] };
+
+type TListResponse = {
   totalRecords: number;
   currentPage: number;
   totalPages: number;
 };
+
+export type GetUploadsListResponse = TUploadsPage & TListResponse;
+export type GetProjectsListResponse = TProjectsPage & TListResponse;
 
 export type GetUploadsListQueryParams = {
   page: number;

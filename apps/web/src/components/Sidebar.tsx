@@ -11,9 +11,8 @@ import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import Tooltip from "@mui/joy/Tooltip";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import DashboardIcon from "@mui/icons-material/BarChart";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import FolderIcon from "@mui/icons-material/Folder";
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
@@ -30,17 +29,12 @@ const routes = [
   {
     path: "/projects",
     label: "Projects",
-    icon: FolderIcon,
+    icon: BusinessCenterIcon,
   },
   {
     path: "/uploads",
     label: "CV List",
     icon: UploadFileIcon,
-  },
-  {
-    path: "/support",
-    label: "Support",
-    icon: DashboardIcon,
   },
 ];
 
