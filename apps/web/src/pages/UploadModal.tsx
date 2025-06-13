@@ -10,8 +10,9 @@ import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import { FormLabel, Input } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { useUploadMutation } from "../api/query/useUploadMutation.js";
+import { useUploadMutation } from "../api/query/useUploadMutation.ts";
 import { Snackbar } from "../components/Snackbar.tsx";
+import { ProjectsDropdown } from "../components/ProjectsDropdown";
 
 export const UploadModal = ({
   open,
@@ -22,7 +23,7 @@ export const UploadModal = ({
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
+  const [project, setProject] = useState<string | null>(null);
 
   const { isPending, isError, isSuccess, reset, handleFileUpload } =
     useUploadMutation();
@@ -89,12 +90,11 @@ export const UploadModal = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <FormLabel id="applied-label">Applied For</FormLabel>
-            <Input
-              id="applied"
-              placeholder="e.g., Engineer for MVP"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
+            <ProjectsDropdown
+              selectedProject={project}
+              onProjectChange={setProject}
+              placeholder="Select a project"
+              required={true}
             />
           </Stack>
 
@@ -117,14 +117,14 @@ export const UploadModal = ({
               Cancel
             </Button>
             <Button
-              disabled={!file}
+              disabled={!file || !project}
               loading={isPending}
               size="md"
               variant="solid"
               color="primary"
               onClick={() => {
-                if (!file) return;
-                handleFileUpload(file, name, role);
+                if (!file || !project) return;
+                handleFileUpload(file, name, project);
               }}
             >
               Proceed

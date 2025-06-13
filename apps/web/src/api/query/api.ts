@@ -57,13 +57,23 @@ export const listProjects = async ({ page, limit }: ListParams) => {
   return Promise.resolve(mockResponse);
 };
 
+export const getProjectsProps = async () => {
+  const names = mockProjects.map((project) => project.name);
+
+  return Promise.resolve({ names });
+};
+
 export const getUploadProfile = async ({ uploadId }: { uploadId: string }) => {
   return apiClient.get<UploadTechProfileResponse>(
     `/document/uploads/${uploadId}`,
   );
 };
 
-export const getProjectProfile = async ({ projectId }: { projectId: string }): Promise<ProjectsItem> => {
+export const getProjectProfile = async ({
+  projectId,
+}: {
+  projectId: string;
+}): Promise<ProjectsItem> => {
   const project = mockProjects.find((p) => p._id === projectId);
 
   if (!project) {

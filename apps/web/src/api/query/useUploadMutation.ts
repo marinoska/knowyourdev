@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { InfiniteUploadList, uploadCV } from "./api.js";
+import { InfiniteUploadList, uploadCV } from "./api.ts";
 import {
   DocumentUploadRequestType,
   DocumentUploadResponse,
@@ -47,11 +47,12 @@ export const useUploadMutation = () => {
   const handleFileUpload = (
     file: File,
     name: string = "",
-    role: string = "",
+    role: string,
   ) => {
     const isValidFileSize = file.size <= MAXIMUM_UPLOAD_SIZE_BYTES;
 
     if (!isValidFileSize) throw Error(`Invalid file size ${file.toString()}`);
+    if (!role) throw Error(`Project is required`);
 
     return mutate({ file, name, role });
   };

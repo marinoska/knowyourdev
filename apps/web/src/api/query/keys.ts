@@ -10,4 +10,5 @@ export const projectsKeys = {
   list: (): QueryKey => ["projects", "list"],
   paginate: (page: number): QueryKey => ["projects", page],
   profile: (id: string): QueryKey => ["projects", "profile", id],
+  props: (): QueryKey => ["projects", "props"],
 };
