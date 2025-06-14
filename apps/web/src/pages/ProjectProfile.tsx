@@ -10,6 +10,7 @@ import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { format } from "date-fns";
+import { SCOPE_NAMES } from "@kyd/common/api";
 
 type ProjectProfileParams = {
   id: string;
@@ -38,7 +39,7 @@ const ProjectPage = ({
         icon={BusinessCenterIcon}
       />
     ),
-    [profile, profile?.name, profile?.createdAt],
+    [profile],
   );
 
   return (
@@ -83,14 +84,14 @@ const ProjectPage = ({
                       backgroundColor: "var(--joy-palette-primary-softBg)",
                     }}
                   >
-                    <Typography>{tech}</Typography>
+                    <Typography>{SCOPE_NAMES[tech]}</Typography>
                   </Sheet>
                 ))}
               </Stack>
 
               <Typography component="h5">Baseline Job Duration</Typography>
               <Typography>
-                {profile.settings?.baselineJobDuration} days
+                {profile.settings?.baselineJobDuration} months
               </Typography>
             </Stack>
           </Sheet>
