@@ -1,15 +1,13 @@
-import Stack from "@mui/joy/Stack";
 import * as React from "react";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
-import { CircularProgress } from "@mui/joy";
-import Button from "@mui/joy/Button";
 import Sheet from "@mui/joy/Sheet";
 import Container from "@/components/Container.tsx";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { ProjectItem } from "./ProjectItem.tsx";
 import { ProjectModal } from "./ProjectModal.tsx";
 import { useProjectsQuery } from "@/api/query/useProjectsQuery.ts";
+import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 
 export const ProjectsList = () => {
   const [openProjectModal, setOpenProjectModal] =
@@ -52,24 +50,11 @@ export const ProjectsList = () => {
             ))}
           </Sheet>
 
-          {hasNextPage && (
-            <Stack direction="row" justifyContent="center" padding={2}>
-              <Button
-                variant="solid"
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-              >
-                {isFetchingNextPage ? (
-                  <>
-                    <CircularProgress size="sm" sx={{ marginRight: 1 }} />
-                    Loading...
-                  </>
-                ) : (
-                  "Load More"
-                )}
-              </Button>
-            </Stack>
-          )}
+          <LoadMoreButton
+            onClick={() => fetchNextPage()}
+            isLoading={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+          />
         </Container>
       </BasePage>
       {openProjectModal && (
