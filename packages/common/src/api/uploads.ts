@@ -1,7 +1,7 @@
 import { ScopeType } from "./constants.js";
 
 export type ParsedStatus = "pending" | "failed" | "processed";
-export type UploadItem = {
+export type TUploadItem = {
   _id: string;
   name: string;
   role: string | null;
@@ -16,9 +16,9 @@ export type UploadItem = {
   r2Url?: string; // Cloudflare R2 object URL
 };
 
-export type TUploadsPage = { uploads: UploadItem[] };
+export type TUploadsPage = { uploads: TUploadItem[] };
 
-export type ProjectsItem = {
+export type TProjectsItem = {
   _id: string;
   name: string;
   settings: {
@@ -29,7 +29,7 @@ export type ProjectsItem = {
   createdAt: string;
 };
 
-export type TProjectsPage = { projects: ProjectsItem[] };
+export type TProjectsPage = { projects: TProjectsItem[] };
 
 type TListResponse = {
   totalRecords: number;
@@ -48,7 +48,7 @@ export type GetUploadsListQueryParams = {
 };
 
 export type DocumentUploadResponse = Omit<
-  UploadItem,
+  TUploadItem,
   "fullName" | "position" | "hash"
 >;
 

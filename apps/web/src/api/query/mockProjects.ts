@@ -1,6 +1,6 @@
-import { ProjectsItem } from "@kyd/common/api";
+import { TProjectsItem } from "@kyd/common/api";
 
-export const mockProjects: ProjectsItem[] = [
+export const mockProjects: TProjectsItem[] = [
   {
     _id: "1",
     name: "Web Application Development",

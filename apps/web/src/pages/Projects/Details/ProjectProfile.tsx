@@ -6,7 +6,7 @@ import Tabs, { TabItem } from "@/components/Tabs.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { format } from "date-fns";
-import { ProjectsItem } from "@kyd/common/api";
+import { TProjectsItem } from "@kyd/common/api";
 import ProjectSettingsContent from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
 import CandidatesContent from "@/pages/Projects/Details/CandidatesContent.tsx";
 
@@ -14,7 +14,7 @@ type ProjectProfileParams = {
   id: string;
 };
 
-const getTabItems = (profile: ProjectsItem): TabItem[] => [
+const getTabItems = (profile: TProjectsItem): TabItem[] => [
   {
     label: "Project Details",
     content: <ProjectSettingsContent profile={profile} />,

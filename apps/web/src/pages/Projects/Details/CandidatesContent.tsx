@@ -1,9 +1,9 @@
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import { ProjectsItem } from "@kyd/common/api";
+import { TProjectsItem } from "@kyd/common/api";
 import { BasePage } from "@/components/BasePage.tsx";
 
-export const CandidatesContent = ({ profile }: { profile: ProjectsItem }) => {
+export const CandidatesContent = ({ profile }: { profile: TProjectsItem }) => {
   console.log({ profile });
   return (
     <BasePage.Content>

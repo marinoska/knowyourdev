@@ -5,8 +5,8 @@ import theme from "./theme";
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import { UploadedList } from "./pages/Upload/UploadedList.tsx";
-import { UploadedProfile } from "@/pages/Upload/UploadedProfile.tsx";
+import { UploadsList } from "./pages/Upload/UploadsList.tsx";
+import { UploadProfile } from "@/pages/Upload/UploadProfile.tsx";
 import { ProjectsList } from "@/pages/Projects/ProjectsList.tsx";
 import { ProjectProfile } from "@/pages/Projects/Details/ProjectProfile.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -85,8 +85,8 @@ export default function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/projects" element={<ProjectsList />} />
               <Route path="/projects/:id" element={<ProjectProfile />} />
-              <Route path="/uploads" element={<UploadedList />} />
-              <Route path="/uploads/:id" element={<UploadedProfile />} />
+              <Route path="/uploads" element={<UploadsList />} />
+              <Route path="/uploads/:id" element={<UploadProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Box>

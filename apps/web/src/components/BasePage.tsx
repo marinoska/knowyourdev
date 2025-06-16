@@ -121,3 +121,39 @@ BasePage.Content = ({
     </Sheet>
   );
 };
+
+BasePage.ListItem = ({
+  children,
+  isActive = true,
+  onClick,
+  id,
+}: {
+  children: ReactNode;
+  isActive?: boolean;
+  onClick?: () => void;
+  id?: string;
+}) => {
+  const style = {
+    backgroundColor: "var(--joy-palette-background-body)",
+    p: 2,
+  };
+
+  const hoverStyle = {
+    "&:hover": {
+      backgroundColor: "var(--joy-palette-primary-softHoverBg)",
+      cursor: "pointer",
+    },
+  };
+
+  return (
+    <Sheet
+      key={id}
+      onClick={isActive ? onClick : undefined}
+      sx={isActive ? { ...style, ...hoverStyle } : { ...style }}
+    >
+      <Stack direction="row" gap={2} alignItems="center">
+        {children}
+      </Stack>
+    </Sheet>
+  );
+};

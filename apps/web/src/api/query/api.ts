@@ -4,7 +4,7 @@ import {
   DocumentUploadResponse,
   GetProjectsListResponse,
   GetUploadsListResponse,
-  ProjectsItem,
+  TProjectsItem,
   TProjectsPage,
   TUploadsPage,
   UploadTechProfileResponse,
@@ -73,7 +73,7 @@ export const getProjectProfile = async ({
   projectId,
 }: {
   projectId: string;
-}): Promise<ProjectsItem> => {
+}): Promise<TProjectsItem> => {
   const project = mockProjects.find((p) => p._id === projectId);
 
   if (!project) {

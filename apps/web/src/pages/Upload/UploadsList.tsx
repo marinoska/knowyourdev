@@ -1,4 +1,4 @@
-import { UploadedItem } from "./UploadedItem.tsx";
+import { UploadItem } from "./UploadItem.tsx";
 import UploadFile from "@mui/icons-material/Upload";
 import * as React from "react";
 import { UploadModal } from "./UploadModal.tsx";
@@ -8,7 +8,7 @@ import { BasePage } from "@/components/BasePage.tsx";
 import Container from "@/components/Container.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 
-export const UploadedList = () => {
+export const UploadsList = () => {
   const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
   const query = useUploadsQuery({ page: 1, limit: 300 });
@@ -34,7 +34,7 @@ export const UploadedList = () => {
         <Container>
           <BasePage.Content>
             {query.data?.map((upload) => (
-              <UploadedItem key={upload._id} item={upload} />
+              <UploadItem key={upload._id} item={upload} />
             ))}
           </BasePage.Content>
 

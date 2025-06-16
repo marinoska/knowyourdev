@@ -1,13 +1,13 @@
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
-import { SCOPE_NAMES, ProjectsItem } from "@kyd/common/api";
+import { SCOPE_NAMES, TProjectsItem } from "@kyd/common/api";
 import { BasePage } from "@/components/BasePage.tsx";
 
 export const ProjectSettingsContent = ({
   profile,
 }: {
-  profile: ProjectsItem;
+  profile: TProjectsItem;
 }) => {
   return (
     <BasePage.Content>

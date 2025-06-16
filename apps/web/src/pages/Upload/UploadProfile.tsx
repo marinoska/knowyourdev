@@ -62,7 +62,7 @@ const getTabItems = (): TabItem[] => [
   },
 ];
 
-export const UploadedProfile = () => {
+export const UploadProfile = () => {
   const { id } = useParams<UploadedProfileParams>();
 
   const query = useUploadProfileQuery({ uploadId: id });

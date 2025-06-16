@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { projectsKeys } from "./keys.ts";
 import { getProjectProfile, listProjects } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
-import { GetProjectsListResponse, ProjectsItem } from "@kyd/common/api";
+import { GetProjectsListResponse, TProjectsItem } from "@kyd/common/api";
 
 export const useProjectsQuery = ({
   page,
@@ -38,7 +38,7 @@ export const useProjectProfileQuery = ({
 }: {
   projectId?: string;
 }) => {
-  return useQuery<ProjectsItem, Error>({
+  return useQuery<TProjectsItem, Error>({
     queryKey: projectsKeys.profile(projectId!),
     queryFn: () => getProjectProfile({ projectId: projectId! }),
     retry: TIMES_THREE,
