@@ -1,8 +1,8 @@
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import Sheet from "@mui/joy/Sheet";
 import Chip from "@mui/joy/Chip";
 import { SCOPE_NAMES, ProjectsItem } from "@kyd/common/api";
+import { BasePage } from "@/components/BasePage.tsx";
 
 export const ProjectSettingsContent = ({
   profile,
@@ -10,14 +10,7 @@ export const ProjectSettingsContent = ({
   profile: ProjectsItem;
 }) => {
   return (
-    <Sheet
-      sx={{
-        padding: 3,
-        gap: 2,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <BasePage.Content>
       <Stack gap={2}>
         <Typography component="h5">Description</Typography>
         <Typography>
@@ -36,7 +29,7 @@ export const ProjectSettingsContent = ({
         <Typography component="h5">Baseline Job Duration</Typography>
         <Typography>{profile.settings?.baselineJobDuration} months</Typography>
       </Stack>
-    </Sheet>
+    </BasePage.Content>
   );
 };
 

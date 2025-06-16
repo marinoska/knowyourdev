@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
-import Sheet from "@mui/joy/Sheet";
 import Container from "@/components/Container.tsx";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { ProjectItem } from "./ProjectItem.tsx";
@@ -37,18 +36,11 @@ export const ProjectsList = () => {
           action={() => setOpenProjectModal(true)}
         />
         <Container>
-          <Sheet
-            sx={{
-              padding: 2,
-              gap: 2,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+          <BasePage.Content>
             {projects?.map((project) => (
               <ProjectItem key={project._id} item={project} />
             ))}
-          </Sheet>
+          </BasePage.Content>
 
           <LoadMoreButton
             onClick={() => fetchNextPage()}

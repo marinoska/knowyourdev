@@ -3,6 +3,7 @@ import EmptyPage from "@/components/EmptyPage.tsx";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
+import Sheet from "@mui/joy/Sheet";
 import { Children, ElementType, isValidElement, ReactNode } from "react";
 
 export const BasePage = ({
@@ -24,6 +25,8 @@ export const BasePage = ({
     if (isValidElement(child)) {
       if (child.type === BasePage.Header) {
         header = child;
+      } else if (child.type === BasePage.Content) {
+        content.push(child);
       } else {
         content.push(child);
       }
@@ -52,7 +55,6 @@ export const BasePage = ({
   );
 };
 
-// Header component to be used as a child of BasePage
 BasePage.Header = ({
   children,
   title,
@@ -95,5 +97,27 @@ BasePage.Header = ({
         </Button>
       )}
     </Stack>
+  );
+};
+
+BasePage.Content = ({
+  children,
+  sx,
+}: {
+  children: ReactNode;
+  sx?: Record<string, unknown>;
+}) => {
+  return (
+    <Sheet
+      sx={{
+        padding: 2,
+        gap: 2,
+        display: "flex",
+        flexDirection: "column",
+        ...sx,
+      }}
+    >
+      {children}
+    </Sheet>
   );
 };

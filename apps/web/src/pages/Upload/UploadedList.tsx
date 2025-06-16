@@ -5,7 +5,6 @@ import { UploadModal } from "./UploadModal.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
-import Sheet from "@mui/joy/Sheet";
 import Container from "@/components/Container.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 
@@ -33,18 +32,11 @@ export const UploadedList = () => {
           action={() => setOpenUploadModal(true)}
         />
         <Container>
-          <Sheet
-            sx={{
-              padding: 2,
-              gap: 2,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+          <BasePage.Content>
             {query.data?.map((upload) => (
               <UploadedItem key={upload._id} item={upload} />
             ))}
-          </Sheet>
+          </BasePage.Content>
 
           <LoadMoreButton
             onClick={() => query.fetchNextPage()}
