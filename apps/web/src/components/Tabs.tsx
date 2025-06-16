@@ -67,11 +67,12 @@ export const Tabs = ({ tabs }: { tabs: TabItem[] }) => {
               key={index}
               value={index}
               sx={{
-                py: 2,
+                // p: 0,
                 background: "var(--joy-palette-background-surface)",
               }}
             >
               {tab.content}
+              {/*<BasePage.Content>{tab.content}</BasePage.Content>*/}
             </TabPanel>
           ))}
         </Container>

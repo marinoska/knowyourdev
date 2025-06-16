@@ -100,13 +100,7 @@ BasePage.Header = ({
   );
 };
 
-BasePage.Content = ({
-  children,
-  sx,
-}: {
-  children: ReactNode;
-  sx?: Record<string, unknown>;
-}) => {
+BasePage.Content = ({ children }: { children: ReactNode }) => {
   return (
     <Sheet
       sx={{
@@ -114,7 +108,6 @@ BasePage.Content = ({
         gap: 2,
         display: "flex",
         flexDirection: "column",
-        ...sx,
       }}
     >
       {children}
