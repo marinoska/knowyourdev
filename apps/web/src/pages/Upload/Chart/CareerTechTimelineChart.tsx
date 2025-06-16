@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.ts";
+import { useChartContext } from "@/pages/Upload/Chart/Core/ChartContext.ts";
 import { RedLegendColor } from "@/utils/const";
 import { GreenLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";
-import { ChartContainer } from "@/pages/Analisys/Chart/Components/ChartContainer.tsx";
+import { ChartContainer } from "@/pages/Upload/Chart/Components/ChartContainer.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
-import { TimelineChart } from "@/pages/Analisys/Chart/Components/TimelineChart.tsx";
+import { TimelineChart } from "@/pages/Upload/Chart/Components/TimelineChart.tsx";
 
 const LegendItems = [
   { label: "Tech stack specified", color: GreenLegendColor },

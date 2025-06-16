@@ -3,13 +3,13 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import { StateSetter } from "../types.js";
+import { StateSetter } from "../../types.ts";
 import Divider from "@mui/joy/Divider";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import { FormLabel, Input, Textarea } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { Snackbar } from "../components/Snackbar.tsx";
+import { Snackbar } from "../../components/Snackbar.tsx";
 
 export const ProjectModal = ({
   open,
@@ -20,17 +20,17 @@ export const ProjectModal = ({
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  
+
   // Mock project creation - in a real app, this would use a mutation hook
   const [isPending, setIsPending] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   const reset = () => {
     setIsError(false);
     setIsSuccess(false);
   };
-  
+
   const handleCreateProject = () => {
     setIsPending(true);
     // Simulate API call
@@ -102,8 +102,11 @@ export const ProjectModal = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            
-            <FormLabel id="project-description-label" htmlFor="project-description">
+
+            <FormLabel
+              id="project-description-label"
+              htmlFor="project-description"
+            >
               Description
             </FormLabel>
             <Textarea

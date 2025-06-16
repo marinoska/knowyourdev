@@ -1,6 +1,6 @@
 import { useState, ReactNode } from "react";
 import Box from "@mui/joy/Box";
-import Tabs from "@mui/joy/Tabs";
+import JoyTabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
@@ -11,12 +11,12 @@ export type TabItem = {
   content: ReactNode;
 };
 
-export const AnalysisTabs = ({ tabs }: { tabs: TabItem[] }) => {
+export const Tabs = ({ tabs }: { tabs: TabItem[] }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
     <Box id="analysis-tabs" sx={{ mb: 8 }}>
-      <Tabs
+      <JoyTabs
         variant="plain"
         value={activeTab}
         // @ts-ignore
@@ -75,9 +75,9 @@ export const AnalysisTabs = ({ tabs }: { tabs: TabItem[] }) => {
             </TabPanel>
           ))}
         </Container>
-      </Tabs>
+      </JoyTabs>
     </Box>
   );
 };
 
-export default AnalysisTabs;
+export default Tabs;

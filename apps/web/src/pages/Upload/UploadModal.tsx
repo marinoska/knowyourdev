@@ -3,16 +3,16 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import { StateSetter } from "../types.js";
-import { DropzoneBox } from "../components/DropzoneBox";
+import { StateSetter } from "@/types.ts";
+import { DropzoneBox } from "@/components/DropzoneBox.tsx";
 import Divider from "@mui/joy/Divider";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import { FormLabel, Input } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { useUploadMutation } from "../api/query/useUploadMutation.ts";
-import { Snackbar } from "../components/Snackbar.tsx";
-import { ProjectsDropdown } from "../components/ProjectsDropdown";
+import { useUploadMutation } from "@/api/query/useUploadMutation.ts";
+import { Snackbar } from "@/components/Snackbar.tsx";
+import { ProjectsDropdown } from "@/components/ProjectsDropdown.tsx";
 
 export const UploadModal = ({
   open,

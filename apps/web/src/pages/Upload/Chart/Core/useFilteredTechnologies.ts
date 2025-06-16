@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
-import { useChartContext } from "@/pages/Analisys/Chart/Core/ChartContext.ts";
+import { useChartContext } from "@/pages/Upload/Chart/Core/ChartContext.ts";
 import { ScopeType } from "@kyd/common/api";
 
 export const useFilteredTechnologies = () => {
   const [selectedScope, setSelectedScope] = useState<ScopeType | null>(null); // Handles selected scope
-  const [showKeyTechOnly, setShowKeyTechOnly] = useState(false); // Handles "skills-only" mode
+  const [showKeyTechOnly, setShowKeyTechOnly] = useState(true); // Handles "skills-only" mode
 
   const chartContext = useChartContext();
 

@@ -1,8 +1,8 @@
 import Stack from "@mui/joy/Stack";
-import { UploadedItem } from "./UploadedItem";
+import { UploadedItem } from "./UploadedItem.tsx";
 import UploadFile from "@mui/icons-material/Upload";
 import * as React from "react";
-import { UploadModal } from "./UploadModal.js";
+import { UploadModal } from "./UploadModal.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
@@ -14,30 +14,19 @@ import Container from "@/components/Container.tsx";
 export const UploadedList = () => {
   const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
-  const {
-    data: uploads,
-    isLoading,
-    isError,
-    showError,
-    dismissError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useUploadsQuery({ page: 1, limit: 300 });
+  const query = useUploadsQuery({ page: 1, limit: 300 });
 
   return (
     <>
-      {showError && (
-        <Snackbar
-          type="danger"
-          msg="Failed to load CV list."
-          onClose={dismissError}
-        />
-      )}
+      <Snackbar
+        type="danger"
+        msg="Failed to load CV list."
+        show={query.isError}
+      />
       <BasePage
-        isLoading={isLoading}
-        isError={isError}
-        showEmpty={!uploads?.length}
+        isLoading={query.isLoading}
+        isError={query.isError}
+        showEmpty={!query.data?.length}
       >
         <BasePage.Header
           title="Uploaded CVs"
@@ -54,19 +43,19 @@ export const UploadedList = () => {
               flexDirection: "column",
             }}
           >
-            {uploads?.map((upload) => (
+            {query.data?.map((upload) => (
               <UploadedItem key={upload._id} item={upload} />
             ))}
           </Sheet>
 
-          {hasNextPage && (
+          {query.hasNextPage && (
             <Stack direction="row" justifyContent="center" padding={2}>
               <Button
                 variant="solid"
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
+                onClick={() => query.fetchNextPage()}
+                disabled={query.isFetchingNextPage}
               >
-                {isFetchingNextPage ? (
+                {query.isFetchingNextPage ? (
                   <>
                     <CircularProgress size="sm" sx={{ marginRight: 1 }} />
                     Loading...

@@ -2,11 +2,11 @@ import { useEffect, useMemo } from "react";
 import { Checkbox, FormControl, FormLabel } from "@mui/joy";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { Tooltip } from "@/components/Tooltip.tsx";
-import { ScopeSelect } from "@/pages/Analisys/Chart/Components/ScopeSelect.tsx";
-import { ChartContainer } from "@/pages/Analisys/Chart/Components/ChartContainer.tsx";
-import { useFilteredTechnologies } from "@/pages/Analisys/Chart/Core/useFilteredTechnologies.ts";
+import { ScopeSelect } from "@/pages/Upload/Chart/Components/ScopeSelect.tsx";
+import { ChartContainer } from "@/pages/Upload/Chart/Components/ChartContainer.tsx";
+import { useFilteredTechnologies } from "@/pages/Upload/Chart/Core/useFilteredTechnologies.ts";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
-import { TimelineChart } from "@/pages/Analisys/Chart/Components/TimelineChart.tsx";
+import { TimelineChart } from "@/pages/Upload/Chart/Components/TimelineChart.tsx";
 
 //* TODO add a position description via a tooltip
 

@@ -2,7 +2,6 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { uploadsKeys } from "./keys.ts";
 import { getUploadProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
-import { useEffect, useState } from "react";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
 import { endOfMonth, startOfMonth } from "date-fns";
 import { GetUploadsListResponse } from "@kyd/common/api";
@@ -14,12 +13,7 @@ export const useUploadsQuery = ({
   page: number;
   limit: number;
 }) => {
-  const [showError, setShowError] = useState(false);
-
-  const { data, isError, error, ...rest } = useInfiniteQuery<
-    GetUploadsListResponse,
-    Error
-  >({
+  const { data, ...rest } = useInfiniteQuery<GetUploadsListResponse, Error>({
     queryKey: uploadsKeys.paginate(page),
     queryFn: ({ pageParam }: { pageParam: number | unknown }) =>
       listUploads({ page: Number(pageParam), limit }),
@@ -43,29 +37,14 @@ export const useUploadsQuery = ({
 
   const allData = data ? data.pages.flatMap((page) => page.uploads) : [];
 
-  useEffect(() => {
-    if (isError) {
-      console.error("Upload Error:", error);
-      setShowError(true);
-    }
-  }, [isError, error]);
-
   return {
     data: allData,
-    isError,
-    error,
-    showError,
-    dismissError: () => setShowError(false),
     ...rest,
   };
 };
 
 export const useUploadProfileQuery = ({ uploadId }: { uploadId?: string }) => {
-  const [showError, setShowError] = useState(false);
-  const { data, isError, error, ...rest } = useQuery<
-    ProcessedUploadProfile,
-    Error
-  >({
+  const { data, ...rest } = useQuery<ProcessedUploadProfile, Error>({
     queryKey: uploadsKeys.profile(uploadId!), // we dont use the query params for now so default it to 0
     queryFn: () =>
       getUploadProfile({ uploadId: uploadId! }).then((data) => ({
@@ -91,19 +70,8 @@ export const useUploadProfileQuery = ({ uploadId }: { uploadId?: string }) => {
     enabled: !!uploadId,
   });
 
-  useEffect(() => {
-    if (isError) {
-      console.error(error);
-      setShowError(true);
-    }
-  }, [isError, error]);
-
   return {
     profile: data,
-    isError,
-    error,
-    showError,
-    dismissError: () => setShowError(false),
     ...rest,
   };
 };

@@ -4,16 +4,9 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { ProjectsItem } from "@kyd/common/api";
 
-// Define the Project item type
-export interface ProjectItem {
-  _id: string;
-  name: string;
-  description: string;
-  createdAt: string;
-}
-
-export const ProjectItem = ({ item }: { item: ProjectItem }) => {
+export const ProjectItem = ({ item }: { item: ProjectsItem }) => {
   const navigate = useNavigate();
 
   const style = {
