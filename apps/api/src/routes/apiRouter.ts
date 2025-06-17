@@ -19,6 +19,14 @@ import {
   getUploadTechProfileController,
   getTechProfileValidationSchema,
 } from "@/routes/api/document/getProfile.controller.js";
+import {
+  getProjectsListController,
+  getProjectsListValidationSchema,
+} from "@/routes/api/document/projects.controller.js";
+import {
+  getProjectController,
+  getProjectValidationSchema,
+} from "@/routes/api/document/getProject.controller.js";
 // import { loadAuthenticatedUser } from 'nftit/User/loadAuthenticatedUser.middleware';
 
 const validateOptions = { abortEarly: false };
@@ -42,6 +50,16 @@ apiRouter.get(
   "/document/uploads/:uploadId",
   celebrate(getTechProfileValidationSchema),
   getUploadTechProfileController,
+);
+apiRouter.get(
+  "/document/projects",
+  celebrate(getProjectsListValidationSchema),
+  getProjectsListController,
+);
+apiRouter.get(
+  "/document/projects/:projectId",
+  celebrate(getProjectValidationSchema),
+  getProjectController,
 );
 
 apiRouter.use(notFoundController);

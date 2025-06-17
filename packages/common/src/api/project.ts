@@ -16,4 +16,9 @@ export type TProjectsItem = TProject & {
 };
 
 export type TProjectsPage = { projects: TProjectsItem[] };
-export type TGetProjectsListResponse = TProjectsPage & TListResponse;
+export type GetProjectsListResponse = TProjectsPage & TListResponse;
+
+export type GetProjectsListQueryParams = {
+  page: number;
+  limit: number;
+};
