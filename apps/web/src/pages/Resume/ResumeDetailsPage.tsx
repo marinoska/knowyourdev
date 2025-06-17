@@ -17,7 +17,7 @@ import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { TechPopularityTimelineChart } from "@/pages/Resume/Chart/TechPopularityTimelineChart.tsx";
 import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
 
-type UploadedProfileParams = {
+type ResumeProfileParams = {
   id: string;
 };
 
@@ -62,19 +62,19 @@ const getTabItems = (): TabItem[] => [
   },
 ];
 
-export const UploadProfile = () => {
-  const { id } = useParams<UploadedProfileParams>();
+export const ResumeDetailsPage = () => {
+  const { id } = useParams<ResumeProfileParams>();
 
   const query = useUploadProfileQuery({ uploadId: id });
 
   return (
     <ChartProvider profile={query.profile}>
-      <UploadPage query={query} />
+      <ResumeDetails query={query} />
     </ChartProvider>
   );
 };
 
-const UploadPage = ({
+const ResumeDetails = ({
   query: { profile, isError, isLoading },
 }: {
   query: ReturnType<typeof useUploadProfileQuery>;

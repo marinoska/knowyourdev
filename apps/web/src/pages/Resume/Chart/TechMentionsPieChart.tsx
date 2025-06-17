@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
 import { Typography } from "@mui/joy";
-import { useChartContext } from "@/pages/Upload/Chart/Core/ChartContext.ts";
+import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
 import { TechProfile } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import {
@@ -11,7 +11,7 @@ import {
   YellowLegendColor,
 } from "@/utils/const.ts";
 import { pieTooltip, tooltipField, tooltipOptions } from "@/utils/chart.ts";
-import { ChartContainer } from "@/pages/Upload/Chart/Components/ChartContainer.tsx";
+import { ChartContainer } from "@/pages/Resume/Chart/Components/ChartContainer.tsx";
 
 const LegendItems = [
   {

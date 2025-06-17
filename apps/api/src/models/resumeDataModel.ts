@@ -2,12 +2,12 @@ import { Document, Model, model, Schema } from "mongoose";
 import { ExtractedCVData, JobEntry, TechnologyEntry } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
 
-export type TUploadDataDocument = Document &
+export type TResumeDataDocument = Document &
   ExtractedCVData & {
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
   };
 
-export type TUploadDataModel = Model<TUploadDataDocument>;
+export type TResumeDataModel = Model<TResumeDataDocument>;
 
 const TechnologyEntrySchema = new Schema<TechnologyEntry>(
   {
@@ -50,7 +50,7 @@ const JobEntrySchema = new Schema<JobEntry>({
   techStack: [TechStackSchema],
 });
 
-const uploadDataSchema = new Schema<TUploadDataDocument, TUploadDataModel>(
+const resumeDataSchema = new Schema<TResumeDataDocument, TResumeDataModel>(
   {
     uploadRef: {
       type: Schema.Types.ObjectId, // Refers to ObjectId type in MongoDB
@@ -81,10 +81,10 @@ const uploadDataSchema = new Schema<TUploadDataDocument, TUploadDataModel>(
     },
     jobs: [JobEntrySchema],
   },
-  { timestamps: true, collection: "UploadData", autoIndex: true },
+  { timestamps: true, collection: "ResumeData", autoIndex: true },
 );
 
-export const UploadDataModel = model<TUploadDataDocument, TUploadDataModel>(
-  "UploadData",
-  uploadDataSchema,
+export const ResumeDataModel = model<TResumeDataDocument, TResumeDataModel>(
+  "ResumeData",
+  resumeDataSchema,
 );

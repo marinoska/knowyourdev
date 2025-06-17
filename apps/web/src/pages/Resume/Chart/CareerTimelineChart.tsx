@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { useChartContext } from "@/pages/Upload/Chart/Core/ChartContext.ts";
+import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
 import { GreenLegendColor, YellowLegendColor } from "@/utils/const";
 import { RedLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";
 import { ChartContainer } from "./Components/ChartContainer.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
-import { TimelineChart } from "@/pages/Upload/Chart/Components/TimelineChart.tsx";
+import { TimelineChart } from "@/pages/Resume/Chart/Components/TimelineChart.tsx";
 
 const LegendItems = [
   { label: "Software Development Jobs", color: GreenLegendColor },

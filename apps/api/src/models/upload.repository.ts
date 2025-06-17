@@ -1,5 +1,5 @@
 import { UploadModel } from "@/models/upload.model.js";
-import { UploadDataModel } from "@/models/uploadData.model.js";
+import { ResumeDataModel } from "@/models/resumeDataModel.js";
 import { ParsedStatus } from "@kyd/common/api";
 
 export type GetUploadsParams = {
@@ -46,7 +46,7 @@ export const getUploadsWithDetails = async ({
   const uploadsWithDetails = await UploadModel.aggregate([
     {
       $lookup: {
-        from: UploadDataModel.collection.name,
+        from: ResumeDataModel.collection.name,
         localField: "_id",
         foreignField: "uploadRef",
         as: "uploadData",

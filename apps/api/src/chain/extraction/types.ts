@@ -1,8 +1,8 @@
 import { TechDocument } from "@/models/types.js";
-import { TUploadDataDocument } from "@/models/uploadData.model.js";
+import { TResumeDataDocument } from "@/models/resumeDataModel.js";
 import { Schema } from "mongoose";
 import { ExtractedCVData } from "@kyd/common/api";
-import { TUploadTechProfileDocument } from "@/models/uploadTechProfile.model.js";
+import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
 
 export type ExtractionChainInput = {
   cvText: string;
@@ -10,8 +10,8 @@ export type ExtractionChainInput = {
   uploadId: Schema.Types.ObjectId;
 };
 export type ExtractionChainOutput = {
-  cvData: TUploadDataDocument;
-  techProfile: TUploadTechProfileDocument;
+  cvData: TResumeDataDocument;
+  techProfile: TResumeTechProfileDocument;
 };
 
 export type ExtractionChainParam =

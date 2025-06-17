@@ -1,16 +1,16 @@
 import { ExtractionChainParam } from "@/chain/extraction/types.js";
-import { UploadDataModel } from "@/models/uploadData.model.js";
+import { ResumeDataModel } from "@/models/resumeDataModel.js";
 import { TechDocument } from "@/models/types.js";
 import { isValid, parse, subYears } from "date-fns";
 import logger from "@/app/logger.js";
 import { Schema } from "mongoose";
-import { UploadTechProfileModel } from "@/models/uploadTechProfile.model.js";
+import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { isNotNull } from "@/utils/types.utils.js";
 import {
   TechCode,
-  UploadTechProfileJobEntry,
-  UploadTechProfileTechnologiesEntry,
-  UploadTechProfileTechnologiesJobEntry,
+  ResumeTechProfileJobEntry,
+  ResumeTechProfileTechnologiesEntry,
+  ResumeTechProfileTechnologiesJobEntry,
   TREND_MAP,
   TechnologyEntry,
   JobEntry,
@@ -30,7 +30,7 @@ export const aggregateAndSave = async (
   if (!("extractedData" in params))
     throw new Error("extractedData is required");
 
-  const updatedCV = await UploadDataModel.findOneAndUpdate(
+  const updatedCV = await ResumeDataModel.findOneAndUpdate(
     { uploadRef: params.uploadId }, // Find by hash
     {
       $set: { uploadRef: params.uploadId, ...params.extractedData },
@@ -47,7 +47,7 @@ export const aggregateAndSave = async (
       techReference: Schema.Types.ObjectId;
       code: TechCode;
 
-      jobs: UploadTechProfileTechnologiesJobEntry[];
+      jobs: ResumeTechProfileTechnologiesJobEntry[];
     }
   > = {};
 
@@ -57,7 +57,7 @@ export const aggregateAndSave = async (
     }
 
     job.technologies.forEach((tech) => {
-      const jobEntry: UploadTechProfileTechnologiesJobEntry = {
+      const jobEntry: ResumeTechProfileTechnologiesJobEntry = {
         role: job.role,
         company: job.job,
       };
@@ -103,7 +103,7 @@ export const aggregateAndSave = async (
     );
 
   const techWithTotals = Object.values(aggTechs)
-    .map<UploadTechProfileTechnologiesEntry | null>((tech) => {
+    .map<ResumeTechProfileTechnologiesEntry | null>((tech) => {
       const mergedRanges = mergeRanges(tech.jobs as Range[]); // Merge the overlapping ranges
       const totalMonths = calculateTotalMonths(mergedRanges); // Calculate total unique months
       const recentMonths = calculateTotalMonths(mergedRanges, 3); // Calculate total unique months
@@ -124,10 +124,10 @@ export const aggregateAndSave = async (
         popularity: normalizePopularityLevel(technology),
         category: technology.category,
         scope: technology.scope,
-      } satisfies UploadTechProfileTechnologiesEntry;
+      } satisfies ResumeTechProfileTechnologiesEntry;
     })
-    .filter<UploadTechProfileTechnologiesEntry>(isNotNull)
-    .reduce<Record<TechCode, UploadTechProfileTechnologiesEntry>>(
+    .filter<ResumeTechProfileTechnologiesEntry>(isNotNull)
+    .reduce<Record<TechCode, ResumeTechProfileTechnologiesEntry>>(
       (acc, doc) => ({
         ...acc,
         [doc.code]: doc,
@@ -137,9 +137,9 @@ export const aggregateAndSave = async (
 
   const enrich = (
     techs: TechnologyEntry[],
-    props: Partial<UploadTechProfileTechnologiesEntry>,
+    props: Partial<ResumeTechProfileTechnologiesEntry>,
   ) => {
-    for (let tech of techs) {
+    for (const tech of techs) {
       if (!tech.code) {
         continue;
       }
@@ -166,7 +166,7 @@ export const aggregateAndSave = async (
   enrich(updatedCV.skillSection.technologies, { inSkillsSection: true });
   enrich(updatedCV.profileSection.technologies, { inProfileSection: true });
 
-  const techProfileJobs = updatedCV.jobs.map<UploadTechProfileJobEntry>(
+  const techProfileJobs = updatedCV.jobs.map<ResumeTechProfileJobEntry>(
     (job) => {
       const technologies = job.technologies
         .map((tech) => {
@@ -174,7 +174,7 @@ export const aggregateAndSave = async (
 
           if (!("name" in tech.techReference)) {
             throw new Error(
-              `${updatedCV._id}: UploadData jobs.tech.techReference is populated`,
+              `${updatedCV._id}: ResumeData jobs.tech.techReference is populated`,
             );
           }
 
@@ -228,7 +228,7 @@ export const aggregateAndSave = async (
     },
   );
 
-  const techProfile = await UploadTechProfileModel.findOneAndUpdate(
+  const techProfile = await ResumeTechProfileModel.findOneAndUpdate(
     { uploadRef: updatedCV.uploadRef }, // Find by hash
     {
       $set: {

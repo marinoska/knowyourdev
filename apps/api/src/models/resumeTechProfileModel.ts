@@ -3,10 +3,10 @@ import { Document, Model, model, Schema } from "mongoose";
 import {
   CATEGORY,
   SCOPE,
-  UploadTechProfileJobEntry,
-  UploadTechProfileTechnologiesEntry,
+  ResumeTechProfileJobEntry,
+  ResumeTechProfileTechnologiesEntry,
   TREND,
-  UploadTechProfileType,
+  ResumeTechProfileType,
 } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
 
@@ -18,7 +18,7 @@ const JobSchema = {
   company: { type: String, required: true },
 };
 
-const UploadTechProfileJobEntrySchema = new Schema<UploadTechProfileJobEntry>(
+const ResumeTechProfileJobEntrySchema = new Schema<ResumeTechProfileJobEntry>(
   {
     start: Date,
     end: Date,
@@ -57,8 +57,8 @@ const UploadTechProfileJobEntrySchema = new Schema<UploadTechProfileJobEntry>(
   },
 );
 
-const UploadTechProfileTechnologiesEntrySchema =
-  new Schema<UploadTechProfileTechnologiesEntry>(
+const ResumeTechProfileTechnologiesEntrySchema =
+  new Schema<ResumeTechProfileTechnologiesEntry>(
     {
       techReference: {
         type: Schema.Types.ObjectId,
@@ -97,18 +97,18 @@ const UploadTechProfileTechnologiesEntrySchema =
     },
   );
 
-export type TUploadTechProfileDocument = Document &
-  UploadTechProfileType & {
+export type TResumeTechProfileDocument = Document &
+  ResumeTechProfileType & {
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
     createdAt: Date;
     updatedAt: Date;
   };
 
-export type TUploadTechProfileModel = Model<TUploadTechProfileDocument>;
+export type TResumeTechProfileModel = Model<TResumeTechProfileDocument>;
 
-const UploadTechProfileSchema = new Schema<
-  TUploadTechProfileDocument,
-  TUploadTechProfileModel
+const ResumeTechProfileSchema = new Schema<
+  TResumeTechProfileDocument,
+  TResumeTechProfileModel
 >(
   {
     uploadRef: {
@@ -120,20 +120,20 @@ const UploadTechProfileSchema = new Schema<
     fullName: { type: String, required: true },
     position: { type: String, required: true },
     technologies: {
-      type: [UploadTechProfileTechnologiesEntrySchema],
+      type: [ResumeTechProfileTechnologiesEntrySchema],
       required: true,
       default: [],
     }, // List of technology entries
     jobs: {
-      type: [UploadTechProfileJobEntrySchema],
+      type: [ResumeTechProfileJobEntrySchema],
       required: true,
       default: [],
     },
   },
-  { timestamps: true, collection: "UploadTechProfile" }, // Automatically adds createdAt and updatedAt
+  { timestamps: true, collection: "ResumeTechProfile" }, // Automatically adds createdAt and updatedAt
 );
 
-export const UploadTechProfileModel = model<
-  TUploadTechProfileDocument,
-  TUploadTechProfileModel
->("UploadTechProfile", UploadTechProfileSchema);
+export const ResumeTechProfileModel = model<
+  TResumeTechProfileDocument,
+  TResumeTechProfileModel
+>("ResumeTechProfile", ResumeTechProfileSchema);

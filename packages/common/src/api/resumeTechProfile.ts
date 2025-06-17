@@ -1,11 +1,11 @@
 import { Schema } from "mongoose";
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
-import { ExtractedCVData, JobEntry } from "./uploadedData.js";
+import { ExtractedCVData, JobEntry } from "./resumeData.js";
 
-export type UploadTechProfileTechnologiesEntry = {
+export type ResumeTechProfileTechnologiesEntry = {
   techReference: Schema.Types.ObjectId;
   code: TechCode;
-  jobs: UploadTechProfileTechnologiesJobEntry[];
+  jobs: ResumeTechProfileTechnologiesJobEntry[];
   totalMonths?: number;
   recentMonths?: number;
   name: string;
@@ -17,14 +17,14 @@ export type UploadTechProfileTechnologiesEntry = {
   inProfileSection?: boolean;
 };
 
-export type UploadTechProfileTechnologiesJobEntry = {
+export type ResumeTechProfileTechnologiesJobEntry = {
   start?: Date;
   end?: Date;
   role: string;
   company: string;
 };
 
-export type UploadTechProfileJobEntry = Pick<
+export type ResumeTechProfileJobEntry = Pick<
   JobEntry,
   | "isSoftwareDevelopmentRole"
   | "roleType"
@@ -52,16 +52,16 @@ export type UploadTechProfileJobEntry = Pick<
   }[];
 };
 
-export type UploadTechProfileType = Pick<
+export type ResumeTechProfileType = Pick<
   ExtractedCVData,
   "position" | "fullName"
 > & {
-  technologies: UploadTechProfileTechnologiesEntry[];
-  jobs: UploadTechProfileJobEntry[];
+  technologies: ResumeTechProfileTechnologiesEntry[];
+  jobs: ResumeTechProfileJobEntry[];
 };
 
-export type UploadTechProfileResponse = {
+export type ResumeTechProfileResponse = {
   uploadId: string;
   createdAt: string;
   updatedAt: string;
-} & UploadTechProfileType;
+} & ResumeTechProfileType;

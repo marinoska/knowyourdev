@@ -1,4 +1,4 @@
-import { ProjectModel } from "@/models/project.model.js";
+import { ProjectModel, TProjectDocument } from "@/models/project.model.js";
 
 export type GetProjectsParams = {
   page: number;
@@ -7,17 +7,7 @@ export type GetProjectsParams = {
 };
 
 export type GetProjectsResponse = {
-  projects: Array<{
-    _id: string;
-    name: string;
-    settings: {
-      baselineJobDuration: number;
-      techFocus: string[];
-      description: string;
-    };
-    createdAt: string;
-    updatedAt: string;
-  }>;
+  projects: TProjectDocument[];
   totalRecords: number;
   currentPage: number;
   totalPages: number;

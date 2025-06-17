@@ -1,15 +1,15 @@
 import {
-  UploadTechProfileJobEntry,
-  UploadTechProfileResponse,
-  UploadTechProfileTechnologiesEntry,
+  ResumeTechProfileJobEntry,
+  ResumeTechProfileResponse,
+  ResumeTechProfileTechnologiesEntry,
 } from "@kyd/common/api";
 
-export type Job = Omit<UploadTechProfileJobEntry, "start" | "end"> & {
+export type Job = Omit<ResumeTechProfileJobEntry, "start" | "end"> & {
   start: Date;
   end: Date;
 };
 
-export type TechProfile = Omit<UploadTechProfileTechnologiesEntry, "jobs"> & {
+export type TechProfile = Omit<ResumeTechProfileTechnologiesEntry, "jobs"> & {
   totalMonths: number;
   jobs: {
     start: Date;
@@ -20,7 +20,7 @@ export type TechProfile = Omit<UploadTechProfileTechnologiesEntry, "jobs"> & {
 };
 
 export type ProcessedUploadProfile = Omit<
-  UploadTechProfileResponse,
+  ResumeTechProfileResponse,
   "jobs" | "technologies"
 > & {
   jobs: Job[];

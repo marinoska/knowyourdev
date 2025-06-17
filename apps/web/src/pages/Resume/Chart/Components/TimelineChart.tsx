@@ -1,5 +1,5 @@
 import { Typography } from "@mui/joy";
-import { useGoogleChartAutoHeight } from "@/pages/Upload/Chart/Components/useGoogleChartAutoHeight.ts";
+import { useGoogleChartAutoHeight } from "@/pages/Resume/Chart/Components/useGoogleChartAutoHeight.ts";
 import { useEffect } from "react";
 import Chart from "react-google-charts";
 

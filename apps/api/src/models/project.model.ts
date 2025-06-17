@@ -1,20 +1,10 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { SCOPE, ScopeType } from "@kyd/common/api";
-
-export type TProject = {
-  name: string;
-  settings: {
-    baselineJobDuration: number;
-    techFocus: ScopeType[];
-    description: string;
-  };
-};
+import { SCOPE, TProject } from "@kyd/common/api";
 
 export type TProjectDocument = Document &
   TProject & {
-    _id: Schema.Types.ObjectId;
+    _id: string;
     createdAt: Date;
-    updatedAt: Date;
   };
 
 export type TProjectModel = Model<TProjectDocument>;

@@ -1,26 +1,26 @@
 import { RequestHandler, Response } from "express";
-import { UploadTechProfileModel } from "@/models/uploadTechProfile.model.js";
+import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { Joi, Segments } from "celebrate";
-import { UploadTechProfileResponse } from "@kyd/common/api";
+import { ResumeTechProfileResponse } from "@kyd/common/api";
 import { NotFound, ValidationError } from "@/app/errors.js";
 import { Types } from "mongoose";
 
 export type UploadTechProfileController = RequestHandler<
   { uploadId: string },
-  UploadTechProfileResponse,
+  ResumeTechProfileResponse,
   any,
   any,
   {}
 >;
 
 export const getUploadTechProfileController: UploadTechProfileController =
-  async (req, res: Response<UploadTechProfileResponse>) => {
+  async (req, res: Response<ResumeTechProfileResponse>) => {
     const { uploadId } = req.params;
     if (!Types.ObjectId.isValid(uploadId)) {
       throw new ValidationError("Invalid upload ID: " + uploadId);
     }
 
-    const techProfile = await UploadTechProfileModel.findOne({
+    const techProfile = await ResumeTechProfileModel.findOne({
       uploadRef: uploadId,
     }).lean();
 

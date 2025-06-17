@@ -7,7 +7,7 @@ import {
   TProjectsItem,
   TProjectsPage,
   TUploadsPage,
-  UploadTechProfileResponse,
+  ResumeTechProfileResponse,
 } from "@kyd/common/api";
 import { InfiniteData } from "@tanstack/react-query";
 import { mockProjects } from "@/api/query/mockProjects.ts";
@@ -68,7 +68,7 @@ export const getProjectsProps = async () => {
 };
 
 export const getUploadProfile = async ({ uploadId }: { uploadId: string }) => {
-  return apiClient.get<UploadTechProfileResponse>(
+  return apiClient.get<ResumeTechProfileResponse>(
     `/document/uploads/${uploadId}`,
   );
 };

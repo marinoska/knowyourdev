@@ -1,7 +1,7 @@
 import Stack from "@mui/joy/Stack";
 import { TProjectsItem } from "@kyd/common/api";
 import Container from "@/components/Container.tsx";
-import { UploadItem } from "@/pages/Upload/UploadItem.tsx";
+import { UploadItem } from "@/pages/Resume/UploadItem.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import Loader from "@/components/Loader.tsx";
