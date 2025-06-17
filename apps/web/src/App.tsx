@@ -5,7 +5,7 @@ import theme from "./theme";
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import { UploadsList } from "./pages/Upload/UploadsList.tsx";
+import { UploadsPage } from "./pages/Upload/UploadsPage.tsx";
 import { UploadProfile } from "@/pages/Upload/UploadProfile.tsx";
 import { ProjectsList } from "@/pages/Projects/ProjectsList.tsx";
 import { ProjectProfile } from "@/pages/Projects/Details/ProjectProfile.tsx";
@@ -85,7 +85,7 @@ export default function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/projects" element={<ProjectsList />} />
               <Route path="/projects/:id" element={<ProjectProfile />} />
-              <Route path="/uploads" element={<UploadsList />} />
+              <Route path="/uploads" element={<UploadsPage />} />
               <Route path="/uploads/:id" element={<UploadProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

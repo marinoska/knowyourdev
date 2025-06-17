@@ -72,7 +72,6 @@ export const Tabs = ({ tabs }: { tabs: TabItem[] }) => {
               }}
             >
               {tab.content}
-              {/*<BasePage.Content>{tab.content}</BasePage.Content>*/}
             </TabPanel>
           ))}
         </Container>

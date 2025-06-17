@@ -51,6 +51,7 @@ export const getUploadsListValidationSchema = {
   [Segments.QUERY]: {
     page: Joi.number().integer().min(1).default(1).optional(), // Page number
     limit: Joi.number().integer().min(1).default(30).optional(), // Page size
+    projectId: Joi.string().optional(), // Page size
     // sortBy: Joi.string().valid('name', 'role', 'size', 'createdAt').default('createdAt').optional(), // Sort field
     // sortOrder: Joi.string().valid('asc', 'desc').default('desc').optional(), // Sort order
   },

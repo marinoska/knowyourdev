@@ -8,7 +8,7 @@ import { BasePage } from "@/components/BasePage.tsx";
 import Container from "@/components/Container.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 
-export const UploadsList = () => {
+export const UploadsPage = () => {
   const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
 
   const query = useUploadsQuery({ page: 1, limit: 300 });

@@ -32,9 +32,13 @@ export type ListParams = {
 export type InfiniteUploadList = InfiniteData<TUploadsPage>;
 export type InfiniteProjectList = InfiniteData<TProjectsPage>;
 
-export const listUploads = async ({ page, limit }: ListParams) => {
+export const listUploads = async ({
+  page,
+  limit,
+  projectId,
+}: ListParams & { projectId?: string }) => {
   return apiClient.get<GetUploadsListResponse>("/document/uploads", {
-    params: { page, limit },
+    params: { page, limit, projectId },
   });
 };
 

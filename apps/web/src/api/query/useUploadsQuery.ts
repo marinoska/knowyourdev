@@ -9,14 +9,16 @@ import { GetUploadsListResponse } from "@kyd/common/api";
 export const useUploadsQuery = ({
   page,
   limit,
+  projectId,
 }: {
   page: number;
   limit: number;
+  projectId?: string;
 }) => {
   const { data, ...rest } = useInfiniteQuery<GetUploadsListResponse, Error>({
-    queryKey: uploadsKeys.paginate(page),
+    queryKey: uploadsKeys.paginate(page, projectId),
     queryFn: ({ pageParam }: { pageParam: number | unknown }) =>
-      listUploads({ page: Number(pageParam), limit }),
+      listUploads({ page: Number(pageParam), limit, projectId }),
     initialPageParam: 1,
     retry: TIMES_THREE,
     refetchInterval: (query) => {

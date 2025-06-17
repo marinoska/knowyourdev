@@ -21,7 +21,7 @@ const getTabItems = (profile: TProjectsItem): TabItem[] => [
   },
   {
     label: "Candidates",
-    content: <CandidatesContent profile={profile} />,
+    content: <CandidatesContent project={profile} />,
   },
 ];
 

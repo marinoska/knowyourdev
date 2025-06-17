@@ -43,6 +43,7 @@ export type GetProjectsListResponse = TProjectsPage & TListResponse;
 export type GetUploadsListQueryParams = {
   page: number;
   limit: number;
+  projectId?: string;
   // sortBy?: string;
   // sortOrder?: 'asc' | 'desc';
 };
