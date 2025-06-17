@@ -26,7 +26,9 @@ export const CareerTechTimelineChart = () => {
     });
 
     const jobsData = chartContext.jobsWithFilledTech.map((job) => {
-      const techList = job.technologies.map((tech) => tech.name);
+      const techList = job.technologies.map(
+        (tech: { name: string }) => tech.name,
+      );
 
       return [
         job.role || "Undefined role",

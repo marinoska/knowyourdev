@@ -4,18 +4,18 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useState } from "react";
 import Tabs, { TabItem } from "@/components/Tabs.tsx";
-import { CareerTimelineChart } from "@/pages/Upload/Chart/CareerTimelineChart.tsx";
+import { CareerTimelineChart } from "@/pages/Resume/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
-import { ChartProvider } from "@/pages/Upload/Chart/Core/ChartProvider.tsx";
-import { CareerTechTimelineChart } from "@/pages/Upload/Chart/CareerTechTimelineChart.tsx";
+import { ChartProvider } from "@/pages/Resume/Chart/Core/ChartProvider.tsx";
+import { CareerTechTimelineChart } from "@/pages/Resume/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
-import { TechTimelineChart } from "@/pages/Upload/Chart/TechTimelineChart.tsx";
-import { TechDurationPieChart } from "@/pages/Upload/Chart/TechDurationPieChart.tsx";
-import { TechMentionsPieChart } from "@/pages/Upload/Chart/TechMentionsPieChart.tsx";
+import { TechTimelineChart } from "@/pages/Resume/Chart/TechTimelineChart.tsx";
+import { TechDurationPieChart } from "@/pages/Resume/Chart/TechDurationPieChart.tsx";
+import { TechMentionsPieChart } from "@/pages/Resume/Chart/TechMentionsPieChart.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
-import { TechPopularityTimelineChart } from "@/pages/Upload/Chart/TechPopularityTimelineChart.tsx";
-import { useChartContext } from "@/pages/Upload/Chart/Core/ChartContext.ts";
+import { TechPopularityTimelineChart } from "@/pages/Resume/Chart/TechPopularityTimelineChart.tsx";
+import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
 
 type UploadedProfileParams = {
   id: string;
