@@ -5,6 +5,9 @@ import { UploadItem } from "@/pages/Resume/UploadItem.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import Loader from "@/components/Loader.tsx";
+import Button from "@mui/joy/Button";
+import UploadIcon from "@mui/icons-material/Upload";
+import Box from "@mui/joy/Box";
 
 export const CandidatesList = ({ projectId }: { projectId: string }) => {
   // const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
@@ -19,19 +22,32 @@ export const CandidatesList = ({ projectId }: { projectId: string }) => {
     );
   }
   return (
-    <Container>
-      <Stack gap={2}>
-        {query.data?.map((upload) => (
-          <UploadItem key={upload._id} item={upload} />
-        ))}
+    <Stack gap={1} direction="column">
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        gap={2}
+        alignItems="center"
+        sx={{ mb: 2 }}
+      >
+        <Button onClick={null} startDecorator={<UploadIcon />} size="md">
+          Upload CV
+        </Button>
       </Stack>
+      <Container>
+        <Stack gap={2}>
+          {query.data?.map((upload) => (
+            <UploadItem key={upload._id} item={upload} />
+          ))}
+        </Stack>
 
-      <LoadMoreButton
-        onClick={() => query.fetchNextPage()}
-        isLoading={query.isFetchingNextPage}
-        hasNextPage={query.hasNextPage}
-      />
-    </Container>
+        <LoadMoreButton
+          onClick={() => query.fetchNextPage()}
+          isLoading={query.isFetchingNextPage}
+          hasNextPage={query.hasNextPage}
+        />
+      </Container>
+    </Stack>
   );
 };
 

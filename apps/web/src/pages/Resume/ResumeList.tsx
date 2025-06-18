@@ -1,7 +1,7 @@
 import { UploadItem } from "./UploadItem.tsx";
 import UploadFile from "@mui/icons-material/Upload";
 import * as React from "react";
-import { UploadModal } from "./UploadModal.tsx";
+import { UploadModal } from "../components/UploadModal.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
