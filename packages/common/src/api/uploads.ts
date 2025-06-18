@@ -35,7 +35,7 @@ export type DocumentUploadResponse = Omit<
 
 export type DocumentUploadRequestBody = {
   name: string;
-  role: string;
+  projectId?: string;
 };
 
 export type DocumentUploadRequestType = {

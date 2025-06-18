@@ -2,7 +2,7 @@ import { RequestHandler, Response } from "express";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { Joi, Segments } from "celebrate";
 import { ResumeTechProfileResponse } from "@kyd/common/api";
-import { NotFound, ValidationError } from "@/app/errors.js";
+import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
 
 export type UploadTechProfileController = RequestHandler<
@@ -16,9 +16,6 @@ export type UploadTechProfileController = RequestHandler<
 export const getUploadTechProfileController: UploadTechProfileController =
   async (req, res: Response<ResumeTechProfileResponse>) => {
     const { uploadId } = req.params;
-    if (!Types.ObjectId.isValid(uploadId)) {
-      throw new ValidationError("Invalid upload ID: " + uploadId);
-    }
 
     const techProfile = await ResumeTechProfileModel.findOne({
       uploadRef: uploadId,
@@ -44,6 +41,13 @@ export const getUploadTechProfileController: UploadTechProfileController =
 
 export const getTechProfileValidationSchema = {
   [Segments.PARAMS]: Joi.object({
-    uploadId: Joi.string().required(),
+    uploadId: Joi.string()
+      .required()
+      .custom((value, helpers) => {
+        if (!Types.ObjectId.isValid(value)) {
+          return helpers.error("string.objectId", { value });
+        }
+        return value;
+      }, "MongoDB ObjectId validation"),
   }),
 };

@@ -1,6 +1,7 @@
 import { Joi, Segments } from "celebrate";
 import type { Response, Request, RequestHandler } from "express";
 import { TUploadDocument, UploadModel } from "@/models/upload.model.js";
+import { Types } from "mongoose";
 import {
   DocumentUploadRequestBody,
   DocumentUploadResponse,
@@ -29,7 +30,7 @@ export const documentUploadController: DocumentUploadController = async (
     throw new Error("No file uploaded to R2. Please try again.");
   }
 
-  const { name, role } = req.body;
+  const { name, projectId } = req.body;
   const { originalname, mimetype, size, buffer } = req.file;
   const { hash, r2Key, r2Url } = req.r2File;
 
@@ -43,7 +44,7 @@ export const documentUploadController: DocumentUploadController = async (
     r2Url,
     metadata: {
       name: name || originalname,
-      role,
+      projectId: projectId || "",
     },
     parseStatus: "pending",
   });
@@ -55,7 +56,7 @@ export const documentUploadController: DocumentUploadController = async (
   res.status(200).json({
     _id: newUpload._id.toString(),
     name: newUpload.metadata.name,
-    role: newUpload.metadata.role,
+    role: newUpload.metadata.projectId,
     size: newUpload.size,
     contentType: newUpload.contentType,
     parseStatus: newUpload.parseStatus,
@@ -66,6 +67,13 @@ export const documentUploadController: DocumentUploadController = async (
 export const documentUploadValidationSchema = {
   [Segments.BODY]: {
     name: Joi.string().allow("").optional().default(""),
-    role: Joi.string().allow("").optional().default(""),
+    projectId: Joi.string()
+      .optional()
+      .custom((value, helpers) => {
+        if (value && !Types.ObjectId.isValid(value)) {
+          return helpers.error("string.objectId", { value });
+        }
+        return value;
+      }, "MongoDB ObjectId validation"),
   },
 };

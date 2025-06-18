@@ -47,14 +47,13 @@ export const useUploadMutation = () => {
   const handleFileUpload = (
     file: File,
     name: string = "",
-    role: string,
+    projectId?: string,
   ) => {
     const isValidFileSize = file.size <= MAXIMUM_UPLOAD_SIZE_BYTES;
 
     if (!isValidFileSize) throw Error(`Invalid file size ${file.toString()}`);
-    if (!role) throw Error(`Project is required`);
 
-    return mutate({ file, name, role });
+    return mutate({ file, name, projectId });
   };
 
   return {

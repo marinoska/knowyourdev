@@ -12,18 +12,18 @@ import { FormLabel, Input } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useUploadMutation } from "@/api/query/useUploadMutation.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { ProjectsDropdown } from "@/components/ProjectsDropdown.tsx";
 
 export const UploadModal = ({
   open,
   setOpen,
+  projectId,
 }: {
   open: boolean;
   setOpen: StateSetter<boolean>;
+  projectId?: string;
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
-  const [project, setProject] = useState<string | null>(null);
 
   const { isPending, isError, isSuccess, reset, handleFileUpload } =
     useUploadMutation();
@@ -90,12 +90,6 @@ export const UploadModal = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <ProjectsDropdown
-              selectedProject={project}
-              onProjectChange={setProject}
-              placeholder="Select a project"
-              required={true}
-            />
           </Stack>
 
           <Divider sx={{ my: 2 }} />
@@ -117,14 +111,14 @@ export const UploadModal = ({
               Cancel
             </Button>
             <Button
-              disabled={!file || !project}
+              disabled={!file}
               loading={isPending}
               size="md"
               variant="solid"
               color="primary"
               onClick={() => {
-                if (!file || !project) return;
-                handleFileUpload(file, name, project);
+                if (!file) return;
+                handleFileUpload(file, name, projectId);
               }}
             >
               Proceed

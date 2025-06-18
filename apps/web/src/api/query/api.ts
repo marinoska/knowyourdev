@@ -11,11 +11,17 @@ import {
 } from "@kyd/common/api";
 import { InfiniteData } from "@tanstack/react-query";
 
-export const uploadCV = ({ file, name, role }: DocumentUploadRequestType) => {
+export const uploadCV = ({
+  file,
+  name,
+  projectId,
+}: DocumentUploadRequestType) => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("name", name);
-  formData.append("role", role);
+  if (projectId) {
+    formData.append("projectId", projectId);
+  }
 
   return apiClient.post<DocumentUploadResponse>("/document/upload", {
     body: formData,

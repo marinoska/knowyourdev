@@ -12,7 +12,7 @@ export type TUpload = {
   r2Url?: string; // Cloudflare R2 object URL
   metadata: {
     name: string;
-    role: string;
+    projectId: string;
   };
   parseStatus: ParsedStatus;
 };
@@ -36,7 +36,7 @@ const UploadSchema = new Schema<TUploadDocument, TUploadModel>(
     r2Url: { type: String, required: true, immutable: true },
     metadata: {
       name: { type: String, required: true },
-      role: { type: String, default: "" },
+      projectId: { type: String, default: "" },
     },
     parseStatus: { type: String, default: "pending" },
   },
