@@ -8,6 +8,7 @@ export type TProject = {
     techFocus: ScopeType[];
     description: string;
   };
+  candidates: string[];
 };
 
 export type TProjectsItem = TProject & {

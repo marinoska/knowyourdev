@@ -10,6 +10,7 @@ export const mockProjects: TProjectsItem[] = [
       description:
         "Building a modern web application with React frontend and Node.js backend",
     },
+    candidates: [],
     createdAt: new Date(2023, 0, 15).toISOString(),
   },
   {
@@ -21,6 +22,7 @@ export const mockProjects: TProjectsItem[] = [
       description:
         "Developing a cross-platform mobile application for Android and iOS",
     },
+    candidates: [],
     createdAt: new Date(2023, 1, 20).toISOString(),
   },
   {
@@ -32,6 +34,7 @@ export const mockProjects: TProjectsItem[] = [
       description:
         "Research and development of machine learning algorithms for data analysis",
     },
+    candidates: [],
     createdAt: new Date(2023, 2, 10).toISOString(),
   },
   {
@@ -43,6 +46,7 @@ export const mockProjects: TProjectsItem[] = [
       description:
         "Setting up CI/CD pipelines and cloud infrastructure for application deployment",
     },
+    candidates: [],
     createdAt: new Date(2023, 3, 5).toISOString(),
   },
   {
@@ -54,6 +58,7 @@ export const mockProjects: TProjectsItem[] = [
       description:
         "Building a complete e-commerce solution with user authentication and payment processing",
     },
+    candidates: [],
     createdAt: new Date(2023, 4, 25).toISOString(),
   },
 ];

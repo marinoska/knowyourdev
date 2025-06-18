@@ -7,6 +7,9 @@ import {
   DocumentUploadResponse,
 } from "@kyd/common/api";
 import { processUpload } from "@/chain/extraction/runner.js";
+import { ValidationError } from "@/app/errors.js";
+import { getProjectById } from "@/models/project.repository.js";
+import { ProjectModel } from "@/models/project.model.js";
 
 export type DocumentUploadController = RequestHandler<
   any,
@@ -34,6 +37,16 @@ export const documentUploadController: DocumentUploadController = async (
   const { originalname, mimetype, size, buffer } = req.file;
   const { hash, r2Key, r2Url } = req.r2File;
 
+  // Check if projectId exists in the project table
+  if (projectId) {
+    const project = await getProjectById(projectId);
+    if (!project) {
+      throw new ValidationError(
+        `Project not found for the provided ID: ${projectId}`,
+      );
+    }
+  }
+
   const newUpload: TUploadDocument = new UploadModel({
     originalName: originalname,
     filename: r2Key,
@@ -50,6 +63,15 @@ export const documentUploadController: DocumentUploadController = async (
   });
 
   await newUpload.save();
+
+  // Add the new upload _id to the project.candidates array if projectId is provided
+  if (projectId) {
+    await ProjectModel.findByIdAndUpdate(
+      projectId,
+      { $push: { candidates: newUpload._id } },
+      { new: true },
+    );
+  }
 
   void processUpload(newUpload, buffer);
 

@@ -15,7 +15,7 @@ export type GetProjectController = RequestHandler<
 
 export const getProjectController: GetProjectController = async (
   req,
-  res: Response<TProjectsItem>
+  res: Response<TProjectsItem>,
 ) => {
   const { projectId } = req.params;
   if (!Types.ObjectId.isValid(projectId)) {
@@ -34,6 +34,7 @@ export const getProjectController: GetProjectController = async (
     name: project.name,
     settings: project.settings,
     createdAt: project.createdAt.toISOString(),
+    candidates: project.candidates, // Ensure candidates are included
   });
 };
 

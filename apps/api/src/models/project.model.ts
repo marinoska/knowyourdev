@@ -17,6 +17,7 @@ const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
       techFocus: [{ type: String, enum: SCOPE }],
       description: { type: String, default: "" },
     },
+    candidates: [{ type: Schema.Types.ObjectId, ref: 'Upload', default: [] }],
   },
   { timestamps: true, collection: "Project", autoIndex: true },
 );
