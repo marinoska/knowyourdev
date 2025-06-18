@@ -7,6 +7,7 @@ import { ProjectItem } from "./ProjectItem.tsx";
 import { ProjectModal } from "./ProjectModal.tsx";
 import { useProjectsQuery } from "@/api/query/useProjectsQuery.ts";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
+import Button from "@mui/joy/Button";
 
 export const ProjectsList = () => {
   const [openProjectModal, setOpenProjectModal] =
@@ -31,10 +32,11 @@ export const ProjectsList = () => {
       >
         <BasePage.Header
           title="ProjectsList"
-          buttonLabel="Create Project"
-          icon={BusinessCenterIcon}
-          action={() => setOpenProjectModal(true)}
-        />
+        >
+          <Button onClick={() => setOpenProjectModal(true)} startDecorator={<BusinessCenterIcon />} size="md">
+            Create Project
+          </Button>
+        </BasePage.Header>
         <Container>
           <BasePage.Content>
             {projects?.map((project) => (

@@ -1,10 +1,9 @@
 import CenteredLoader from "@/components/Loader.tsx";
 import EmptyPage from "@/components/EmptyPage.tsx";
 import Typography from "@mui/joy/Typography";
-import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import Sheet from "@mui/joy/Sheet";
-import { Children, ElementType, isValidElement, ReactNode } from "react";
+import { Children, isValidElement, ReactNode } from "react";
 
 export const BasePage = ({
   children,
@@ -59,21 +58,11 @@ BasePage.Header = ({
   children,
   title,
   subtitle,
-  buttonLabel,
-  icon: Icon,
-  action,
 }: {
   children?: ReactNode;
   title?: string;
   subtitle?: string;
-  buttonLabel?: string;
-  icon?: ElementType;
-  action?: VoidFunction;
 }) => {
-  if (children) {
-    return <>{children}</>;
-  }
-
   return (
     <Stack
       sx={{
@@ -91,11 +80,7 @@ BasePage.Header = ({
         </Typography>
         {subtitle && <Typography level="title-md">{subtitle}</Typography>}
       </Stack>
-      {buttonLabel && (
-        <Button onClick={action} startDecorator={Icon && <Icon />} size="md">
-          {buttonLabel}
-        </Button>
-      )}
+      {children}
     </Stack>
   );
 };

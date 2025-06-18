@@ -1,4 +1,4 @@
-import { useState, ReactNode } from "react";
+import { useState, ReactNode, useMemo } from "react";
 import Box from "@mui/joy/Box";
 import JoyTabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -11,8 +11,26 @@ export type TabItem = {
   content: ReactNode;
 };
 
-export const Tabs = ({ tabs }: { tabs: TabItem[] }) => {
-  const [activeTab, setActiveTab] = useState(0);
+export const Tabs = ({
+  tabs,
+  initialTab = 0,
+  onTabChange,
+}: {
+  tabs: TabItem[];
+  initialTab?: number;
+  onTabChange?: (index: number) => void;
+}) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  const handleTabChange = useMemo(
+    () => (newValue: number) => {
+      setActiveTab(newValue);
+      if (onTabChange) {
+        onTabChange(newValue);
+      }
+    },
+    [onTabChange, setActiveTab],
+  );
 
   return (
     <Box id="analysis-tabs" sx={{ mb: 8 }}>
@@ -20,7 +38,7 @@ export const Tabs = ({ tabs }: { tabs: TabItem[] }) => {
         variant="plain"
         value={activeTab}
         // @ts-ignore
-        onChange={(_, newValue) => setActiveTab(newValue)}
+        onChange={(_, newValue) => handleTabChange(newValue)}
         sx={{
           borderBottom: "1px solid",
           borderColor: "neutral.outlinedBorder",

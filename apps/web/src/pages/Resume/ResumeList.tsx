@@ -7,6 +7,7 @@ import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
 import Container from "@/components/Container.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
+import Button from "@mui/joy/Button";
 
 export const ResumeList = () => {
   const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
@@ -27,10 +28,11 @@ export const ResumeList = () => {
       >
         <BasePage.Header
           title="Uploaded CVs"
-          buttonLabel="Upload CV"
-          icon={UploadFile}
-          action={() => setOpenUploadModal(true)}
-        />
+        >
+          <Button onClick={() => setOpenUploadModal(true)} startDecorator={<UploadFile />} size="md">
+            Upload CV
+          </Button>
+        </BasePage.Header>
         <Container>
           <BasePage.Content>
             {query.data?.map((upload) => (
