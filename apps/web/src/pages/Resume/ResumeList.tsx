@@ -1,17 +1,12 @@
 import { UploadItem } from "./UploadItem.tsx";
-import UploadFile from "@mui/icons-material/Upload";
-import * as React from "react";
-import { UploadModal } from "../components/UploadModal.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
 import Container from "@/components/Container.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
-import Button from "@mui/joy/Button";
+import { UploadButton } from "@/components/UploadButton.tsx";
 
 export const ResumeList = () => {
-  const [openUploadModal, setOpenUploadModal] = React.useState<boolean>(false);
-
   const query = useUploadsQuery({ page: 1, limit: 300 });
 
   return (
@@ -26,12 +21,8 @@ export const ResumeList = () => {
         isError={query.isError}
         showEmpty={!query.data?.length}
       >
-        <BasePage.Header
-          title="Uploaded CVs"
-        >
-          <Button onClick={() => setOpenUploadModal(true)} startDecorator={<UploadFile />} size="md">
-            Upload CV
-          </Button>
+        <BasePage.Header title="Uploaded CVs">
+          <UploadButton />
         </BasePage.Header>
         <Container>
           <BasePage.Content>
@@ -47,9 +38,6 @@ export const ResumeList = () => {
           />
         </Container>
       </BasePage>
-      {openUploadModal && (
-        <UploadModal setOpen={setOpenUploadModal} open={openUploadModal} />
-      )}
     </>
   );
 };
