@@ -2,7 +2,7 @@ import { Snackbar } from "@/components/Snackbar.tsx";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
-import Tabs, { TabItem } from "@/components/Tabs.tsx";
+import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import { format } from "date-fns";
 import { TProjectsItem } from "@kyd/common/api";
@@ -15,16 +15,16 @@ type ProjectProfileParams = {
   id: string;
 };
 
-const getTabItems = (profile: TProjectsItem): TabItem[] => [
-  {
+const getTabItems = (profile: TProjectsItem): TabsRecord => ({
+  settings: {
     label: "Project Details",
     content: <ProjectSettingsContent profile={profile} />,
   },
-  {
+  candidates: {
     label: "Candidates",
     content: <CandidatesContent project={profile} />,
   },
-];
+});
 
 export const ProjectProfile = () => {
   const { id } = useParams<ProjectProfileParams>();

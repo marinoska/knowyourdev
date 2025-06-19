@@ -1,26 +1,47 @@
-import { useState, ReactNode, useMemo } from "react";
+import { useState, ReactNode, useMemo, useEffect } from "react";
 import Box from "@mui/joy/Box";
 import JoyTabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
 import { Container } from "@/components/Container.tsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export type TabItem = {
   label: string;
   content: ReactNode;
 };
 
+export type TabsRecord = Record<string, TabItem>;
+
 export const Tabs = ({
   tabs,
   initialTab = 0,
   onTabChange,
 }: {
-  tabs: TabItem[];
+  tabs: TabsRecord;
   initialTab?: number;
   onTabChange?: (index: number) => void;
 }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const hashes = Object.keys(tabs);
+  const hash = location.hash.replace("#", "");
+  const index = hashes.indexOf(hash);
+
+  // Initialize active tab based on URL hash if available
   const [activeTab, setActiveTab] = useState(initialTab);
+
+  // Update active tab when hash changes
+  useEffect(() => {
+    if (hash && index >= 0) {
+      setActiveTab(index);
+      if (onTabChange) {
+        onTabChange(index);
+      }
+    }
+  }, [hash, index, onTabChange]);
 
   const handleTabChange = useMemo(
     () => (newValue: number) => {
@@ -28,8 +49,15 @@ export const Tabs = ({
       if (onTabChange) {
         onTabChange(newValue);
       }
+
+      const selectedTabHash = hashes[newValue];
+      if (selectedTabHash) {
+        navigate({ hash: selectedTabHash }, { replace: true });
+      } else {
+        navigate({ hash: "" }, { replace: true });
+      }
     },
-    [onTabChange, setActiveTab],
+    [hashes, navigate, onTabChange],
   );
 
   return (
@@ -53,7 +81,7 @@ export const Tabs = ({
             gap: 2,
           }}
         >
-          {tabs.map((tab, index) => (
+          {Object.values(tabs).map((tab, index) => (
             <Tab
               variant="plain"
               key={index}
@@ -80,7 +108,7 @@ export const Tabs = ({
           ))}
         </TabList>
         <Container>
-          {tabs.map((tab, index) => (
+          {Object.values(tabs).map((tab, index) => (
             <TabPanel
               key={index}
               value={index}

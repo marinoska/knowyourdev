@@ -1,11 +1,14 @@
 import { UploadModel } from "@/models/upload.model.js";
 import { ResumeDataModel } from "@/models/resumeDataModel.js";
 import { ParsedStatus } from "@kyd/common/api";
+import { ProjectModel } from "@/models/project.model.js";
+import mongoose from "mongoose";
 
 export type GetUploadsParams = {
   page: number;
   limit: number;
   sortOrder?: "asc" | "desc";
+  projectId?: string;
 };
 
 type UploadDetail = {
@@ -40,10 +43,32 @@ export const getUploadsWithDetails = async ({
   page,
   limit,
   sortOrder = "desc",
+  projectId,
 }: GetUploadsParams) => {
   const skip = (page - 1) * limit;
 
+  const uploadIds = [];
+  let matchStage = {};
+  let totalRecords = 0;
+
+  if (projectId) {
+    const project = await ProjectModel.findById(projectId).lean();
+    if (project?.candidates?.length) {
+      matchStage = { _id: { $in: project.candidates } };
+      totalRecords = project?.candidates?.length || 0;
+    } else {
+      // If project not found or no candidates, return empty result
+      return {
+        uploads: [],
+        totalRecords: 0,
+        currentPage: page,
+        totalPages: 0,
+      };
+    }
+  }
+
   const uploadsWithDetails = await UploadModel.aggregate([
+    ...(projectId ? [{ $match: matchStage }] : []),
     {
       $lookup: {
         from: ResumeDataModel.collection.name,
@@ -88,7 +113,10 @@ export const getUploadsWithDetails = async ({
     },
   ]);
 
-  const totalRecords = await UploadModel.countDocuments({});
+  // Only count all documents if not filtering by projectId
+  if (!projectId) {
+    totalRecords = await UploadModel.countDocuments({});
+  }
 
   return {
     uploads: uploadsWithDetails,

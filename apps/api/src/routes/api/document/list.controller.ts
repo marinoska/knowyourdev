@@ -16,12 +16,13 @@ export const getUploadsListController: RequestHandler<
   req: Request<any, GetUploadsListResponse, any, GetUploadsListQueryParams>,
   res: Response<GetUploadsListResponse>,
 ) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, projectId } = req.query;
 
   const { uploads, totalRecords, totalPages, currentPage } =
     await getUploadsWithDetails({
       page: Number(page),
       limit: Number(limit),
+      projectId,
     });
 
   const responseData = {

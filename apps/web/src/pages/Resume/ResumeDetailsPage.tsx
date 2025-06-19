@@ -3,7 +3,7 @@ import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useState } from "react";
-import Tabs, { TabItem } from "@/components/Tabs.tsx";
+import Tabs, { TabItem, TabsRecord } from "@/components/Tabs.tsx";
 import { CareerTimelineChart } from "@/pages/Resume/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import { ChartProvider } from "@/pages/Resume/Chart/Core/ChartProvider.tsx";
@@ -37,8 +37,8 @@ const TechnologiesChartGroup = () => {
   );
 };
 
-const getTabItems = (): TabItem[] => [
-  {
+const getTabItems = (): TabsRecord => ({
+  timeline: {
     label: "Career Timeline",
     content: (
       <Stack gap={6}>
@@ -48,11 +48,11 @@ const getTabItems = (): TabItem[] => [
       </Stack>
     ),
   },
-  {
+  techs: {
     label: "Technologies",
     content: <TechnologiesChartGroup />,
   },
-  {
+  insights: {
     label: "Tech insights",
     content: (
       <Stack gap={6}>
@@ -60,7 +60,7 @@ const getTabItems = (): TabItem[] => [
       </Stack>
     ),
   },
-];
+});
 
 export const ResumeDetailsPage = () => {
   const { id } = useParams<ResumeProfileParams>();
