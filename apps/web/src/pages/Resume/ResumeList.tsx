@@ -1,4 +1,4 @@
-import { UploadItem } from "./UploadItem.tsx";
+import { ResumeItem } from "./ResumeItem.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
@@ -27,7 +27,7 @@ export const ResumeList = () => {
         <Container>
           <BasePage.Content>
             {query.data?.map((upload) => (
-              <UploadItem key={upload._id} item={upload} />
+              <ResumeItem key={upload._id} item={upload} />
             ))}
           </BasePage.Content>
 

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
 import { Typography } from "@mui/joy";
-import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
+import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { TechProfile } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import {
@@ -11,7 +11,7 @@ import {
   YellowLegendColor,
 } from "@/utils/const.ts";
 import { pieTooltip, tooltipField, tooltipOptions } from "@/utils/chart.ts";
-import { ChartContainer } from "@/pages/Resume/Chart/Components/ChartContainer.tsx";
+import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
 
 const LegendItems = [
   {
@@ -35,7 +35,7 @@ const LegendItems = [
 ];
 
 export const TechMentionsPieChart = () => {
-  const chartContext = useChartContext();
+  const chartContext = useResumeProfileContext();
 
   const { chartData, sliceColors } = useMemo(() => {
     const technologies = (chartContext.profile?.technologies || []).sort(

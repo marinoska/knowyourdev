@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
+import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { RedLegendColor } from "@/utils/const";
 import { GreenLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";
-import { ChartContainer } from "@/pages/Resume/Chart/Components/ChartContainer.tsx";
+import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
-import { TimelineChart } from "@/pages/Resume/Chart/Components/TimelineChart.tsx";
+import { TimelineChart } from "@/pages/components/Chart/TimelineChart.tsx";
 
 const LegendItems = [
   { label: "Tech stack specified", color: GreenLegendColor },
@@ -13,7 +13,7 @@ const LegendItems = [
 ];
 
 export const CareerTechTimelineChart = () => {
-  const chartContext = useChartContext();
+  const chartContext = useResumeProfileContext();
 
   const chartData = useMemo(() => {
     const missingTechJobsData = chartContext.jobsWithMissingTech.map((job) => {

@@ -6,7 +6,7 @@ export type Gap = Pick<
   "job" | "role" | "months" | "start" | "end" | "popularity"
 >;
 
-type ChartContextType = {
+type ResumeProfileType = {
   jobGaps: Gap[];
   softwareDevelopmentJobs: Job[];
   irrelevantJobs: Job[];
@@ -16,7 +16,7 @@ type ChartContextType = {
   monthsActive: number;
 };
 
-export const ChartContext = createContext<ChartContextType>({
+export const ResumeProfileContext = createContext<ResumeProfileType>({
   jobGaps: [],
   softwareDevelopmentJobs: [],
   irrelevantJobs: [],
@@ -26,6 +26,6 @@ export const ChartContext = createContext<ChartContextType>({
   monthsActive: 0,
 });
 
-export const useChartContext = () => {
-  return useContext(ChartContext);
+export const useResumeProfileContext = () => {
+  return useContext(ResumeProfileContext);
 };

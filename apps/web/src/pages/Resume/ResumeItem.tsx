@@ -16,7 +16,7 @@ const StatusIcon: Record<ParsedStatus, React.ReactNode> = {
   processed: <Done color="success" />,
 };
 
-export const UploadItem = ({ item }: { item: TUploadItem }) => {
+export const ResumeItem = ({ item }: { item: TUploadItem }) => {
   const { role, name, fullName, position, createdAt, parseStatus, _id } = item;
   const navigate = useNavigate();
   const isActive = item.parseStatus === "processed";

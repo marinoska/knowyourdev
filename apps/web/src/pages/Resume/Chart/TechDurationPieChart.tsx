@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
 import { Typography } from "@mui/joy";
-import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
+import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { TechProfile } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import { GreenLegendColor, SoftGrayColor } from "@/utils/const.ts";
 import { pieTooltip, tooltipField } from "@/utils/chart.ts";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
-import { ChartContainer } from "@/pages/Resume/Chart/Components/ChartContainer.tsx";
+import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
 
 const LegendItems = [
   {
@@ -25,7 +25,7 @@ const LegendItems = [
 ];
 
 export const TechDurationPieChart = () => {
-  const chartContext = useChartContext();
+  const chartContext = useResumeProfileContext();
 
   const { chartData, sliceColors } = useMemo(() => {
     const technologies = (chartContext.profile?.technologies || []).sort(

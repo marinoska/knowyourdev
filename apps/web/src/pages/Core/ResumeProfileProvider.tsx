@@ -1,10 +1,10 @@
 import { ReactNode, useMemo } from "react";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
-import { getJobGaps } from "@/pages/Resume/Chart/Core/ranges.ts";
+import { getJobGaps } from "@/pages/Core/ranges.ts";
 import { GAP_JOB, GAP_ROLE, sumRanges } from "@kyd/common";
-import { ChartContext, Gap } from "./ChartContext.ts";
+import { ResumeProfileContext, Gap } from "./ResumeProfileContext.ts";
 
-export function ChartProvider({
+export function ResumeProfileProvider({
   children,
   profile,
 }: {
@@ -85,6 +85,8 @@ export function ChartProvider({
   );
 
   return (
-    <ChartContext.Provider value={context}>{children}</ChartContext.Provider>
+    <ResumeProfileContext.Provider value={context}>
+      {children}
+    </ResumeProfileContext.Provider>
   );
 }

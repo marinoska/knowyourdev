@@ -5,8 +5,7 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { useState } from "react";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { CareerTimelineChart } from "@/pages/Resume/Chart/CareerTimelineChart.tsx";
-import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
-import { ChartProvider } from "@/pages/Resume/Chart/Core/ChartProvider.tsx";
+import { ResumeProfileProvider } from "@/pages/Core/ResumeProfileProvider.tsx";
 import { CareerTechTimelineChart } from "@/pages/Resume/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
@@ -15,7 +14,7 @@ import { TechDurationPieChart } from "@/pages/Resume/Chart/TechDurationPieChart.
 import { TechMentionsPieChart } from "@/pages/Resume/Chart/TechMentionsPieChart.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { TechPopularityTimelineChart } from "@/pages/Resume/Chart/TechPopularityTimelineChart.tsx";
-import { useChartContext } from "@/pages/Resume/Chart/Core/ChartContext.ts";
+import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 
 type ResumeProfileParams = {
   id: string;
@@ -68,9 +67,9 @@ export const ResumeDetailsPage = () => {
   const query = useUploadProfileQuery({ uploadId: id });
 
   return (
-    <ChartProvider profile={query.profile}>
+    <ResumeProfileProvider profile={query.profile}>
       <ResumeDetails query={query} />
-    </ChartProvider>
+    </ResumeProfileProvider>
   );
 };
 
@@ -79,7 +78,7 @@ const ResumeDetails = ({
 }: {
   query: ReturnType<typeof useUploadProfileQuery>;
 }) => {
-  const { monthsActive } = useChartContext();
+  const { monthsActive } = useResumeProfileContext();
 
   const { years, months } = monthsToYearsAndMonths(monthsActive);
 

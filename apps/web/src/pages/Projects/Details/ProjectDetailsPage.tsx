@@ -3,7 +3,6 @@ import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
-import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import { format } from "date-fns";
 import { TProjectsItem } from "@kyd/common/api";
 import ProjectSettingsContent from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
@@ -26,7 +25,7 @@ const getTabItems = (profile: TProjectsItem): TabsRecord => ({
   },
 });
 
-export const ProjectProfile = () => {
+export const ProjectDetailsPage = () => {
   const { id } = useParams<ProjectProfileParams>();
 
   const query = useProjectProfileQuery({ projectId: id });

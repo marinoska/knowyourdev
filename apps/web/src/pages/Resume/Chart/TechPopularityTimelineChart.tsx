@@ -1,8 +1,8 @@
-import { useFilteredTechnologies } from "@/pages/Resume/Chart/Core/useFilteredTechnologies.ts";
+import { useFilteredTechnologies } from "@/pages/Core/useFilteredTechnologies.ts";
 import { useCallback, useEffect, useMemo } from "react";
-import { ChartContainer } from "@/pages/Resume/Chart/Components/ChartContainer.tsx";
-import { ScopeSelect } from "@/pages/Resume/Chart/Components/ScopeSelect.tsx";
-import { TimelineChart } from "@/pages/Resume/Chart/Components/TimelineChart.tsx";
+import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
+import { ScopeSelect } from "@/pages/components/Chart/ScopeSelect.tsx";
+import { TimelineChart } from "@/pages/components/Chart/TimelineChart.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
 import { TREND_MAP, TrendType } from "@kyd/common/api";
 import { TechProfile } from "@/api/query/types.ts";
