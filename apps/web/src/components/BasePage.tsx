@@ -58,11 +58,13 @@ BasePage.Header = ({
   children,
   title,
   subtitle,
+  caption,
   showBackButton,
 }: {
   children?: ReactNode;
   title?: string;
   subtitle?: string;
+  caption?: string;
   showBackButton?: boolean;
 }) => {
   return (
@@ -84,6 +86,12 @@ BasePage.Header = ({
       >
         {showBackButton && <NavigateBackLink />}
         <Stack>
+          {caption && (
+            <Typography level="title-sm" textColor="text.tertiary">
+              {caption}
+            </Typography>
+          )}
+
           <Typography textColor="text.secondary" level="h3">
             {title}
           </Typography>

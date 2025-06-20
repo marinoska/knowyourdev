@@ -63,7 +63,8 @@ const CandidateDetails = ({
       >
         <BasePage.Header
           showBackButton
-          subtitle={`${project?.name} • ${profile?.position} • ${years} years ${months} month net active time`}
+          caption={`Project: ${project?.name}`}
+          subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
           title={profile?.fullName}
         />
       </BasePage>
