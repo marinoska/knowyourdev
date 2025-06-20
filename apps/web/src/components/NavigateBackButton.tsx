@@ -1,7 +1,6 @@
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Typography from "@mui/joy/Typography";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -36,15 +35,15 @@ export const NavigateBackLink = () => {
             ...(isHovered && { transform: "translateX(-4px)" }),
           }}
         />
-        <Typography
-          level="body-md"
-          sx={{
-            fontWeight: "medium",
-            "&:hover": { color: "inherit" },
-          }}
-        >
-          Back
-        </Typography>
+        {/*<Typography*/}
+        {/*  level="body-md"*/}
+        {/*  sx={{*/}
+        {/*    fontWeight: "medium",*/}
+        {/*    "&:hover": { color: "inherit" },*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  Back*/}
+        {/*</Typography>*/}
       </IconButton>
     </Box>
   );

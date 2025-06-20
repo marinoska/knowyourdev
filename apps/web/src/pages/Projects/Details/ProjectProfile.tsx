@@ -48,9 +48,9 @@ const ProjectPage = ({
         msg="Failed to load project details."
         show={isError}
       />
-      <NavigateBackLink />
       <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile}>
         <BasePage.Header
+          showBackButton
           subtitle={`Created on ${profile ? format(new Date(profile.createdAt), "MMMM d, yyyy") : ""}`}
           title={profile?.name}
         >

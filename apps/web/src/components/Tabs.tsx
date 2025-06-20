@@ -68,7 +68,7 @@ export const Tabs = ({
         // @ts-ignore
         onChange={(_, newValue) => handleTabChange(newValue)}
         sx={{
-          borderBottom: "1px solid",
+          // borderBottom: "1px solid",
           borderColor: "neutral.outlinedBorder",
           background: "transparent",
         }}

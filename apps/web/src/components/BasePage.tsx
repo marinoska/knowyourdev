@@ -4,6 +4,7 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Sheet from "@mui/joy/Sheet";
 import { Children, isValidElement, ReactNode } from "react";
+import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 
 export const BasePage = ({
   children,
@@ -43,7 +44,6 @@ export const BasePage = ({
         overflow: "hidden",
         minWidth: "auto",
         borderRadius: "sm",
-        pl: 2,
         pt: 2,
         gap: 2,
       }}
@@ -58,10 +58,12 @@ BasePage.Header = ({
   children,
   title,
   subtitle,
+  showBackButton,
 }: {
   children?: ReactNode;
   title?: string;
   subtitle?: string;
+  showBackButton?: boolean;
 }) => {
   return (
     <Stack
@@ -74,11 +76,19 @@ BasePage.Header = ({
         justifyContent: "space-between",
       }}
     >
-      <Stack>
-        <Typography textColor="text.secondary" level="h3">
-          {title}
-        </Typography>
-        {subtitle && <Typography level="title-md">{subtitle}</Typography>}
+      <Stack
+        direction="row"
+        gap={1}
+        alignItems="center"
+        ml={showBackButton ? -1 : 0}
+      >
+        {showBackButton && <NavigateBackLink />}
+        <Stack>
+          <Typography textColor="text.secondary" level="h3">
+            {title}
+          </Typography>
+          {subtitle && <Typography level="title-md">{subtitle}</Typography>}
+        </Stack>
       </Stack>
       {children}
     </Stack>

@@ -28,7 +28,7 @@ export const Container = ({ children }: { children: React.ReactNode }) => {
     <Box
       ref={containerRef}
       sx={{
-        height: `calc(100vh - ${calculatedOffset}px)`,
+        maxHeight: `calc(100vh - ${calculatedOffset}px)`,
         overflow: "auto",
       }}
     >

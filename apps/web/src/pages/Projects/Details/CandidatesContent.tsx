@@ -5,17 +5,20 @@ import { UploadItem } from "@/pages/Resume/UploadItem.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import Loader from "@/components/Loader.tsx";
+import CenteredLoader from "@/components/Loader.tsx";
+import EmptyPage from "@/components/EmptyPage.tsx";
 
 export const CandidatesList = ({ projectId }: { projectId: string }) => {
   const query = useUploadsQuery({ page: 1, limit: 300, projectId });
 
   if (query.isLoading) {
-    return (
-      <Container>
-        <Loader />
-      </Container>
-    );
+    return <CenteredLoader />;
   }
+
+  if (!query.data?.length || query.isError) {
+    return <EmptyPage isError={query.isError} />;
+  }
+
   return (
     <Stack gap={1} direction="column">
       {/* put filters here*/}

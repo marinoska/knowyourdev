@@ -3,7 +3,7 @@ import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useState } from "react";
-import Tabs, { TabItem, TabsRecord } from "@/components/Tabs.tsx";
+import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { CareerTimelineChart } from "@/pages/Resume/Chart/CareerTimelineChart.tsx";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import { ChartProvider } from "@/pages/Resume/Chart/Core/ChartProvider.tsx";
@@ -85,10 +85,10 @@ const ResumeDetails = ({
 
   return (
     <>
-      <NavigateBackLink />
       <Snackbar type="danger" msg="Failed to load CV list." show={isError} />
       <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile}>
         <BasePage.Header
+          showBackButton
           subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
           title={profile?.fullName}
         />
