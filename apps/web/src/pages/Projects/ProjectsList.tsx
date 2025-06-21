@@ -8,6 +8,7 @@ import { ProjectModal } from "./ProjectModal.tsx";
 import { useProjectsQuery } from "@/api/query/useProjectsQuery.ts";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import Button from "@mui/joy/Button";
+import { Stack } from "@mui/joy";
 
 export const ProjectsList = () => {
   const [openProjectModal, setOpenProjectModal] =
@@ -30,18 +31,22 @@ export const ProjectsList = () => {
         isError={isError}
         showEmpty={!projects?.length}
       >
-        <BasePage.Header
-          title="ProjectsList"
-        >
-          <Button onClick={() => setOpenProjectModal(true)} startDecorator={<BusinessCenterIcon />} size="md">
+        <BasePage.Header title="ProjectsList">
+          <Button
+            onClick={() => setOpenProjectModal(true)}
+            startDecorator={<BusinessCenterIcon />}
+            size="md"
+          >
             Create Project
           </Button>
         </BasePage.Header>
         <Container>
           <BasePage.Content>
-            {projects?.map((project) => (
-              <ProjectItem key={project._id} item={project} />
-            ))}
+            <Stack gap={2} direction="column">
+              {projects?.map((project) => (
+                <ProjectItem key={project._id} item={project} />
+              ))}
+            </Stack>
           </BasePage.Content>
 
           <LoadMoreButton

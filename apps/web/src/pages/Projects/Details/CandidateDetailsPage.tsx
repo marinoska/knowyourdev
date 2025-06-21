@@ -6,6 +6,11 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { ResumeProfileProvider } from "@/pages/Core/ResumeProfileProvider.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
+import { Subtitle } from "@/components/typography.tsx";
+import Stack from "@mui/joy/Stack";
+import { FrontendActivityCard } from "@/pages/Projects/Details/components/TechFocusMatchBar.tsx";
+import Typography from "@mui/joy/Typography";
+import { Box } from "@mui/joy";
 
 type CandidateDetailsParams = {
   id: string;
@@ -67,9 +72,24 @@ const CandidateDetails = ({
           subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
           title={profile?.fullName}
         />
+        <BasePage.Content>
+          <TechFocusMatch />
+        </BasePage.Content>
       </BasePage>
     </>
   );
 };
 
-export default CandidateDetailsPage;
+const TechFocusMatch = () => {
+  return (
+    <Stack gap={2}>
+      <Box>
+        <Subtitle text={"Tech Focus Match"} />
+        <Typography color="neutral" level="body-sm">
+          Based on recent experience (last 5 years)
+        </Typography>
+      </Box>
+      <FrontendActivityCard color="success" />
+    </Stack>
+  );
+};

@@ -5,6 +5,7 @@ import { BasePage } from "@/components/BasePage.tsx";
 import Container from "@/components/Container.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import { UploadButton } from "@/components/UploadButton.tsx";
+import Stack from "@mui/joy/Stack";
 
 export const ResumeList = () => {
   const query = useUploadsQuery({ page: 1, limit: 300 });
@@ -26,9 +27,11 @@ export const ResumeList = () => {
         </BasePage.Header>
         <Container>
           <BasePage.Content>
-            {query.data?.map((upload) => (
-              <ResumeItem key={upload._id} item={upload} />
-            ))}
+            <Stack gap={2} direction="column">
+              {query.data?.map((upload) => (
+                <ResumeItem key={upload._id} item={upload} />
+              ))}
+            </Stack>
           </BasePage.Content>
 
           <LoadMoreButton
