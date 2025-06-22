@@ -1,20 +1,17 @@
 import { Card, Typography, Box, LinearProgress } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
 
-export const FrontendActivityCard = ({
-  color,
-}: {
-  color: "success" | "warning";
-}) => {
+type ActivityTypeProps = { color: "success" | "warning"; scope: string };
+export const ActivityCard = ({ color, scope }: ActivityTypeProps) => {
   const activityPerYear = [90, 85, 75, 60, 0]; // recent activity per year
   const totalActiveYears = 4.5;
   const overallScore = 95;
 
   return (
-    <Card variant="outlined" color={color}>
+    <Card variant="soft" color={color}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography level="body-md" fontWeight="md" color={color}>
-          Frontend
+          {scope}
         </Typography>
         <Typography level="body-md" fontWeight="lg" color={color}>
           {overallScore}%
@@ -32,7 +29,7 @@ export const FrontendActivityCard = ({
         <Typography level="body-sm" color={color}>
           Recent activity:
         </Typography>
-        <ActivityPills activityPerYear={activityPerYear} text={"2019–2024"} />
+        <ActivityPills activityLevels={activityPerYear} text={"2019–2024"} />
         <Typography level="body-sm" fontWeight="md" color={color}>
           {totalActiveYears} years active
         </Typography>
@@ -46,15 +43,15 @@ export const FrontendActivityCard = ({
 };
 
 const ActivityPills = ({
-  activityPerYear,
+  activityLevels,
   text,
 }: {
-  activityPerYear: number[];
+  activityLevels: number[];
   text: string;
 }) => {
   return (
     <Stack direction="row" gap={0.5} alignItems="center">
-      {activityPerYear.map((value, index) => (
+      {activityLevels.map((value, index) => (
         <Box
           key={index}
           borderRadius={4}

@@ -1,12 +1,36 @@
 import { createContext, useContext } from "react";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
+import { ScopeType } from "@kyd/common/api";
 
 export type Gap = Pick<
   Job,
   "job" | "role" | "months" | "start" | "end" | "popularity"
 >;
 
-type ResumeProfileType = {
+export type ScopePeriod = {
+  startDate: Date;
+  endDate: Date;
+  totalMonths: number;
+  technologies: Array<{
+    name: string;
+    totalMonths: number;
+  }>;
+};
+
+export type ScopeData = {
+  periods: ScopePeriod[];
+  years: Record<number, Array<1 | 0>>;
+};
+
+export type Selection = {
+  scope: ScopeType;
+  periodIndex: number;
+  selectedTechnologies?: string[]; // Optional array of selected technology names
+};
+
+export type TScopes = Record<ScopeType, ScopeData>;
+
+export type ResumeProfileType = {
   jobGaps: Gap[];
   softwareDevelopmentJobs: Job[];
   irrelevantJobs: Job[];
@@ -14,6 +38,8 @@ type ResumeProfileType = {
   jobsWithFilledTech: Job[];
   profile?: ProcessedUploadProfile;
   monthsActive: number;
+  scopes: TScopes;
+  earliestJobStart: Date | null;
 };
 
 export const ResumeProfileContext = createContext<ResumeProfileType>({
@@ -24,6 +50,8 @@ export const ResumeProfileContext = createContext<ResumeProfileType>({
   jobsWithFilledTech: [],
   profile: undefined,
   monthsActive: 0,
+  scopes: {} as TScopes,
+  earliestJobStart: null,
 });
 
 export const useResumeProfileContext = () => {

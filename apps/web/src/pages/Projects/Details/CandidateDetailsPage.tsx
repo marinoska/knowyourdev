@@ -1,3 +1,4 @@
+import { ScopeType, SCOPE_NAMES } from "@kyd/common/api";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
@@ -8,7 +9,7 @@ import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { Subtitle } from "@/components/typography.tsx";
 import Stack from "@mui/joy/Stack";
-import { FrontendActivityCard } from "@/pages/Projects/Details/components/TechFocusMatchBar.tsx";
+import { ActivityCard } from "@/pages/Projects/Details/components/TechFocusMatchBar.tsx";
 import Typography from "@mui/joy/Typography";
 import { Box } from "@mui/joy";
 
@@ -73,14 +74,18 @@ const CandidateDetails = ({
           title={profile?.fullName}
         />
         <BasePage.Content>
-          <TechFocusMatch />
+          <TechFocusMatch techFocusList={project?.settings.techFocus} />
         </BasePage.Content>
       </BasePage>
     </>
   );
 };
 
-const TechFocusMatch = () => {
+type TechFocusMatchProps = {
+  techFocusList?: ScopeType[];
+};
+
+const TechFocusMatch = ({ techFocusList = [] }: TechFocusMatchProps) => {
   return (
     <Stack gap={2}>
       <Box>
@@ -89,7 +94,9 @@ const TechFocusMatch = () => {
           Based on recent experience (last 5 years)
         </Typography>
       </Box>
-      <FrontendActivityCard color="success" />
+      {techFocusList.map((scope) => (
+        <ActivityCard scope={SCOPE_NAMES[scope]} color="success" />
+      ))}
     </Stack>
   );
 };
