@@ -46,6 +46,7 @@ export const createProject = async (projectData: {
     baselineJobDuration: number;
     techFocus: string[];
     description: string;
+    baselineExperienceYears: number;
   };
 }) => {
   const project = new ProjectModel(projectData);
@@ -60,6 +61,7 @@ export const updateProject = async (
       baselineJobDuration: number;
       techFocus: string[];
       description: string;
+      baselineExperienceYears: number;
     }>;
   }>,
 ) => {

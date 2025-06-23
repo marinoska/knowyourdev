@@ -1,9 +1,39 @@
-import { Card, Typography, Box, LinearProgress } from "@mui/joy";
+import { Card, Typography, Box, LinearProgress, Tooltip } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
+import { TScopeActivity } from "@/pages/Core/ResumeProfileContext.ts";
 
-type ActivityTypeProps = { color: "success" | "warning"; scope: string };
-export const ActivityCard = ({ color, scope }: ActivityTypeProps) => {
-  const activityPerYear = [90, 85, 75, 60, 0]; // recent activity per year
+type ActivityTypeProps = {
+  color: "success" | "warning";
+  scope: string;
+  scopeActivity?: TScopeActivity;
+  baselineExperienceYears: number;
+};
+export const ActivityCard = ({
+  color,
+  scope,
+  scopeActivity,
+  baselineExperienceYears,
+}: ActivityTypeProps) => {
+  const lastPeriods =
+    scopeActivity?.periods.slice(0, baselineExperienceYears) || [];
+  const paddedPeriodList = lastPeriods
+    .reverse()
+    .concat(
+      Array(Math.max(0, baselineExperienceYears - lastPeriods.length)).fill(0),
+    );
+  const normalizedActivityList = paddedPeriodList.map(
+    ({ totalMonths }) => (totalMonths * 100) / 12,
+  );
+  const rawActivityList = paddedPeriodList.map(
+    ({ totalMonths }) => totalMonths,
+  );
+
+  console.log({
+    lastPeriods,
+    normalizedActivityList,
+    rawActivityList,
+    baselineExperienceYears,
+  });
   const totalActiveYears = 4.5;
   const overallScore = 95;
 
@@ -29,7 +59,11 @@ export const ActivityCard = ({ color, scope }: ActivityTypeProps) => {
         <Typography level="body-sm" color={color}>
           Recent activity:
         </Typography>
-        <ActivityPills activityLevels={activityPerYear} text={"2019–2024"} />
+        <ActivityPills
+          normalizedActivityList={normalizedActivityList}
+          rawActivityList={rawActivityList}
+          text={"2019–2024"}
+        />
         <Typography level="body-sm" fontWeight="md" color={color}>
           {totalActiveYears} years active
         </Typography>
@@ -43,24 +77,31 @@ export const ActivityCard = ({ color, scope }: ActivityTypeProps) => {
 };
 
 const ActivityPills = ({
-  activityLevels,
+  normalizedActivityList,
+  rawActivityList,
   text,
 }: {
-  activityLevels: number[];
+  normalizedActivityList: number[];
+  rawActivityList: number[];
   text: string;
 }) => {
   return (
     <Stack direction="row" gap={0.5} alignItems="center">
-      {activityLevels.map((value, index) => (
-        <Box
+      {normalizedActivityList.map((value, index) => (
+        <Tooltip
           key={index}
-          borderRadius={4}
-          width={24}
-          height={8}
-          sx={{
-            backgroundColor: getColorByValue(value),
-          }}
-        />
+          title={`${rawActivityList[index]} months`}
+          placement="top"
+        >
+          <Box
+            borderRadius={4}
+            width={24}
+            height={8}
+            sx={{
+              backgroundColor: getColorByValue(value),
+            }}
+          />
+        </Tooltip>
       ))}
       <Typography level="body-sm" ml={1}>
         {text}

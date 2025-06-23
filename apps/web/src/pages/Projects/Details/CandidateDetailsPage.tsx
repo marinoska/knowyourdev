@@ -1,4 +1,4 @@
-import { ScopeType, SCOPE_NAMES } from "@kyd/common/api";
+import { SCOPE_NAMES, TProject } from "@kyd/common/api";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
@@ -74,7 +74,7 @@ const CandidateDetails = ({
           title={profile?.fullName}
         />
         <BasePage.Content>
-          <TechFocusMatch techFocusList={project?.settings.techFocus} />
+          <TechFocusMatch project={project} />
         </BasePage.Content>
       </BasePage>
     </>
@@ -82,10 +82,11 @@ const CandidateDetails = ({
 };
 
 type TechFocusMatchProps = {
-  techFocusList?: ScopeType[];
+  project?: TProject;
 };
 
-const TechFocusMatch = ({ techFocusList = [] }: TechFocusMatchProps) => {
+const TechFocusMatch = ({ project }: TechFocusMatchProps) => {
+  const { scopes } = useResumeProfileContext();
   return (
     <Stack gap={2}>
       <Box>
@@ -94,8 +95,13 @@ const TechFocusMatch = ({ techFocusList = [] }: TechFocusMatchProps) => {
           Based on recent experience (last 5 years)
         </Typography>
       </Box>
-      {techFocusList.map((scope) => (
-        <ActivityCard scope={SCOPE_NAMES[scope]} color="success" />
+      {project?.settings.techFocus.map((scope) => (
+        <ActivityCard
+          scope={SCOPE_NAMES[scope]}
+          color="success"
+          scopeActivity={scopes[scope]}
+          baselineExperienceYears={project.settings.baselineExperienceYears}
+        />
       ))}
     </Stack>
   );

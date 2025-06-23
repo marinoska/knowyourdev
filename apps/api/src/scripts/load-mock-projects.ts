@@ -1,8 +1,9 @@
 import "dotenv/config";
-import { connected, stopMongoClient } from "@/app/mongo.js";
+import { connected, stopMongoClient, db } from "@/app/mongo.js";
 import { ProjectModel } from "@/models/project.model.js";
+import { TProjectsItem } from "@kyd/common/api";
 
-// Import mock projects data
+// Mock projects data from mockProjects.ts
 const mockProjects = [
   {
     name: "Web Application Development",
@@ -11,59 +12,84 @@ const mockProjects = [
       techFocus: ["FE", "BE"],
       description:
         "Building a modern web application with React frontend and Node.js backend",
+      baselineExperienceYears: 5,
     },
+    candidates: [],
     createdAt: new Date(2023, 0, 15).toISOString(),
   },
   {
     name: "Mobile App Development",
     settings: {
+      baselineExperienceYears: 1,
       baselineJobDuration: 120,
       techFocus: ["ANDR", "IOS"],
       description:
         "Developing a cross-platform mobile application for Android and iOS",
     },
+    candidates: [],
     createdAt: new Date(2023, 1, 20).toISOString(),
   },
   {
     name: "AI Research Project",
     settings: {
+      baselineExperienceYears: 2,
       baselineJobDuration: 180,
       techFocus: ["AI", "ML"],
       description:
         "Research and development of machine learning algorithms for data analysis",
     },
+    candidates: [],
     createdAt: new Date(2023, 2, 10).toISOString(),
   },
   {
     name: "DevOps Infrastructure Setup",
     settings: {
+      baselineExperienceYears: 3,
       baselineJobDuration: 60,
       techFocus: ["DO", "SYS"],
       description:
         "Setting up CI/CD pipelines and cloud infrastructure for application deployment",
     },
+    candidates: [],
     createdAt: new Date(2023, 3, 5).toISOString(),
   },
   {
     name: "Fullstack E-commerce Platform",
     settings: {
+      baselineExperienceYears: 5,
       baselineJobDuration: 150,
       techFocus: ["FS", "CMS"],
       description:
         "Building a complete e-commerce solution with user authentication and payment processing",
     },
+    candidates: [],
     createdAt: new Date(2023, 4, 25).toISOString(),
   },
 ];
 
+const dropExistingCollection = async (name: string) => {
+  try {
+    const collections = await db.listCollections();
+    if (collections.filter((coll) => coll.name === name).length > 0) {
+      console.log(`Dropping existing collection ${name}...`);
+      await db.dropCollection(name);
+      console.log(`Collection ${name} dropped successfully.`);
+    } else {
+      console.log(`Collection ${name} does not exist, skipping drop operation.`);
+    }
+  } catch (error) {
+    console.error(`Error dropping collection ${name}:`, error);
+    throw error;
+  }
+};
+
 const loadMockProjects = async () => {
   try {
-    // Check if projects already exist
-    const existingCount = await ProjectModel.countDocuments();
-    if (existingCount > 0) {
-      console.log(`Found ${existingCount} existing projects. Skipping insertion.`);
-      return;
-    }
+    // Drop the existing Project collection
+    await dropExistingCollection("Project");
+
+    // Ensure the model is initialized
+    await ProjectModel.init();
 
     // Insert mock projects
     const result = await ProjectModel.insertMany(mockProjects);

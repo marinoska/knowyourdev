@@ -26,6 +26,9 @@ export const ProjectSettingsContent = ({
 
       <Typography component="h5">Baseline Job Duration</Typography>
       <Typography>{profile.settings?.baselineJobDuration} months</Typography>
+
+      <Typography component="h5">Experience Years</Typography>
+      <Typography>{profile.settings?.baselineExperienceYears} years</Typography>
     </Stack>
   );
 };

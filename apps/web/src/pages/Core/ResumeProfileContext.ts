@@ -17,7 +17,7 @@ export type ScopePeriod = {
   }>;
 };
 
-export type ScopeData = {
+export type TScopeActivity = {
   periods: ScopePeriod[];
   years: Record<number, Array<1 | 0>>;
 };
@@ -28,7 +28,7 @@ export type Selection = {
   selectedTechnologies?: string[]; // Optional array of selected technology names
 };
 
-export type TScopes = Record<ScopeType, ScopeData>;
+export type TScopes = Record<ScopeType, TScopeActivity>;
 
 export type ResumeProfileType = {
   jobGaps: Gap[];

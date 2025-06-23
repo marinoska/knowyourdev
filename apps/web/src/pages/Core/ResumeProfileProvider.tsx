@@ -6,7 +6,7 @@ import { ScopeType } from "@kyd/common/api";
 import {
   ResumeProfileContext,
   Gap,
-  ScopeData,
+  TScopeActivity,
   TScopes,
 } from "./ResumeProfileContext.ts";
 import {
@@ -184,7 +184,7 @@ export function ResumeProfileProvider({
 
 // Helper function to add a period with filtered technologies
 function addPeriod(
-  scopeData: ScopeData,
+  scopeData: TScopeActivity,
   periodStart: Date,
   periodEnd: Date,
   technologies: TechProfile[],
