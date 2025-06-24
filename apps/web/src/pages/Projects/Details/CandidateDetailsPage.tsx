@@ -87,20 +87,23 @@ type TechFocusMatchProps = {
 
 const TechFocusMatch = ({ project }: TechFocusMatchProps) => {
   const { scopes } = useResumeProfileContext();
+
   return (
     <Stack gap={2}>
       <Box>
         <Subtitle text={"Tech Focus Match"} />
         <Typography color="neutral" level="body-sm">
-          Based on recent experience (last 5 years)
+          Based on recent relevant experience (
+          {project?.settings.expectedRecentRelevantYears} years)
         </Typography>
       </Box>
       {project?.settings.techFocus.map((scope) => (
         <ActivityCard
           scope={SCOPE_NAMES[scope]}
-          color="success"
           scopeActivity={scopes[scope]}
-          baselineExperienceYears={project.settings.baselineExperienceYears}
+          expectedRecentRelevantYears={
+            project.settings.expectedRecentRelevantYears
+          }
         />
       ))}
     </Stack>

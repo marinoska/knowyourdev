@@ -129,15 +129,10 @@ export function ResumeProfileProvider({
       // Create periods (12-month chunks) going back from upload date to earliest job start
       let periodEnd = endOfMonth(subMonths(new Date(uploadDate), 1));
       let periodStart = startOfMonth(subMonths(periodEnd, 11));
-      // Create multiple periods from upload date back to earliest job start
 
       // Keep creating periods until we reach or go past the earliest job start date
       do {
         addPeriod(scopeData, periodStart, periodEnd, scopeTechnologies[scope]);
-        console.log({
-          periodEnd: periodEnd.toDateString(),
-          periodStart: periodStart.toDateString(),
-        });
         periodStart = subMonths(periodStart, 12);
         periodEnd = subMonths(periodEnd, 12);
       } while (periodStart >= earliestJobStart);

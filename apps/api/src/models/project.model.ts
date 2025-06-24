@@ -16,7 +16,7 @@ const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
       baselineJobDuration: { type: Number, default: 12 }, // Default to 12 months
       techFocus: [{ type: String, enum: SCOPE }],
       description: { type: String, default: "" },
-      baselineExperienceYears: { type: Number, default: 5 },
+      expectedRecentRelevantYears: { type: Number, default: 5 },
     },
     candidates: [{ type: Schema.Types.ObjectId, ref: "Upload", default: [] }],
   },

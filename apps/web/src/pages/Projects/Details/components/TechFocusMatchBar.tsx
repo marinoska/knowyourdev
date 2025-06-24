@@ -1,41 +1,32 @@
 import { Card, Typography, Box, LinearProgress, Tooltip } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
 import { TScopeActivity } from "@/pages/Core/ResumeProfileContext.ts";
+import { useTechFocusActivity } from "./useTechFocusActivity";
 
 type ActivityTypeProps = {
-  color: "success" | "warning";
   scope: string;
-  scopeActivity?: TScopeActivity;
-  baselineExperienceYears: number;
+  scopeActivity: TScopeActivity;
+  expectedRecentRelevantYears: number;
 };
+
 export const ActivityCard = ({
-  color,
   scope,
   scopeActivity,
-  baselineExperienceYears,
+  expectedRecentRelevantYears,
 }: ActivityTypeProps) => {
-  const lastPeriods =
-    scopeActivity?.periods.slice(0, baselineExperienceYears) || [];
-  const paddedPeriodList = lastPeriods
-    .reverse()
-    .concat(
-      Array(Math.max(0, baselineExperienceYears - lastPeriods.length)).fill(0),
-    );
-  const normalizedActivityList = paddedPeriodList.map(
-    ({ totalMonths }) => (totalMonths * 100) / 12,
-  );
-  const rawActivityList = paddedPeriodList.map(
-    ({ totalMonths }) => totalMonths,
-  );
-
-  console.log({
-    lastPeriods,
+  const {
     normalizedActivityList,
-    rawActivityList,
-    baselineExperienceYears,
+    hintList,
+    pillsCaption,
+    techNames,
+    activeMonthsAndYears,
+    overallScore,
+    color,
+  } = useTechFocusActivity({
+    scopeActivity,
+    expectedRecentRelevantYears,
+    order: "desc",
   });
-  const totalActiveYears = 4.5;
-  const overallScore = 95;
 
   return (
     <Card variant="soft" color={color}>
@@ -44,10 +35,9 @@ export const ActivityCard = ({
           {scope}
         </Typography>
         <Typography level="body-md" fontWeight="lg" color={color}>
-          {overallScore}%
+          {overallScore.toFixed(1)}%
         </Typography>
       </Stack>
-
       <LinearProgress
         determinate
         value={overallScore}
@@ -61,16 +51,18 @@ export const ActivityCard = ({
         </Typography>
         <ActivityPills
           normalizedActivityList={normalizedActivityList}
-          rawActivityList={rawActivityList}
-          text={"2019–2024"}
+          hintList={hintList}
+          text={pillsCaption}
+          color={color}
         />
         <Typography level="body-sm" fontWeight="md" color={color}>
-          {totalActiveYears} years active
+          {activeMonthsAndYears.years} years {activeMonthsAndYears.months}{" "}
+          months active
         </Typography>
       </Stack>
 
       <Typography level="body-sm" color={color} fontWeight="md">
-        Strong match: React, TypeScript, modern frontend tools TODO
+        Technologies: {techNames || "-"}
       </Typography>
     </Card>
   );
@@ -78,27 +70,25 @@ export const ActivityCard = ({
 
 const ActivityPills = ({
   normalizedActivityList,
-  rawActivityList,
+  hintList,
   text,
+  color,
 }: {
   normalizedActivityList: number[];
-  rawActivityList: number[];
+  hintList: string[];
   text: string;
+  color: "danger" | "neutral" | "primary" | "success" | "warning";
 }) => {
   return (
     <Stack direction="row" gap={0.5} alignItems="center">
       {normalizedActivityList.map((value, index) => (
-        <Tooltip
-          key={index}
-          title={`${rawActivityList[index]} months`}
-          placement="top"
-        >
+        <Tooltip key={index} title={hintList[index]} placement="top">
           <Box
             borderRadius={4}
             width={24}
             height={8}
             sx={{
-              backgroundColor: getColorByValue(value),
+              backgroundColor: getColorByValue(value, color),
             }}
           />
         </Tooltip>
@@ -110,10 +100,53 @@ const ActivityPills = ({
   );
 };
 // Simple color mapping for yearly bars
-function getColorByValue(value: number): string {
-  if (value >= 90) return "#1b873e";
-  if (value >= 75) return "#2ca951";
-  if (value >= 50) return "#49bd65";
-  if (value >= 25) return "#a0e3c1";
-  return "#e0e0e0";
+function getColorByValue(
+  value: number,
+  color: "danger" | "neutral" | "primary" | "success" | "warning",
+): string {
+  switch (color) {
+    case "success":
+      if (value >= 90) return "#1b873e";
+      if (value >= 75) return "#2ca951";
+      if (value >= 50) return "#49bd65";
+      if (value >= 25) return "#a0e3c1";
+      break;
+    // return "#d5f5e3";
+
+    case "primary":
+      if (value >= 90) return "#0b6bc8";
+      if (value >= 75) return "#1e88e5";
+      if (value >= 50) return "#42a5f5";
+      if (value >= 25) return "#90caf9";
+      break;
+    // return "#e3f2fd";
+
+    case "warning":
+      if (value >= 90) return "#bb4d00";
+      if (value >= 75) return "#f57c00";
+      if (value >= 50) return "#ffa726";
+      if (value >= 25) return "#ffe082";
+      break;
+    // return "#fff3e0";
+
+    case "danger":
+      if (value >= 90) return "#b71c1c";
+      if (value >= 75) return "#d32f2f";
+      if (value >= 50) return "#ef5350";
+      if (value >= 25) return "#ef9a9a";
+      break;
+    // return "#ffebee";
+
+    case "neutral":
+      if (value >= 90) return "#424242";
+      if (value >= 75) return "#616161";
+      if (value >= 50) return "#9e9e9e";
+      if (value >= 25) return "#cfcfcf";
+      break;
+    // return "#f5f5f5";
+
+    default:
+      return "#e0e0e0"; // fallback
+  }
+  return "#e0e0e0"; // fallback
 }

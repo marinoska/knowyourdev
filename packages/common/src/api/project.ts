@@ -7,7 +7,7 @@ export type TProject = {
     baselineJobDuration: number;
     techFocus: ScopeType[];
     description: string;
-    baselineExperienceYears: number;
+    expectedRecentRelevantYears: number;
   };
   candidates: string[];
 };

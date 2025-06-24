@@ -28,7 +28,9 @@ export const ProjectSettingsContent = ({
       <Typography>{profile.settings?.baselineJobDuration} months</Typography>
 
       <Typography component="h5">Experience Years</Typography>
-      <Typography>{profile.settings?.baselineExperienceYears} years</Typography>
+      <Typography>
+        {profile.settings?.expectedRecentRelevantYears} years
+      </Typography>
     </Stack>
   );
 };

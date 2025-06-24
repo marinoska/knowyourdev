@@ -9,7 +9,7 @@ export const mockProjects: TProjectsItem[] = [
       techFocus: ["FE", "BE"],
       description:
         "Building a modern web application with React frontend and Node.js backend",
-      baselineExperienceYears: 5,
+      expectedRecentRelevantYears: 5,
     },
     candidates: [],
     createdAt: new Date(2023, 0, 15).toISOString(),
@@ -18,7 +18,7 @@ export const mockProjects: TProjectsItem[] = [
     _id: "2",
     name: "Mobile App Development",
     settings: {
-      baselineExperienceYears: 1,
+      expectedRecentRelevantYears: 1,
       baselineJobDuration: 120,
       techFocus: ["ANDR", "IOS"],
       description:
@@ -31,7 +31,7 @@ export const mockProjects: TProjectsItem[] = [
     _id: "3",
     name: "AI Research Project",
     settings: {
-      baselineExperienceYears: 2,
+      expectedRecentRelevantYears: 2,
       baselineJobDuration: 180,
       techFocus: ["AI", "ML"],
       description:
@@ -44,7 +44,7 @@ export const mockProjects: TProjectsItem[] = [
     _id: "4",
     name: "DevOps Infrastructure Setup",
     settings: {
-      baselineExperienceYears: 3,
+      expectedRecentRelevantYears: 3,
       baselineJobDuration: 60,
       techFocus: ["DO", "SYS"],
       description:
@@ -57,7 +57,7 @@ export const mockProjects: TProjectsItem[] = [
     _id: "5",
     name: "Fullstack E-commerce Platform",
     settings: {
-      baselineExperienceYears: 5,
+      expectedRecentRelevantYears: 5,
       baselineJobDuration: 150,
       techFocus: ["FS", "CMS"],
       description:
