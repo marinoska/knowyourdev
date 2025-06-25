@@ -3,6 +3,7 @@ import { Document, Model, model, Schema } from "mongoose";
 import {
   CATEGORY,
   SCOPE,
+  ROLE_TYPE,
   ResumeTechProfileJobEntry,
   ResumeTechProfileTechnologiesEntry,
   TREND,
@@ -37,7 +38,7 @@ const ResumeTechProfileJobEntrySchema = new Schema<ResumeTechProfileJobEntry>(
     },
     roleType: {
       type: String,
-      enum: ["SE", "QA", "UI/UX", "PM", ""],
+      enum: ROLE_TYPE,
     },
     isSoftwareDevelopmentRole: { type: Boolean, default: false },
     job: { type: String, required: true },

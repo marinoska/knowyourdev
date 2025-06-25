@@ -1,5 +1,10 @@
 import { Document, Model, model, Schema } from "mongoose";
-import { ExtractedCVData, JobEntry, TechnologyEntry } from "@kyd/common/api";
+import {
+  ExtractedCVData,
+  JobEntry,
+  ROLE_TYPE,
+  TechnologyEntry,
+} from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
 
 export type TResumeDataDocument = Document &
@@ -36,7 +41,7 @@ const JobEntrySchema = new Schema<JobEntry>({
   summary: { type: String, required: true },
   roleType: {
     type: String,
-    enum: ["SE", "QA", "UI/UX", "PM", ""],
+    enum: ROLE_TYPE,
   },
   isSoftwareDevelopmentRole: { type: Boolean, default: false },
   job: { type: String, required: true },

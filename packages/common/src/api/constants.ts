@@ -10,6 +10,7 @@ export const CATEGORY = [
 // CV - computer vision,
 // DA - desktop apps
 export const TREND = ["SD", "D", "S", "T", "HT"] as const; //string decline, decline, steady, trending, highly trending
+export const ROLE_TYPE = ["SE", "QA", "UI/UX", "PM", "DO", ""];
 export const SCOPE = [
   "BE",
   "FE",
@@ -47,6 +48,7 @@ export type TechCode = string;
 export type TrendType = (typeof TREND)[number];
 export type CategoryType = (typeof CATEGORY)[number];
 export type ScopeType = (typeof SCOPE)[number];
+export type RoleType = (typeof ROLE_TYPE)[number];
 export type ProficiencyType = (typeof PROFICIENCY)[number];
 
 export const TREND_MAP: Record<TrendType, number> = {

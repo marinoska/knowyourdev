@@ -1,5 +1,11 @@
 import { Schema } from "mongoose";
-import { ProficiencyType, ScopeType, SECTIONS, TechCode } from "./constants.js";
+import {
+  ProficiencyType,
+  RoleType,
+  ScopeType,
+  SECTIONS,
+  TechCode,
+} from "./constants.js";
 import { TechStack, TechType } from "./tech.js";
 
 export type TechnologyEntry = {
@@ -14,7 +20,6 @@ export type TechnologyEntry = {
       })
     | null;
 };
-export type RoleType = "SE" | "QA" | "UI/UX" | "PM" | "DO" | "";
 
 export type JobEntry = {
   _id: Schema.Types.ObjectId;

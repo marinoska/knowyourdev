@@ -12,6 +12,7 @@ import Stack from "@mui/joy/Stack";
 import { ActivityCard } from "@/pages/Projects/Details/components/TechFocusMatchBar.tsx";
 import Typography from "@mui/joy/Typography";
 import { Box } from "@mui/joy";
+import { Tooltip } from "@/components/Tooltip.tsx";
 
 type CandidateDetailsParams = {
   id: string;
@@ -95,6 +96,10 @@ const TechFocusMatch = ({ project }: TechFocusMatchProps) => {
         <Typography color="neutral" level="body-sm">
           Based on recent relevant experience (
           {project?.settings.expectedRecentRelevantYears} years)
+          <Tooltip title={"You can change it in the project settings"} />
+        </Typography>
+        <Typography color="primary" level="body-sm">
+          Analyzed against {project?.name} project requirements
         </Typography>
       </Box>
       {project?.settings.techFocus.map((scope) => (

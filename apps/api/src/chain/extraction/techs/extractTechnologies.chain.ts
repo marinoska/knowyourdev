@@ -5,11 +5,10 @@ import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { extractTechnologiesPrompt } from "./extractTechnologies.prompt.js";
 import { normalizeTechList } from "./sub/normaliseTechNameList.chain.js";
-import { RoleType } from "@/models/types.js";
 import { ExtractionChainParam } from "@/chain/extraction/types.js";
 import { extractTechProficiency } from "@/chain/extraction/techs/sub/extractTechProficiency.chain.js";
 import { TechStackModel } from "@/models/techStack.model.js";
-import { JobEntry, TechnologyEntry } from "@kyd/common/api";
+import { JobEntry, TechnologyEntry, RoleType } from "@kyd/common/api";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechnologiesPrompt}

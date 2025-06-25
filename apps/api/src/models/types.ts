@@ -61,8 +61,6 @@ export type TechModelType = Model<TechDocument> & {
   getMaxPopularity: () => Promise<Record<CategoryType, number>>;
 };
 
-export type RoleType = JobEntry["roleType"];
-
 export type JobHistoryQuality = {
   hasDetailedJobs: boolean; // Confirms that job descriptions contain enough detail, not just titles
   hasConsistentSkills: boolean; // Checks if listed skills align with technologies used in job history
