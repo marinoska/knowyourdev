@@ -1,13 +1,16 @@
 import {
   ScopePeriod,
   TScopeActivity,
+  TScopes,
 } from "@/pages/Core/ResumeProfileContext.ts";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { format } from "date-fns";
 import { ColorPaletteProp } from "@mui/joy/styles";
+import { ScopeType } from "@kyd/common/api";
 
 type UseTechFocusActivityParams = {
-  scopeActivity: TScopeActivity;
+  candidateScopes: TScopes;
+  scopeCodes: ScopeType[];
   expectedRecentRelevantYears: number;
   order: "asc" | "desc";
 };
@@ -25,16 +28,28 @@ type UseTechFocusActivityResult = {
   maxScore: number;
   color: ColorPaletteProp;
 };
+
+type UseTechFocusActivityResults = Record<
+  ScopeType,
+  UseTechFocusActivityResult
+>;
+
 const MAX_SCORED_YEARS = 10;
 
-export const useTechFocusActivity = ({
-  scopeActivity,
+type ProcessCandidateScopeInput = {
+  candidateScope: TScopeActivity;
+  expectedRecentRelevantYears: number;
+  order: "asc" | "desc";
+};
+
+const processCandidateScope = ({
+  candidateScope = { periods: [], years: [] },
   expectedRecentRelevantYears,
   order,
-}: UseTechFocusActivityParams): UseTechFocusActivityResult => {
+}: ProcessCandidateScopeInput): UseTechFocusActivityResult => {
   // sort desc
   const sortedPeriods =
-    scopeActivity?.periods.sort(
+    candidateScope?.periods?.sort(
       (a, b) =>
         new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
     ) || [];
@@ -97,6 +112,26 @@ export const useTechFocusActivity = ({
     maxScore,
     color: getScoreColor(overallScore),
   };
+};
+
+export const useTechFocusActivity = ({
+  candidateScopes,
+  scopeCodes,
+  expectedRecentRelevantYears,
+  order,
+}: UseTechFocusActivityParams): UseTechFocusActivityResults => {
+  const results: UseTechFocusActivityResults =
+    {} as UseTechFocusActivityResults;
+
+  for (const scopeCode of scopeCodes) {
+    results[scopeCode] = processCandidateScope({
+      candidateScope: candidateScopes[scopeCode],
+      expectedRecentRelevantYears,
+      order,
+    });
+  }
+
+  return results;
 };
 
 /**

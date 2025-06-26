@@ -59,7 +59,7 @@ export const mockProjects: TProjectsItem[] = [
     settings: {
       expectedRecentRelevantYears: 5,
       baselineJobDuration: 150,
-      techFocus: ["FS", "CMS"],
+      techFocus: ["FE", "BE", "DO", "CMS"],
       description:
         "Building a complete e-commerce solution with user authentication and payment processing",
     },

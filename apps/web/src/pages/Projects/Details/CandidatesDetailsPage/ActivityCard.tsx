@@ -1,39 +1,36 @@
 import { Card, Typography, Box, LinearProgress, Tooltip } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
-import { TScopeActivity } from "@/pages/Core/ResumeProfileContext.ts";
-import { useTechFocusActivity } from "./useTechFocusActivity";
 import { ColorPaletteProp } from "@mui/joy/styles";
 import { Small, Subtitle } from "@/components/typography.tsx";
 
 type ActivityTypeProps = {
-  scope: string;
-  scopeActivity: TScopeActivity;
-  expectedRecentRelevantYears: number;
+  scopeName: string;
+  normalizedActivityList: number[];
+  hintList: string[];
+  pillsCaption: string;
+  techNames: string;
+  activeMonthsAndYears: {
+    years: number;
+    months: number;
+  };
+  overallScore: number;
+  color: ColorPaletteProp;
 };
 
 export const ActivityCard = ({
-  scope,
-  scopeActivity,
-  expectedRecentRelevantYears,
+  scopeName,
+  normalizedActivityList,
+  hintList,
+  pillsCaption,
+  techNames,
+  activeMonthsAndYears,
+  overallScore,
+  color,
 }: ActivityTypeProps) => {
-  const {
-    normalizedActivityList,
-    hintList,
-    pillsCaption,
-    techNames,
-    activeMonthsAndYears,
-    overallScore,
-    color,
-  } = useTechFocusActivity({
-    scopeActivity,
-    expectedRecentRelevantYears,
-    order: "desc",
-  });
-
   return (
     <Card variant="soft" color={color}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Subtitle color={color}>{scope}</Subtitle>
+        <Subtitle color={color}>{scopeName}</Subtitle>
         <Typography fontWeight="lg" color={color}>
           {overallScore.toFixed(1)}%
         </Typography>

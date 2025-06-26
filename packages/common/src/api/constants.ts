@@ -14,7 +14,7 @@ export const ROLE_TYPE = ["SE", "QA", "UI/UX", "PM", "DO", ""];
 export const SCOPE = [
   "BE",
   "FE",
-  "FS",
+  "G",
   "MD",
   "DO",
   "SYS",
@@ -30,7 +30,7 @@ export const SCOPE = [
 export const SCOPE_NAMES: Record<ScopeType, string> = {
   BE: "Backend",
   FE: "Frontend",
-  FS: "Fullstack",
+  G: "General",
   MD: "Mobile",
   DO: "DevOps",
   SYS: "System programming",

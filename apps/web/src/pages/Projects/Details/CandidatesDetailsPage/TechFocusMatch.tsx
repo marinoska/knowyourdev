@@ -6,13 +6,22 @@ import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
 import { SCOPE_NAMES, TProject } from "@kyd/common/api";
+import { useTechFocusActivity } from "./useTechFocusActivity";
 
 type TechFocusMatchProps = {
   project?: TProject;
 };
 
 export const TechFocusMatch = ({ project }: TechFocusMatchProps) => {
-  const { scopes } = useResumeProfileContext();
+  const { scopes: candidateScopes } = useResumeProfileContext();
+
+  const techFocusActivities = useTechFocusActivity({
+    candidateScopes,
+    scopeCodes: project?.settings.techFocus || [],
+    expectedRecentRelevantYears:
+      project?.settings.expectedRecentRelevantYears || 0,
+    order: "desc",
+  });
 
   return (
     <BasePage.Sheet>
@@ -28,15 +37,23 @@ export const TechFocusMatch = ({ project }: TechFocusMatchProps) => {
             Analyzed against {project?.name} project requirements
           </Small>
         </Box>
-        {project?.settings.techFocus.map((scope) => (
-          <ActivityCard
-            scope={SCOPE_NAMES[scope]}
-            scopeActivity={scopes[scope]}
-            expectedRecentRelevantYears={
-              project.settings.expectedRecentRelevantYears
-            }
-          />
-        ))}
+        {project?.settings.techFocus.map((scope) => {
+          const techFocusActivity = techFocusActivities[scope];
+
+          return (
+            <ActivityCard
+              key={scope}
+              scopeName={SCOPE_NAMES[scope]}
+              normalizedActivityList={techFocusActivity.normalizedActivityList}
+              hintList={techFocusActivity.hintList}
+              pillsCaption={techFocusActivity.pillsCaption}
+              techNames={techFocusActivity.techNames}
+              activeMonthsAndYears={techFocusActivity.activeMonthsAndYears}
+              overallScore={techFocusActivity.overallScore}
+              color={techFocusActivity.color}
+            />
+          );
+        })}
       </Stack>
     </BasePage.Sheet>
   );
