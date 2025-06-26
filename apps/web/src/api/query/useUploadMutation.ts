@@ -7,7 +7,7 @@ import {
 import { MAXIMUM_UPLOAD_SIZE_BYTES } from "@/utils/const.ts";
 import { uploadsKeys } from "@/api/query/keys.ts";
 
-export const useUploadMutation = () => {
+export const useUploadMutation = (projectId?: string) => {
   const queryClient = useQueryClient();
   const { mutate, ...results } = useMutation<
     DocumentUploadResponse,
@@ -16,12 +16,11 @@ export const useUploadMutation = () => {
   >({
     mutationFn: uploadCV,
     onError: (err) => {
-      console.log("UploadMutation error:", err.toString());
+      console.error("UploadMutation error:", err.toString());
     },
     onSuccess: async (newUpload) => {
-      console.log("useUploadsMutation", uploadsKeys.paginate(1));
       void queryClient.setQueryData(
-        uploadsKeys.paginate(1),
+        uploadsKeys.paginate(1, projectId),
 
         (uploadsPages: InfiniteUploadList | null) => {
           if (!uploadsPages) return uploadsPages;
@@ -44,11 +43,7 @@ export const useUploadMutation = () => {
     },
   });
 
-  const handleFileUpload = (
-    file: File,
-    name: string = "",
-    projectId?: string,
-  ) => {
+  const handleFileUpload = (file: File, name: string = "") => {
     const isValidFileSize = file.size <= MAXIMUM_UPLOAD_SIZE_BYTES;
 
     if (!isValidFileSize) throw Error(`Invalid file size ${file.toString()}`);

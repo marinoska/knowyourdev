@@ -26,7 +26,7 @@ export const UploadModal = ({
   const [name, setName] = useState("");
 
   const { isPending, isError, isSuccess, reset, handleFileUpload } =
-    useUploadMutation();
+    useUploadMutation(projectId);
 
   useEffect(() => {
     isSuccess && setOpen(false);
@@ -118,7 +118,7 @@ export const UploadModal = ({
               color="primary"
               onClick={() => {
                 if (!file) return;
-                handleFileUpload(file, name, projectId);
+                handleFileUpload(file, name);
               }}
             >
               Proceed
