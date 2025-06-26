@@ -9,6 +9,7 @@ import { Done, ReportProblem } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import { BasePage } from "@/components/BasePage";
+import { Regular, Smallest } from "@/components/typography.tsx";
 
 const StatusIcon: Record<ParsedStatus, React.ReactNode> = {
   pending: <CircularProgress variant="solid" size="sm" />,
@@ -28,19 +29,19 @@ export const ResumeItem = ({ item }: { item: TUploadItem }) => {
 
   return (
     <BasePage.ListItem id={_id} isActive={isActive} onClick={onClick}>
-      <Typography level="body-md">
+      <Regular>
         <DocumentIcon />
-      </Typography>
+      </Regular>
       <Stack>
-        <Typography>
+        <Regular>
           {fullName ? fullName : name} {position && ` - ${position}`}
-        </Typography>
-        <Typography level="body-xs">
+        </Regular>
+        <Smallest>
           Uploaded on {format(new Date(createdAt), "MMMM d, yyyy")}{" "}
           {role && ` for ${role}`} ({name})
-        </Typography>
+        </Smallest>
       </Stack>
-      <Typography sx={{ marginLeft: "auto" }} level="body-md">
+      <Typography sx={{ marginLeft: "auto" }}>
         {StatusIcon[parseStatus]}
       </Typography>
     </BasePage.ListItem>

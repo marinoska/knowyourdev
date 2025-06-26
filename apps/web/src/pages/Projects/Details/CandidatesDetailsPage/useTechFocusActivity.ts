@@ -4,6 +4,7 @@ import {
 } from "@/pages/Core/ResumeProfileContext.ts";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { format } from "date-fns";
+import { ColorPaletteProp } from "@mui/joy/styles";
 
 type UseTechFocusActivityParams = {
   scopeActivity: TScopeActivity;
@@ -22,7 +23,7 @@ type UseTechFocusActivityResult = {
   };
   overallScore: number;
   maxScore: number;
-  color: "danger" | "neutral" | "primary" | "success" | "warning";
+  color: ColorPaletteProp;
 };
 const MAX_SCORED_YEARS = 10;
 

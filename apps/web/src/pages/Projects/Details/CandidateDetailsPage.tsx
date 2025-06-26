@@ -1,4 +1,3 @@
-import { SCOPE_NAMES, TProject } from "@kyd/common/api";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
@@ -7,12 +6,14 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { ResumeProfileProvider } from "@/pages/Core/ResumeProfileProvider.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
-import { Subtitle } from "@/components/typography.tsx";
+import { Small, Subtitle, Title } from "@/components/typography.tsx";
 import Stack from "@mui/joy/Stack";
-import { ActivityCard } from "@/pages/Projects/Details/components/TechFocusMatchBar.tsx";
-import Typography from "@mui/joy/Typography";
-import { Box } from "@mui/joy";
-import { Tooltip } from "@/components/Tooltip.tsx";
+import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
+import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
+import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
+import { Alert } from "@mui/joy";
+import Box from "@mui/joy/Box";
+import { ColorPaletteProp } from "@mui/joy/styles";
 
 type CandidateDetailsParams = {
   id: string;
@@ -32,6 +33,86 @@ export const CandidateDetailsPage = () => {
         projectQuery={projectQuery}
       />
     </ResumeProfileProvider>
+  );
+};
+
+const CareerDetailsAlert = ({ color }: { color: ColorPaletteProp }) => {
+  return (
+    <Alert
+      variant="soft"
+      color={color}
+      startDecorator={
+        <Box
+          width={16}
+          height={16}
+          borderRadius="50%"
+          bgcolor={`${color}.500`}
+          mr={1}
+        />
+      }
+    >
+      <Stack>
+        <Subtitle>Career Gap Detected</Subtitle>
+        <Small>6 months gap in 2022</Small>
+      </Stack>
+    </Alert>
+  );
+};
+
+const JobStability = () => {
+  return (
+    <BasePage.Sheet>
+      <Stack direction="column" gap={0.5}>
+        <Title text="Job stability" />
+        <MatchDetailsRow
+          value="18 months"
+          color="neutral"
+          text="Baseline Job Duration"
+        />
+        <MatchDetailsRow
+          value="24 months"
+          color="success"
+          text="Average Job Duration"
+        />
+      </Stack>
+    </BasePage.Sheet>
+  );
+};
+
+const KeyStrengths = () => {
+  return (
+    <BasePage.Sheet>
+      <Title text="Key Strengths" />
+    </BasePage.Sheet>
+  );
+};
+
+const RiskAssessment = () => {
+  return (
+    <BasePage.Sheet>
+      <Stack gap={2}>
+        <Title text="Risk Assessment" />
+        <CareerDetailsAlert color="danger" />
+        <CareerDetailsAlert color="warning" />
+        <CareerDetailsAlert color="success" />
+      </Stack>
+    </BasePage.Sheet>
+  );
+};
+
+const Actions = () => {
+  return (
+    <BasePage.Sheet>
+      <Title text="Actions" />
+    </BasePage.Sheet>
+  );
+};
+
+const RoleSuitability = () => {
+  return (
+    <BasePage.Sheet>
+      <Title text="Role suitability" />
+    </BasePage.Sheet>
   );
 };
 
@@ -75,42 +156,21 @@ const CandidateDetails = ({
           title={profile?.fullName}
         />
         <BasePage.Content>
-          <TechFocusMatch project={project} />
+          <Stack direction="row" spacing={2}>
+            <Stack direction="column" flex={2}>
+              <KeyStrengths />
+              <TechFocusMatch project={project} />
+              <RiskAssessment />
+            </Stack>
+            <Stack flex={1} direction="column" gap={2}>
+              <OverallMatch />
+              <RoleSuitability />
+              <JobStability />
+              <Actions />
+            </Stack>
+          </Stack>
         </BasePage.Content>
       </BasePage>
     </>
-  );
-};
-
-type TechFocusMatchProps = {
-  project?: TProject;
-};
-
-const TechFocusMatch = ({ project }: TechFocusMatchProps) => {
-  const { scopes } = useResumeProfileContext();
-
-  return (
-    <Stack gap={2}>
-      <Box>
-        <Subtitle text={"Tech Focus Match"} />
-        <Typography color="neutral" level="body-sm">
-          Based on recent relevant experience (
-          {project?.settings.expectedRecentRelevantYears} years)
-          <Tooltip title={"You can change it in the project settings"} />
-        </Typography>
-        <Typography color="primary" level="body-sm">
-          Analyzed against {project?.name} project requirements
-        </Typography>
-      </Box>
-      {project?.settings.techFocus.map((scope) => (
-        <ActivityCard
-          scope={SCOPE_NAMES[scope]}
-          scopeActivity={scopes[scope]}
-          expectedRecentRelevantYears={
-            project.settings.expectedRecentRelevantYears
-          }
-        />
-      ))}
-    </Stack>
   );
 };

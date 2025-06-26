@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/joy";
+import { Box } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
 import { Tooltip } from "@/components/Tooltip.tsx";
+import { Small } from "@/components/typography.tsx";
 
 export type LegendProps = {
   title: string;
@@ -27,7 +28,7 @@ export const Legend = ({ items }: LegendProps) => {
               borderRadius: "50%",
             }}
           />
-          <Typography level="body-sm">{item.label}</Typography>
+          <Small>{item.label}</Small>
           {item.tooltipText && <Tooltip title={item.tooltipText} />}
         </Box>
       ))}

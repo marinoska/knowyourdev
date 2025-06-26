@@ -1,10 +1,10 @@
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import Stack from "@mui/joy/Stack";
-import Typography from "@mui/joy/Typography";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { TProjectsItem } from "@kyd/common/api";
 import { BasePage } from "@/components/BasePage";
+import { Regular, Smallest } from "@/components/typography.tsx";
 
 export const ProjectItem = ({ item }: { item: TProjectsItem }) => {
   const navigate = useNavigate();
@@ -12,14 +12,14 @@ export const ProjectItem = ({ item }: { item: TProjectsItem }) => {
   const { name, createdAt, _id } = item;
   return (
     <BasePage.ListItem id={_id} onClick={() => navigate(`/projects/${_id}`)}>
-      <Typography level="body-md">
+      <Regular>
         <BusinessCenterIcon />
-      </Typography>
+      </Regular>
       <Stack>
-        <Typography>{name}</Typography>
-        <Typography level="body-xs">
+        <Regular>{name}</Regular>
+        <Smallest>
           Created on {format(new Date(createdAt), "MMMM d, yyyy")}
-        </Typography>
+        </Smallest>
       </Stack>
     </BasePage.ListItem>
   );

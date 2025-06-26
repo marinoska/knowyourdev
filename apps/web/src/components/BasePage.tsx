@@ -6,6 +6,7 @@ import Sheet from "@mui/joy/Sheet";
 import { Children, isValidElement, ReactNode } from "react";
 import { NavigateBackLink } from "@/components/NavigateBackButton.tsx";
 import Box from "@mui/joy/Box";
+import Container from "@/components/Container.tsx";
 
 export const BasePage = ({
   children,
@@ -46,11 +47,13 @@ export const BasePage = ({
         overflow: "hidden",
         minWidth: "auto",
         borderRadius: "sm",
-        pt: 0,
+        pt: 1,
       }}
     >
       {header}
-      {showEmpty ? <EmptyPage isError={isError} /> : content}
+      <Container>
+        {showEmpty ? <EmptyPage isError={isError} /> : content}
+      </Container>
     </Stack>
   );
 };
@@ -104,17 +107,29 @@ BasePage.Header = ({
   );
 };
 
-BasePage.Content = ({ children }: { children: ReactNode }) => {
+BasePage.Content = ({
+  children,
+  flex = 1,
+}: {
+  children: ReactNode;
+  flex?: number;
+}) => {
   return (
-    <Box mt={1}>
-      <Sheet
-        sx={{
-          padding: 2,
-        }}
-      >
-        {children}
-      </Sheet>
+    <Box mt={1} flex={flex}>
+      {children}
     </Box>
+  );
+};
+
+BasePage.Sheet = ({ children }: { children: ReactNode }) => {
+  return (
+    <Sheet
+      sx={{
+        padding: 2,
+      }}
+    >
+      {children}
+    </Sheet>
   );
 };
 

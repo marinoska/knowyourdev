@@ -2,6 +2,8 @@ import { Card, Typography, Box, LinearProgress, Tooltip } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
 import { TScopeActivity } from "@/pages/Core/ResumeProfileContext.ts";
 import { useTechFocusActivity } from "./useTechFocusActivity";
+import { ColorPaletteProp } from "@mui/joy/styles";
+import { Small, Subtitle } from "@/components/typography.tsx";
 
 type ActivityTypeProps = {
   scope: string;
@@ -31,10 +33,8 @@ export const ActivityCard = ({
   return (
     <Card variant="soft" color={color}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography level="body-md" fontWeight="md" color={color}>
-          {scope}
-        </Typography>
-        <Typography level="body-md" fontWeight="lg" color={color}>
+        <Subtitle color={color}>{scope}</Subtitle>
+        <Typography fontWeight="lg" color={color}>
           {overallScore.toFixed(1)}%
         </Typography>
       </Stack>
@@ -45,25 +45,26 @@ export const ActivityCard = ({
         variant="solid"
         size="sm"
       />
-      <Stack>
-        <Typography level="body-sm" color={color}>
-          Recent activity:
-        </Typography>
-        <ActivityPills
-          normalizedActivityList={normalizedActivityList}
-          hintList={hintList}
-          text={pillsCaption}
-          color={color}
-        />
-        <Typography level="body-sm" fontWeight="md" color={color}>
+      <Stack
+        direction="row"
+        gap={2}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Small color={color}>Recent activity:</Small>
+        <Small color={color}>
           {activeMonthsAndYears.years} years {activeMonthsAndYears.months}{" "}
           months active
-        </Typography>
+        </Small>
       </Stack>
+      <ActivityPills
+        normalizedActivityList={normalizedActivityList}
+        hintList={hintList}
+        text={pillsCaption}
+        color={color}
+      />
 
-      <Typography level="body-sm" color={color} fontWeight="md">
-        Technologies: {techNames || "-"}
-      </Typography>
+      <Small color={color}>Technologies: {techNames || "-"}</Small>
     </Card>
   );
 };
@@ -77,7 +78,7 @@ const ActivityPills = ({
   normalizedActivityList: number[];
   hintList: string[];
   text: string;
-  color: "danger" | "neutral" | "primary" | "success" | "warning";
+  color: ColorPaletteProp;
 }) => {
   return (
     <Stack direction="row" gap={0.5} alignItems="center">
@@ -93,17 +94,14 @@ const ActivityPills = ({
           />
         </Tooltip>
       ))}
-      <Typography level="body-sm" ml={1}>
-        {text}
-      </Typography>
+      <Box ml={1}>
+        <Small>{text}</Small>
+      </Box>
     </Stack>
   );
 };
 // Simple color mapping for yearly bars
-function getColorByValue(
-  value: number,
-  color: "danger" | "neutral" | "primary" | "success" | "warning",
-): string {
+function getColorByValue(value: number, color: ColorPaletteProp): string {
   switch (color) {
     case "success":
       if (value >= 90) return "#1b873e";

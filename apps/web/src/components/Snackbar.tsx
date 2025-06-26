@@ -1,6 +1,7 @@
 import Button from "@mui/joy/Button";
 import { Snackbar as JoySnackbar } from "@mui/joy";
 import { useCallback, useState } from "react";
+import { ColorPaletteProp } from "@mui/joy/styles";
 
 export function Snackbar({
   msg,
@@ -13,7 +14,7 @@ export function Snackbar({
   onClose?: VoidFunction;
   show?: boolean;
   variant?: "soft" | "solid" | "outlined";
-  type?: "danger" | "neutral" | "primary" | "success" | "warning";
+  type?: ColorPaletteProp;
 }) {
   const [open, setOpen] = useState(show);
 

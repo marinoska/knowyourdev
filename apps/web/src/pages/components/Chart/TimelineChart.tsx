@@ -1,7 +1,7 @@
-import { Typography } from "@mui/joy";
 import { useGoogleChartAutoHeight } from "@/pages/components/Chart/useGoogleChartAutoHeight.ts";
 import { useEffect } from "react";
 import Chart from "react-google-charts";
+import { Regular } from "@/components/typography.tsx";
 
 type TimelineChartProps = {
   chartData: Array<unknown>;
@@ -27,10 +27,10 @@ export const TimelineChart = ({
   return (
     <>
       {isDataEmpty ? (
-        <Typography>
+        <Regular>
           Insufficient data provided for the chart: no technologies found in the
           job descriptions or durations are not found or specified
-        </Typography>
+        </Regular>
       ) : (
         <div ref={chartContainerRef}>
           <Chart
@@ -40,7 +40,7 @@ export const TimelineChart = ({
             options={options}
             chartEvents={chartEvents}
             data={chartData}
-            loader={<Typography>Loading Chart...</Typography>}
+            loader={<Regular>Loading Chart...</Regular>}
           />
         </div>
       )}

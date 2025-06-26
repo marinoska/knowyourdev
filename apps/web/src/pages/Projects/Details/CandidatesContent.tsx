@@ -1,20 +1,20 @@
 import Stack from "@mui/joy/Stack";
 import { TProjectsItem, TUploadItem } from "@kyd/common/api";
-import Container from "@/components/Container.tsx";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import CenteredLoader from "@/components/Loader.tsx";
 import EmptyPage from "@/components/EmptyPage.tsx";
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+import { ReactNode, useCallback } from "react";
 import { BasePage } from "@/components/BasePage.tsx";
 import Typography from "@mui/joy/Typography";
 import DocumentIcon from "@mui/icons-material/Grading";
 import { format } from "date-fns";
 import { Done, ReportProblem } from "@mui/icons-material";
 import { CircularProgress } from "@mui/joy";
+import { Regular, Smallest } from "@/components/typography.tsx";
 
-const StatusIcon: Record<string, React.ReactNode> = {
+const StatusIcon: Record<string, ReactNode> = {
   pending: <CircularProgress variant="solid" size="sm" />,
   failed: <ReportProblem color="warning" />,
   processed: <Done color="success" />,
@@ -38,19 +38,19 @@ const ProjectCandidateItem = ({
 
   return (
     <BasePage.ListItem id={_id} isActive={isActive} onClick={onClick}>
-      <Typography level="body-md">
+      <Regular>
         <DocumentIcon />
-      </Typography>
+      </Regular>
       <Stack>
-        <Typography>
+        <Regular>
           {fullName ? fullName : name} {position && ` - ${position}`}
-        </Typography>
-        <Typography level="body-xs">
+        </Regular>
+        <Smallest>
           Uploaded on {format(new Date(createdAt), "MMMM d, yyyy")}{" "}
           {role && ` for ${role}`} ({name})
-        </Typography>
+        </Smallest>
       </Stack>
-      <Typography sx={{ marginLeft: "auto" }} level="body-md">
+      <Typography sx={{ marginLeft: "auto" }}>
         {StatusIcon[parseStatus]}
       </Typography>
     </BasePage.ListItem>
@@ -71,23 +71,21 @@ export const CandidatesList = ({ projectId }: { projectId: string }) => {
   return (
     <Stack gap={1} direction="column">
       {/* put filters here*/}
-      <Container>
-        <Stack gap={2}>
-          {query.data?.map((upload) => (
-            <ProjectCandidateItem
-              key={upload._id}
-              item={upload}
-              projectId={projectId}
-            />
-          ))}
-        </Stack>
+      <Stack gap={2}>
+        {query.data?.map((upload) => (
+          <ProjectCandidateItem
+            key={upload._id}
+            item={upload}
+            projectId={projectId}
+          />
+        ))}
+      </Stack>
 
-        <LoadMoreButton
-          onClick={() => query.fetchNextPage()}
-          isLoading={query.isFetchingNextPage}
-          hasNextPage={query.hasNextPage}
-        />
-      </Container>
+      <LoadMoreButton
+        onClick={() => query.fetchNextPage()}
+        isLoading={query.isFetchingNextPage}
+        hasNextPage={query.hasNextPage}
+      />
     </Stack>
   );
 };

@@ -1,7 +1,7 @@
 import Stack from "@mui/joy/Stack";
-import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
 import { SCOPE_NAMES, TProjectsItem } from "@kyd/common/api";
+import { Regular, Title } from "@/components/typography.tsx";
 
 export const ProjectSettingsContent = ({
   profile,
@@ -10,12 +10,12 @@ export const ProjectSettingsContent = ({
 }) => {
   return (
     <Stack gap={2}>
-      <Typography component="h5">Description</Typography>
-      <Typography>
+      <Title>Description</Title>
+      <Regular>
         {profile.settings?.description || "No description provided."}
-      </Typography>
+      </Regular>
 
-      <Typography component="h5">Technical Focus</Typography>
+      <Title>Technical Focus</Title>
       <Stack direction="row" gap={1} flexWrap="wrap">
         {profile.settings?.techFocus.map((tech) => (
           <Chip key={tech} variant="soft" color="primary" size="md">
@@ -24,13 +24,11 @@ export const ProjectSettingsContent = ({
         ))}
       </Stack>
 
-      <Typography component="h5">Baseline Job Duration</Typography>
-      <Typography>{profile.settings?.baselineJobDuration} months</Typography>
+      <Title>Baseline Job Duration</Title>
+      <Regular>{profile.settings?.baselineJobDuration} months</Regular>
 
-      <Typography component="h5">expectedRecentRelevantYears</Typography>
-      <Typography>
-        {profile.settings?.expectedRecentRelevantYears} years
-      </Typography>
+      <Title>expectedRecentRelevantYears</Title>
+      <Regular>{profile.settings?.expectedRecentRelevantYears} years</Regular>
     </Stack>
   );
 };

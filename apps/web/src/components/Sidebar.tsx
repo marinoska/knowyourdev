@@ -12,13 +12,14 @@ import Sheet from "@mui/joy/Sheet";
 import Tooltip from "@mui/joy/Tooltip";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import { closeSidebar } from "../utils";
 import KnowYourDevIcon from "./KnowYourDevIcon";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Regular } from "@/components/typography.tsx";
 
 const routes = [
   {
@@ -66,7 +67,7 @@ const NavigationItem = ({
     >
       <Icon />
       <ListItemContent>
-        <Typography level="body-md">{label}</Typography>
+        <Regular>{label}</Regular>
       </ListItemContent>
     </ListItemButton>
   );

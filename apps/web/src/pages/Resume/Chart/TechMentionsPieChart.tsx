@@ -12,6 +12,7 @@ import {
 } from "@/utils/const.ts";
 import { pieTooltip, tooltipField, tooltipOptions } from "@/utils/chart.ts";
 import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
+import { Regular } from "@/components/typography.tsx";
 
 const LegendItems = [
   {
@@ -112,9 +113,7 @@ export const TechMentionsPieChart = () => {
       <Legend title={"Legend"} items={LegendItems} />
 
       {chartContext.profile?.jobs.length === 0 ? (
-        <Typography>
-          No data available to display the timeline chart.
-        </Typography>
+        <Regular>No data available to display the timeline chart.</Regular>
       ) : (
         <Chart
           chartType="PieChart"
@@ -122,7 +121,7 @@ export const TechMentionsPieChart = () => {
           options={options}
           width="100%"
           height="600px"
-          loader={<Typography>Loading Chart...</Typography>}
+          loader={<Regular>Loading Chart...</Regular>}
         />
       )}
     </ChartContainer>

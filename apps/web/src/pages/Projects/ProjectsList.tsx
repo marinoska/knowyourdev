@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasePage } from "@/components/BasePage.tsx";
-import Container from "@/components/Container.tsx";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { ProjectItem } from "./ProjectItem.tsx";
 import { ProjectModal } from "./ProjectModal.tsx";
@@ -40,21 +39,21 @@ export const ProjectsList = () => {
             Create Project
           </Button>
         </BasePage.Header>
-        <Container>
-          <BasePage.Content>
+        <BasePage.Content>
+          <BasePage.Sheet>
             <Stack gap={2} direction="column">
               {projects?.map((project) => (
                 <ProjectItem key={project._id} item={project} />
               ))}
             </Stack>
-          </BasePage.Content>
+          </BasePage.Sheet>
 
           <LoadMoreButton
             onClick={() => fetchNextPage()}
             isLoading={isFetchingNextPage}
             hasNextPage={hasNextPage}
           />
-        </Container>
+        </BasePage.Content>
       </BasePage>
       {openProjectModal && (
         <ProjectModal setOpen={setOpenProjectModal} open={openProjectModal} />
