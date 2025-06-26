@@ -10,6 +10,7 @@ import { Small, Subtitle, Title } from "@/components/typography.tsx";
 import Stack from "@mui/joy/Stack";
 import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
 import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
+import { useTechFocusActivity } from "@/pages/Projects/Details/CandidatesDetailsPage/useTechFocusActivity";
 import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
@@ -131,8 +132,16 @@ const CandidateDetails = ({
   candidateQuery: ReturnType<typeof useUploadProfileQuery>;
   projectQuery: ReturnType<typeof useProjectProfileQuery>;
 }) => {
-  const { monthsActive } = useResumeProfileContext();
+  const { monthsActive, scopes: candidateScopes } = useResumeProfileContext();
   const { years, months } = monthsToYearsAndMonths(monthsActive);
+
+  const techFocusActivities = useTechFocusActivity({
+    candidateScopes,
+    scopeCodes: project?.settings.techFocus || [],
+    expectedRecentRelevantYears:
+      project?.settings.expectedRecentRelevantYears || 0,
+    order: "desc",
+  });
 
   const isLoading = isCandidateLoading || isProjectLoading;
   const isError = isCandidateError || isProjectError;
@@ -159,7 +168,10 @@ const CandidateDetails = ({
           <Stack direction="row" spacing={2}>
             <Stack direction="column" flex={2}>
               <KeyStrengths />
-              <TechFocusMatch project={project} />
+              <TechFocusMatch
+                project={project}
+                techFocusActivities={techFocusActivities}
+              />
               <RiskAssessment />
             </Stack>
             <Stack flex={1} direction="column" gap={2}>

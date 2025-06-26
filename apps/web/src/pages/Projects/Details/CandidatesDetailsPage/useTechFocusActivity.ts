@@ -15,7 +15,7 @@ type UseTechFocusActivityParams = {
   order: "asc" | "desc";
 };
 
-type UseTechFocusActivityResult = {
+export type TTechFocusActivity = {
   normalizedActivityList: number[];
   hintList: string[];
   pillsCaption: string;
@@ -29,10 +29,7 @@ type UseTechFocusActivityResult = {
   color: ColorPaletteProp;
 };
 
-type UseTechFocusActivityResults = Record<
-  ScopeType,
-  UseTechFocusActivityResult
->;
+type UseTechFocusActivityResults = Record<ScopeType, TTechFocusActivity>;
 
 const MAX_SCORED_YEARS = 10;
 
@@ -46,7 +43,7 @@ const processCandidateScope = ({
   candidateScope = { periods: [], years: [] },
   expectedRecentRelevantYears,
   order,
-}: ProcessCandidateScopeInput): UseTechFocusActivityResult => {
+}: ProcessCandidateScopeInput): TTechFocusActivity => {
   // sort desc
   const sortedPeriods =
     candidateScope?.periods?.sort(
@@ -169,7 +166,7 @@ const calculateMaxScoreForYears = (years: number) => {
   return maxScore;
 };
 
-const getScoreColor = (score: number): UseTechFocusActivityResult["color"] => {
+const getScoreColor = (score: number): TTechFocusActivity["color"] => {
   if (score >= 85) return "success";
   if (score >= 65) return "primary";
   if (score >= 45) return "warning";

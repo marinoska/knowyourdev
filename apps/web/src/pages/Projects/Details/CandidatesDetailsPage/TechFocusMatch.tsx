@@ -1,4 +1,3 @@
-import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { BasePage } from "@/components/BasePage.tsx";
 import Stack from "@mui/joy/Stack";
 import { Box } from "@mui/joy";
@@ -6,23 +5,17 @@ import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
 import { SCOPE_NAMES, TProject } from "@kyd/common/api";
-import { useTechFocusActivity } from "./useTechFocusActivity";
+import { TTechFocusActivity } from "@/pages/Projects/Details/CandidatesDetailsPage/useTechFocusActivity.ts";
 
 type TechFocusMatchProps = {
   project?: TProject;
+  techFocusActivities: Record<string, TTechFocusActivity>;
 };
 
-export const TechFocusMatch = ({ project }: TechFocusMatchProps) => {
-  const { scopes: candidateScopes } = useResumeProfileContext();
-
-  const techFocusActivities = useTechFocusActivity({
-    candidateScopes,
-    scopeCodes: project?.settings.techFocus || [],
-    expectedRecentRelevantYears:
-      project?.settings.expectedRecentRelevantYears || 0,
-    order: "desc",
-  });
-
+export const TechFocusMatch = ({
+  project,
+  techFocusActivities,
+}: TechFocusMatchProps) => {
   return (
     <BasePage.Sheet>
       <Stack gap={2}>
