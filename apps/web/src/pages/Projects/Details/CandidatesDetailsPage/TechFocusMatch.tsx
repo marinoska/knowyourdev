@@ -5,11 +5,12 @@ import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
 import { SCOPE_NAMES, TProject } from "@kyd/common/api";
-import { TTechFocusActivity } from "@/pages/Projects/Details/CandidatesDetailsPage/useTechFocusActivity.ts";
+import { TTechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
+import { ColorPaletteProp } from "@mui/joy/styles";
 
 type TechFocusMatchProps = {
   project?: TProject;
-  techFocusActivities: Record<string, TTechFocusActivity>;
+  techFocusActivities: Record<string, TTechFocusMatch>;
 };
 
 export const TechFocusMatch = ({
@@ -37,17 +38,25 @@ export const TechFocusMatch = ({
             <ActivityCard
               key={scope}
               scopeName={SCOPE_NAMES[scope]}
-              normalizedActivityList={techFocusActivity.normalizedActivityList}
-              hintList={techFocusActivity.hintList}
-              pillsCaption={techFocusActivity.pillsCaption}
-              techNames={techFocusActivity.techNames}
-              activeMonthsAndYears={techFocusActivity.activeMonthsAndYears}
+              descActivityPeriods={techFocusActivity.descActivityPeriods}
+              descNormalizedActivityScoreList={
+                techFocusActivity.descNormalizedActivityScoreList
+              }
+              totalActiveMonths={techFocusActivity.totalActiveMonths}
               overallScore={techFocusActivity.overallScore}
-              color={techFocusActivity.color}
+              color={getScoreColor(techFocusActivity.overallScore)}
             />
           );
         })}
       </Stack>
     </BasePage.Sheet>
   );
+};
+
+const getScoreColor = (score: number): ColorPaletteProp => {
+  if (score >= 85) return "success";
+  if (score >= 65) return "primary";
+  if (score >= 45) return "warning";
+  if (score >= 25) return "neutral";
+  return "danger";
 };

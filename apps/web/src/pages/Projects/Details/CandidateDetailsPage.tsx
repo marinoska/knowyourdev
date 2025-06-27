@@ -10,7 +10,7 @@ import { Small, Subtitle, Title } from "@/components/typography.tsx";
 import Stack from "@mui/joy/Stack";
 import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
 import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
-import { useTechFocusActivity } from "@/pages/Projects/Details/CandidatesDetailsPage/useTechFocusActivity";
+import { useCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
 import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
@@ -135,12 +135,11 @@ const CandidateDetails = ({
   const { monthsActive, scopes: candidateScopes } = useResumeProfileContext();
   const { years, months } = monthsToYearsAndMonths(monthsActive);
 
-  const techFocusActivities = useTechFocusActivity({
+  const candidateMatch = useCandidateMatch({
     candidateScopes,
     scopeCodes: project?.settings.techFocus || [],
     expectedRecentRelevantYears:
       project?.settings.expectedRecentRelevantYears || 0,
-    order: "desc",
   });
 
   const isLoading = isCandidateLoading || isProjectLoading;
@@ -170,7 +169,7 @@ const CandidateDetails = ({
               <KeyStrengths />
               <TechFocusMatch
                 project={project}
-                techFocusActivities={techFocusActivities}
+                techFocusActivities={candidateMatch}
               />
               <RiskAssessment />
             </Stack>

@@ -3,47 +3,35 @@ import {
   TScopeActivity,
   TScopes,
 } from "@/pages/Core/ResumeProfileContext.ts";
-import { monthsToYearsAndMonths } from "@/utils/dates.ts";
-import { format } from "date-fns";
-import { ColorPaletteProp } from "@mui/joy/styles";
 import { ScopeType } from "@kyd/common/api";
 
-type UseTechFocusActivityParams = {
+type UseCandidateMatchParams = {
   candidateScopes: TScopes;
   scopeCodes: ScopeType[];
   expectedRecentRelevantYears: number;
-  order: "asc" | "desc";
 };
 
-export type TTechFocusActivity = {
-  normalizedActivityList: number[];
-  hintList: string[];
-  pillsCaption: string;
-  techNames: string;
-  activeMonthsAndYears: {
-    years: number;
-    months: number;
-  };
+export type TTechFocusMatch = {
+  descNormalizedActivityScoreList: number[];
+  descActivityPeriods: ScopePeriod[];
+  totalActiveMonths: number;
   overallScore: number;
   maxScore: number;
-  color: ColorPaletteProp;
 };
 
-type UseTechFocusActivityResults = Record<ScopeType, TTechFocusActivity>;
+type TCandidateTechFocusMatch = Record<ScopeType, TTechFocusMatch>;
 
 const MAX_SCORED_YEARS = 10;
 
 type ProcessCandidateScopeInput = {
   candidateScope: TScopeActivity;
   expectedRecentRelevantYears: number;
-  order: "asc" | "desc";
 };
 
 const processCandidateScope = ({
   candidateScope = { periods: [], years: [] },
   expectedRecentRelevantYears,
-  order,
-}: ProcessCandidateScopeInput): TTechFocusActivity => {
+}: ProcessCandidateScopeInput): TTechFocusMatch => {
   // sort desc
   const sortedPeriods =
     candidateScope?.periods?.sort(
@@ -52,41 +40,14 @@ const processCandidateScope = ({
     ) || [];
 
   const lastPeriods = sortedPeriods.slice(0, MAX_SCORED_YEARS) || [];
-  // const numPeriodsToPad = Math.max(
-  //   0,
-  //   expectedRecentRelevantYears - lastPeriods.length,
-  // );
-  // for (let i = 0; i++; i < numPeriodsToPad) {
-  //   lastPeriods.push({
-  //     startDate: subMonths(lastPeriods[lastPeriods.length - 1].startDate, 12),
-  //     endDate: subMonths(lastPeriods[lastPeriods.length - 1].endDate, 12),
-  //     totalMonths: 0,
-  //     technologies: [],
-  //   });
-  // }
 
-  const normalizedActivityList = lastPeriods.map(
+  const descNormalizedActivityScoreList = lastPeriods.map(
     ({ totalMonths }) => (totalMonths * 100) / 12,
   );
-  const hintList = lastPeriods.map(
-    ({ totalMonths, endDate, startDate }) =>
-      `${totalMonths} months within period ${format(startDate, "MM.yy")}-${format(endDate, "MM.yy")} `,
-  );
-  const pillsCaption =
-    lastPeriods.length > 0
-      ? `${lastPeriods[lastPeriods.length - 1].startDate.getFullYear()}-${lastPeriods[0].endDate.getFullYear()}`
-      : "";
-
-  const techNameArray = lastPeriods
-    .map((period) => period.technologies.map((tech) => tech.name))
-    .flat();
-  const techNames = Array.from(new Set(techNameArray)).join(", ");
 
   const totalActiveMonth = lastPeriods
     .map((period) => period.totalMonths)
     .reduce((acc, val) => acc + val, 0);
-
-  const activeMonthsAndYears = monthsToYearsAndMonths(totalActiveMonth);
 
   // score for all periods
   const { score } = calculateTechFocusScore(lastPeriods);
@@ -97,34 +58,25 @@ const processCandidateScope = ({
   const overallScore = Math.min((score / maxScore) * 100, 100);
 
   return {
-    normalizedActivityList:
-      order === "asc"
-        ? normalizedActivityList
-        : normalizedActivityList.reverse(),
-    hintList: order === "asc" ? hintList : hintList.reverse(),
-    pillsCaption,
-    techNames,
-    activeMonthsAndYears,
+    descNormalizedActivityScoreList,
+    descActivityPeriods: lastPeriods,
+    totalActiveMonths: totalActiveMonth,
     overallScore,
     maxScore,
-    color: getScoreColor(overallScore),
   };
 };
 
-export const useTechFocusActivity = ({
+export const useCandidateMatch = ({
   candidateScopes,
   scopeCodes,
   expectedRecentRelevantYears,
-  order,
-}: UseTechFocusActivityParams): UseTechFocusActivityResults => {
-  const results: UseTechFocusActivityResults =
-    {} as UseTechFocusActivityResults;
+}: UseCandidateMatchParams): TCandidateTechFocusMatch => {
+  const results: TCandidateTechFocusMatch = {} as TCandidateTechFocusMatch;
 
   for (const scopeCode of scopeCodes) {
     results[scopeCode] = processCandidateScope({
       candidateScope: candidateScopes[scopeCode],
       expectedRecentRelevantYears,
-      order,
     });
   }
 
@@ -164,12 +116,4 @@ const calculateMaxScoreForYears = (years: number) => {
   }
 
   return maxScore;
-};
-
-const getScoreColor = (score: number): TTechFocusActivity["color"] => {
-  if (score >= 85) return "success";
-  if (score >= 65) return "primary";
-  if (score >= 45) return "warning";
-  if (score >= 25) return "neutral";
-  return "danger";
 };

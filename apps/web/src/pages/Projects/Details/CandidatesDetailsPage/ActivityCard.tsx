@@ -2,31 +2,44 @@ import { Card, Typography, Box, LinearProgress, Tooltip } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
 import { ColorPaletteProp } from "@mui/joy/styles";
 import { Small, Subtitle } from "@/components/typography.tsx";
+import { format } from "date-fns";
+import { ScopePeriod } from "@/pages/Core/ResumeProfileContext.ts";
+import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 
 type ActivityTypeProps = {
   scopeName: string;
-  normalizedActivityList: number[];
-  hintList: string[];
-  pillsCaption: string;
-  techNames: string;
-  activeMonthsAndYears: {
-    years: number;
-    months: number;
-  };
+  descNormalizedActivityScoreList: number[];
+  descActivityPeriods: ScopePeriod[];
+  totalActiveMonths: number;
   overallScore: number;
   color: ColorPaletteProp;
 };
 
 export const ActivityCard = ({
   scopeName,
-  normalizedActivityList,
-  hintList,
-  pillsCaption,
-  techNames,
-  activeMonthsAndYears,
+  descNormalizedActivityScoreList,
+  descActivityPeriods,
+  totalActiveMonths,
   overallScore,
   color,
 }: ActivityTypeProps) => {
+  const hintList = descActivityPeriods.map(
+    ({ totalMonths, endDate, startDate }) =>
+      `${totalMonths} months within period ${format(startDate, "MM.yy")}-${format(endDate, "MM.yy")} `,
+  );
+  const pillsCaption =
+    descActivityPeriods.length > 0
+      ? `${descActivityPeriods[descActivityPeriods.length - 1].startDate.getFullYear()}-${descActivityPeriods[0].endDate.getFullYear()}`
+      : "";
+
+  const techNameArray = descActivityPeriods
+    .map((period) => period.technologies.map((tech) => tech.name))
+    .flat();
+  const techNames = Array.from(new Set(techNameArray)).join(", ");
+
+  const activeMonthsAndYears = monthsToYearsAndMonths(totalActiveMonths);
+  console.log({ descNormalizedActivityScoreList });
+
   return (
     <Card variant="soft" color={color}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -55,7 +68,7 @@ export const ActivityCard = ({
         </Small>
       </Stack>
       <ActivityPills
-        normalizedActivityList={normalizedActivityList}
+        activityScoreList={descNormalizedActivityScoreList}
         hintList={hintList}
         text={pillsCaption}
         color={color}
@@ -67,30 +80,32 @@ export const ActivityCard = ({
 };
 
 const ActivityPills = ({
-  normalizedActivityList,
+  activityScoreList,
   hintList,
   text,
   color,
 }: {
-  normalizedActivityList: number[];
+  activityScoreList: number[];
   hintList: string[];
   text: string;
   color: ColorPaletteProp;
 }) => {
   return (
     <Stack direction="row" gap={0.5} alignItems="center">
-      {normalizedActivityList.map((value, index) => (
-        <Tooltip key={index} title={hintList[index]} placement="top">
-          <Box
-            borderRadius={4}
-            width={24}
-            height={8}
-            sx={{
-              backgroundColor: getColorByValue(value, color),
-            }}
-          />
-        </Tooltip>
-      ))}
+      {activityScoreList
+        .map((value, index) => (
+          <Tooltip key={index} title={hintList[index]} placement="top">
+            <Box
+              borderRadius={4}
+              width={24}
+              height={8}
+              sx={{
+                backgroundColor: getColorByValue(value, color),
+              }}
+            />
+          </Tooltip>
+        ))
+        .reverse()}
       <Box ml={1}>
         <Small>{text}</Small>
       </Box>
