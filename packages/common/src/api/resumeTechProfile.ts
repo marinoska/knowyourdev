@@ -32,9 +32,9 @@ export type ResumeTechProfileJobEntry = Pick<
   | "role"
   | "job"
   | "months"
-  | "start"
-  | "end"
 > & {
+  start: Date;
+  end: Date;
   popularity?: number;
   trending?: number;
   summary: string;

@@ -1,7 +1,7 @@
 import { ExtractionChainParam } from "@/chain/extraction/types.js";
 import { ResumeDataModel } from "@/models/resumeDataModel.js";
 import { TechDocument } from "@/models/types.js";
-import { isValid, parse, subYears } from "date-fns";
+import { endOfMonth, isValid, parse, startOfMonth, subYears } from "date-fns";
 import logger from "@/app/logger.js";
 import { Schema } from "mongoose";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
@@ -31,15 +31,40 @@ export const aggregateAndSave = async (
     throw new Error("extractedData is required");
 
   const updatedCV = await ResumeDataModel.findOneAndUpdate(
-    { uploadRef: params.uploadId }, // Find by hash
+    { uploadRef: params.uploadId },
     {
       $set: { uploadRef: params.uploadId, ...params.extractedData },
     }, // Set new or updated fields
     { upsert: true, new: true, runValidators: true }, // Create if not exists, return updated, apply schema validations
-  ).populate({
-    path: "jobs.technologies.techReference", // Path to populate nested techReference in jobs array
-    // model: "TechModel" // Specify the model being populated
-  });
+  )
+    .populate({
+      path: "jobs.technologies.techReference", // Path to populate nested techReference in jobs array
+      // model: "TechModel" // Specify the model being populated
+    })
+    .transform((doc) => {
+      const transformedJobs = doc.jobs.map((job) => {
+        // TODO date cannot be empty - handle the case
+        let start: Date = parse(job.start, FormatString, new Date());
+        if (!isValid(start)) {
+          log.warn(
+            `Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`,
+          );
+          start = new Date();
+        }
+
+        let end = parse(job.end, FormatString, new Date());
+        if (!isValid(end)) {
+          log.warn(
+            `Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`,
+          );
+          end = new Date();
+        }
+
+        return { ...job, start: startOfMonth(start), end: endOfMonth(end) };
+      });
+
+      return { ...doc, jobs: transformedJobs };
+    });
 
   const aggTechs: Record<
     TechCode,
@@ -61,34 +86,16 @@ export const aggregateAndSave = async (
         role: job.role,
         company: job.job,
       };
-      const start = parse(job.start, FormatString, new Date());
-      // TODO date cannot be empty
-      if (!isValid(start)) {
-        log.warn(
-          `Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`,
-        );
-        jobEntry.start = new Date();
-      } else {
-        jobEntry.start = start;
-      }
-      const end = parse(job.end, FormatString, new Date());
-      if (!isValid(end)) {
-        log.warn(
-          `Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`,
-        );
-        jobEntry.end = new Date();
-      } else {
-        jobEntry.end = end;
-      }
 
-      // Parse the date
-      !aggTechs[tech.code] &&
-        (aggTechs[tech.code] = {
+      if (!aggTechs[tech.code]) {
+        aggTechs[tech.code] = {
           techReference: tech.techReference as Schema.Types.ObjectId,
           code: tech.code,
 
           jobs: [],
-        });
+        };
+      }
+
       aggTechs[tech.code].jobs.push(jobEntry);
     });
   }
@@ -187,28 +194,14 @@ export const aggregateAndSave = async (
         })
         .filter(isNotNull);
 
-      const start = parse(job.start, FormatString, new Date());
-      // TODO date cannot be empty - process error
-      if (!isValid(start)) {
-        log.error(
-          `Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`,
-        );
-      }
-      const end = parse(job.end, FormatString, new Date());
-      if (!isValid(end)) {
-        log.error(
-          `Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`,
-        );
-      }
-
       const avgPopularity = technologies.length
         ? technologies.reduce((acc, tech) => acc + tech.popularity, 0) /
           technologies.length
         : 0;
 
       return {
-        start: isValid(start) ? start.toISOString() : new Date().toISOString(),
-        end: isValid(end) ? end.toISOString() : new Date().toISOString(),
+        start: job.start,
+        end: job.end,
         months: job.months,
         role: job.role,
         job: job.job,
@@ -242,7 +235,7 @@ export const aggregateAndSave = async (
     { upsert: true, new: true, runValidators: true }, // Create if not exists, return updated, apply schema validations
   ).lean();
 
-  return { ...params, cvData: updatedCV, techProfile };
+  return { ...params, techProfile };
 };
 
 type Range = {

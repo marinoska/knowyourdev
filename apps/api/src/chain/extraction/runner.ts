@@ -104,7 +104,7 @@ export async function processUpload(upload: TUploadDocument, buffer?: Buffer) {
 
       const cvText = await extractCVText(fileBuffer, upload.contentType);
       // TODO check the amount of tokens in cvText - has to be limited?
-      const data = await runCVDataExtraction(cvText, upload._id);
+      await runCVDataExtraction(cvText, upload._id);
       upload.parseStatus = "processed";
       void upload.save();
     }

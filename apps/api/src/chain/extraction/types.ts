@@ -10,7 +10,7 @@ export type ExtractionChainInput = {
   uploadId: Schema.Types.ObjectId;
 };
 export type ExtractionChainOutput = {
-  cvData: TResumeDataDocument;
+  // cvData: TResumeDataDocument;
   techProfile: TResumeTechProfileDocument;
 };
 
