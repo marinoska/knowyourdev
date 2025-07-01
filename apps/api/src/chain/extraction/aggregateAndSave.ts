@@ -1,7 +1,10 @@
 import { ExtractionChainParam } from "@/chain/extraction/types.js";
-import { ResumeDataModel } from "@/models/resumeDataModel.js";
+import {
+  ResumeDataModel,
+  TResumeDataDocument,
+} from "@/models/resumeDataModel.js";
 import { TechDocument } from "@/models/types.js";
-import { endOfMonth, isValid, parse, startOfMonth, subYears } from "date-fns";
+import { subYears } from "date-fns";
 import logger from "@/app/logger.js";
 import { Schema } from "mongoose";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
@@ -13,16 +16,16 @@ import {
   ResumeTechProfileTechnologiesJobEntry,
   TREND_MAP,
   TechnologyEntry,
-  JobEntry,
   TechType,
+  EnhancedJobEntry,
+  JobEntry,
 } from "@kyd/common/api";
 import { normalizePopularityLevel } from "@/chain/normalizer/popularityLevel.js";
 import { env } from "@/app/env.js";
+import { mergeRanges, Range } from "@kyd/common";
+import { parseMonthEndUtc, parseMonthStartUtc } from "@/utils/dates.js";
 
 const log = logger("extraction:extraction:runner");
-
-const FormatString = "MM-yyyy"; // Specify the format
-const currentUsageFieldName = env("CURRENT_USAGE_FIELD_NAME") as keyof TechType;
 
 export const aggregateAndSave = async (
   params: ExtractionChainParam,
@@ -30,7 +33,9 @@ export const aggregateAndSave = async (
   if (!("extractedData" in params))
     throw new Error("extractedData is required");
 
-  const updatedCV = await ResumeDataModel.findOneAndUpdate(
+  const resumeDocument = await ResumeDataModel.findOneAndUpdate<
+    TResumeDataDocument<JobEntry>
+  >(
     { uploadRef: params.uploadId },
     {
       $set: { uploadRef: params.uploadId, ...params.extractedData },
@@ -41,37 +46,25 @@ export const aggregateAndSave = async (
       path: "jobs.technologies.techReference", // Path to populate nested techReference in jobs array
       // model: "TechModel" // Specify the model being populated
     })
-    .transform((doc) => {
-      const transformedJobs = doc.jobs.map((job) => {
-        // TODO date cannot be empty - handle the case
-        let start: Date = parse(job.start, FormatString, new Date());
-        if (!isValid(start)) {
-          log.warn(
-            `Invalid start date in tech profile ${job.role} ${job.start}, uploadId: ${params.uploadId}`,
-          );
-          start = new Date();
-        }
+    .lean();
 
-        let end = parse(job.end, FormatString, new Date());
-        if (!isValid(end)) {
-          log.warn(
-            `Invalid end date in tech profile ${job.role} ${job.end}, uploadId: ${params.uploadId}`,
-          );
-          end = new Date();
-        }
-
-        return { ...job, start: startOfMonth(start), end: endOfMonth(end) };
-      });
-
-      return { ...doc, jobs: transformedJobs };
-    });
+  const updatedCV = {
+    ...resumeDocument,
+    jobs: resumeDocument.jobs.map<EnhancedJobEntry>((job: JobEntry) => {
+      // create EnhancedJobEntry type
+      return {
+        ...job,
+        start: parseMonthStartUtc(job.start),
+        end: parseMonthEndUtc(job.end),
+      };
+    }),
+  };
 
   const aggTechs: Record<
     TechCode,
     {
       techReference: Schema.Types.ObjectId;
       code: TechCode;
-
       jobs: ResumeTechProfileTechnologiesJobEntry[];
     }
   > = {};
@@ -81,10 +74,12 @@ export const aggregateAndSave = async (
       continue;
     }
 
-    job.technologies.forEach((tech) => {
+    job.technologies.forEach((tech: TechnologyEntry) => {
       const jobEntry: ResumeTechProfileTechnologiesJobEntry = {
         role: job.role,
         company: job.job,
+        start: job.start,
+        end: job.end,
       };
 
       if (!aggTechs[tech.code]) {
@@ -173,8 +168,8 @@ export const aggregateAndSave = async (
   enrich(updatedCV.skillSection.technologies, { inSkillsSection: true });
   enrich(updatedCV.profileSection.technologies, { inProfileSection: true });
 
-  const techProfileJobs = updatedCV.jobs.map<ResumeTechProfileJobEntry>(
-    (job) => {
+  const techProfileJobs: ResumeTechProfileJobEntry[] = updatedCV.jobs.map(
+    (job: EnhancedJobEntry) => {
       const technologies = job.technologies
         .map((tech) => {
           if (!tech.techReference) return null;
@@ -237,36 +232,6 @@ export const aggregateAndSave = async (
 
   return { ...params, techProfile };
 };
-
-type Range = {
-  start: Date;
-  end: Date;
-};
-
-// Function to merge overlapping date ranges
-function mergeRanges(ranges: Range[]) {
-  // Sort ranges by their start dates
-  ranges.sort((a, b) => a.start.getTime() - b.start.getTime());
-
-  const merged = [ranges[0]]; // Initialize with the first range
-
-  for (let i = 1; i < ranges.length; i++) {
-    const lastRange = merged[merged.length - 1];
-    const currentRange = ranges[i];
-
-    if (currentRange.start <= lastRange.end) {
-      // If ranges overlap, merge them by extending the lastRange's end
-      lastRange.end = new Date(
-        Math.max(lastRange.end.getTime(), currentRange.end.getTime()),
-      );
-    } else {
-      // If no overlap, add the current range to the merged array
-      merged.push(currentRange);
-    }
-  }
-
-  return merged; // Return the merged ranges
-}
 
 // Function to calculate the total number of months covered by merged ranges
 function calculateTotalMonths(ranges: Range[], yearsAgo: number = 50) {

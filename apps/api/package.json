@@ -9,7 +9,8 @@
     "start": "NODE_ENV=production node ./dist/index.js",
     "build": "tsc && tsc-alias",
     "lint": "eslint ./src/**/*.ts --fix",
-    "format": "prettier --write ./**/*.{ts,json}"
+    "format": "prettier --write ./**/*.{ts,json}",
+    "fetch-cv": "NODE_ENV=development tsx -r tsconfig-paths/register ./src/scripts/fetch-cv.ts"
   },
   "devDependencies": {
     "@kyd/typescript-config": "workspace:*",

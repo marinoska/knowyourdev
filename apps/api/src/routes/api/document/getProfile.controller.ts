@@ -51,3 +51,20 @@ export const getTechProfileValidationSchema = {
       }, "MongoDB ObjectId validation"),
   }),
 };
+
+/*
+    // Add job gaps to the response
+    const responseWithGaps = addJobGapsToResponse(response);
+
+    // Add job categories to the response
+    const responseWithGapsAndCategories =
+      addJobCategoriesToResponse(responseWithGaps);
+
+    // Add scopes to the response
+    const responseWithGapsCategoriesAndScopes = addScopesToResponse(
+      responseWithGapsAndCategories,
+    );
+
+    // Send the tech profile with job gaps, categories, and scopes in the response
+    res.status(200).json(responseWithGapsCategoriesAndScopes);
+*/

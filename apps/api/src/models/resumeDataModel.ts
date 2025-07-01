@@ -6,9 +6,10 @@ import {
   TechnologyEntry,
 } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
+import { parseMonthStartUtc, parseMonthEndUtc } from "@/utils/dates.js";
 
-export type TResumeDataDocument = Document &
-  ExtractedCVData & {
+export type TResumeDataDocument<TJob = JobEntry> = Document &
+  ExtractedCVData<TJob> & {
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
   };
 
@@ -35,25 +36,31 @@ const TechStackSchema = {
   matchPercentage: { type: Number, required: true },
 };
 
-const JobEntrySchema = new Schema<JobEntry>({
-  text: { type: String, required: true },
-  role: { type: String, required: true },
-  summary: { type: String, required: true },
-  roleType: {
-    type: String,
-    enum: ROLE_TYPE,
+const JobEntrySchema = new Schema<JobEntry>(
+  {
+    text: { type: String, required: true },
+    role: { type: String, required: true },
+    summary: { type: String, required: true },
+    roleType: {
+      type: String,
+      enum: ROLE_TYPE,
+    },
+    isSoftwareDevelopmentRole: { type: Boolean, default: false },
+    job: { type: String, required: true },
+    start: { type: String, required: true }, // Format: 'mm-yyyy'
+    end: { type: String, required: true }, // Format: 'mm-yyyy'
+    months: { type: Number, required: true },
+    present: { type: Boolean, default: false },
+    // softwareDevelopmentScope: {type: String, enum: ["BE", "FE", "FS", ""]},
+    // isMobileDevelopmentRole: {type: Boolean, default: false},
+    technologies: [TechnologyEntrySchema],
+    techStack: [TechStackSchema],
   },
-  isSoftwareDevelopmentRole: { type: Boolean, default: false },
-  job: { type: String, required: true },
-  start: { type: String, required: true }, // Format: 'mm-yyyy'
-  end: { type: String, required: true }, // Format: 'mm-yyyy'
-  months: { type: Number, required: true },
-  present: { type: Boolean, default: false },
-  // softwareDevelopmentScope: {type: String, enum: ["BE", "FE", "FS", ""]},
-  // isMobileDevelopmentRole: {type: Boolean, default: false},
-  technologies: [TechnologyEntrySchema],
-  techStack: [TechStackSchema],
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
 
 const resumeDataSchema = new Schema<TResumeDataDocument, TResumeDataModel>(
   {

@@ -22,6 +22,8 @@ const formatter = ({ error, ...logEntry }: any) => {
     enhanced.message += error.toString();
     // @ts-ignore
     enhanced.code = error.code;
+    // Add stack trace to the log
+    enhanced.stack = error.stack;
   }
 
   return enhanced;

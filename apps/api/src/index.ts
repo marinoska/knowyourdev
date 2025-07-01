@@ -45,7 +45,7 @@ process.on("unhandledRejection", (reason, _promise) => {
     process.exit(1);
 });
 
-process.on("unhandledException", (err) => {
+process.on("uncaughtException", (err) => {
     log.error(`Unhandled exception: `, err);
 
     process.exit(1);
