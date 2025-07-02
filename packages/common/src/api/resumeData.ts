@@ -7,6 +7,7 @@ import {
   TechCode,
 } from "./constants.js";
 import { TechStack, TechType } from "./tech.js";
+import { GAP_ROLE, GAP_JOB } from "../utils/index.js";
 
 export type TechnologyEntry = {
   original: string; // Exact name as found in the job description
@@ -38,9 +39,23 @@ export type JobEntry = {
   techStack: TechStack[];
 };
 
+export type EnhancedJobEntry = Omit<JobEntry, "start" | "end"> & {
+  start: Date;
+  end: Date;
+};
+
 export type SectionsNames = (typeof SECTIONS)[number];
 
-export type ExtractedCVData = {
+export type GapEntry = {
+  role: typeof GAP_ROLE;
+  job: typeof GAP_JOB;
+  start: Date;
+  end: Date;
+  months: number;
+  popularity: 0;
+};
+
+export type ExtractedCVData<TJob = JobEntry> = {
   // technologies: TechnologiesEntry[],
   // techStack: TechStack[];
   position: string;
@@ -56,5 +71,5 @@ export type ExtractedCVData = {
     technologies: TechnologyEntry[];
     techStack: TechStack[];
   };
-  jobs: JobEntry[];
+  jobs: TJob[];
 };

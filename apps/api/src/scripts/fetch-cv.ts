@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { connected, stopMongoClient, db } from "@/app/mongo.js";
+import { connected, stopMongoClient } from "@/app/mongo.js";
 import { ResumeDataModel } from "@/models/resumeDataModel.js";
 import { TechListModel } from "@/models/techList.model.js";
 import { parseMonthEndUtc, parseMonthStartUtc } from "@/utils/dates.js";

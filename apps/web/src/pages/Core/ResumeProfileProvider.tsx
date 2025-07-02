@@ -1,11 +1,9 @@
 import { ReactNode, useMemo } from "react";
 import { Job, ProcessedUploadProfile, TechProfile } from "@/api/query/types.ts";
-import { getJobGaps } from "@/pages/Core/ranges.ts";
-import { GAP_JOB, GAP_ROLE, sumRanges } from "@kyd/common";
+import { sumRanges } from "@kyd/common";
 import { ScopeType } from "@kyd/common/api";
 import {
   ResumeProfileContext,
-  Gap,
   TScopeActivity,
   TScopes,
 } from "./ResumeProfileContext.ts";
@@ -26,28 +24,6 @@ export function ResumeProfileProvider({
   children: ReactNode;
   profile?: ProcessedUploadProfile;
 }) {
-  const jobGaps = useMemo<Gap[]>(() => {
-    if (!profile?.jobs) {
-      return [];
-    }
-
-    const sortedJobs = profile.jobs.sort(
-      (a, b) => a.start.getTime() - b.start.getTime(),
-    );
-    const gapsRanges = getJobGaps(sortedJobs);
-
-    return [
-      ...gapsRanges.map((range) => ({
-        role: GAP_ROLE,
-        job: GAP_JOB,
-        start: range.start,
-        end: range.end,
-        months: range.months,
-        popularity: 0,
-      })),
-    ];
-  }, [profile?.jobs]);
-
   const [
     softwareDevelopmentJobs,
     irrelevantJobs,
@@ -149,7 +125,7 @@ export function ResumeProfileProvider({
   const context = useMemo(
     () => ({
       profile,
-      jobGaps,
+      jobGaps: profile?.jobGaps || [],
       softwareDevelopmentJobs,
       irrelevantJobs,
       jobsWithMissingTech,
@@ -160,7 +136,6 @@ export function ResumeProfileProvider({
     }),
     [
       profile,
-      jobGaps,
       irrelevantJobs,
       softwareDevelopmentJobs,
       jobsWithMissingTech,

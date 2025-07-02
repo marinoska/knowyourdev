@@ -3,7 +3,6 @@ import { uploadsKeys } from "./keys.ts";
 import { getUploadProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
-import { endOfMonth, startOfMonth } from "date-fns";
 import { GetUploadsListResponse } from "@kyd/common/api";
 
 export const useUploadsQuery = ({
@@ -54,17 +53,22 @@ export const useUploadProfileQuery = ({ uploadId }: { uploadId?: string }) => {
         jobs:
           data.jobs?.map<Job>((job) => ({
             ...job,
-            start: startOfMonth(new Date(job.start)),
-            end: endOfMonth(new Date(job.end)),
+            start: new Date(job.start),
+            end: new Date(job.end),
           })) || [],
+        jobGaps: data.jobGaps.map((gap) => ({
+          ...gap,
+          start: new Date(gap.start),
+          end: new Date(gap.end),
+        })),
         technologies: data.technologies.map((tech) => ({
           ...tech,
           totalMonths: tech.totalMonths || 0,
           jobs:
             tech.jobs.map((job) => ({
               ...job,
-              start: startOfMonth(job.start ? new Date(job.start) : new Date()),
-              end: endOfMonth(job.end ? new Date(job.end) : new Date()),
+              start: job.start,
+              end: job.end,
             })) || [],
         })),
       })),

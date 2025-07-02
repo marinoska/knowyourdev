@@ -16,12 +16,10 @@ import {
   ResumeTechProfileTechnologiesJobEntry,
   TREND_MAP,
   TechnologyEntry,
-  TechType,
   EnhancedJobEntry,
   JobEntry,
 } from "@kyd/common/api";
 import { normalizePopularityLevel } from "@/chain/normalizer/popularityLevel.js";
-import { env } from "@/app/env.js";
 import { mergeRanges, Range } from "@kyd/common";
 import { parseMonthEndUtc, parseMonthStartUtc } from "@/utils/dates.js";
 

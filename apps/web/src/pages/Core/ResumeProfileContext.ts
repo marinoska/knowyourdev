@@ -1,11 +1,6 @@
 import { createContext, useContext } from "react";
 import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
-import { ScopeType } from "@kyd/common/api";
-
-export type Gap = Pick<
-  Job,
-  "job" | "role" | "months" | "start" | "end" | "popularity"
->;
+import { GapEntry, ScopeType } from "@kyd/common/api";
 
 export type ScopePeriod = {
   startDate: Date;
@@ -31,7 +26,7 @@ export type Selection = {
 export type TScopes = Record<ScopeType, TScopeActivity>;
 
 export type ResumeProfileType = {
-  jobGaps: Gap[];
+  jobGaps: GapEntry[];
   softwareDevelopmentJobs: Job[];
   irrelevantJobs: Job[];
   jobsWithMissingTech: Job[];

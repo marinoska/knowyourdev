@@ -1,4 +1,5 @@
 import {
+  GapEntry,
   ResumeTechProfileJobEntry,
   ResumeTechProfileResponse,
   ResumeTechProfileTechnologiesEntry,
@@ -24,5 +25,6 @@ export type ProcessedUploadProfile = Omit<
   "jobs" | "technologies"
 > & {
   jobs: Job[];
+  jobGaps: GapEntry[];
   technologies: TechProfile[];
 };

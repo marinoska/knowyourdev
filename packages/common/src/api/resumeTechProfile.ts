@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
-import { ExtractedCVData, JobEntry } from "./resumeData.js";
+import { ExtractedCVData, GapEntry, JobEntry } from "./resumeData.js";
 
 export type ResumeTechProfileTechnologiesEntry = {
   techReference: Schema.Types.ObjectId;
@@ -18,8 +18,8 @@ export type ResumeTechProfileTechnologiesEntry = {
 };
 
 export type ResumeTechProfileTechnologiesJobEntry = {
-  start?: Date;
-  end?: Date;
+  start: Date;
+  end: Date;
   role: string;
   company: string;
 };
@@ -64,4 +64,5 @@ export type ResumeTechProfileResponse = {
   uploadId: string;
   createdAt: string;
   updatedAt: string;
+  jobGaps: GapEntry[];
 } & ResumeTechProfileType;
