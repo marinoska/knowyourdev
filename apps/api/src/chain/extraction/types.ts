@@ -1,5 +1,4 @@
 import { TechDocument } from "@/models/types.js";
-import { TResumeDataDocument } from "@/models/resumeDataModel.js";
 import { Schema } from "mongoose";
 import { ExtractedCVData } from "@kyd/common/api";
 import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";

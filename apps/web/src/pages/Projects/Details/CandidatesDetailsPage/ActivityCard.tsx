@@ -42,7 +42,6 @@ export const ActivityCard = ({
   const techNames = Array.from(new Set(techNameArray)).join(", ");
 
   const activeMonthsAndYears = monthsToYearsAndMonths(totalActiveMonths);
-  console.log({ descNormalizedActivityScoreList });
 
   return (
     <Card variant="soft" color={color}>

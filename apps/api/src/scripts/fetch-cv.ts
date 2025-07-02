@@ -15,8 +15,6 @@ const fetchCV = async () => {
       })
       .transform((doc) => {
         const jobs = doc?.jobs.map((job, i) => {
-          console.log("Index @@@@@", i);
-          console.info(`${job.end} ${job.role} ${job._id}`);
           console.info(
             `job.end ${parseMonthEndUtc(job.end).toISOString()} ${job.role} ${job._id}`,
           );

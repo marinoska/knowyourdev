@@ -100,7 +100,6 @@ export const TechPopularityTimelineChart = () => {
           // @ts-ignore
           const { label, color } = getLabelFn(tech[fieldName]);
           colorsSet.add(color);
-          console.log(label, color);
           return tech.jobs.map((job) => [label, tech.name, job.start, job.end]);
         })
         .flat();

@@ -62,7 +62,7 @@ export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
         irrelevantJobs: rangeToDate(data.irrelevantJobs),
         jobsWithMissingTech: rangeToDate(data.jobsWithMissingTech),
         jobsWithFilledTech: rangeToDate(data.jobsWithFilledTech),
-        earliestJobStart: new Date(data.earliestJobStart || ""),
+        earliestJobStart: data.earliestJobStart ? new Date(data.earliestJobStart) : new Date(),
         scopes: Object.entries(data.scopes).reduce((acc, [key, value]) => {
           acc[key as ScopeType] = {
             ...value,
