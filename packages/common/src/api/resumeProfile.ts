@@ -52,10 +52,7 @@ export type ResumeTechProfileJobEntry = Pick<
   }[];
 };
 
-export type ResumeTechProfileType = Pick<
-  ExtractedCVData,
-  "position" | "fullName"
-> & {
+export type TResumeProfile = Pick<ExtractedCVData, "position" | "fullName"> & {
   technologies: ResumeTechProfileTechnologiesEntry[];
   jobs: ResumeTechProfileJobEntry[];
 };
@@ -77,7 +74,7 @@ export type TScopeActivity = {
 
 export type TScopes = Record<ScopeType, TScopeActivity>;
 
-export type ResumeTechProfileResponse = {
+export type TResumeProfileResponse = {
   uploadId: string;
   createdAt: string;
   updatedAt: string;
@@ -88,4 +85,4 @@ export type ResumeTechProfileResponse = {
   jobsWithFilledTech: ResumeTechProfileJobEntry[];
   earliestJobStart: Date;
   scopes: TScopes;
-} & ResumeTechProfileType;
+} & TResumeProfile;

@@ -45,7 +45,7 @@ export const useUploadsQuery = ({
   };
 };
 
-export const useUploadProfileQuery = ({ uploadId }: { uploadId?: string }) => {
+export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
   const { data, ...rest } = useQuery<ProcessedUploadProfile, Error>({
     queryKey: uploadsKeys.profile(uploadId!), // we dont use the query params for now so default it to 0
     queryFn: () =>

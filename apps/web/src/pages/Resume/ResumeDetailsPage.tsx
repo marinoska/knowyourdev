@@ -1,5 +1,5 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
+import { useResumeProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useState } from "react";
@@ -64,7 +64,7 @@ const getTabItems = (): TabsRecord => ({
 export const ResumeDetailsPage = () => {
   const { id } = useParams<ResumeProfileParams>();
 
-  const query = useUploadProfileQuery({ uploadId: id });
+  const query = useResumeProfileQuery({ uploadId: id });
 
   return (
     <ResumeProfileProvider profile={query.profile}>
@@ -76,7 +76,7 @@ export const ResumeDetailsPage = () => {
 const ResumeDetails = ({
   query: { profile, isError, isLoading },
 }: {
-  query: ReturnType<typeof useUploadProfileQuery>;
+  query: ReturnType<typeof useResumeProfileQuery>;
 }) => {
   const { monthsActive } = useResumeProfileContext();
 

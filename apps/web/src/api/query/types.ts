@@ -1,7 +1,7 @@
 import {
   GapEntry,
   ResumeTechProfileJobEntry,
-  ResumeTechProfileResponse,
+  TResumeProfileResponse,
   ResumeTechProfileTechnologiesEntry,
 } from "@kyd/common/api";
 
@@ -21,7 +21,7 @@ export type TechProfile = Omit<ResumeTechProfileTechnologiesEntry, "jobs"> & {
 };
 
 export type ProcessedUploadProfile = Omit<
-  ResumeTechProfileResponse,
+  TResumeProfileResponse,
   "jobs" | "technologies"
 > & {
   jobs: Job[];

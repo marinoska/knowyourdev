@@ -7,7 +7,7 @@ import {
   ResumeTechProfileJobEntry,
   ResumeTechProfileTechnologiesEntry,
   TREND,
-  ResumeTechProfileType,
+  TResumeProfile,
 } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
 
@@ -99,7 +99,7 @@ const ResumeTechProfileTechnologiesEntrySchema =
   );
 
 export type TResumeTechProfileDocument = Document &
-  ResumeTechProfileType & {
+  TResumeProfile & {
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
     createdAt: Date;
     updatedAt: Date;

@@ -1,7 +1,7 @@
 import { RequestHandler, Response } from "express";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { Joi, Segments } from "celebrate";
-import { ResumeTechProfileResponse, TScopes } from "@kyd/common/api";
+import { TResumeProfileResponse, TScopes } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { addJobGapsToResponse } from "@/routes/api/document/getProfile/jobGaps.js";
@@ -10,14 +10,14 @@ import { addScopesToResponse } from "@/routes/api/document/getProfile/scopes.js"
 
 export type UploadTechProfileController = RequestHandler<
   { uploadId: string },
-  ResumeTechProfileResponse,
+  TResumeProfileResponse,
   any,
   any,
   {}
 >;
 
 export const getUploadTechProfileController: UploadTechProfileController =
-  async (req, res: Response<ResumeTechProfileResponse>) => {
+  async (req, res: Response<TResumeProfileResponse>) => {
     const { uploadId } = req.params;
 
     const techProfile = await ResumeTechProfileModel.findOne({

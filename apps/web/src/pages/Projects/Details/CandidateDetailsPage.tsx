@@ -1,5 +1,5 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { useUploadProfileQuery } from "@/api/query/useUploadsQuery.ts";
+import { useResumeProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
@@ -15,6 +15,7 @@ import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
+import { TProjectsItem, TScopes } from "@kyd/common/api";
 
 type CandidateDetailsParams = {
   id: string;
@@ -24,14 +25,18 @@ type CandidateDetailsParams = {
 export const CandidateDetailsPage = () => {
   const { id, candidateId } = useParams<CandidateDetailsParams>();
 
-  const candidateQuery = useUploadProfileQuery({ uploadId: candidateId });
+  const candidateQuery = useResumeProfileQuery({ uploadId: candidateId });
   const projectQuery = useProjectProfileQuery({ projectId: id });
+
+  const isLoading = candidateQuery.isLoading || projectQuery.isLoading;
+  const isError = candidateQuery.isError || projectQuery.isError;
 
   return (
     <ResumeProfileProvider profile={candidateQuery.profile}>
       <CandidateDetails
-        candidateQuery={candidateQuery}
-        projectQuery={projectQuery}
+        project={projectQuery.data}
+        isLoading={isLoading}
+        isError={isError}
       />
     </ResumeProfileProvider>
   );
@@ -118,32 +123,23 @@ const RoleSuitability = () => {
 };
 
 const CandidateDetails = ({
-  candidateQuery: {
-    profile,
-    isError: isCandidateError,
-    isLoading: isCandidateLoading,
-  },
-  projectQuery: {
-    data: project,
-    isError: isProjectError,
-    isLoading: isProjectLoading,
-  },
+  project,
+  isLoading,
+  isError,
 }: {
-  candidateQuery: ReturnType<typeof useUploadProfileQuery>;
-  projectQuery: ReturnType<typeof useProjectProfileQuery>;
+  project?: TProjectsItem;
+  isLoading: boolean;
+  isError: boolean;
 }) => {
-  const { monthsActive, scopes: candidateScopes } = useResumeProfileContext();
+  const { monthsActive, profile } = useResumeProfileContext();
   const { years, months } = monthsToYearsAndMonths(monthsActive);
 
   const candidateMatch = useCandidateMatch({
-    candidateScopes,
+    candidateScopes: profile?.scopes || ({} as TScopes),
     scopeCodes: project?.settings.techFocus || [],
     expectedRecentRelevantYears:
       project?.settings.expectedRecentRelevantYears || 0,
   });
-
-  const isLoading = isCandidateLoading || isProjectLoading;
-  const isError = isCandidateError || isProjectError;
 
   return (
     <>

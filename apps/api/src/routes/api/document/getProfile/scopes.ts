@@ -1,5 +1,5 @@
 import {
-  ResumeTechProfileResponse,
+  TResumeProfileResponse,
   ResumeTechProfileTechnologiesEntry,
   ScopeType,
   TScopeActivity,
@@ -22,7 +22,7 @@ import {
  * @returns Object containing scopes data
  */
 export function calculateScopes(
-  techProfile: ResumeTechProfileResponse,
+  techProfile: TResumeProfileResponse,
   earliestJobStart: Date,
 ): TScopes {
   const result = {} as TScopes;
@@ -87,8 +87,8 @@ export function calculateScopes(
  * @returns The tech profile response with scopes added
  */
 export function addScopesToResponse(
-  techProfile: ResumeTechProfileResponse & { earliestJobStart?: Date },
-): ResumeTechProfileResponse {
+  techProfile: TResumeProfileResponse & { earliestJobStart?: Date },
+): TResumeProfileResponse {
   if (!techProfile.earliestJobStart) {
     return techProfile;
   }
