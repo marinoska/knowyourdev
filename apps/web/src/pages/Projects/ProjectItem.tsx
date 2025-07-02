@@ -2,11 +2,11 @@ import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import Stack from "@mui/joy/Stack";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { TProjectsItem } from "@kyd/common/api";
 import { BasePage } from "@/components/BasePage";
 import { Regular, Smallest } from "@/components/typography.tsx";
+import { TProject } from "@/api/query/types.ts";
 
-export const ProjectItem = ({ item }: { item: TProjectsItem }) => {
+export const ProjectItem = ({ item }: { item: TProject }) => {
   const navigate = useNavigate();
 
   const { name, createdAt, _id } = item;

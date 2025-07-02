@@ -4,20 +4,20 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
-import { TProjectsItem } from "@kyd/common/api";
 import ProjectSettingsContent from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
 import CandidatesContent from "@/pages/Projects/Details/CandidatesContent.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";
+import { TProject } from "@/api/query/types.ts";
 
 type ProjectProfileParams = {
   id: string;
 };
 
-const getTabItems = (profile: TProjectsItem): TabsRecord => ({
+const getTabItems = (profile: TProject): TabsRecord => ({
   settings: {
     label: "Project Details",
-    content: <ProjectSettingsContent profile={profile} />,
+    content: <ProjectSettingsContent project={profile} />,
   },
   candidates: {
     label: "Candidates",

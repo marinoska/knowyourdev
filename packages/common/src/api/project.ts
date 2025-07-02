@@ -12,12 +12,12 @@ export type TProject = {
   candidates: string[];
 };
 
-export type TProjectsItem = TProject & {
+export type TProjectResponse = TProject & {
   _id: string;
   createdAt: string;
 };
 
-export type TProjectsPage = { projects: TProjectsItem[] };
+export type TProjectsPage = { projects: TProjectResponse[] };
 export type GetProjectsListResponse = TProjectsPage & TListResponse;
 
 export type GetProjectsListQueryParams = {

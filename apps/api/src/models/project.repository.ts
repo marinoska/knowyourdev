@@ -6,7 +6,7 @@ export type GetProjectsParams = {
   sortOrder?: "asc" | "desc";
 };
 
-export type GetProjectsResponse = {
+export type GeTProjectResponse = {
   projects: TProjectDocument[];
   totalRecords: number;
   currentPage: number;
@@ -17,7 +17,7 @@ export const getProjects = async ({
   page,
   limit,
   sortOrder = "desc",
-}: GetProjectsParams): Promise<GetProjectsResponse> => {
+}: GetProjectsParams): Promise<GeTProjectResponse> => {
   const skip = (page - 1) * limit;
 
   const projects = await ProjectModel.find({})

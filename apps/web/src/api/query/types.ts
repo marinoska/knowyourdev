@@ -1,6 +1,7 @@
 import {
   TResumeProfileResponse,
   ResumeTechProfileTechnologiesEntry,
+  TProjectResponse,
 } from "@kyd/common/api";
 
 export type TechProfile = Omit<ResumeTechProfileTechnologiesEntry, "jobs"> & {
@@ -14,3 +15,4 @@ export type TechProfile = Omit<ResumeTechProfileTechnologiesEntry, "jobs"> & {
 };
 
 export type TResumeProfile = TResumeProfileResponse;
+export type TProject = TProjectResponse;

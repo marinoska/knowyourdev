@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { connected, stopMongoClient, db } from "@/app/mongo.js";
 import { ProjectModel } from "@/models/project.model.js";
-import { TProjectsItem } from "@kyd/common/api";
+import { TProjectResponse } from "@kyd/common/api";
 
 // Mock projects data from mockProjects.ts
 const mockProjects = [

@@ -1,13 +1,13 @@
 import { RequestHandler, Response } from "express";
 import { Joi, Segments } from "celebrate";
-import { TProjectsItem } from "@kyd/common/api";
+import { TProjectResponse } from "@kyd/common/api";
 import { NotFound, ValidationError } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { getProjectById } from "@/models/project.repository.js";
 
 export type GetProjectController = RequestHandler<
   { projectId: string },
-  TProjectsItem,
+  TProjectResponse,
   any,
   any,
   {}
@@ -15,7 +15,7 @@ export type GetProjectController = RequestHandler<
 
 export const getProjectController: GetProjectController = async (
   req,
-  res: Response<TProjectsItem>,
+  res: Response<TProjectResponse>,
 ) => {
   const { projectId } = req.params;
   if (!Types.ObjectId.isValid(projectId)) {

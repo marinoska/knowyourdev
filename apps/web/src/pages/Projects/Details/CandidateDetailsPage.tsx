@@ -15,7 +15,8 @@ import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
-import { TProjectsItem, TScopes } from "@kyd/common/api";
+import { TScopes } from "@kyd/common/api";
+import { TProject } from "@/api/query/types.ts";
 
 type CandidateDetailsParams = {
   id: string;
@@ -127,7 +128,7 @@ const CandidateDetails = ({
   isLoading,
   isError,
 }: {
-  project?: TProjectsItem;
+  project?: TProject;
   isLoading: boolean;
   isError: boolean;
 }) => {

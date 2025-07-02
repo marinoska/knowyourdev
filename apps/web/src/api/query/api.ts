@@ -4,7 +4,7 @@ import {
   DocumentUploadResponse,
   GetProjectsListResponse,
   GetUploadsListResponse,
-  TProjectsItem,
+  TProjectResponse,
   TProjectsPage,
   TUploadsPage,
   TResumeProfileResponse,
@@ -60,7 +60,7 @@ export const getProjectsProps = async () => {
   return { names };
 };
 
-export const getUploadProfile = async ({ uploadId }: { uploadId: string }) => {
+export const getResumeProfile = async ({ uploadId }: { uploadId: string }) => {
   return apiClient.get<TResumeProfileResponse>(`/document/uploads/${uploadId}`);
 };
 
@@ -68,6 +68,6 @@ export const getProjectProfile = async ({
   projectId,
 }: {
   projectId: string;
-}): Promise<TProjectsItem> => {
-  return apiClient.get<TProjectsItem>(`/document/projects/${projectId}`);
+}): Promise<TProjectResponse> => {
+  return apiClient.get<TProjectResponse>(`/document/projects/${projectId}`);
 };

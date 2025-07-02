@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { uploadsKeys } from "./keys.ts";
-import { getUploadProfile, listUploads } from "./api.ts";
+import { getResumeProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { TResumeProfile } from "@/api/query/types.ts";
 import { GetUploadsListResponse, ScopeType, TScopes } from "@kyd/common/api";
@@ -49,7 +49,7 @@ export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
   const { data, ...rest } = useQuery<TResumeProfile, Error>({
     queryKey: uploadsKeys.profile(uploadId!), // we dont use the query params for now so default it to 0
     queryFn: () =>
-      getUploadProfile({ uploadId: uploadId! }).then((data) => ({
+      getResumeProfile({ uploadId: uploadId! }).then((data) => ({
         ...data,
         jobs: rangeToDate(data.jobs),
         jobGaps: rangeToDate(data.jobGaps),
@@ -62,7 +62,9 @@ export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
         irrelevantJobs: rangeToDate(data.irrelevantJobs),
         jobsWithMissingTech: rangeToDate(data.jobsWithMissingTech),
         jobsWithFilledTech: rangeToDate(data.jobsWithFilledTech),
-        earliestJobStart: data.earliestJobStart ? new Date(data.earliestJobStart) : new Date(),
+        earliestJobStart: data.earliestJobStart
+          ? new Date(data.earliestJobStart)
+          : new Date(),
         scopes: Object.entries(data.scopes).reduce((acc, [key, value]) => {
           acc[key as ScopeType] = {
             ...value,

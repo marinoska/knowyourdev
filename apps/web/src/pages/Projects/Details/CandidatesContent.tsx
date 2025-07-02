@@ -1,5 +1,5 @@
 import Stack from "@mui/joy/Stack";
-import { TProjectsItem, TUploadItem } from "@kyd/common/api";
+import { TUploadItem } from "@kyd/common/api";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import CenteredLoader from "@/components/Loader.tsx";
@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { Done, ReportProblem } from "@mui/icons-material";
 import { CircularProgress } from "@mui/joy";
 import { Regular, Smallest } from "@/components/typography.tsx";
+import { TProject } from "@/api/query/types.ts";
 
 const StatusIcon: Record<string, ReactNode> = {
   pending: <CircularProgress variant="solid" size="sm" />,
@@ -90,7 +91,7 @@ export const CandidatesList = ({ projectId }: { projectId: string }) => {
   );
 };
 
-export const CandidatesContent = ({ project }: { project: TProjectsItem }) => {
+export const CandidatesContent = ({ project }: { project: TProject }) => {
   return <CandidatesList projectId={project._id} />;
 };
 
