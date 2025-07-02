@@ -1,9 +1,9 @@
 import {
   ScopePeriod,
+  ScopeType,
   TScopeActivity,
   TScopes,
-} from "@/pages/Core/ResumeProfileContext.ts";
-import { ScopeType } from "@kyd/common/api";
+} from "@kyd/common/api";
 
 type UseCandidateMatchParams = {
   candidateScopes: TScopes;
@@ -35,19 +35,18 @@ const processCandidateScope = ({
   // sort desc
   const sortedPeriods =
     candidateScope?.periods?.sort(
-      (a, b) =>
-        new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+      (a: ScopePeriod, b: ScopePeriod) => b.start.getTime() - a.start.getTime(),
     ) || [];
 
   const lastPeriods = sortedPeriods.slice(0, MAX_SCORED_YEARS) || [];
 
   const descNormalizedActivityScoreList = lastPeriods.map(
-    ({ totalMonths }) => (totalMonths * 100) / 12,
+    ({ totalMonths }: { totalMonths: number }) => (totalMonths * 100) / 12,
   );
 
   const totalActiveMonth = lastPeriods
-    .map((period) => period.totalMonths)
-    .reduce((acc, val) => acc + val, 0);
+    .map((period: ScopePeriod) => period.totalMonths)
+    .reduce((acc: number, val: number) => acc + val, 0);
 
   // score for all periods
   const { score } = calculateTechFocusScore(lastPeriods);

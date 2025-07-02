@@ -60,6 +60,23 @@ export type ResumeTechProfileType = Pick<
   jobs: ResumeTechProfileJobEntry[];
 };
 
+export type ScopePeriod = {
+  start: Date;
+  end: Date;
+  totalMonths: number;
+  technologies: Array<{
+    name: string;
+    totalMonths: number;
+  }>;
+};
+
+export type TScopeActivity = {
+  periods: ScopePeriod[];
+  years: Record<number, Array<1 | 0>>;
+};
+
+export type TScopes = Record<ScopeType, TScopeActivity>;
+
 export type ResumeTechProfileResponse = {
   uploadId: string;
   createdAt: string;
@@ -70,4 +87,5 @@ export type ResumeTechProfileResponse = {
   jobsWithMissingTech: ResumeTechProfileJobEntry[];
   jobsWithFilledTech: ResumeTechProfileJobEntry[];
   earliestJobStart: Date;
+  scopes: TScopes;
 } & ResumeTechProfileType;

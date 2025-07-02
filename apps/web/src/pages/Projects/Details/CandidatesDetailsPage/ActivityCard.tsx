@@ -3,8 +3,8 @@ import Stack from "@mui/joy/Stack";
 import { ColorPaletteProp } from "@mui/joy/styles";
 import { Small, Subtitle } from "@/components/typography.tsx";
 import { format } from "date-fns";
-import { ScopePeriod } from "@/pages/Core/ResumeProfileContext.ts";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
+import { ScopePeriod } from "@kyd/common/api";
 
 type ActivityTypeProps = {
   scopeName: string;
@@ -24,16 +24,20 @@ export const ActivityCard = ({
   color,
 }: ActivityTypeProps) => {
   const hintList = descActivityPeriods.map(
-    ({ totalMonths, endDate, startDate }) =>
-      `${totalMonths} months within period ${format(startDate, "MM.yy")}-${format(endDate, "MM.yy")} `,
+    ({ totalMonths, end, start }) =>
+      `${totalMonths} months within period ${format(start, "MM.yy")}-${format(end, "MM.yy")} `,
   );
   const pillsCaption =
     descActivityPeriods.length > 0
-      ? `${descActivityPeriods[descActivityPeriods.length - 1].startDate.getFullYear()}-${descActivityPeriods[0].endDate.getFullYear()}`
+      ? `${descActivityPeriods[descActivityPeriods.length - 1].start.getFullYear()}-${descActivityPeriods[0].end.getFullYear()}`
       : "";
 
   const techNameArray = descActivityPeriods
-    .map((period) => period.technologies.map((tech) => tech.name))
+    .map((period) =>
+      period.technologies.map(
+        (tech: { name: string; totalMonths: number }) => tech.name,
+      ),
+    )
     .flat();
   const techNames = Array.from(new Set(techNameArray)).join(", ");
 

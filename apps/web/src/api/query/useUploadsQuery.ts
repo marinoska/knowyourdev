@@ -3,7 +3,7 @@ import { uploadsKeys } from "./keys.ts";
 import { getUploadProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { ProcessedUploadProfile } from "@/api/query/types.ts";
-import { GetUploadsListResponse } from "@kyd/common/api";
+import { GetUploadsListResponse, ScopeType, TScopes } from "@kyd/common/api";
 import { rangeToDate } from "@/utils/dates.ts";
 
 export const useUploadsQuery = ({
@@ -63,6 +63,13 @@ export const useUploadProfileQuery = ({ uploadId }: { uploadId?: string }) => {
         jobsWithMissingTech: rangeToDate(data.jobsWithMissingTech),
         jobsWithFilledTech: rangeToDate(data.jobsWithFilledTech),
         earliestJobStart: new Date(data.earliestJobStart || ""),
+        scopes: Object.entries(data.scopes).reduce((acc, [key, value]) => {
+          acc[key as ScopeType] = {
+            ...value,
+            periods: rangeToDate(value.periods),
+          };
+          return acc;
+        }, {} as TScopes),
       })),
     retry: TIMES_THREE,
     enabled: !!uploadId,

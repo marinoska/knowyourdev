@@ -1,11 +1,12 @@
 import { RequestHandler, Response } from "express";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { Joi, Segments } from "celebrate";
-import { ResumeTechProfileResponse } from "@kyd/common/api";
+import { ResumeTechProfileResponse, TScopes } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { addJobGapsToResponse } from "@/routes/api/document/getProfile/jobGaps.js";
 import { addJobCategoriesToResponse } from "@/routes/api/document/getProfile/jobCategories.js";
+import { addScopesToResponse } from "@/routes/api/document/getProfile/scopes.js";
 
 export type UploadTechProfileController = RequestHandler<
   { uploadId: string },
@@ -42,14 +43,17 @@ export const getUploadTechProfileController: UploadTechProfileController =
       irrelevantJobs: [],
       jobsWithMissingTech: [],
       jobsWithFilledTech: [],
+      scopes: {} as TScopes,
       earliestJobStart: new Date(),
     };
     const responseWithGaps = addJobGapsToResponse(response);
     const responseWithGapsAndCategories =
       addJobCategoriesToResponse(responseWithGaps);
-
+    const responseWithGapsCategoriesAndScopes = addScopesToResponse(
+      responseWithGapsAndCategories,
+    );
     // Send the tech profile in the response
-    res.status(200).json(responseWithGapsAndCategories);
+    res.status(200).json(responseWithGapsCategoriesAndScopes);
   };
 
 export const getTechProfileValidationSchema = {
@@ -64,18 +68,3 @@ export const getTechProfileValidationSchema = {
       }, "MongoDB ObjectId validation"),
   }),
 };
-
-/*
-
-    // Add job categories to the response
-    const responseWithGapsAndCategories =
-      addJobCategoriesToResponse(responseWithGaps);
-
-    // Add scopes to the response
-    const responseWithGapsCategoriesAndScopes = addScopesToResponse(
-      responseWithGapsAndCategories,
-    );
-
-    // Send the tech profile with job gaps, categories, and scopes in the response
-    res.status(200).json(responseWithGapsCategoriesAndScopes);
-*/
