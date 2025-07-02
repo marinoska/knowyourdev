@@ -1,5 +1,5 @@
 import { ReactNode, useMemo } from "react";
-import { Job, ProcessedUploadProfile, TechProfile } from "@/api/query/types.ts";
+import { ProcessedUploadProfile, TechProfile } from "@/api/query/types.ts";
 import { sumRanges } from "@kyd/common";
 import { ScopeType } from "@kyd/common/api";
 import {
@@ -24,48 +24,6 @@ export function ResumeProfileProvider({
   children: ReactNode;
   profile?: ProcessedUploadProfile;
 }) {
-  const [
-    softwareDevelopmentJobs,
-    irrelevantJobs,
-    jobsWithMissingTech,
-    jobsWithFilledTech,
-    earliestJobStart,
-  ] = useMemo(() => {
-    const devJobs: Job[] = [];
-    const otherJobs: Job[] = [];
-    const jobsWithMissingTech: Job[] = [];
-    const jobsWithFilledTech: Job[] = [];
-
-    const sortedJobs = profile?.jobs.sort(
-      (a, b) => a.start.getTime() - b.start.getTime(),
-    );
-
-    const earliestJobStart = sortedJobs?.length
-      ? new Date(sortedJobs[0].start)
-      : new Date();
-
-    for (const job of sortedJobs || []) {
-      if (job.isSoftwareDevelopmentRole) {
-        devJobs.push(job);
-        if (!job.technologies.length) {
-          jobsWithMissingTech.push(job);
-        } else {
-          jobsWithFilledTech.push(job);
-        }
-      } else {
-        otherJobs.push(job);
-      }
-    }
-
-    return [
-      devJobs,
-      otherJobs,
-      jobsWithMissingTech,
-      jobsWithFilledTech,
-      earliestJobStart,
-    ];
-  }, [profile?.jobs]);
-
   const scopes = useMemo<TScopes>(() => {
     const result = {} as TScopes;
     if (!profile?.technologies) {
@@ -111,7 +69,7 @@ export function ResumeProfileProvider({
         addPeriod(scopeData, periodStart, periodEnd, scopeTechnologies[scope]);
         periodStart = subMonths(periodStart, 12);
         periodEnd = subMonths(periodEnd, 12);
-      } while (periodStart >= earliestJobStart);
+      } while (periodStart >= profile?.earliestJobStart);
 
       // Sort periods from the last backwards (most recent first)
       scopeData.periods.sort(
@@ -120,29 +78,23 @@ export function ResumeProfileProvider({
     }
 
     return result;
-  }, [profile?.technologies, profile?.createdAt, earliestJobStart]);
+  }, [profile]);
 
   const context = useMemo(
     () => ({
       profile,
       jobGaps: profile?.jobGaps || [],
-      softwareDevelopmentJobs,
-      irrelevantJobs,
-      jobsWithMissingTech,
-      jobsWithFilledTech,
-      monthsActive: sumRanges(softwareDevelopmentJobs),
+      softwareDevelopmentJobs: profile?.softwareDevelopmentJobs || [],
+      irrelevantJobs: profile?.irrelevantJobs || [],
+      jobsWithMissingTech: profile?.jobsWithMissingTech || [],
+      jobsWithFilledTech: profile?.jobsWithFilledTech || [],
+      earliestJobStart: profile?.earliestJobStart
+        ? new Date(profile.earliestJobStart)
+        : null,
+      monthsActive: sumRanges(profile?.softwareDevelopmentJobs || []),
       scopes,
-      earliestJobStart,
     }),
-    [
-      profile,
-      irrelevantJobs,
-      softwareDevelopmentJobs,
-      jobsWithMissingTech,
-      jobsWithFilledTech,
-      scopes,
-      earliestJobStart,
-    ],
+    [profile, scopes],
   );
 
   return (

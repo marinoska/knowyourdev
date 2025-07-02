@@ -65,4 +65,9 @@ export type ResumeTechProfileResponse = {
   createdAt: string;
   updatedAt: string;
   jobGaps: GapEntry[];
+  softwareDevelopmentJobs: ResumeTechProfileJobEntry[];
+  irrelevantJobs: ResumeTechProfileJobEntry[];
+  jobsWithMissingTech: ResumeTechProfileJobEntry[];
+  jobsWithFilledTech: ResumeTechProfileJobEntry[];
+  earliestJobStart: Date;
 } & ResumeTechProfileType;

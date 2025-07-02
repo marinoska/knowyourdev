@@ -5,6 +5,7 @@ import { ResumeTechProfileResponse } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { addJobGapsToResponse } from "@/routes/api/document/getProfile/jobGaps.js";
+import { addJobCategoriesToResponse } from "@/routes/api/document/getProfile/jobCategories.js";
 
 export type UploadTechProfileController = RequestHandler<
   { uploadId: string },
@@ -37,19 +38,20 @@ export const getUploadTechProfileController: UploadTechProfileController =
       technologies: techProfile.technologies,
       jobs: techProfile.jobs,
       jobGaps: [],
+      softwareDevelopmentJobs: [],
+      irrelevantJobs: [],
+      jobsWithMissingTech: [],
+      jobsWithFilledTech: [],
+      earliestJobStart: new Date(),
     };
-    // Add job gaps to the response
     const responseWithGaps = addJobGapsToResponse(response);
+    const responseWithGapsAndCategories =
+      addJobCategoriesToResponse(responseWithGaps);
 
     // Send the tech profile in the response
-    res.status(200).json(responseWithGaps);
+    res.status(200).json(responseWithGapsAndCategories);
   };
-//
-// jobs: techProfile.jobs.map((job) => ({
-//   ...job,
-//   start: job.start.toISOString(),
-//   end: job.end.toISOString(),
-// })),
+
 export const getTechProfileValidationSchema = {
   [Segments.PARAMS]: Joi.object({
     uploadId: Joi.string()
@@ -64,8 +66,6 @@ export const getTechProfileValidationSchema = {
 };
 
 /*
-    // Add job gaps to the response
-    const responseWithGaps = addJobGapsToResponse(response);
 
     // Add job categories to the response
     const responseWithGapsAndCategories =

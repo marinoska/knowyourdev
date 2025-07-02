@@ -2,7 +2,7 @@ import {
   ResumeTechProfileJobEntry,
   ResumeTechProfileResponse,
   GapEntry,
-} from "@kyd/common";
+} from "@kyd/common/api";
 import { GAP_JOB, GAP_ROLE, Range, mergeRanges } from "@kyd/common";
 import { addDays, differenceInMonths } from "date-fns";
 

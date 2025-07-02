@@ -2,8 +2,9 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { uploadsKeys } from "./keys.ts";
 import { getUploadProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
-import { Job, ProcessedUploadProfile } from "@/api/query/types.ts";
+import { ProcessedUploadProfile } from "@/api/query/types.ts";
 import { GetUploadsListResponse } from "@kyd/common/api";
+import { rangeToDate } from "@/utils/dates.ts";
 
 export const useUploadsQuery = ({
   page,
@@ -50,27 +51,18 @@ export const useUploadProfileQuery = ({ uploadId }: { uploadId?: string }) => {
     queryFn: () =>
       getUploadProfile({ uploadId: uploadId! }).then((data) => ({
         ...data,
-        jobs:
-          data.jobs?.map<Job>((job) => ({
-            ...job,
-            start: new Date(job.start),
-            end: new Date(job.end),
-          })) || [],
-        jobGaps: data.jobGaps.map((gap) => ({
-          ...gap,
-          start: new Date(gap.start),
-          end: new Date(gap.end),
-        })),
+        jobs: rangeToDate(data.jobs),
+        jobGaps: rangeToDate(data.jobGaps),
         technologies: data.technologies.map((tech) => ({
           ...tech,
           totalMonths: tech.totalMonths || 0,
-          jobs:
-            tech.jobs.map((job) => ({
-              ...job,
-              start: job.start,
-              end: job.end,
-            })) || [],
+          jobs: rangeToDate(tech.jobs),
         })),
+        softwareDevelopmentJobs: rangeToDate(data.softwareDevelopmentJobs),
+        irrelevantJobs: rangeToDate(data.irrelevantJobs),
+        jobsWithMissingTech: rangeToDate(data.jobsWithMissingTech),
+        jobsWithFilledTech: rangeToDate(data.jobsWithFilledTech),
+        earliestJobStart: new Date(data.earliestJobStart || ""),
       })),
     retry: TIMES_THREE,
     enabled: !!uploadId,
