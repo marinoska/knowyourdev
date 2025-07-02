@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { uploadsKeys } from "./keys.ts";
 import { getUploadProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
-import { ProcessedUploadProfile } from "@/api/query/types.ts";
+import { TResumeProfile } from "@/api/query/types.ts";
 import { GetUploadsListResponse, ScopeType, TScopes } from "@kyd/common/api";
 import { rangeToDate } from "@/utils/dates.ts";
 
@@ -46,7 +46,7 @@ export const useUploadsQuery = ({
 };
 
 export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
-  const { data, ...rest } = useQuery<ProcessedUploadProfile, Error>({
+  const { data, ...rest } = useQuery<TResumeProfile, Error>({
     queryKey: uploadsKeys.profile(uploadId!), // we dont use the query params for now so default it to 0
     queryFn: () =>
       getUploadProfile({ uploadId: uploadId! }).then((data) => ({

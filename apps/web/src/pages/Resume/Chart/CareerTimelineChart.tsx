@@ -14,15 +14,13 @@ const LegendItems = [
 ];
 
 export const CareerTimelineChart = () => {
-  const chartContext = useResumeProfileContext();
+  const { profile } = useResumeProfileContext();
 
   const chartData = useMemo(() => {
-    chartContext.jobGaps;
-
     const gapsAndJobs = [
-      ...chartContext.jobGaps,
-      ...chartContext.irrelevantJobs,
-      ...chartContext.softwareDevelopmentJobs,
+      ...profile.jobGaps,
+      ...profile.irrelevantJobs,
+      ...profile.softwareDevelopmentJobs,
     ];
     const data = gapsAndJobs.map((job) => {
       const role = job.role || "Undefined Role";
@@ -42,22 +40,20 @@ export const CareerTimelineChart = () => {
       ...data,
     ];
   }, [
-    chartContext.irrelevantJobs,
-    chartContext.jobGaps,
-    chartContext.softwareDevelopmentJobs,
+    profile.irrelevantJobs,
+    profile.jobGaps,
+    profile.softwareDevelopmentJobs,
   ]);
 
   const options = useMemo(() => {
     const irrelevantJobsRowsCount = new Set(
-      chartContext.irrelevantJobs.map((job) => job.role),
+      profile.irrelevantJobs.map((job) => job.role),
     ).size;
     const softwareJobsRowsCount = new Set(
-      chartContext.softwareDevelopmentJobs.map((job) => job.role),
+      profile.softwareDevelopmentJobs.map((job) => job.role),
     ).size;
 
-    const firstGapsColor = chartContext.jobGaps.length
-      ? [YellowLegendColor]
-      : [];
+    const firstGapsColor = profile.jobGaps.length ? [YellowLegendColor] : [];
     return {
       colors: [
         ...firstGapsColor, // Gaps color (first row)
@@ -67,9 +63,9 @@ export const CareerTimelineChart = () => {
       timeline: defaultTimelineOptions,
     };
   }, [
-    chartContext.irrelevantJobs,
-    chartContext.jobGaps.length,
-    chartContext.softwareDevelopmentJobs,
+    profile.irrelevantJobs,
+    profile.jobGaps.length,
+    profile.softwareDevelopmentJobs,
   ]);
 
   return (

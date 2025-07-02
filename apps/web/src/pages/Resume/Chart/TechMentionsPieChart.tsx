@@ -36,14 +36,12 @@ const LegendItems = [
 ];
 
 export const TechMentionsPieChart = () => {
-  const chartContext = useResumeProfileContext();
+  const { profile } = useResumeProfileContext();
 
   const { chartData, sliceColors } = useMemo(() => {
-    const technologies = (chartContext.profile?.technologies || []).sort(
-      (a, b) => {
-        return b.totalMonths - a.totalMonths;
-      },
-    );
+    const technologies = (profile.technologies || []).sort((a, b) => {
+      return b.totalMonths - a.totalMonths;
+    });
 
     const inSkillsAndJobDescription: TechProfile[] = [];
     const inJobDescriptionOnly: TechProfile[] = [];
@@ -80,7 +78,7 @@ export const TechMentionsPieChart = () => {
     inJobDescriptionOnly.forEach((tech) => addTechInDate(tech, SoftGrayColor));
 
     return { chartData: data, sliceColors: colors };
-  }, [chartContext.profile?.technologies]);
+  }, [profile.technologies]);
 
   const options = useMemo(
     () => ({
@@ -97,10 +95,7 @@ export const TechMentionsPieChart = () => {
     [sliceColors],
   );
 
-  if (
-    !chartContext.profile?.technologies ||
-    chartContext.profile.technologies.length === 0
-  ) {
+  if (!profile.technologies || profile.technologies.length === 0) {
     return (
       <Typography level="h4">No technologies available to display.</Typography>
     );
@@ -112,7 +107,7 @@ export const TechMentionsPieChart = () => {
     >
       <Legend title={"Legend"} items={LegendItems} />
 
-      {chartContext.profile?.jobs.length === 0 ? (
+      {!profile.jobs.length ? (
         <Regular>No data available to display the timeline chart.</Regular>
       ) : (
         <Chart

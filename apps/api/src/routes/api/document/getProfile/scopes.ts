@@ -1,5 +1,8 @@
 import {
-  TResumeProfileResponse,
+  TResumeProfileBaseResponse,
+  TResumeProfileGaps,
+  TResumeProfileCategories,
+  TResumeProfileScopes,
   ResumeTechProfileTechnologiesEntry,
   ScopeType,
   TScopeActivity,
@@ -22,7 +25,9 @@ import {
  * @returns Object containing scopes data
  */
 export function calculateScopes(
-  techProfile: TResumeProfileResponse,
+  techProfile: TResumeProfileBaseResponse &
+    TResumeProfileGaps &
+    TResumeProfileCategories,
   earliestJobStart: Date,
 ): TScopes {
   const result = {} as TScopes;
@@ -84,20 +89,19 @@ export function calculateScopes(
 /**
  * Add scopes to the tech profile response
  * @param techProfile The tech profile response with job categories
- * @returns The tech profile response with scopes added
+ * @returns The scopes
  */
-export function addScopesToResponse(
-  techProfile: TResumeProfileResponse & { earliestJobStart?: Date },
-): TResumeProfileResponse {
+export function getProfileScopes(
+  techProfile: TResumeProfileBaseResponse &
+    TResumeProfileGaps &
+    TResumeProfileCategories,
+): TResumeProfileScopes {
   if (!techProfile.earliestJobStart) {
-    return techProfile;
+    return { scopes: {} as TScopes };
   }
 
   const scopes = calculateScopes(techProfile, techProfile.earliestJobStart);
-  return {
-    ...techProfile,
-    scopes,
-  };
+  return { scopes };
 }
 
 // Helper function to add a period with filtered technologies

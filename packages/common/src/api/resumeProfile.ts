@@ -6,7 +6,7 @@ export type ResumeTechProfileTechnologiesEntry = {
   techReference: Schema.Types.ObjectId;
   code: TechCode;
   jobs: ResumeTechProfileTechnologiesJobEntry[];
-  totalMonths?: number;
+  totalMonths: number;
   recentMonths?: number;
   name: string;
   trend: TrendType;
@@ -74,15 +74,29 @@ export type TScopeActivity = {
 
 export type TScopes = Record<ScopeType, TScopeActivity>;
 
-export type TResumeProfileResponse = {
+export type TResumeProfileBaseResponse = TResumeProfile & {
   uploadId: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type TResumeProfileGaps = {
   jobGaps: GapEntry[];
+};
+
+export type TResumeProfileCategories = {
   softwareDevelopmentJobs: ResumeTechProfileJobEntry[];
   irrelevantJobs: ResumeTechProfileJobEntry[];
   jobsWithMissingTech: ResumeTechProfileJobEntry[];
   jobsWithFilledTech: ResumeTechProfileJobEntry[];
   earliestJobStart: Date;
+};
+
+export type TResumeProfileScopes = {
   scopes: TScopes;
-} & TResumeProfile;
+};
+
+export type TResumeProfileResponse = TResumeProfileBaseResponse &
+  TResumeProfileGaps &
+  TResumeProfileCategories &
+  TResumeProfileScopes;

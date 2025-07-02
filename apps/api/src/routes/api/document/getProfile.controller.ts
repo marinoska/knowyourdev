@@ -1,14 +1,17 @@
 import { RequestHandler, Response } from "express";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { Joi, Segments } from "celebrate";
-import { TResumeProfileResponse, TScopes } from "@kyd/common/api";
+import {
+  TResumeProfileResponse,
+  TResumeProfileBaseResponse,
+} from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
-import { addJobGapsToResponse } from "@/routes/api/document/getProfile/jobGaps.js";
-import { addJobCategoriesToResponse } from "@/routes/api/document/getProfile/jobCategories.js";
-import { addScopesToResponse } from "@/routes/api/document/getProfile/scopes.js";
+import { getProfileJobGaps } from "@/routes/api/document/getProfile/jobGaps.js";
+import { getProfileCategories } from "@/routes/api/document/getProfile/jobCategories.js";
+import { getProfileScopes } from "@/routes/api/document/getProfile/scopes.js";
 
-export type UploadTechProfileController = RequestHandler<
+export type ResumeProfileController = RequestHandler<
   { uploadId: string },
   TResumeProfileResponse,
   any,
@@ -16,47 +19,54 @@ export type UploadTechProfileController = RequestHandler<
   {}
 >;
 
-export const getUploadTechProfileController: UploadTechProfileController =
-  async (req, res: Response<TResumeProfileResponse>) => {
-    const { uploadId } = req.params;
+export const getResumeProfileController: ResumeProfileController = async (
+  req,
+  res: Response<TResumeProfileResponse>,
+) => {
+  const { uploadId } = req.params;
 
-    const techProfile = await ResumeTechProfileModel.findOne({
-      uploadRef: uploadId,
-    }).lean();
+  const techProfile = await ResumeTechProfileModel.findOne({
+    uploadRef: uploadId,
+  }).lean();
 
-    if (!techProfile) {
-      throw new NotFound(
-        `TechProfile not found for the provided uploadRef: ${uploadId}`,
-      );
-    }
-
-    const response = {
-      uploadId,
-      fullName: techProfile.fullName,
-      position: techProfile.position,
-      createdAt: techProfile.createdAt.toISOString(),
-      updatedAt: techProfile.updatedAt.toISOString(),
-      technologies: techProfile.technologies,
-      jobs: techProfile.jobs,
-      jobGaps: [],
-      softwareDevelopmentJobs: [],
-      irrelevantJobs: [],
-      jobsWithMissingTech: [],
-      jobsWithFilledTech: [],
-      scopes: {} as TScopes,
-      earliestJobStart: new Date(),
-    };
-    const responseWithGaps = addJobGapsToResponse(response);
-    const responseWithGapsAndCategories =
-      addJobCategoriesToResponse(responseWithGaps);
-    const responseWithGapsCategoriesAndScopes = addScopesToResponse(
-      responseWithGapsAndCategories,
+  if (!techProfile) {
+    throw new NotFound(
+      `TechProfile not found for the provided uploadRef: ${uploadId}`,
     );
-    // Send the tech profile in the response
-    res.status(200).json(responseWithGapsCategoriesAndScopes);
+  }
+
+  const response: TResumeProfileBaseResponse = {
+    uploadId,
+    fullName: techProfile.fullName,
+    position: techProfile.position,
+    createdAt: techProfile.createdAt.toISOString(),
+    updatedAt: techProfile.updatedAt.toISOString(),
+    technologies: techProfile.technologies,
+    jobs: techProfile.jobs,
   };
 
-export const getTechProfileValidationSchema = {
+  const baseResponse = {
+    ...response,
+    ...getProfileJobGaps(response),
+  };
+  // full response
+  const profileCategories = getProfileCategories({
+    ...baseResponse,
+  });
+
+  const profileScopes = getProfileScopes({
+    ...baseResponse,
+    ...profileCategories,
+  });
+
+  res.status(200).json({
+    ...baseResponse,
+    ...profileScopes,
+    ...profileCategories,
+  });
+};
+
+export const getResumeProfileValidationSchema = {
   [Segments.PARAMS]: Joi.object({
     uploadId: Joi.string()
       .required()

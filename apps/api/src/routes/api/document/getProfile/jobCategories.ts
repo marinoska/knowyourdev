@@ -1,6 +1,8 @@
 import {
   ResumeTechProfileJobEntry,
-  TResumeProfileResponse,
+  TResumeProfileBaseResponse,
+  TResumeProfileGaps,
+  TResumeProfileCategories,
 } from "@kyd/common/api";
 
 /**
@@ -57,14 +59,10 @@ export function categorizeJobs(jobs: ResumeTechProfileJobEntry[]) {
 /**
  * Add job categories to the tech profile response
  * @param resumeProfile The tech profile response
- * @returns The tech profile response with job categories added
+ * @returns The job categories
  */
-export function addJobCategoriesToResponse(
-  resumeProfile: TResumeProfileResponse,
-): TResumeProfileResponse {
-  const categories = categorizeJobs(resumeProfile.jobs);
-  return {
-    ...resumeProfile,
-    ...categories,
-  };
+export function getProfileCategories(
+  resumeProfile: TResumeProfileBaseResponse & TResumeProfileGaps,
+): TResumeProfileCategories {
+  return categorizeJobs(resumeProfile.jobs);
 }

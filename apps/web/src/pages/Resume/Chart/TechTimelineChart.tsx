@@ -42,7 +42,7 @@ export const TechTimelineChart = ({
 
     const data = filteredTechnologies
       .map((tech) => {
-        const { years, months } = monthsToYearsAndMonths(tech.totalMonths);
+        const { years, months } = monthsToYearsAndMonths(tech.totalMonths || 0);
         const totalLabel = tech.totalMonths
           ? `${years}y ${months}m`
           : "No duration found";

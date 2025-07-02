@@ -13,10 +13,10 @@ const LegendItems = [
 ];
 
 export const CareerTechTimelineChart = () => {
-  const chartContext = useResumeProfileContext();
+  const { profile } = useResumeProfileContext();
 
   const chartData = useMemo(() => {
-    const missingTechJobsData = chartContext.jobsWithMissingTech.map((job) => {
+    const missingTechJobsData = profile.jobsWithMissingTech.map((job) => {
       return [
         job.role || "Undefined role",
         "No tech specified",
@@ -25,7 +25,7 @@ export const CareerTechTimelineChart = () => {
       ];
     });
 
-    const jobsData = chartContext.jobsWithFilledTech.map((job) => {
+    const jobsData = profile.jobsWithFilledTech.map((job) => {
       const techList = job.technologies.map(
         (tech: { name: string }) => tech.name,
       );
@@ -43,13 +43,13 @@ export const CareerTechTimelineChart = () => {
       ...missingTechJobsData,
       ...jobsData,
     ];
-  }, [chartContext.jobsWithFilledTech, chartContext.jobsWithMissingTech]);
+  }, [profile.jobsWithFilledTech, profile.jobsWithMissingTech]);
 
   const missingTechJobsRowCount = new Set(
-    chartContext.jobsWithMissingTech.map((job) => job.job),
+    profile.jobsWithMissingTech.map((job) => job.job),
   ).size;
   const jobsWithFilledTechRowCount = new Set(
-    chartContext.jobsWithFilledTech.map((job) => job.job),
+    profile.jobsWithFilledTech.map((job) => job.job),
   ).size;
 
   const options = useMemo(() => {

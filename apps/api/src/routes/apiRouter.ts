@@ -16,8 +16,8 @@ import {
   getUploadsListValidationSchema,
 } from "@/routes/api/document/list.controller.js";
 import {
-  getUploadTechProfileController,
-  getTechProfileValidationSchema,
+  getResumeProfileController,
+  getResumeProfileValidationSchema,
 } from "@/routes/api/document/getProfile.controller.js";
 import {
   getProjectsListController,
@@ -48,8 +48,8 @@ apiRouter.get(
 );
 apiRouter.get(
   "/document/uploads/:uploadId",
-  celebrate(getTechProfileValidationSchema),
-  getUploadTechProfileController,
+  celebrate(getResumeProfileValidationSchema),
+  getResumeProfileController,
 );
 apiRouter.get(
   "/document/projects",

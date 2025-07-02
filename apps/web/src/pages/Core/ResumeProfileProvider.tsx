@@ -1,14 +1,17 @@
 import { ReactNode, useMemo } from "react";
-import { ProcessedUploadProfile } from "@/api/query/types.ts";
+import { TResumeProfile } from "@/api/query/types.ts";
 import { sumRanges } from "@kyd/common";
-import { ResumeProfileContext } from "./ResumeProfileContext.ts";
+import {
+  ResumeProfileContext,
+  defaultProfile,
+} from "./ResumeProfileContext.ts";
 
 export function ResumeProfileProvider({
   children,
-  profile,
+  profile = { ...defaultProfile },
 }: {
   children: ReactNode;
-  profile?: ProcessedUploadProfile;
+  profile?: TResumeProfile;
 }) {
   const context = useMemo(
     () => ({

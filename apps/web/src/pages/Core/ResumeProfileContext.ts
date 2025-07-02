@@ -1,13 +1,30 @@
 import { createContext, useContext } from "react";
-import { ProcessedUploadProfile } from "@/api/query/types.ts";
+import { TScopes } from "@kyd/common/api";
+import { TResumeProfile } from "@/api/query/types.ts";
 
 export type ResumeProfileType = {
-  profile?: ProcessedUploadProfile;
+  profile: TResumeProfile;
   monthsActive: number;
 };
 
+export const defaultProfile = {
+  uploadId: "",
+  position: "",
+  fullName: "",
+  jobs: [],
+  jobGaps: [],
+  technologies: [],
+  softwareDevelopmentJobs: [],
+  irrelevantJobs: [],
+  jobsWithMissingTech: [],
+  jobsWithFilledTech: [],
+  earliestJobStart: new Date(),
+  scopes: {} as TScopes,
+  createdAt: Date(),
+  updatedAt: Date(),
+};
 export const ResumeProfileContext = createContext<ResumeProfileType>({
-  profile: undefined,
+  profile: { ...defaultProfile },
   monthsActive: 0,
 });
 
