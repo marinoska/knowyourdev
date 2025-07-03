@@ -1,14 +1,9 @@
-import {
-  ScopePeriod,
-  ScopeType,
-  TScopeActivity,
-  TScopes,
-} from "@kyd/common/api";
+import { ScopePeriod, ScopeType, TScopeActivity } from "@kyd/common/api";
+import { TProject, TResumeProfile } from "@/api/query/types.ts";
 
 type UseCandidateMatchParams = {
-  candidateScopes: TScopes;
-  scopeCodes: ScopeType[];
-  expectedRecentRelevantYears: number;
+  project?: TProject;
+  profile?: TResumeProfile;
 };
 
 export type TTechFocusMatch = {
@@ -19,7 +14,14 @@ export type TTechFocusMatch = {
   maxScore: number;
 };
 
-type TCandidateTechFocusMatch = Record<ScopeType, TTechFocusMatch>;
+export type TCandidateTechFocusMatch = {
+  techFocusMatch: Record<ScopeType, TTechFocusMatch>;
+  techFocusAvgScore: number;
+  overallMatch: number;
+  averageJobDuration: number;
+  baselineJobDuration: number;
+  jobStabilityScore: number;
+};
 
 const MAX_SCORED_YEARS = 10;
 
@@ -66,20 +68,55 @@ const processCandidateScope = ({
 };
 
 export const useCandidateMatch = ({
-  candidateScopes,
-  scopeCodes,
-  expectedRecentRelevantYears,
+  project,
+  profile,
 }: UseCandidateMatchParams): TCandidateTechFocusMatch => {
-  const results: TCandidateTechFocusMatch = {} as TCandidateTechFocusMatch;
+  // If either project or profile is missing, return default empty result
+  if (!project || !profile) {
+    return {
+      techFocusMatch: {} as Record<ScopeType, TTechFocusMatch>,
+      techFocusAvgScore: 0,
+      overallMatch: 0,
+      averageJobDuration: 0,
+      baselineJobDuration: 0,
+      jobStabilityScore: 0,
+    };
+  }
 
-  for (const scopeCode of scopeCodes) {
-    results[scopeCode] = processCandidateScope({
+  const { scopes: candidateScopes, averageJobDuration } = profile;
+  const {
+    techFocus: expectedScopes,
+    expectedRecentRelevantYears,
+    baselineJobDuration,
+  } = project.settings;
+
+  const techFocusMatch = {} as Record<ScopeType, TTechFocusMatch>;
+  let techFocusAvgScore = 0;
+  let overallMatch = 0;
+
+  for (const scopeCode of expectedScopes) {
+    techFocusMatch[scopeCode] = processCandidateScope({
       candidateScope: candidateScopes[scopeCode],
       expectedRecentRelevantYears,
     });
+    techFocusAvgScore += techFocusMatch[scopeCode].overallScore;
   }
+  techFocusAvgScore = techFocusAvgScore / expectedScopes.length;
+  overallMatch = techFocusAvgScore;
 
-  return results;
+  const jobStabilityScore = Math.min(
+    (averageJobDuration / baselineJobDuration) * 100,
+    100,
+  );
+
+  return {
+    techFocusMatch,
+    techFocusAvgScore,
+    overallMatch,
+    averageJobDuration,
+    baselineJobDuration,
+    jobStabilityScore,
+  };
 };
 
 /**

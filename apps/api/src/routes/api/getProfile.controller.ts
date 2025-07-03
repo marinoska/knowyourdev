@@ -4,10 +4,11 @@ import { Joi, Segments } from "celebrate";
 import {
   TResumeProfileResponse,
   TResumeProfileBaseResponse,
-} from "@kyd/common";
+} from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { getProfileJobGaps } from "@/routes/api/getProfile/jobGaps.js";
+import { getProfileJobDuration } from "@/routes/api/getProfile/jobDuration.js";
 import { getProfileCategories } from "@/routes/api/getProfile/jobCategories.js";
 import { getProfileScopes } from "@/routes/api/getProfile/scopes.js";
 
@@ -48,6 +49,7 @@ export const getResumeProfileController: ResumeProfileController = async (
   const baseResponse = {
     ...response,
     ...getProfileJobGaps(response),
+    ...getProfileJobDuration(response),
   };
   // full response
   const profileCategories = getProfileCategories({

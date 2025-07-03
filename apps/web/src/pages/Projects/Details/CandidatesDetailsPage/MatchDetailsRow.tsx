@@ -18,7 +18,7 @@ export const MatchDetailsRow = ({
       alignItems="center"
       justifyContent="space-between"
     >
-      <Small>{text}</Small>
+      <Small sx={{ textTransform: 'capitalize' }}>{text}</Small>
       <Small color={color}>{value}</Small>
     </Stack>
   );

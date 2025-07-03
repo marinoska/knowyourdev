@@ -4,24 +4,33 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { Title } from "@/components/typography.tsx";
 import { LinearProgress } from "@mui/joy";
 import { MatchDetailsRow } from "./MatchDetailsRow.tsx";
+import { TCandidateTechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
 
-export const OverallMatch = () => {
+type TOverallMatch = Pick<
+  TCandidateTechFocusMatch,
+  "techFocusAvgScore" | "overallMatch"
+>;
+
+export const OverallMatch = ({ match }: { match: TOverallMatch }) => {
   return (
     <BasePage.Sheet>
       <Stack direction="column" gap={2}>
-        <Title text="Overall match" />
+        <Title text="Overall tech match" />
         <Typography level="h2" color="success" width="100%" textAlign="center">
-          85%
+          {match.overallMatch.toFixed(2)}%
         </Typography>
         <LinearProgress variant="solid" size="lg" value={85} determinate />
         <Stack gap={0.5}>
-          <MatchDetailsRow value="85%" text="Skills Match" color="success" />
           <MatchDetailsRow
-            value="90%"
-            text="Experience Level"
+            value={`${match.techFocusAvgScore.toFixed(2)}%`}
+            text="Tech focus match"
             color="success"
           />
-          <MatchDetailsRow value="95%" text="Job Stability" color="success" />
+          <MatchDetailsRow
+            value="90%"
+            text="Key technologies Match"
+            color="success"
+          />
         </Stack>
       </Stack>
     </BasePage.Sheet>

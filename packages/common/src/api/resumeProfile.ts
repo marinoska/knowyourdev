@@ -84,6 +84,10 @@ export type TResumeProfileGaps = {
   jobGaps: GapEntry[];
 };
 
+export type TResumeProfileJobDuration = {
+  averageJobDuration: number;
+};
+
 export type TResumeProfileCategories = {
   softwareDevelopmentJobs: ResumeTechProfileJobEntry[];
   irrelevantJobs: ResumeTechProfileJobEntry[];
@@ -98,5 +102,6 @@ export type TResumeProfileScopes = {
 
 export type TResumeProfileResponse = TResumeProfileBaseResponse &
   TResumeProfileGaps &
+  TResumeProfileJobDuration &
   TResumeProfileCategories &
   TResumeProfileScopes;

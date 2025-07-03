@@ -58,7 +58,7 @@ export const mockProjects: TProjectResponse[] = [
     name: "Fullstack E-commerce Platform",
     settings: {
       expectedRecentRelevantYears: 5,
-      baselineJobDuration: 150,
+      baselineJobDuration: 15,
       techFocus: ["FE", "BE", "DO", "CMS"],
       description:
         "Building a complete e-commerce solution with user authentication and payment processing",

@@ -10,12 +10,12 @@ import { ColorPaletteProp } from "@mui/joy/styles";
 
 type TechFocusMatchProps = {
   project?: TProject;
-  techFocusActivities: Record<string, TTechFocusMatch>;
+  techFocusMatch: Record<string, TTechFocusMatch>;
 };
 
 export const TechFocusMatch = ({
   project,
-  techFocusActivities,
+  techFocusMatch,
 }: TechFocusMatchProps) => {
   return (
     <BasePage.Sheet>
@@ -32,7 +32,7 @@ export const TechFocusMatch = ({
           </Small>
         </Box>
         {project?.settings.techFocus.map((scope) => {
-          const techFocusActivity = techFocusActivities[scope];
+          const techFocusActivity = techFocusMatch[scope];
 
           return (
             <ActivityCard

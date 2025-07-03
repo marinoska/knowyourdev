@@ -11,19 +11,18 @@ import Stack from "@mui/joy/Stack";
 import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
 import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
 import { useCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
-import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
-import { TScopes } from "@kyd/common/api";
 import { TProject } from "@/api/query/types.ts";
+import { JobStability } from "@/pages/Projects/Details/CandidatesDetailsPage/JobStability.tsx";
 
 type CandidateDetailsParams = {
   id: string;
   candidateId: string;
 };
 
-export const CandidateDetailsPage = () => {
+export const CandidateMatchPage = () => {
   const { id, candidateId } = useParams<CandidateDetailsParams>();
 
   const candidateQuery = useResumeProfileQuery({ uploadId: candidateId });
@@ -63,26 +62,6 @@ const CareerDetailsAlert = ({ color }: { color: ColorPaletteProp }) => {
         <Small>6 months gap in 2022</Small>
       </Stack>
     </Alert>
-  );
-};
-
-const JobStability = () => {
-  return (
-    <BasePage.Sheet>
-      <Stack direction="column" gap={0.5}>
-        <Title text="Job stability" />
-        <MatchDetailsRow
-          value="18 months"
-          color="neutral"
-          text="Baseline Job Duration"
-        />
-        <MatchDetailsRow
-          value="24 months"
-          color="success"
-          text="Average Job Duration"
-        />
-      </Stack>
-    </BasePage.Sheet>
   );
 };
 
@@ -136,10 +115,8 @@ const CandidateDetails = ({
   const { years, months } = monthsToYearsAndMonths(monthsActive);
 
   const candidateMatch = useCandidateMatch({
-    candidateScopes: profile?.scopes || ({} as TScopes),
-    scopeCodes: project?.settings.techFocus || [],
-    expectedRecentRelevantYears:
-      project?.settings.expectedRecentRelevantYears || 0,
+    project,
+    profile,
   });
 
   return (
@@ -166,14 +143,14 @@ const CandidateDetails = ({
               <KeyStrengths />
               <TechFocusMatch
                 project={project}
-                techFocusActivities={candidateMatch}
+                techFocusMatch={candidateMatch.techFocusMatch}
               />
               <RiskAssessment />
             </Stack>
             <Stack flex={1} direction="column" gap={2}>
-              <OverallMatch />
+              <OverallMatch match={candidateMatch} />
               <RoleSuitability />
-              <JobStability />
+              <JobStability match={candidateMatch} />
               <Actions />
             </Stack>
           </Stack>

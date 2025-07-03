@@ -10,7 +10,11 @@ export const Title = ({
   text?: string;
 }) => {
   return (
-    <Typography textColor="text.secondary" component="h5">
+    <Typography
+      textColor="text.secondary"
+      component="h5"
+      textTransform="capitalize"
+    >
       {children || text}
     </Typography>
   );
@@ -31,12 +35,14 @@ export const Subtitle = ({
 export const Small = ({
   children,
   color,
+  sx,
 }: {
   children: ReactNode;
   color?: ColorPaletteProp;
+  sx?: unknown;
 }) => {
   return (
-    <Typography level="body-sm" color={color}>
+    <Typography level="body-sm" color={color} sx={sx}>
       {children}
     </Typography>
   );

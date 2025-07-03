@@ -9,7 +9,7 @@ import { ResumeList } from "@/pages/Resume/ResumeList.tsx";
 import { ResumeDetailsPage } from "@/pages/Resume/ResumeDetailsPage.tsx";
 import { ProjectsList } from "@/pages/Projects/ProjectsList.tsx";
 import { ProjectDetailsPage } from "@/pages/Projects/Details/ProjectDetailsPage.tsx";
-import { CandidateDetailsPage } from "@/pages/Projects/Details/CandidateDetailsPage.tsx";
+import { CandidateMatchPage } from "@/pages/Projects/Details/CandidateMatchPage.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@mui/joy/Button";
 import KnowYourDevIcon from "@/components/KnowYourDevIcon.tsx";
@@ -88,7 +88,7 @@ export default function App() {
               <Route path="/projects/:id" element={<ProjectDetailsPage />} />
               <Route
                 path="/projects/:id/candidates/:candidateId"
-                element={<CandidateDetailsPage />}
+                element={<CandidateMatchPage />}
               />
               <Route path="/uploads" element={<ResumeList />} />
               <Route path="/uploads/:id" element={<ResumeDetailsPage />} />
