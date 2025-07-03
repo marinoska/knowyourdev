@@ -4,12 +4,12 @@ import { Joi, Segments } from "celebrate";
 import {
   TResumeProfileResponse,
   TResumeProfileBaseResponse,
-} from "@kyd/common/api";
+} from "@kyd/common";
 import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
-import { getProfileJobGaps } from "@/routes/api/document/getProfile/jobGaps.js";
-import { getProfileCategories } from "@/routes/api/document/getProfile/jobCategories.js";
-import { getProfileScopes } from "@/routes/api/document/getProfile/scopes.js";
+import { getProfileJobGaps } from "@/routes/api/getProfile/jobGaps.js";
+import { getProfileCategories } from "@/routes/api/getProfile/jobCategories.js";
+import { getProfileScopes } from "@/routes/api/getProfile/scopes.js";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },

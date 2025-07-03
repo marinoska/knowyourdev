@@ -1,6 +1,6 @@
 import { RequestHandler, Response } from "express";
 import { Joi, Segments } from "celebrate";
-import { TProjectResponse } from "@kyd/common/api";
+import { TProjectResponse } from "@kyd/common";
 import { NotFound, ValidationError } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { getProjectById } from "@/models/project.repository.js";

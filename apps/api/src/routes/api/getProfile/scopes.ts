@@ -7,7 +7,7 @@ import {
   ScopeType,
   TScopeActivity,
   TScopes,
-} from "@kyd/common/api";
+} from "@kyd/common";
 import {
   addMonths,
   differenceInMonths,

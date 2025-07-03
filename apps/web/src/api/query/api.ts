@@ -48,7 +48,7 @@ export const listUploads = async ({
 };
 
 export const listProjects = async ({ page, limit }: ListParams) => {
-  return apiClient.get<GetProjectsListResponse>("/document/projects", {
+  return apiClient.get<GetProjectsListResponse>("/projects", {
     params: { page, limit },
   });
 };
@@ -61,7 +61,7 @@ export const getProjectsProps = async () => {
 };
 
 export const getResumeProfile = async ({ uploadId }: { uploadId: string }) => {
-  return apiClient.get<TResumeProfileResponse>(`/document/uploads/${uploadId}`);
+  return apiClient.get<TResumeProfileResponse>(`/resume/profile/${uploadId}`);
 };
 
 export const getProjectProfile = async ({
@@ -69,5 +69,5 @@ export const getProjectProfile = async ({
 }: {
   projectId: string;
 }): Promise<TProjectResponse> => {
-  return apiClient.get<TProjectResponse>(`/document/projects/${projectId}`);
+  return apiClient.get<TProjectResponse>(`/projects/${projectId}`);
 };

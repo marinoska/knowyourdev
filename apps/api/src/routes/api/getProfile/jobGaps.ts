@@ -4,7 +4,7 @@ import {
   GapEntry,
   TResumeProfileBaseResponse,
   TResumeProfileGaps,
-} from "@kyd/common/api";
+} from "@kyd/common";
 import { GAP_JOB, GAP_ROLE, Range, mergeRanges } from "@kyd/common";
 import { addDays, differenceInMonths } from "date-fns";
 

@@ -3,7 +3,7 @@ import {
   TResumeProfileBaseResponse,
   TResumeProfileGaps,
   TResumeProfileCategories,
-} from "@kyd/common/api";
+} from "@kyd/common";
 
 /**
  * Categorizes jobs into different groups and calculates the earliest job start date

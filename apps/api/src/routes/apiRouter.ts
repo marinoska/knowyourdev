@@ -5,7 +5,7 @@ import { notFoundController } from "./api/notFound.controller.js";
 import {
   documentUploadController,
   documentUploadValidationSchema,
-} from "@/routes/api/document/upload.controller.js";
+} from "@/routes/api/upload.controller.js";
 import { r2Upload } from "@/middleware/r2Upload.middleware.js";
 import {
   FILE_MULTIPART_PARAM,
@@ -14,19 +14,19 @@ import {
 import {
   getUploadsListController,
   getUploadsListValidationSchema,
-} from "@/routes/api/document/list.controller.js";
+} from "@/routes/api/list.controller.js";
 import {
   getResumeProfileController,
   getResumeProfileValidationSchema,
-} from "@/routes/api/document/getProfile.controller.js";
+} from "@/routes/api/getProfile.controller.js";
 import {
   getProjectsListController,
   getProjectsListValidationSchema,
-} from "@/routes/api/document/projects.controller.js";
+} from "@/routes/api/projects.controller.js";
 import {
   getProjectController,
   getProjectValidationSchema,
-} from "@/routes/api/document/getProject.controller.js";
+} from "@/routes/api/getProject.controller.js";
 // import { loadAuthenticatedUser } from 'nftit/User/loadAuthenticatedUser.middleware';
 
 const validateOptions = { abortEarly: false };
@@ -47,17 +47,17 @@ apiRouter.get(
   getUploadsListController,
 );
 apiRouter.get(
-  "/document/uploads/:uploadId",
+  "/resume/profile/:uploadId",
   celebrate(getResumeProfileValidationSchema),
   getResumeProfileController,
 );
 apiRouter.get(
-  "/document/projects",
+  "/projects",
   celebrate(getProjectsListValidationSchema),
   getProjectsListController,
 );
 apiRouter.get(
-  "/document/projects/:projectId",
+  "/projects/:projectId",
   celebrate(getProjectValidationSchema),
   getProjectController,
 );

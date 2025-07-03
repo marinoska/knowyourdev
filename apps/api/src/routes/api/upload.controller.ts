@@ -2,10 +2,7 @@ import { Joi, Segments } from "celebrate";
 import type { Response, Request, RequestHandler } from "express";
 import { TUploadDocument, UploadModel } from "@/models/upload.model.js";
 import { Types } from "mongoose";
-import {
-  DocumentUploadRequestBody,
-  DocumentUploadResponse,
-} from "@kyd/common/api";
+import { DocumentUploadRequestBody, DocumentUploadResponse } from "@kyd/common";
 import { processUpload } from "@/chain/extraction/runner.js";
 import { ValidationError } from "@/app/errors.js";
 import { getProjectById } from "@/models/project.repository.js";
