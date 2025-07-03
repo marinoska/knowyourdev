@@ -88,6 +88,7 @@ export const useCandidateMatch = ({
     techFocus: expectedScopes,
     expectedRecentRelevantYears,
     baselineJobDuration,
+    technologies,
   } = project.settings;
 
   const techFocusMatch = {} as Record<ScopeType, TTechFocusMatch>;

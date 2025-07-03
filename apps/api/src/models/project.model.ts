@@ -17,6 +17,14 @@ const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
       techFocus: [{ type: String, enum: SCOPE }],
       description: { type: String, default: "" },
       expectedRecentRelevantYears: { type: Number, default: 5 },
+      technologies: {
+        type: [{
+          ref: { type: Schema.Types.ObjectId, ref: "TechList", required: true },
+          code: { type: String, required: true },
+          name: { type: String, required: true },
+        }],
+        default: [],
+      },
     },
     candidates: [{ type: Schema.Types.ObjectId, ref: "Upload", default: [] }],
   },

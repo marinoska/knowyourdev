@@ -8,6 +8,11 @@ export type TProject = {
     techFocus: ScopeType[];
     description: string;
     expectedRecentRelevantYears: number;
+    technologies: Array<{
+      ref: string;
+      code: string;
+      name: string;
+    }>;
   };
   candidates: string[];
 };

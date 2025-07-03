@@ -24,6 +24,7 @@ export const getProjects = async ({
     .sort({ createdAt: sortOrder === "asc" ? 1 : -1 })
     .skip(skip)
     .limit(limit)
+    .populate('settings.technologies.ref')
     .lean();
 
   const totalRecords = await ProjectModel.countDocuments({});
@@ -37,7 +38,9 @@ export const getProjects = async ({
 };
 
 export const getProjectById = async (id: string) => {
-  return ProjectModel.findById(id).lean();
+  return ProjectModel.findById(id)
+    .populate('settings.technologies.ref')
+    .lean();
 };
 
 export const createProject = async (projectData: {

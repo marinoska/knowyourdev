@@ -21,6 +21,19 @@ export const ProjectSettingsContent = ({ project }: { project: TProject }) => {
         ))}
       </Stack>
 
+      <Title>Technologies</Title>
+      <Stack direction="row" gap={1} flexWrap="wrap">
+        {project.settings?.technologies && project.settings.technologies.length > 0 ? (
+          project.settings.technologies.map((tech) => (
+            <Chip key={tech.code} variant="soft" color="primary" size="md">
+              {tech.name}
+            </Chip>
+          ))
+        ) : (
+          <Regular>No technologies specified.</Regular>
+        )}
+      </Stack>
+
       <Title>Baseline Job Duration</Title>
       <Regular>{project.settings?.baselineJobDuration} months</Regular>
 
