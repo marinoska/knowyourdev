@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import { Range } from "../utils/index.js";
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
 import { ExtractedCVData, GapEntry, JobEntry } from "./resumeData.js";
 
@@ -57,9 +58,7 @@ export type TResumeProfile = Pick<ExtractedCVData, "position" | "fullName"> & {
   jobs: ResumeTechProfileJobEntry[];
 };
 
-export type ScopePeriod = {
-  start: Date;
-  end: Date;
+export type ActivityPeriod = Range & {
   totalMonths: number;
   technologies: Array<{
     name: string;
@@ -67,12 +66,18 @@ export type ScopePeriod = {
   }>;
 };
 
-export type TScopeActivity = {
-  periods: ScopePeriod[];
+export type TTechFocusTimeline = {
+  periods: ActivityPeriod[];
   years: Record<number, Array<1 | 0>>;
 };
 
-export type TScopes = Record<ScopeType, TScopeActivity>;
+export type TTechTimeline = {
+  periods: ActivityPeriod[];
+  years: Record<number, Array<1 | 0>>;
+};
+
+export type TTechFocusUsage = Record<ScopeType, TTechFocusTimeline>;
+export type TTechUsage = Record<string, TTechTimeline>;
 
 export type TResumeProfileBaseResponse = TResumeProfile & {
   uploadId: string;
@@ -96,12 +101,17 @@ export type TResumeProfileCategories = {
   earliestJobStart: Date;
 };
 
-export type TResumeProfileScopes = {
-  scopes: TScopes;
+export type TResumeProfileTechFocusUsage = {
+  scopes: TTechFocusUsage;
+};
+
+export type TResumeProfileTechUsage = {
+  techUsage: TTechUsage;
 };
 
 export type TResumeProfileResponse = TResumeProfileBaseResponse &
   TResumeProfileGaps &
   TResumeProfileJobDuration &
   TResumeProfileCategories &
-  TResumeProfileScopes;
+  TResumeProfileTechFocusUsage &
+  TResumeProfileTechUsage;

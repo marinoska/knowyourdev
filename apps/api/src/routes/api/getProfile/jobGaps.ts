@@ -1,11 +1,16 @@
 import {
   ResumeTechProfileJobEntry,
-  TResumeProfileResponse,
   GapEntry,
   TResumeProfileBaseResponse,
   TResumeProfileGaps,
+} from "@kyd/common/api";
+import {
+  GAP_JOB,
+  GAP_ROLE,
+  Range,
+  mergeRanges,
+  sortRangesAsc,
 } from "@kyd/common";
-import { GAP_JOB, GAP_ROLE, Range, mergeRanges } from "@kyd/common";
 import { addDays, differenceInMonths } from "date-fns";
 
 /**
@@ -34,11 +39,9 @@ export function calculateJobGaps(
 export function getJobGaps(
   jobs: ResumeTechProfileJobEntry[],
 ): (Range & { months: number })[] {
-  const sortedJobs = jobs.sort(
-    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
-  );
+  const sortedJobs = sortRangesAsc(jobs);
   const mergedAndSorted = mergeRanges(
-    sortedJobs.map((job) => ({
+    sortedJobs.map((job: ResumeTechProfileJobEntry) => ({
       start: job.start,
       end: job.end,
     })),

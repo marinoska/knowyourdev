@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { TScopes } from "@kyd/common/api";
+import { TTechFocusUsage, TTechUsage } from "@kyd/common/api";
 import { TResumeProfile } from "@/api/query/types.ts";
 
 export type ResumeProfileType = {
@@ -19,9 +19,11 @@ export const defaultProfile = {
   jobsWithMissingTech: [],
   jobsWithFilledTech: [],
   earliestJobStart: new Date(),
-  scopes: {} as TScopes,
+  scopes: {} as TTechFocusUsage,
   createdAt: Date(),
   updatedAt: Date(),
+  averageJobDuration: 0,
+  techUsage: {} as TTechUsage,
 };
 export const ResumeProfileContext = createContext<ResumeProfileType>({
   profile: { ...defaultProfile },

@@ -10,6 +10,7 @@ import { Small, Subtitle, Title } from "@/components/typography.tsx";
 import Stack from "@mui/joy/Stack";
 import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
 import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
+import { TechMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechMatch.tsx";
 import { useCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
@@ -144,6 +145,10 @@ const CandidateDetails = ({
               <TechFocusMatch
                 project={project}
                 techFocusMatch={candidateMatch.techFocusMatch}
+              />
+              <TechMatch
+                project={project}
+                techMatch={candidateMatch.techMatch}
               />
               <RiskAssessment />
             </Stack>

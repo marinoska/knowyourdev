@@ -1,9 +1,10 @@
+import { sortRangesAsc } from "@kyd/common";
 import {
   ResumeTechProfileJobEntry,
   TResumeProfileBaseResponse,
   TResumeProfileGaps,
   TResumeProfileCategories,
-} from "@kyd/common";
+} from "@kyd/common/api";
 
 /**
  * Categorizes jobs into different groups and calculates the earliest job start date
@@ -21,9 +22,7 @@ export function categorizeJobs(jobs: ResumeTechProfileJobEntry[]) {
     };
   }
 
-  const sortedJobs = jobs.sort(
-    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
-  );
+  const sortedJobs = sortRangesAsc(jobs);
 
   const devJobs: ResumeTechProfileJobEntry[] = [];
   const otherJobs: ResumeTechProfileJobEntry[] = [];

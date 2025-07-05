@@ -4,12 +4,12 @@ import { ColorPaletteProp } from "@mui/joy/styles";
 import { Small, Subtitle } from "@/components/typography.tsx";
 import { format } from "date-fns";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
-import { ScopePeriod } from "@kyd/common/api";
+import { ActivityPeriod } from "@kyd/common/api";
 
 type ActivityTypeProps = {
   scopeName: string;
   descNormalizedActivityScoreList: number[];
-  descActivityPeriods: ScopePeriod[];
+  descActivityPeriods: ActivityPeriod[];
   totalActiveMonths: number;
   overallScore: number;
   color: ColorPaletteProp;

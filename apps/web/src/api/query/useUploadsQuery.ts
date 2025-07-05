@@ -3,7 +3,7 @@ import { uploadsKeys } from "./keys.ts";
 import { getResumeProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { TResumeProfile } from "@/api/query/types.ts";
-import { GetUploadsListResponse, ScopeType, TScopes } from "@kyd/common/api";
+import { GetUploadsListResponse, ScopeType, TTechFocusUsage } from "@kyd/common/api";
 import { rangeToDate } from "@/utils/dates.ts";
 
 export const useUploadsQuery = ({
@@ -71,7 +71,7 @@ export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
             periods: rangeToDate(value.periods),
           };
           return acc;
-        }, {} as TScopes),
+        }, {} as TTechFocusUsage),
       })),
     retry: TIMES_THREE,
     enabled: !!uploadId,

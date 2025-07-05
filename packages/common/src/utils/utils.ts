@@ -5,12 +5,15 @@ export type Range = {
   end: Date;
 };
 
-export function mergeRanges(ranges: Range[]): Range[] {
-  if (!ranges.length) {
+export const sortRangesAsc = <T extends Range>(ranges: T[]) =>
+  [...ranges].sort((a, b) => a.start.getTime() - b.start.getTime());
+
+export function mergeRanges<T extends Range>(inputRanges: T[]): Range[] {
+  if (!inputRanges.length) {
     return [];
   }
-  // Sort ranges by their start dates
-  ranges.sort((a, b) => a.start.getTime() - b.start.getTime());
+  const ranges = sortRangesAsc(inputRanges);
+  // ranges.sort((a, b) => a.start.getTime() - b.start.getTime());
 
   const merged = [ranges[0]]; // Initialize with the first range
 

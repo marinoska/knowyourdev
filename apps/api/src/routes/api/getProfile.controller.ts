@@ -11,6 +11,7 @@ import { getProfileJobGaps } from "@/routes/api/getProfile/jobGaps.js";
 import { getProfileJobDuration } from "@/routes/api/getProfile/jobDuration.js";
 import { getProfileCategories } from "@/routes/api/getProfile/jobCategories.js";
 import { getProfileScopes } from "@/routes/api/getProfile/scopes.js";
+import { getProfileTechActivity } from "@/routes/api/getProfile/techActivity.js";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },
@@ -61,10 +62,16 @@ export const getResumeProfileController: ResumeProfileController = async (
     ...profileCategories,
   });
 
+  const profileTechActivity = getProfileTechActivity({
+    ...baseResponse,
+    ...profileCategories,
+  });
+
   res.status(200).json({
     ...baseResponse,
     ...profileScopes,
     ...profileCategories,
+    ...profileTechActivity,
   });
 };
 

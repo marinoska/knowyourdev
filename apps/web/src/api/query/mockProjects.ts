@@ -10,6 +10,7 @@ export const mockProjects: TProjectResponse[] = [
       description:
         "Building a modern web application with React frontend and Node.js backend",
       expectedRecentRelevantYears: 5,
+      technologies: [],
     },
     candidates: [],
     createdAt: new Date(2023, 0, 15).toISOString(),
@@ -23,6 +24,7 @@ export const mockProjects: TProjectResponse[] = [
       techFocus: ["ANDR", "IOS"],
       description:
         "Developing a cross-platform mobile application for Android and iOS",
+      technologies: [],
     },
     candidates: [],
     createdAt: new Date(2023, 1, 20).toISOString(),
@@ -36,6 +38,7 @@ export const mockProjects: TProjectResponse[] = [
       techFocus: ["AI", "ML"],
       description:
         "Research and development of machine learning algorithms for data analysis",
+      technologies: [],
     },
     candidates: [],
     createdAt: new Date(2023, 2, 10).toISOString(),
@@ -49,6 +52,7 @@ export const mockProjects: TProjectResponse[] = [
       techFocus: ["DO", "SYS"],
       description:
         "Setting up CI/CD pipelines and cloud infrastructure for application deployment",
+      technologies: [],
     },
     candidates: [],
     createdAt: new Date(2023, 3, 5).toISOString(),
@@ -62,6 +66,7 @@ export const mockProjects: TProjectResponse[] = [
       techFocus: ["FE", "BE", "DO", "CMS"],
       description:
         "Building a complete e-commerce solution with user authentication and payment processing",
+      technologies: [],
     },
     candidates: [],
     createdAt: new Date(2023, 4, 25).toISOString(),

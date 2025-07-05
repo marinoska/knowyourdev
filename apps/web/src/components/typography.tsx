@@ -1,5 +1,6 @@
 import Typography from "@mui/joy/Typography";
 import { ColorPaletteProp } from "@mui/joy/styles";
+import { SxProps } from "@mui/joy/styles/types";
 import { ReactNode } from "react";
 
 export const Title = ({
@@ -39,7 +40,7 @@ export const Small = ({
 }: {
   children: ReactNode;
   color?: ColorPaletteProp;
-  sx?: unknown;
+  sx?: SxProps;
 }) => {
   return (
     <Typography level="body-sm" color={color} sx={sx}>

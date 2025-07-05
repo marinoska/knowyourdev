@@ -1,7 +1,10 @@
 import { Joi, Segments } from "celebrate";
 
 import { Request, Response, RequestHandler } from "express";
-import { GetUploadsListQueryParams, GetUploadsListResponse } from "@kyd/common";
+import {
+  GetUploadsListQueryParams,
+  GetUploadsListResponse,
+} from "@kyd/common/api";
 import { getUploadsWithDetails } from "@/models/upload.repository.js";
 
 export const getUploadsListController: RequestHandler<

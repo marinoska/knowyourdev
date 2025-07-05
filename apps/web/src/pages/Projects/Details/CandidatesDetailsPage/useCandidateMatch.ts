@@ -1,5 +1,12 @@
-import { ScopePeriod, ScopeType, TScopeActivity } from "@kyd/common/api";
+import {
+  ResumeTechProfileTechnologiesEntry,
+  ActivityPeriod,
+  ScopeType,
+  TTechFocusTimeline,
+  TTechTimeline,
+} from "@kyd/common/api";
 import { TProject, TResumeProfile } from "@/api/query/types.ts";
+import { sortRangesAsc } from "@kyd/common";
 
 type UseCandidateMatchParams = {
   project?: TProject;
@@ -8,7 +15,15 @@ type UseCandidateMatchParams = {
 
 export type TTechFocusMatch = {
   descNormalizedActivityScoreList: number[];
-  descActivityPeriods: ScopePeriod[];
+  descActivityPeriods: ActivityPeriod[];
+  totalActiveMonths: number;
+  overallScore: number;
+  maxScore: number;
+};
+
+export type TTechMatch = {
+  descNormalizedActivityScoreList: number[];
+  descActivityPeriods: ActivityPeriod[];
   totalActiveMonths: number;
   overallScore: number;
   maxScore: number;
@@ -17,6 +32,8 @@ export type TTechFocusMatch = {
 export type TCandidateTechFocusMatch = {
   techFocusMatch: Record<ScopeType, TTechFocusMatch>;
   techFocusAvgScore: number;
+  techMatch: Record<string, TTechMatch>;
+  techMatchAvgScore: number;
   overallMatch: number;
   averageJobDuration: number;
   baselineJobDuration: number;
@@ -26,7 +43,7 @@ export type TCandidateTechFocusMatch = {
 const MAX_SCORED_YEARS = 10;
 
 type ProcessCandidateScopeInput = {
-  candidateScope: TScopeActivity;
+  candidateScope: TTechFocusTimeline;
   expectedRecentRelevantYears: number;
 };
 
@@ -34,11 +51,15 @@ const processCandidateScope = ({
   candidateScope = { periods: [], years: [] },
   expectedRecentRelevantYears,
 }: ProcessCandidateScopeInput): TTechFocusMatch => {
-  // sort desc
-  const sortedPeriods =
-    candidateScope?.periods?.sort(
-      (a: ScopePeriod, b: ScopePeriod) => b.start.getTime() - a.start.getTime(),
-    ) || [];
+  // Ensure dates are properly converted to Date objects
+  const periodsWithDates =
+    candidateScope?.periods?.map((period) => ({
+      ...period,
+      start: new Date(period.start),
+      end: new Date(period.end),
+    })) || [];
+
+  const sortedPeriods = sortRangesAsc(periodsWithDates);
 
   const lastPeriods = sortedPeriods.slice(0, MAX_SCORED_YEARS) || [];
 
@@ -47,7 +68,7 @@ const processCandidateScope = ({
   );
 
   const totalActiveMonth = lastPeriods
-    .map((period: ScopePeriod) => period.totalMonths)
+    .map((period: ActivityPeriod) => period.totalMonths)
     .reduce((acc: number, val: number) => acc + val, 0);
 
   // score for all periods
@@ -67,6 +88,70 @@ const processCandidateScope = ({
   };
 };
 
+const restructureProfileTechnologies = (
+  profileTechnologies: ResumeTechProfileTechnologiesEntry[],
+): Record<string, ResumeTechProfileTechnologiesEntry> => {
+  const techMap: Record<string, ResumeTechProfileTechnologiesEntry> = {};
+  profileTechnologies.forEach((tech) => {
+    techMap[tech.code] = tech;
+  });
+
+  return techMap;
+};
+
+/**
+ * Calculate technology match score
+ */
+const calculateTechMatch = (
+  profileTech: ResumeTechProfileTechnologiesEntry,
+  expectedRecentRelevantYears: number,
+  techTimeline?: TTechTimeline,
+): TTechMatch => {
+  // Convert tech jobs to periods format similar to scopes
+  const periods: ActivityPeriod[] = profileTech.jobs.map((job) => ({
+    start: job.start,
+    end: job.end,
+    totalMonths: Math.floor(
+      (job.end.getTime() - job.start.getTime()) / (1000 * 60 * 60 * 24 * 30),
+    ),
+    technologies: [],
+  }));
+
+  const sortedPeriods = sortRangesAsc(periods);
+
+  // Calculate score using the same logic as for scopes
+  const { score } = calculateTechFocusScore(sortedPeriods);
+  const maxScore = calculateMaxScoreForYears(expectedRecentRelevantYears);
+  const overallScore = Math.min((score / maxScore) * 100, 100);
+
+  // Use tech activity data if available, otherwise use calculated periods
+  // Ensure dates are properly converted to Date objects
+  const descActivityPeriods = techTimeline?.periods
+    ? techTimeline.periods.map((period) => ({
+        ...period,
+        start: new Date(period.start),
+        end: new Date(period.end),
+      }))
+    : sortedPeriods;
+  const lastPeriods = descActivityPeriods.slice(0, MAX_SCORED_YEARS) || [];
+
+  const descNormalizedActivityScoreList = lastPeriods.map(
+    ({ totalMonths }: { totalMonths: number }) => (totalMonths * 100) / 12,
+  );
+
+  const totalActiveMonth = lastPeriods
+    .map((period: ActivityPeriod) => period.totalMonths)
+    .reduce((acc: number, val: number) => acc + val, 0);
+
+  return {
+    descNormalizedActivityScoreList,
+    descActivityPeriods: lastPeriods,
+    totalActiveMonths: totalActiveMonth,
+    overallScore,
+    maxScore,
+  };
+};
+
 export const useCandidateMatch = ({
   project,
   profile,
@@ -76,6 +161,8 @@ export const useCandidateMatch = ({
     return {
       techFocusMatch: {} as Record<ScopeType, TTechFocusMatch>,
       techFocusAvgScore: 0,
+      techMatch: {} as Record<string, TTechMatch>,
+      techMatchAvgScore: 0,
       overallMatch: 0,
       averageJobDuration: 0,
       baselineJobDuration: 0,
@@ -83,17 +170,22 @@ export const useCandidateMatch = ({
     };
   }
 
-  const { scopes: candidateScopes, averageJobDuration } = profile;
+  const {
+    scopes: candidateScopes,
+    averageJobDuration,
+    technologies: profileTechnologies,
+    techUsage,
+  } = profile;
   const {
     techFocus: expectedScopes,
     expectedRecentRelevantYears,
     baselineJobDuration,
-    technologies,
+    technologies: projectTechnologies,
   } = project.settings;
 
+  // Process scope matches
   const techFocusMatch = {} as Record<ScopeType, TTechFocusMatch>;
   let techFocusAvgScore = 0;
-  let overallMatch = 0;
 
   for (const scopeCode of expectedScopes) {
     techFocusMatch[scopeCode] = processCandidateScope({
@@ -102,8 +194,43 @@ export const useCandidateMatch = ({
     });
     techFocusAvgScore += techFocusMatch[scopeCode].overallScore;
   }
-  techFocusAvgScore = techFocusAvgScore / expectedScopes.length;
-  overallMatch = techFocusAvgScore;
+  techFocusAvgScore = techFocusAvgScore / expectedScopes.length || 0;
+
+  // Process technology matches
+  const keyProfileTechnologies =
+    restructureProfileTechnologies(profileTechnologies);
+  const techMatch = {} as Record<string, TTechMatch>;
+  let techMatchAvgScore = 0;
+  let techMatchCount = 0;
+
+  for (const projectTech of projectTechnologies) {
+    const profileTech = keyProfileTechnologies[projectTech.code];
+    if (profileTech) {
+      // Get tech activity data if available
+      const techActivity = techUsage?.[projectTech.code];
+
+      techMatch[projectTech.code] = calculateTechMatch(
+        profileTech,
+        expectedRecentRelevantYears,
+        techActivity,
+      );
+      techMatchAvgScore += techMatch[projectTech.code].overallScore;
+      techMatchCount++;
+    } else {
+      techMatch[projectTech.code] = {
+        overallScore: 0,
+        maxScore: 0,
+        descNormalizedActivityScoreList: [],
+        descActivityPeriods: [],
+        totalActiveMonths: 0,
+      };
+    }
+  }
+  techMatchAvgScore =
+    techMatchCount > 0 ? techMatchAvgScore / techMatchCount : 0;
+
+  // Calculate overall match as average of scope and tech matches
+  const overallMatch = (techFocusAvgScore + techMatchAvgScore) / 2;
 
   const jobStabilityScore = Math.min(
     (averageJobDuration / baselineJobDuration) * 100,
@@ -113,6 +240,8 @@ export const useCandidateMatch = ({
   return {
     techFocusMatch,
     techFocusAvgScore,
+    techMatch,
+    techMatchAvgScore,
     overallMatch,
     averageJobDuration,
     baselineJobDuration,
@@ -124,7 +253,7 @@ export const useCandidateMatch = ({
  * Calculate recency-weighted score and max score for a given tech.
  */
 const calculateTechFocusScore = (
-  periods: ScopePeriod[],
+  periods: ActivityPeriod[],
 ): { score: number; maxScore: number } => {
   let score = 0;
   let maxScore = 0;

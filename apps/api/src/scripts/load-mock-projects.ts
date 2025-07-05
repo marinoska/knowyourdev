@@ -2,7 +2,6 @@ import "dotenv/config";
 import { connected, stopMongoClient, db } from "@/app/mongo.js";
 import { ProjectModel } from "@/models/project.model.js";
 import { TechListModel } from "@/models/techList.model.js";
-import { TProjectResponse } from "@kyd/common/api";
 
 // Mock projects data from mockProjects.ts
 const mockProjects = [
@@ -99,52 +98,98 @@ const loadMockProjects = async () => {
     const allTechnologies = await TechListModel.find({});
 
     // Create a map of technology name to technology object for easier lookup
-    const techByName = {};
-    allTechnologies.forEach(tech => {
+    const techByName: { [key: string]: { ref: any; code: string; name: string } } = {};
+    allTechnologies.forEach((tech) => {
       techByName[tech.name] = {
         ref: tech._id,
         code: tech.code,
-        name: tech.name
+        name: tech.name,
       };
     });
 
     // Define relevant technologies for each project
-    const projectsWithTechnologies = mockProjects.map(project => {
-      let technologies = [];
+    const projectsWithTechnologies = mockProjects.map((project) => {
+      let technologies: { ref: any; code: string; name: string }[] = [];
 
       // Assign specific technologies based on project name
       if (project.name === "Web Application Development") {
         // Modern web app with React frontend and Node.js backend
-        const relevantTechNames = ["JavaScript", "TypeScript", "React.js", "Node.js", "Express.js", "MongoDB", "PostgreSQL"];
-        technologies = relevantTechNames.map(name => techByName[name]).filter(Boolean);
-      } 
-      else if (project.name === "Mobile App Development") {
+        const relevantTechNames = [
+          "JavaScript",
+          "TypeScript",
+          "React.js",
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "PostgreSQL",
+        ];
+        technologies = relevantTechNames
+          .map((name) => techByName[name])
+          .filter(Boolean);
+      } else if (project.name === "Mobile App Development") {
         // Cross-platform mobile app for Android and iOS
-        const relevantTechNames = ["React Native", "Flutter", "Swift", "Kotlin", "JavaScript", "TypeScript"];
-        technologies = relevantTechNames.map(name => techByName[name]).filter(Boolean);
-      }
-      else if (project.name === "AI Research Project") {
+        const relevantTechNames = [
+          "React Native",
+          "Flutter",
+          "Swift",
+          "Kotlin",
+          "JavaScript",
+          "TypeScript",
+        ];
+        technologies = relevantTechNames
+          .map((name) => techByName[name])
+          .filter(Boolean);
+      } else if (project.name === "AI Research Project") {
         // AI/ML research project
-        const relevantTechNames = ["Python", "TensorFlow", "PyTorch", "NumPy", "Pandas", "Scikit-Learn"];
-        technologies = relevantTechNames.map(name => techByName[name]).filter(Boolean);
-      }
-      else if (project.name === "DevOps Infrastructure Setup") {
+        const relevantTechNames = [
+          "Python",
+          "TensorFlow",
+          "PyTorch",
+          "NumPy",
+          "Pandas",
+          "Scikit-Learn",
+        ];
+        technologies = relevantTechNames
+          .map((name) => techByName[name])
+          .filter(Boolean);
+      } else if (project.name === "DevOps Infrastructure Setup") {
         // DevOps and infrastructure
-        const relevantTechNames = ["Docker", "Kubernetes", "Terraform", "AWS", "GCP", "Ansible", "Bash/Shell"];
-        technologies = relevantTechNames.map(name => techByName[name]).filter(Boolean);
-      }
-      else if (project.name === "Fullstack E-commerce Platform") {
+        const relevantTechNames = [
+          "Docker",
+          "Kubernetes",
+          "Terraform",
+          "AWS",
+          "GCP",
+          "Ansible",
+          "Bash/Shell",
+        ];
+        technologies = relevantTechNames
+          .map((name) => techByName[name])
+          .filter(Boolean);
+      } else if (project.name === "Fullstack E-commerce Platform") {
         // Fullstack e-commerce platform
-        const relevantTechNames = ["JavaScript", "TypeScript", "React.js", "Node.js", "PostgreSQL", "MongoDB", "Next.js", "AWS", "Docker"];
-        technologies = relevantTechNames.map(name => techByName[name]).filter(Boolean);
+        const relevantTechNames = [
+          "JavaScript",
+          "TypeScript",
+          "React.js",
+          "Node.js",
+          "PostgreSQL",
+          "MongoDB",
+          "Next.js",
+          "AWS",
+          "Docker",
+        ];
+        technologies = relevantTechNames
+          .map((name) => techByName[name])
+          .filter(Boolean);
       }
 
       return {
         ...project,
         settings: {
           ...project.settings,
-          technologies
-        }
+          technologies,
+        },
       };
     });
 

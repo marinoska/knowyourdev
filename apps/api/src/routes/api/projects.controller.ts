@@ -1,6 +1,6 @@
 import { Joi, Segments } from "celebrate";
 import { Request, Response, RequestHandler } from "express";
-import { GetProjectsListResponse } from "@kyd/common";
+import { GetProjectsListResponse } from "@kyd/common/api";
 import { getProjects } from "@/models/project.repository.js";
 
 // Define query params type locally to match the structure in common package
