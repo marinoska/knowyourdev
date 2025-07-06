@@ -8,6 +8,9 @@ export type Range = {
 export const sortRangesAsc = <T extends Range>(ranges: T[]) =>
   [...ranges].sort((a, b) => a.start.getTime() - b.start.getTime());
 
+export const sortRangesDesc = <T extends Range>(ranges: T[]) =>
+  [...ranges].sort((a, b) => b.start.getTime() - a.start.getTime());
+
 export function mergeRanges<T extends Range>(inputRanges: T[]): Range[] {
   if (!inputRanges.length) {
     return [];

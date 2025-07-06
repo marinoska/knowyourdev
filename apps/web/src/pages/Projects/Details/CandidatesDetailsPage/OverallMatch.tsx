@@ -4,10 +4,10 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { Title } from "@/components/typography.tsx";
 import { LinearProgress } from "@mui/joy";
 import { MatchDetailsRow } from "./MatchDetailsRow.tsx";
-import { TCandidateTechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
+import { TCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
 
 type TOverallMatch = Pick<
-  TCandidateTechFocusMatch,
+  TCandidateMatch,
   "techFocusAvgScore" | "overallMatch"
 >;
 

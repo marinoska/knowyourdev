@@ -3,10 +3,9 @@ import {
   TResumeProfileGaps,
   TResumeProfileCategories,
   ResumeTechProfileTechnologiesEntry,
-  ScopeType,
-  TTechFocusTimeline,
-  TTechFocusUsage,
-  TResumeProfileTechFocusUsage,
+  TResumeProfileTechUsage,
+  TTechUsage,
+  TTechTimeline,
 } from "@kyd/common/api";
 import {
   addMonths,
@@ -19,54 +18,47 @@ import {
 } from "date-fns";
 
 /**
- * Calculate scopes for a tech profile
+ * Calculate tech activities for a tech profile
  * @param techProfile The tech profile response
  * @param earliestJobStart The earliest job start date
- * @returns Object containing scopes data
+ * @returns Object containing tech activities data
  */
-export function calculateScopes(
+export function calculateTechActivities(
   techProfile: TResumeProfileBaseResponse &
     TResumeProfileGaps &
     TResumeProfileCategories,
   earliestJobStart: Date,
-): TTechFocusUsage {
-  const result = {} as TTechFocusUsage;
+): TTechUsage {
+  const result = {} as TTechUsage;
   if (!techProfile.technologies) {
     return result;
   }
 
   const uploadDate = startOfMonth(new Date(techProfile.createdAt));
-  const scopeTechnologies = {} as Record<
-    ScopeType,
-    ResumeTechProfileTechnologiesEntry[]
-  >;
 
   for (const tech of techProfile.technologies) {
-    if (!tech.scope) continue;
+    if (!tech.code) continue;
 
-    if (!result[tech.scope]) {
-      result[tech.scope] = {
+    if (!result[tech.code]) {
+      result[tech.code] = {
         periods: [],
         years: {},
       };
-      scopeTechnologies[tech.scope] = [];
     }
 
     for (const job of tech.jobs) {
       loopThroughMonths(job.start, job.end).map(({ year, month }) => {
         // create bit matrix (year, month) where we mark 1 on intersections.
-        result[tech.scope].years[year]
-          ? (result[tech.scope].years[year][month - 1] = 1)
-          : (result[tech.scope].years[year] = Array(12).fill(0));
+        result[tech.code].years[year]
+          ? (result[tech.code].years[year][month - 1] = 1)
+          : (result[tech.code].years[year] = Array(12).fill(0));
       });
     }
-    scopeTechnologies[tech.scope].push(tech);
   }
 
   // Calculate 12-month periods from upload date
-  for (const scopeKey of Object.keys(result)) {
-    const scope = scopeKey as ScopeType;
-    const scopeData = result[scope];
+  for (const techCode of Object.keys(result)) {
+    const techData = result[techCode];
 
     // Create periods (12-month chunks) going back from upload date to earliest job start
     let periodEnd = endOfMonth(subMonths(new Date(uploadDate), 1));
@@ -74,72 +66,69 @@ export function calculateScopes(
 
     // Keep creating periods until we reach or go past the earliest job start date
     do {
-      addPeriod(scopeData, periodStart, periodEnd, scopeTechnologies[scope]);
+      addPeriod(
+        techData,
+        periodStart,
+        periodEnd,
+        techCode,
+        techProfile.technologies,
+      );
       periodStart = subMonths(periodStart, 12);
       periodEnd = subMonths(periodEnd, 12);
     } while (periodStart >= earliestJobStart);
 
     // Sort periods from the last backwards (most recent first)
-    scopeData.periods.sort((a, b) => b.end.getTime() - a.end.getTime());
+    techData.periods.sort((a, b) => b.end.getTime() - a.end.getTime());
   }
 
   return result;
 }
 
 /**
- * Add scopes to the tech profile response
+ * Add tech activities to the tech profile response
  * @param techProfile The tech profile response with job categories
- * @returns The scopes
+ * @returns The tech activities
  */
-export function getProfileScopes(
+export function getProfileTechUsage(
   techProfile: TResumeProfileBaseResponse &
     TResumeProfileGaps &
     TResumeProfileCategories,
-): TResumeProfileTechFocusUsage {
+): TResumeProfileTechUsage {
   if (!techProfile.earliestJobStart) {
-    return { scopes: {} as TTechFocusUsage };
+    return { techUsage: {} as TTechUsage };
   }
 
-  const scopes = calculateScopes(techProfile, techProfile.earliestJobStart);
-  return { scopes };
+  const techUsage = calculateTechActivities(
+    techProfile,
+    techProfile.earliestJobStart,
+  );
+  return { techUsage };
 }
 
 // Helper function to add a period with filtered technologies
 function addPeriod(
-  scopeData: TTechFocusTimeline,
+  techData: TTechTimeline,
   periodStart: Date,
   periodEnd: Date,
+  techCode: string,
   technologies: ResumeTechProfileTechnologiesEntry[],
 ) {
-  scopeData.periods.push({
+  techData.periods.push({
     start: periodStart,
     end: periodEnd,
     totalMonths: loopThroughMonths(periodStart, periodEnd).reduce(
       (acc, { year, month }) => {
-        acc += scopeData.years[year]?.[month - 1] || 0;
+        acc += techData.years[year]?.[month - 1] || 0;
         return acc;
       },
       0,
     ),
     technologies: technologies
+      .filter((tech) => tech.code === techCode)
       .map((tech) => ({
         name: tech.name,
         totalMonths: tech.totalMonths || 0,
-      }))
-      .filter((tech) => {
-        // Check if technology was used in this period
-        return technologies.some((originalTech) => {
-          return (
-            originalTech.name === tech.name &&
-            originalTech.jobs.some((job) => {
-              // Check if job overlaps with period
-              return (
-                (!job.start || job.start <= periodEnd) && job.end >= periodStart
-              );
-            })
-          );
-        });
-      }),
+      })),
   });
 }
 

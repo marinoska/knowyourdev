@@ -117,7 +117,7 @@ const CandidateDetails = ({
 
   const candidateMatch = useCandidateMatch({
     project,
-    profile,
+    candidate: profile,
   });
 
   return (

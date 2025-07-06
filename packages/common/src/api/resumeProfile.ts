@@ -102,7 +102,7 @@ export type TResumeProfileCategories = {
 };
 
 export type TResumeProfileTechFocusUsage = {
-  scopes: TTechFocusUsage;
+  techFocusUsage: TTechFocusUsage;
 };
 
 export type TResumeProfileTechUsage = {

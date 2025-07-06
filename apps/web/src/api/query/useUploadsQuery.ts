@@ -3,7 +3,11 @@ import { uploadsKeys } from "./keys.ts";
 import { getResumeProfile, listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { TResumeProfile } from "@/api/query/types.ts";
-import { GetUploadsListResponse, ScopeType, TTechFocusUsage } from "@kyd/common/api";
+import {
+  GetUploadsListResponse,
+  ScopeType,
+  TTechFocusUsage,
+} from "@kyd/common/api";
 import { rangeToDate } from "@/utils/dates.ts";
 
 export const useUploadsQuery = ({
@@ -65,13 +69,16 @@ export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
         earliestJobStart: data.earliestJobStart
           ? new Date(data.earliestJobStart)
           : new Date(),
-        scopes: Object.entries(data.scopes).reduce((acc, [key, value]) => {
-          acc[key as ScopeType] = {
-            ...value,
-            periods: rangeToDate(value.periods),
-          };
-          return acc;
-        }, {} as TTechFocusUsage),
+        techFocusUsage: Object.entries(data.techFocusUsage).reduce(
+          (acc, [key, value]) => {
+            acc[key as ScopeType] = {
+              ...value,
+              periods: rangeToDate(value.periods),
+            };
+            return acc;
+          },
+          {} as TTechFocusUsage,
+        ),
       })),
     retry: TIMES_THREE,
     enabled: !!uploadId,

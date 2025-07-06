@@ -2,10 +2,10 @@ import { BasePage } from "@/components/BasePage.tsx";
 import Stack from "@mui/joy/Stack";
 import { Title } from "@/components/typography.tsx";
 import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
-import { TCandidateTechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
+import { TCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
 
 type TOverallMatch = Pick<
-  TCandidateTechFocusMatch,
+  TCandidateMatch,
   "baselineJobDuration" | "averageJobDuration" | "jobStabilityScore"
 >;
 export const JobStability = ({ match }: { match: TOverallMatch }) => {

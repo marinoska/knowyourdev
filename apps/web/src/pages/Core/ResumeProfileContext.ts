@@ -19,7 +19,7 @@ export const defaultProfile = {
   jobsWithMissingTech: [],
   jobsWithFilledTech: [],
   earliestJobStart: new Date(),
-  scopes: {} as TTechFocusUsage,
+  techFocusUsage: {} as TTechFocusUsage,
   createdAt: Date(),
   updatedAt: Date(),
   averageJobDuration: 0,

@@ -10,8 +10,8 @@ import { Types } from "mongoose";
 import { getProfileJobGaps } from "@/routes/api/getProfile/jobGaps.js";
 import { getProfileJobDuration } from "@/routes/api/getProfile/jobDuration.js";
 import { getProfileCategories } from "@/routes/api/getProfile/jobCategories.js";
-import { getProfileScopes } from "@/routes/api/getProfile/scopes.js";
-import { getProfileTechActivity } from "@/routes/api/getProfile/techActivity.js";
+import { getProfileTechFocusUsage } from "@/routes/api/getProfile/techFocusUsage.js";
+import { getProfileTechUsage } from "@/routes/api/getProfile/techUsage.js";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },
@@ -57,21 +57,21 @@ export const getResumeProfileController: ResumeProfileController = async (
     ...baseResponse,
   });
 
-  const profileScopes = getProfileScopes({
+  const profileTechFocusUsage = getProfileTechFocusUsage({
     ...baseResponse,
     ...profileCategories,
   });
 
-  const profileTechActivity = getProfileTechActivity({
+  const profileTechUsage = getProfileTechUsage({
     ...baseResponse,
     ...profileCategories,
   });
 
   res.status(200).json({
     ...baseResponse,
-    ...profileScopes,
+    ...profileTechFocusUsage,
     ...profileCategories,
-    ...profileTechActivity,
+    ...profileTechUsage,
   });
 };
 
