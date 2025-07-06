@@ -1,5 +1,4 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { useResumeProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { useState } from "react";
@@ -15,6 +14,7 @@ import { TechMentionsPieChart } from "@/pages/Resume/Chart/TechMentionsPieChart.
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { TechPopularityTimelineChart } from "@/pages/Resume/Chart/TechPopularityTimelineChart.tsx";
 import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
+import { useResumeProfileQuery } from "@/api/query/useResumeProfileQuery.ts";
 
 type ResumeProfileParams = {
   id: string;

@@ -1,14 +1,8 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { uploadsKeys } from "./keys.ts";
-import { getResumeProfile, listUploads } from "./api.ts";
+import { listUploads } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
-import { TResumeProfile } from "@/api/query/types.ts";
-import {
-  GetUploadsListResponse,
-  ScopeType,
-  TTechFocusUsage,
-} from "@kyd/common/api";
-import { rangeToDate } from "@/utils/dates.ts";
+import { GetUploadsListResponse } from "@kyd/common/api";
 
 export const useUploadsQuery = ({
   page,
@@ -45,47 +39,6 @@ export const useUploadsQuery = ({
 
   return {
     data: allData,
-    ...rest,
-  };
-};
-
-export const useResumeProfileQuery = ({ uploadId }: { uploadId?: string }) => {
-  const { data, ...rest } = useQuery<TResumeProfile, Error>({
-    queryKey: uploadsKeys.profile(uploadId!), // we dont use the query params for now so default it to 0
-    queryFn: () =>
-      getResumeProfile({ uploadId: uploadId! }).then((data) => ({
-        ...data,
-        jobs: rangeToDate(data.jobs),
-        jobGaps: rangeToDate(data.jobGaps),
-        technologies: data.technologies.map((tech) => ({
-          ...tech,
-          totalMonths: tech.totalMonths || 0,
-          jobs: rangeToDate(tech.jobs),
-        })),
-        softwareDevelopmentJobs: rangeToDate(data.softwareDevelopmentJobs),
-        irrelevantJobs: rangeToDate(data.irrelevantJobs),
-        jobsWithMissingTech: rangeToDate(data.jobsWithMissingTech),
-        jobsWithFilledTech: rangeToDate(data.jobsWithFilledTech),
-        earliestJobStart: data.earliestJobStart
-          ? new Date(data.earliestJobStart)
-          : new Date(),
-        techFocusUsage: Object.entries(data.techFocusUsage).reduce(
-          (acc, [key, value]) => {
-            acc[key as ScopeType] = {
-              ...value,
-              periods: rangeToDate(value.periods),
-            };
-            return acc;
-          },
-          {} as TTechFocusUsage,
-        ),
-      })),
-    retry: TIMES_THREE,
-    enabled: !!uploadId,
-  });
-
-  return {
-    profile: data,
     ...rest,
   };
 };

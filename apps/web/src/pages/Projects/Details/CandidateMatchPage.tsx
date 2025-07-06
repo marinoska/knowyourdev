@@ -1,5 +1,4 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { useResumeProfileQuery } from "@/api/query/useUploadsQuery.ts";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
@@ -17,6 +16,7 @@ import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
 import { TProject } from "@/api/query/types.ts";
 import { JobStability } from "@/pages/Projects/Details/CandidatesDetailsPage/JobStability.tsx";
+import { useResumeProfileQuery } from "@/api/query/useResumeProfileQuery.ts";
 
 type CandidateDetailsParams = {
   id: string;
