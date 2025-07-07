@@ -2,7 +2,7 @@ import { BasePage } from "@/components/BasePage.tsx";
 import Stack from "@mui/joy/Stack";
 import { Title } from "@/components/typography.tsx";
 import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
-import { TCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
+import { TCandidateMatch } from "@/pages/Core/useCandidateMatch.ts";
 
 type TOverallMatch = Pick<
   TCandidateMatch,
@@ -27,7 +27,7 @@ export const JobStability = ({ match }: { match: TOverallMatch }) => {
         />
         <MatchDetailsRow
           value={`${match.jobStabilityScore.toFixed(2)}%`}
-          text="Fit"
+          text="Match"
           color={color}
         />
       </Stack>

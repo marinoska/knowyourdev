@@ -7,11 +7,6 @@ import {
 import { TProject, TResumeProfile } from "@/api/query/types.ts";
 import { sortRangesDesc } from "@kyd/common";
 
-type UseCandidateMatchParams = {
-  project?: TProject;
-  candidate?: TResumeProfile;
-};
-
 export type TTechFocusMatch = {
   descNormalizedActivityScoreList: number[];
   descActivityPeriods: ActivityPeriod[];
@@ -32,7 +27,7 @@ export type TCandidateMatch = {
   techFocusMatch: Record<ScopeType, TTechFocusMatch>;
   techFocusAvgScore: number;
   techMatch: Record<string, TTechMatch>;
-  techMatchAvgScore: number;
+  techAvgScore: number;
   overallMatch: number;
   averageJobDuration: number;
   baselineJobDuration: number;
@@ -77,24 +72,13 @@ const calculateCandidateTechScore = ({
   };
 };
 
-export const useCandidateMatch = ({
+function candidateMatch({
   project,
   candidate,
-}: UseCandidateMatchParams): TCandidateMatch => {
-  // If either project or profile is missing, return default empty result
-  if (!project || !candidate) {
-    return {
-      techFocusMatch: {} as Record<ScopeType, TTechFocusMatch>,
-      techFocusAvgScore: 0,
-      techMatch: {} as Record<string, TTechMatch>,
-      techMatchAvgScore: 0,
-      overallMatch: 0,
-      averageJobDuration: 0,
-      baselineJobDuration: 0,
-      jobStabilityScore: 0,
-    };
-  }
-
+}: {
+  project: TProject;
+  candidate: TResumeProfile;
+}): TCandidateMatch {
   // Process scope matches
   const techFocusMatch = {} as Record<ScopeType, TTechFocusMatch>;
   let techFocusAvgScore = 0;
@@ -110,20 +94,19 @@ export const useCandidateMatch = ({
     techFocusAvgScore / project.settings.techFocus.length || 0;
 
   const techMatch = {} as Record<string, TTechMatch>;
-  let techMatchAvgScore = 0;
+  let techAvgScore = 0;
 
   for (const projectTech of project.settings.technologies) {
     techMatch[projectTech.code] = calculateCandidateTechScore({
       candidateTimeline: candidate.techUsage[projectTech.code],
       expectedRecentRelevantYears: project.settings.expectedRecentRelevantYears,
     });
-    techMatchAvgScore += techMatch[projectTech.code].overallScore;
+    techAvgScore += techMatch[projectTech.code].overallScore;
   }
-  techMatchAvgScore =
-    techMatchAvgScore / project.settings.technologies.length || 0;
+  techAvgScore = techAvgScore / project.settings.technologies.length || 0;
 
   // Calculate overall match as average of scope and tech matches
-  const overallMatch = (techFocusAvgScore + techMatchAvgScore) / 2;
+  const overallMatch = (techFocusAvgScore + techAvgScore) / 2;
 
   const jobStabilityScore = Math.min(
     (candidate.averageJobDuration / project.settings.baselineJobDuration) * 100,
@@ -134,12 +117,54 @@ export const useCandidateMatch = ({
     techFocusMatch,
     techFocusAvgScore,
     techMatch,
-    techMatchAvgScore,
+    techAvgScore,
     overallMatch,
     averageJobDuration: candidate.averageJobDuration,
     baselineJobDuration: project.settings.baselineJobDuration,
     jobStabilityScore,
   };
+}
+
+const DefaultCandidateMatch = {
+  techFocusMatch: {} as Record<ScopeType, TTechFocusMatch>,
+  techFocusAvgScore: 0,
+  techMatch: {} as Record<string, TTechMatch>,
+  techAvgScore: 0,
+  overallMatch: 0,
+  averageJobDuration: 0,
+  baselineJobDuration: 0,
+  jobStabilityScore: 0,
+};
+
+export const useCandidateMatch = ({
+  project,
+  candidate,
+}: {
+  project?: TProject;
+  candidate?: TResumeProfile;
+}): TCandidateMatch => {
+  if (!project || !candidate) {
+    return DefaultCandidateMatch;
+  }
+
+  return candidateMatch({ project, candidate });
+};
+
+export const useCandidatesMatch = ({
+  project,
+  candidates,
+}: {
+  project?: TProject;
+  candidates?: TResumeProfile[];
+}) => {
+  if (!project || !candidates) {
+    return [DefaultCandidateMatch];
+  }
+
+  return candidates.map((candidate) => ({
+    uploadId: candidate.uploadId,
+    overallMatch: candidateMatch({ project, candidate }).overallMatch,
+  }));
 };
 
 /**

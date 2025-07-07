@@ -4,11 +4,12 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { Title } from "@/components/typography.tsx";
 import { LinearProgress } from "@mui/joy";
 import { MatchDetailsRow } from "./MatchDetailsRow.tsx";
-import { TCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
+import { TCandidateMatch } from "@/pages/Core/useCandidateMatch.ts";
+import { getScoreColor } from "@/utils/colors.ts";
 
 type TOverallMatch = Pick<
   TCandidateMatch,
-  "techFocusAvgScore" | "overallMatch"
+  "techFocusAvgScore" | "techAvgScore" | "overallMatch"
 >;
 
 export const OverallMatch = ({ match }: { match: TOverallMatch }) => {
@@ -16,20 +17,31 @@ export const OverallMatch = ({ match }: { match: TOverallMatch }) => {
     <BasePage.Sheet>
       <Stack direction="column" gap={2}>
         <Title text="Overall tech match" />
-        <Typography level="h2" color="success" width="100%" textAlign="center">
+        <Typography
+          level="h2"
+          color={getScoreColor(match.overallMatch)}
+          width="100%"
+          textAlign="center"
+        >
           {match.overallMatch.toFixed(2)}%
         </Typography>
-        <LinearProgress variant="solid" size="lg" value={85} determinate />
+        <LinearProgress
+          variant="solid"
+          size="lg"
+          value={85}
+          determinate
+          color={getScoreColor(match.overallMatch)}
+        />
         <Stack gap={0.5}>
           <MatchDetailsRow
             value={`${match.techFocusAvgScore.toFixed(2)}%`}
             text="Tech focus match"
-            color="success"
+            color={getScoreColor(match.techFocusAvgScore)}
           />
           <MatchDetailsRow
-            value="90%"
+            value={`${match.techAvgScore.toFixed(2)}%`}
             text="Key technologies Match"
-            color="success"
+            color={getScoreColor(match.techAvgScore)}
           />
         </Stack>
       </Stack>

@@ -14,6 +14,9 @@ import { Done, ReportProblem } from "@mui/icons-material";
 import { CircularProgress } from "@mui/joy";
 import { Regular, Smallest } from "@/components/typography.tsx";
 import { TProject } from "@/api/query/types.ts";
+import Chip from "@mui/joy/Chip";
+import { getScoreColor } from "@/utils/colors.ts";
+import { useCandidatesMatch } from "@/pages/Core/useCandidateMatch.ts";
 
 const StatusIcon: Record<string, ReactNode> = {
   pending: <CircularProgress variant="solid" size="sm" />,
@@ -24,9 +27,11 @@ const StatusIcon: Record<string, ReactNode> = {
 const ProjectCandidateItem = ({
   item,
   projectId,
+  score,
 }: {
   item: TUploadItem;
   projectId: string;
+  score: number;
 }) => {
   const { role, name, fullName, position, createdAt, parseStatus, _id } = item;
   const navigate = useNavigate();
@@ -48,7 +53,10 @@ const ProjectCandidateItem = ({
         </Regular>
         <Smallest>
           Uploaded on {format(new Date(createdAt), "MMMM d, yyyy")}{" "}
-          {role && ` for ${role}`} ({name})
+          {role && ` for ${role}`} ({name})&nbsp;•&nbsp;
+          <Chip variant="soft" color={getScoreColor(score)} size="md">
+            {score.toFixed(2)}% {score > 0.5 ? "Match" : "No match"}
+          </Chip>
         </Smallest>
       </Stack>
       <Typography sx={{ marginLeft: "auto" }}>
@@ -58,8 +66,13 @@ const ProjectCandidateItem = ({
   );
 };
 
-export const CandidatesList = ({ projectId }: { projectId: string }) => {
-  const query = useUploadsQuery({ page: 1, limit: 300, projectId });
+export const CandidatesList = ({ project }: { project: TProject }) => {
+  const query = useUploadsQuery({
+    page: 1,
+    limit: 300,
+    projectId: project._id,
+  });
+  const matches = useCandidatesMatch({ project, candidates: [] });
 
   if (query.isLoading) {
     return <CenteredLoader />;
@@ -73,13 +86,20 @@ export const CandidatesList = ({ projectId }: { projectId: string }) => {
     <Stack gap={1} direction="column">
       {/* put filters here*/}
       <Stack gap={2}>
-        {query.data?.map((upload) => (
-          <ProjectCandidateItem
-            key={upload._id}
-            item={upload}
-            projectId={projectId}
-          />
-        ))}
+        {query.data?.map((upload) => {
+          // Find match for this upload if available
+          const match = matches.find((m) => m.uploadId === upload._id);
+          const score = match ? match.overallMatch : 88; // Use match score if available, otherwise fallback to 88
+
+          return (
+            <ProjectCandidateItem
+              key={upload._id}
+              item={upload}
+              projectId={project._id}
+              score={score}
+            />
+          );
+        })}
       </Stack>
 
       <LoadMoreButton
@@ -92,7 +112,7 @@ export const CandidatesList = ({ projectId }: { projectId: string }) => {
 };
 
 export const CandidatesContent = ({ project }: { project: TProject }) => {
-  return <CandidatesList projectId={project._id} />;
+  return <CandidatesList project={project} />;
 };
 
 export default CandidatesContent;

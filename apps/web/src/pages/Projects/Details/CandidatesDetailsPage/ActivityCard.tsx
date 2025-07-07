@@ -5,6 +5,7 @@ import { Small, Subtitle } from "@/components/typography.tsx";
 import { format } from "date-fns";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { ActivityPeriod } from "@kyd/common/api";
+import { useMemo } from "react";
 
 type ActivityTypeProps = {
   scopeName: string;
@@ -32,14 +33,16 @@ export const ActivityCard = ({
       ? `${descActivityPeriods[descActivityPeriods.length - 1].start.getFullYear()}-${descActivityPeriods[0].end.getFullYear()}`
       : "";
 
-  const techNameArray = descActivityPeriods
-    .map((period) =>
-      period.technologies.map(
-        (tech: { name: string; totalMonths: number }) => tech.name,
-      ),
-    )
-    .flat();
-  const techNames = Array.from(new Set(techNameArray)).join(", ");
+  const techNames = useMemo(() => {
+    const techNameArray = descActivityPeriods
+      .map((period) =>
+        period.technologies.map(
+          (tech: { name: string; totalMonths: number }) => tech.name,
+        ),
+      )
+      .flat();
+    return Array.from(new Set(techNameArray)).join(", ");
+  }, [descActivityPeriods]);
 
   const activeMonthsAndYears = monthsToYearsAndMonths(totalActiveMonths);
 

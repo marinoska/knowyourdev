@@ -4,7 +4,7 @@ import { Box } from "@mui/joy";
 import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { TProject } from "@kyd/common/api";
-import { TTechMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
+import { TTechMatch } from "@/pages/Core/useCandidateMatch.ts";
 import { ColorPaletteProp } from "@mui/joy/styles";
 import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
 
@@ -13,10 +13,7 @@ type TechMatchProps = {
   techMatch: Record<string, TTechMatch>;
 };
 
-export const TechMatch = ({
-  project,
-  techMatch,
-}: TechMatchProps) => {
+export const TechMatch = ({ project, techMatch }: TechMatchProps) => {
   return (
     <BasePage.Sheet>
       <Stack gap={2}>
@@ -41,7 +38,9 @@ export const TechMatch = ({
               key={tech.code}
               scopeName={tech.name}
               descActivityPeriods={techActivity.descActivityPeriods}
-              descNormalizedActivityScoreList={techActivity.descNormalizedActivityScoreList}
+              descNormalizedActivityScoreList={
+                techActivity.descNormalizedActivityScoreList
+              }
               totalActiveMonths={techActivity.totalActiveMonths}
               overallScore={techActivity.overallScore}
               color={getScoreColor(techActivity.overallScore)}
@@ -52,7 +51,6 @@ export const TechMatch = ({
     </BasePage.Sheet>
   );
 };
-
 
 const getScoreColor = (score: number): ColorPaletteProp => {
   if (score >= 85) return "success";

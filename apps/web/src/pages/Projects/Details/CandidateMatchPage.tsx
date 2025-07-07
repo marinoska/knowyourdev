@@ -10,7 +10,7 @@ import Stack from "@mui/joy/Stack";
 import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
 import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
 import { TechMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechMatch.tsx";
-import { useCandidateMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
+import { useCandidateMatch } from "@/pages/Core/useCandidateMatch.ts";
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
@@ -67,11 +67,14 @@ const CareerDetailsAlert = ({ color }: { color: ColorPaletteProp }) => {
 };
 
 const KeyStrengths = () => {
-  return (
-    <BasePage.Sheet>
-      <Title text="Key Strengths" />
-    </BasePage.Sheet>
-  );
+  // TODO implement
+  return null;
+
+  // return (
+  //   <BasePage.Sheet>
+  //     {/*<Title text="Key Strengths" />*/}
+  //   </BasePage.Sheet>
+  // );
 };
 
 const RiskAssessment = () => {

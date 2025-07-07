@@ -5,8 +5,8 @@ import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
 import { SCOPE_NAMES, TProject } from "@kyd/common/api";
-import { TTechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/useCandidateMatch.ts";
-import { ColorPaletteProp } from "@mui/joy/styles";
+import { TTechFocusMatch } from "@/pages/Core/useCandidateMatch.ts";
+import { getScoreColor } from "@/utils/colors.ts";
 
 type TechFocusMatchProps = {
   project?: TProject;
@@ -51,12 +51,4 @@ export const TechFocusMatch = ({
       </Stack>
     </BasePage.Sheet>
   );
-};
-
-const getScoreColor = (score: number): ColorPaletteProp => {
-  if (score >= 85) return "success";
-  if (score >= 65) return "primary";
-  if (score >= 45) return "warning";
-  if (score >= 25) return "neutral";
-  return "danger";
 };
