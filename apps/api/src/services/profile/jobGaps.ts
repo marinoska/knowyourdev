@@ -1,7 +1,6 @@
 import {
   ResumeTechProfileJobEntry,
   GapEntry,
-  TResumeProfileBaseResponse,
   TResumeProfileGaps,
 } from "@kyd/common/api";
 import {
@@ -12,6 +11,7 @@ import {
   sortRangesAsc,
 } from "@kyd/common";
 import { addDays, differenceInMonths } from "date-fns";
+import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
 
 /**
  * Calculate gaps between jobs
@@ -79,7 +79,7 @@ export function getJobGaps(
  * @returns The tech profile response with job gaps added
  */
 export function getProfileJobGaps(
-  techProfile: TResumeProfileBaseResponse,
+  techProfile: TResumeTechProfileDocument,
 ): TResumeProfileGaps {
   return { jobGaps: calculateJobGaps(techProfile.jobs) };
 }

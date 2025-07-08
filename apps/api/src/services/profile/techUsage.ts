@@ -1,21 +1,13 @@
 import {
-  TResumeProfileBaseResponse,
-  TResumeProfileGaps,
   TResumeProfileCategories,
   ResumeTechProfileTechnologiesEntry,
   TResumeProfileTechUsage,
   TTechUsage,
   TTechTimeline,
 } from "@kyd/common/api";
-import {
-  addMonths,
-  differenceInMonths,
-  endOfMonth,
-  getMonth,
-  getYear,
-  startOfMonth,
-  subMonths,
-} from "date-fns";
+import { endOfMonth, startOfMonth, subMonths } from "date-fns";
+import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { loopThroughMonths } from "@/services/profile/helpers.js";
 
 /**
  * Calculate tech activities for a tech profile
@@ -24,10 +16,8 @@ import {
  * @returns Object containing tech activities data
  */
 export function calculateTechActivities(
-  techProfile: TResumeProfileBaseResponse &
-    TResumeProfileGaps &
-    TResumeProfileCategories,
-  earliestJobStart: Date,
+  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+    Pick<TResumeProfileCategories, "earliestJobStart">,
 ): TTechUsage {
   const result = {} as TTechUsage;
   if (!techProfile.technologies) {
@@ -75,7 +65,7 @@ export function calculateTechActivities(
       );
       periodStart = subMonths(periodStart, 12);
       periodEnd = subMonths(periodEnd, 12);
-    } while (periodStart >= earliestJobStart);
+    } while (periodStart >= techProfile.earliestJobStart);
 
     // Sort periods from the last backwards (most recent first)
     techData.periods.sort((a, b) => b.end.getTime() - a.end.getTime());
@@ -90,18 +80,14 @@ export function calculateTechActivities(
  * @returns The tech activities
  */
 export function getProfileTechUsage(
-  techProfile: TResumeProfileBaseResponse &
-    TResumeProfileGaps &
-    TResumeProfileCategories,
+  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+    Pick<TResumeProfileCategories, "earliestJobStart">,
 ): TResumeProfileTechUsage {
   if (!techProfile.earliestJobStart) {
     return { techUsage: {} as TTechUsage };
   }
 
-  const techUsage = calculateTechActivities(
-    techProfile,
-    techProfile.earliestJobStart,
-  );
+  const techUsage = calculateTechActivities(techProfile);
   return { techUsage };
 }
 
@@ -131,24 +117,3 @@ function addPeriod(
       })),
   });
 }
-
-const loopThroughMonths = (
-  start: Date,
-  end: Date,
-): { year: number; month: number }[] => {
-  const totalMonths = differenceInMonths(end, start);
-
-  const result: { year: number; month: number }[] = []; // Array to store the result
-  let currentDate = startOfMonth(start); // Start at the first day of the start month
-
-  for (let i = 0; i <= totalMonths; i++) {
-    result.push({
-      year: getYear(currentDate), // Get the year
-      month: getMonth(currentDate) + 1, // Get the month (add 1 because getMonth is 0-based)
-    });
-
-    currentDate = addMonths(currentDate, 1); // Move to the next month
-  }
-
-  return result;
-};

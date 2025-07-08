@@ -1,17 +1,10 @@
 import { RequestHandler, Response } from "express";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { Joi, Segments } from "celebrate";
-import {
-  TResumeProfileResponse,
-  TResumeProfileBaseResponse,
-} from "@kyd/common/api";
+import { TResumeProfileResponse } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
-import { Types } from "mongoose";
-import { getProfileJobGaps } from "@/routes/api/getProfile/jobGaps.js";
-import { getProfileJobDuration } from "@/routes/api/getProfile/jobDuration.js";
-import { getProfileCategories } from "@/routes/api/getProfile/jobCategories.js";
-import { getProfileTechFocusUsage } from "@/routes/api/getProfile/techFocusUsage.js";
-import { getProfileTechUsage } from "@/routes/api/getProfile/techUsage.js";
+import { Types, Schema } from "mongoose";
+import { ProfileMetricsService } from "@/services/profileMetrics.service.js";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },
@@ -37,42 +30,21 @@ export const getResumeProfileController: ResumeProfileController = async (
     );
   }
 
-  const response: TResumeProfileBaseResponse = {
-    uploadId,
+  const response = {
+    uploadId: new Schema.Types.ObjectId(uploadId),
     fullName: techProfile.fullName,
     position: techProfile.position,
-    createdAt: techProfile.createdAt.toISOString(),
-    updatedAt: techProfile.updatedAt.toISOString(),
+    createdAt: techProfile.createdAt,
+    updatedAt: techProfile.updatedAt,
     technologies: techProfile.technologies,
     jobs: techProfile.jobs,
   };
 
-  const baseResponse = {
-    ...response,
-    ...getProfileJobGaps(response),
-    ...getProfileJobDuration(response),
-  };
-  // full response
-  const profileCategories = getProfileCategories({
-    ...baseResponse,
-  });
+  // Use the ProfileService to calculate all profile data
+  const profileService = new ProfileMetricsService();
+  const profileMetrics = profileService.calculateProfileMetrics(techProfile);
 
-  const profileTechFocusUsage = getProfileTechFocusUsage({
-    ...baseResponse,
-    ...profileCategories,
-  });
-
-  const profileTechUsage = getProfileTechUsage({
-    ...baseResponse,
-    ...profileCategories,
-  });
-
-  res.status(200).json({
-    ...baseResponse,
-    ...profileTechFocusUsage,
-    ...profileCategories,
-    ...profileTechUsage,
-  });
+  res.status(200).json({ ...response, ...profileMetrics });
 };
 
 export const getResumeProfileValidationSchema = {

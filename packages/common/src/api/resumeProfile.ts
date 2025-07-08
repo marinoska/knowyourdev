@@ -79,12 +79,6 @@ export type TTechTimeline = {
 export type TTechFocusUsage = Record<ScopeType, TTechFocusTimeline>;
 export type TTechUsage = Record<string, TTechTimeline>;
 
-export type TResumeProfileBaseResponse = TResumeProfile & {
-  uploadId: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type TResumeProfileGaps = {
   jobGaps: GapEntry[];
 };
@@ -109,9 +103,17 @@ export type TResumeProfileTechUsage = {
   techUsage: TTechUsage;
 };
 
-export type TResumeProfileResponse = TResumeProfileBaseResponse &
-  TResumeProfileGaps &
+export type TResumeProfileMetrics = TResumeProfileGaps &
   TResumeProfileJobDuration &
   TResumeProfileCategories &
   TResumeProfileTechFocusUsage &
   TResumeProfileTechUsage;
+
+export type TResumeTechProfileDTO = TResumeProfile & {
+  uploadId: Schema.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type TResumeProfileResponse = TResumeTechProfileDTO &
+  TResumeProfileMetrics;

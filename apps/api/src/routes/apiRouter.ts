@@ -14,7 +14,7 @@ import {
 import {
   getUploadsListController,
   getUploadsListValidationSchema,
-} from "@/routes/api/list.controller.js";
+} from "@/routes/api/getUploads.controller.js";
 import {
   getResumeProfileController,
   getResumeProfileValidationSchema,

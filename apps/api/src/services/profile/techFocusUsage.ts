@@ -1,6 +1,4 @@
 import {
-  TResumeProfileBaseResponse,
-  TResumeProfileGaps,
   TResumeProfileCategories,
   ResumeTechProfileTechnologiesEntry,
   ScopeType,
@@ -8,15 +6,9 @@ import {
   TTechFocusUsage,
   TResumeProfileTechFocusUsage,
 } from "@kyd/common/api";
-import {
-  addMonths,
-  differenceInMonths,
-  endOfMonth,
-  getMonth,
-  getYear,
-  startOfMonth,
-  subMonths,
-} from "date-fns";
+import { endOfMonth, startOfMonth, subMonths } from "date-fns";
+import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { loopThroughMonths } from "@/services/profile/helpers.js";
 
 /**
  * Calculate scopes for a tech profile
@@ -25,9 +17,8 @@ import {
  * @returns Object containing scopes data
  */
 export function calculateScopes(
-  techProfile: TResumeProfileBaseResponse &
-    TResumeProfileGaps &
-    TResumeProfileCategories,
+  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+    Pick<TResumeProfileCategories, "earliestJobStart">,
   earliestJobStart: Date,
 ): TTechFocusUsage {
   const result = {} as TTechFocusUsage;
@@ -92,9 +83,8 @@ export function calculateScopes(
  * @returns The scopes
  */
 export function getProfileTechFocusUsage(
-  techProfile: TResumeProfileBaseResponse &
-    TResumeProfileGaps &
-    TResumeProfileCategories,
+  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+    Pick<TResumeProfileCategories, "earliestJobStart">,
 ): TResumeProfileTechFocusUsage {
   if (!techProfile.earliestJobStart) {
     return { techFocusUsage: {} as TTechFocusUsage };
@@ -142,24 +132,3 @@ function addPeriod(
       }),
   });
 }
-
-const loopThroughMonths = (
-  start: Date,
-  end: Date,
-): { year: number; month: number }[] => {
-  const totalMonths = differenceInMonths(end, start);
-
-  const result: { year: number; month: number }[] = []; // Array to store the result
-  let currentDate = startOfMonth(start); // Start at the first day of the start month
-
-  for (let i = 0; i <= totalMonths; i++) {
-    result.push({
-      year: getYear(currentDate), // Get the year
-      month: getMonth(currentDate) + 1, // Get the month (add 1 because getMonth is 0-based)
-    });
-
-    currentDate = addMonths(currentDate, 1); // Move to the next month
-  }
-
-  return result;
-};

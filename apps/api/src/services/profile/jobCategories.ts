@@ -1,10 +1,9 @@
 import { sortRangesAsc } from "@kyd/common";
 import {
   ResumeTechProfileJobEntry,
-  TResumeProfileBaseResponse,
-  TResumeProfileGaps,
   TResumeProfileCategories,
 } from "@kyd/common/api";
+import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
 
 /**
  * Categorizes jobs into different groups and calculates the earliest job start date
@@ -61,7 +60,7 @@ export function categorizeJobs(jobs: ResumeTechProfileJobEntry[]) {
  * @returns The job categories
  */
 export function getProfileCategories(
-  resumeProfile: TResumeProfileBaseResponse & TResumeProfileGaps,
+  resumeProfile: TResumeTechProfileDocument,
 ): TResumeProfileCategories {
   return categorizeJobs(resumeProfile.jobs);
 }
