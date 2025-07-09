@@ -7,7 +7,7 @@ import {
   TResumeProfileTechFocusUsage,
 } from "@kyd/common/api";
 import { endOfMonth, startOfMonth, subMonths } from "date-fns";
-import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 import { loopThroughMonths } from "@/services/profile/helpers.js";
 
 /**
@@ -17,7 +17,7 @@ import { loopThroughMonths } from "@/services/profile/helpers.js";
  * @returns Object containing scopes data
  */
 export function calculateScopes(
-  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+  techProfile: Pick<TResumeProfileDocument, "technologies" | "createdAt"> &
     Pick<TResumeProfileCategories, "earliestJobStart">,
   earliestJobStart: Date,
 ): TTechFocusUsage {
@@ -83,7 +83,7 @@ export function calculateScopes(
  * @returns The scopes
  */
 export function getProfileTechFocusUsage(
-  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+  techProfile: Pick<TResumeProfileDocument, "technologies" | "createdAt"> &
     Pick<TResumeProfileCategories, "earliestJobStart">,
 ): TResumeProfileTechFocusUsage {
   if (!techProfile.earliestJobStart) {

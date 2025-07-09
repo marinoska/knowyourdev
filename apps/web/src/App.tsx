@@ -15,6 +15,7 @@ import Button from "@mui/joy/Button";
 import KnowYourDevIcon from "@/components/KnowYourDevIcon.tsx";
 import Loader from "@/components/Loader.tsx";
 import { ApiClientProvider } from "@/api/ApiClientProvider.tsx";
+import { ErrorBoundary } from "@/components/ErrorBoundary.tsx";
 
 const NotFound = () => {
   return <div>Not Found</div>;
@@ -88,7 +89,11 @@ export default function App() {
               <Route path="/projects/:id" element={<ProjectDetailsPage />} />
               <Route
                 path="/projects/:id/candidates/:candidateId"
-                element={<CandidateMatchPage />}
+                element={
+                  <ErrorBoundary>
+                    <CandidateMatchPage />
+                  </ErrorBoundary>
+                }
               />
               <Route path="/uploads" element={<ResumeList />} />
               <Route path="/uploads/:id" element={<ResumeDetailsPage />} />

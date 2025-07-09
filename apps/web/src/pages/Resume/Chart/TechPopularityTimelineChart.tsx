@@ -70,14 +70,14 @@ const sortByTrend = (a: TechProfile, b: TechProfile) => {
   return TREND_MAP[a.trend] < TREND_MAP[b.trend] ? 1 : -1;
 };
 
-export const TechPopularityTimelineChart = () => {
+export const TechPopularityTimelineChart = ({ profile }) => {
   const {
     allTechnologies,
     filteredTechnologies,
     selectedScope,
     setSelectedScope,
     setShowKeyTechOnly,
-  } = useFilteredTechnologies();
+  } = useFilteredTechnologies(profile);
 
   useEffect(() => {
     setShowKeyTechOnly(true);

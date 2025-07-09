@@ -4,9 +4,9 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { BasePage } from "@/components/BasePage";
 import { Regular, Smallest } from "@/components/typography.tsx";
-import { TProject } from "@/api/query/types.ts";
+import { TProjectDTO } from "@/api/query/types.ts";
 
-export const ProjectItem = ({ item }: { item: TProject }) => {
+export const ProjectItem = ({ item }: { item: TProjectDTO }) => {
   const navigate = useNavigate();
 
   const { name, createdAt, _id } = item;

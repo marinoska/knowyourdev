@@ -4,8 +4,8 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { Title } from "@/components/typography.tsx";
 import { LinearProgress } from "@mui/joy";
 import { MatchDetailsRow } from "./MatchDetailsRow.tsx";
-import { TCandidateMatch } from "@/pages/Core/useCandidateMatch.ts";
 import { getScoreColor } from "@/utils/colors.ts";
+import { TCandidateMatch } from "@kyd/common/api";
 
 type TOverallMatch = Pick<
   TCandidateMatch,

@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
 import { Typography } from "@mui/joy";
-import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
-import { TechProfile } from "@/api/query/types.ts";
+import { TechProfile, TResumeProfileDTO } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import {
   GreenLegendColor,
@@ -35,8 +34,7 @@ const LegendItems = [
   },
 ];
 
-export const TechMentionsPieChart = () => {
-  const { profile } = useResumeProfileContext();
+export const TechMentionsPieChart = ({ profile }: { profile: TResumeProfileDTO }) => {
 
   const { chartData, sliceColors } = useMemo(() => {
     const technologies = (profile.technologies || []).sort((a, b) => {

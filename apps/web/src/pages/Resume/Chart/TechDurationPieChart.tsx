@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
 import { Typography } from "@mui/joy";
-import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
-import { TechProfile } from "@/api/query/types.ts";
+import { TechProfile, TResumeProfileDTO } from "@/api/query/types.ts";
 import { Legend } from "@/components/Legend.tsx";
 import { GreenLegendColor, SoftGrayColor } from "@/utils/const.ts";
 import { pieTooltip, tooltipField } from "@/utils/chart.ts";
@@ -25,11 +24,10 @@ const LegendItems = [
   },
 ];
 
-export const TechDurationPieChart = () => {
-  const chartContext = useResumeProfileContext();
+export const TechDurationPieChart = ({ profile }: { profile: TResumeProfileDTO }) => {
 
   const { chartData, sliceColors } = useMemo(() => {
-    const technologies = (chartContext.profile?.technologies || []).sort(
+    const technologies = (profile?.technologies || []).sort(
       (a, b) => {
         return b.totalMonths - a.totalMonths;
       },
@@ -57,7 +55,7 @@ export const TechDurationPieChart = () => {
     });
 
     return { chartData: data, sliceColors: colors };
-  }, [chartContext.profile?.technologies]);
+  }, [profile?.technologies]);
 
   // Chart options
   const options = useMemo(
@@ -79,8 +77,8 @@ export const TechDurationPieChart = () => {
   );
 
   if (
-    !chartContext.profile?.technologies ||
-    chartContext.profile.technologies.length === 0
+    !profile?.technologies ||
+    profile.technologies.length === 0
   ) {
     return (
       <Typography level="h4">No technologies available to display.</Typography>
@@ -94,7 +92,7 @@ export const TechDurationPieChart = () => {
     >
       <Legend title={"Legend"} items={LegendItems} />
 
-      {chartContext.profile?.jobs.length === 0 ? (
+      {profile?.jobs.length === 0 ? (
         <Regular>No data available to display the timeline chart.</Regular>
       ) : (
         <Chart

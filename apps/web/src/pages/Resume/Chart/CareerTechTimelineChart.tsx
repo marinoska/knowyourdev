@@ -1,19 +1,18 @@
 import { useMemo } from "react";
-import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { RedLegendColor } from "@/utils/const";
 import { GreenLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";
 import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
 import { TimelineChart } from "@/pages/components/Chart/TimelineChart.tsx";
+import { TResumeProfileDTO } from "@/api/query/types.ts";
 
 const LegendItems = [
   { label: "Tech stack specified", color: GreenLegendColor },
   { label: "Missing or unrecognized Tech Stack", color: RedLegendColor },
 ];
 
-export const CareerTechTimelineChart = () => {
-  const { profile } = useResumeProfileContext();
+export const CareerTechTimelineChart = ({ profile }: { profile: TResumeProfileDTO }) => {
 
   const chartData = useMemo(() => {
     const missingTechJobsData = profile.jobsWithMissingTech.map((job) => {

@@ -2,11 +2,12 @@ import { Schema } from "mongoose";
 import { Range } from "../utils/index.js";
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
 import { ExtractedCVData, GapEntry, JobEntry } from "./resumeData.js";
+import { TCandidateMatch } from "./match.js";
 
-export type ResumeTechProfileTechnologiesEntry = {
+export type ResumeProfileTechnologiesEntry = {
   techReference: Schema.Types.ObjectId;
   code: TechCode;
-  jobs: ResumeTechProfileTechnologiesJobEntry[];
+  jobs: ResumeProfileTechnologiesJobEntry[];
   totalMonths: number;
   recentMonths?: number;
   name: string;
@@ -18,14 +19,14 @@ export type ResumeTechProfileTechnologiesEntry = {
   inProfileSection?: boolean;
 };
 
-export type ResumeTechProfileTechnologiesJobEntry = {
+export type ResumeProfileTechnologiesJobEntry = {
   start: Date;
   end: Date;
   role: string;
   company: string;
 };
 
-export type ResumeTechProfileJobEntry = Pick<
+export type ResumeProfileJobEntry = Pick<
   JobEntry,
   | "isSoftwareDevelopmentRole"
   | "roleType"
@@ -55,8 +56,8 @@ export type ResumeTechProfileJobEntry = Pick<
 
 export type TResumeProfile = Pick<ExtractedCVData, "position" | "fullName"> & {
   uploadId: Schema.Types.ObjectId;
-  technologies: ResumeTechProfileTechnologiesEntry[];
-  jobs: ResumeTechProfileJobEntry[];
+  technologies: ResumeProfileTechnologiesEntry[];
+  jobs: ResumeProfileJobEntry[];
 };
 
 export type ActivityPeriod = Range & {
@@ -89,11 +90,12 @@ export type TResumeProfileJobDuration = {
 };
 
 export type TResumeProfileCategories = {
-  softwareDevelopmentJobs: ResumeTechProfileJobEntry[];
-  irrelevantJobs: ResumeTechProfileJobEntry[];
-  jobsWithMissingTech: ResumeTechProfileJobEntry[];
-  jobsWithFilledTech: ResumeTechProfileJobEntry[];
+  softwareDevelopmentJobs: ResumeProfileJobEntry[];
+  irrelevantJobs: ResumeProfileJobEntry[];
+  jobsWithMissingTech: ResumeProfileJobEntry[];
+  jobsWithFilledTech: ResumeProfileJobEntry[];
   earliestJobStart: Date;
+  monthsActiveInSE: number;
 };
 
 export type TResumeProfileTechFocusUsage = {
@@ -110,8 +112,12 @@ export type TResumeProfileMetrics = TResumeProfileGaps &
   TResumeProfileTechFocusUsage &
   TResumeProfileTechUsage;
 
-export type GetResumeProfileResponse = Omit<TResumeProfile, "uploadId"> & {
+export type GetResumeProfileResponse<WithMatch extends boolean = false> = Omit<
+  TResumeProfile,
+  "uploadId"
+> & {
   uploadId: string;
   createdAt: string;
   updatedAt: string;
-} & TResumeProfileMetrics;
+} & (WithMatch extends true ? { match: TCandidateMatch } : {}) &
+  TResumeProfileMetrics;

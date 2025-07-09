@@ -12,7 +12,7 @@ import { format } from "date-fns";
 import { Done, ReportProblem } from "@mui/icons-material";
 import { CircularProgress } from "@mui/joy";
 import { Regular, Smallest } from "@/components/typography.tsx";
-import { TProject } from "@/api/query/types.ts";
+import { TProjectDTO } from "@/api/query/types.ts";
 import Chip from "@mui/joy/Chip";
 import { getScoreColor } from "@/utils/colors.ts";
 import { TExtendedUpload, TUpload } from "@kyd/common/api";
@@ -72,7 +72,7 @@ const ProjectCandidateItem = ({
   );
 };
 
-export const CandidatesList = ({ project }: { project: TProject }) => {
+export const CandidatesList = ({ project }: { project: TProjectDTO }) => {
   const query = useUploadsQuery({
     page: 1,
     limit: 300,
@@ -112,7 +112,7 @@ export const CandidatesList = ({ project }: { project: TProject }) => {
   );
 };
 
-export const CandidatesContent = ({ project }: { project: TProject }) => {
+export const CandidatesContent = ({ project }: { project: TProjectDTO }) => {
   return <CandidatesList project={project} />;
 };
 

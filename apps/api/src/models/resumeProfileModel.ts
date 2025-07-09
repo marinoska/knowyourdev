@@ -4,8 +4,8 @@ import {
   CATEGORY,
   SCOPE,
   ROLE_TYPE,
-  ResumeTechProfileJobEntry,
-  ResumeTechProfileTechnologiesEntry,
+  ResumeProfileJobEntry,
+  ResumeProfileTechnologiesEntry,
   TREND,
   TResumeProfile,
 } from "@kyd/common/api";
@@ -19,7 +19,7 @@ const JobSchema = {
   company: { type: String, required: true },
 };
 
-const ResumeTechProfileJobEntrySchema = new Schema<ResumeTechProfileJobEntry>(
+const ResumeProfileJobEntrySchema = new Schema<ResumeProfileJobEntry>(
   {
     start: Date,
     end: Date,
@@ -58,8 +58,8 @@ const ResumeTechProfileJobEntrySchema = new Schema<ResumeTechProfileJobEntry>(
   },
 );
 
-const ResumeTechProfileTechnologiesEntrySchema =
-  new Schema<ResumeTechProfileTechnologiesEntry>(
+const ResumeProfileTechnologiesEntrySchema =
+  new Schema<ResumeProfileTechnologiesEntry>(
     {
       techReference: {
         type: Schema.Types.ObjectId,
@@ -98,17 +98,17 @@ const ResumeTechProfileTechnologiesEntrySchema =
     },
   );
 
-export type TResumeTechProfileDocument = Document &
+export type TResumeProfileDocument = Document &
   TResumeProfile & {
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
     createdAt: Date;
     updatedAt: Date;
   };
 
-export type TResumeTechProfileModel = Model<TResumeTechProfileDocument>;
+export type TResumeTechProfileModel = Model<TResumeProfileDocument>;
 
-const ResumeTechProfileSchema = new Schema<
-  TResumeTechProfileDocument,
+const ResumeProfileSchema = new Schema<
+  TResumeProfileDocument,
   TResumeTechProfileModel
 >(
   {
@@ -121,12 +121,12 @@ const ResumeTechProfileSchema = new Schema<
     fullName: { type: String, required: true },
     position: { type: String, required: true },
     technologies: {
-      type: [ResumeTechProfileTechnologiesEntrySchema],
+      type: [ResumeProfileTechnologiesEntrySchema],
       required: true,
       default: [],
     }, // List of technology entries
     jobs: {
-      type: [ResumeTechProfileJobEntrySchema],
+      type: [ResumeProfileJobEntrySchema],
       required: true,
       default: [],
     },
@@ -134,7 +134,7 @@ const ResumeTechProfileSchema = new Schema<
   { timestamps: true, collection: "ResumeTechProfile" }, // Automatically adds createdAt and updatedAt
 );
 
-export const ResumeTechProfileModel = model<
-  TResumeTechProfileDocument,
+export const ResumeProfileModel = model<
+  TResumeProfileDocument,
   TResumeTechProfileModel
->("ResumeTechProfile", ResumeTechProfileSchema);
+>("ResumeTechProfile", ResumeProfileSchema);

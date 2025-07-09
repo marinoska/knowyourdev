@@ -2,7 +2,7 @@ import { BasePage } from "@/components/BasePage.tsx";
 import Stack from "@mui/joy/Stack";
 import { Title } from "@/components/typography.tsx";
 import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
-import { TCandidateMatch } from "@/pages/Core/useCandidateMatch.ts";
+import { TCandidateMatch } from "@kyd/common/api";
 
 type TOverallMatch = Pick<
   TCandidateMatch,

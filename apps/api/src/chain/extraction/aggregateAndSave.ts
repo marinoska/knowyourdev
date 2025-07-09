@@ -7,13 +7,13 @@ import { TechDocument } from "@/models/types.js";
 import { subYears } from "date-fns";
 import logger from "@/app/logger.js";
 import { Schema } from "mongoose";
-import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
+import { ResumeProfileModel } from "@/models/resumeProfileModel.js";
 import { isNotNull } from "@/utils/types.utils.js";
 import {
   TechCode,
-  ResumeTechProfileJobEntry,
-  ResumeTechProfileTechnologiesEntry,
-  ResumeTechProfileTechnologiesJobEntry,
+  ResumeProfileJobEntry,
+  ResumeProfileTechnologiesEntry,
+  ResumeProfileTechnologiesJobEntry,
   TREND_MAP,
   TechnologyEntry,
   EnhancedJobEntry,
@@ -63,7 +63,7 @@ export const aggregateAndSave = async (
     {
       techReference: Schema.Types.ObjectId;
       code: TechCode;
-      jobs: ResumeTechProfileTechnologiesJobEntry[];
+      jobs: ResumeProfileTechnologiesJobEntry[];
     }
   > = {};
 
@@ -73,7 +73,7 @@ export const aggregateAndSave = async (
     }
 
     job.technologies.forEach((tech: TechnologyEntry) => {
-      const jobEntry: ResumeTechProfileTechnologiesJobEntry = {
+      const jobEntry: ResumeProfileTechnologiesJobEntry = {
         role: job.role,
         company: job.job,
         start: job.start,
@@ -103,7 +103,7 @@ export const aggregateAndSave = async (
     );
 
   const techWithTotals = Object.values(aggTechs)
-    .map<ResumeTechProfileTechnologiesEntry | null>((tech) => {
+    .map<ResumeProfileTechnologiesEntry | null>((tech) => {
       const mergedRanges = mergeRanges(tech.jobs as Range[]); // Merge the overlapping ranges
       const totalMonths = calculateTotalMonths(mergedRanges); // Calculate total unique months
       const recentMonths = calculateTotalMonths(mergedRanges, 3); // Calculate total unique months
@@ -124,10 +124,10 @@ export const aggregateAndSave = async (
         popularity: normalizePopularityLevel(technology),
         category: technology.category,
         scope: technology.scope,
-      } satisfies ResumeTechProfileTechnologiesEntry;
+      } satisfies ResumeProfileTechnologiesEntry;
     })
-    .filter<ResumeTechProfileTechnologiesEntry>(isNotNull)
-    .reduce<Record<TechCode, ResumeTechProfileTechnologiesEntry>>(
+    .filter<ResumeProfileTechnologiesEntry>(isNotNull)
+    .reduce<Record<TechCode, ResumeProfileTechnologiesEntry>>(
       (acc, doc) => ({
         ...acc,
         [doc.code]: doc,
@@ -137,7 +137,7 @@ export const aggregateAndSave = async (
 
   const enrich = (
     techs: TechnologyEntry[],
-    props: Partial<ResumeTechProfileTechnologiesEntry>,
+    props: Partial<ResumeProfileTechnologiesEntry>,
   ) => {
     for (const tech of techs) {
       if (!tech.code) {
@@ -166,7 +166,7 @@ export const aggregateAndSave = async (
   enrich(updatedCV.skillSection.technologies, { inSkillsSection: true });
   enrich(updatedCV.profileSection.technologies, { inProfileSection: true });
 
-  const techProfileJobs: ResumeTechProfileJobEntry[] = updatedCV.jobs.map(
+  const techProfileJobs: ResumeProfileJobEntry[] = updatedCV.jobs.map(
     (job: EnhancedJobEntry) => {
       const technologies = job.technologies
         .map((tech) => {
@@ -214,7 +214,7 @@ export const aggregateAndSave = async (
     },
   );
 
-  const techProfile = await ResumeTechProfileModel.findOneAndUpdate(
+  const resumeProfile = await ResumeProfileModel.findOneAndUpdate(
     { uploadRef: updatedCV.uploadRef }, // Find by hash
     {
       $set: {
@@ -228,7 +228,7 @@ export const aggregateAndSave = async (
     { upsert: true, new: true, runValidators: true }, // Create if not exists, return updated, apply schema validations
   ).lean();
 
-  return { ...params, techProfile };
+  return { ...params, techProfile: resumeProfile };
 };
 
 // Function to calculate the total number of months covered by merged ranges

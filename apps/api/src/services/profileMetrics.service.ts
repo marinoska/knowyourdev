@@ -12,7 +12,7 @@ import { getProfileJobDuration } from "./profile/jobDuration.js";
 import { getProfileCategories } from "./profile/jobCategories.js";
 import { getProfileTechFocusUsage } from "./profile/techFocusUsage.js";
 import { getProfileTechUsage } from "./profile/techUsage.js";
-import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 
 /**
  * Service for calculating various aspects of a resume profile
@@ -23,7 +23,7 @@ export class ProfileMetricsService {
    * @param profile The resume profile base response
    * @returns Object containing job gaps
    */
-  getProfileJobGaps(profile: TResumeTechProfileDocument): TResumeProfileGaps {
+  getProfileJobGaps(profile: TResumeProfileDocument): TResumeProfileGaps {
     return getProfileJobGaps(profile);
   }
 
@@ -33,7 +33,7 @@ export class ProfileMetricsService {
    * @returns Object containing average job duration
    */
   getProfileJobDuration(
-    profile: TResumeTechProfileDocument,
+    profile: TResumeProfileDocument,
   ): TResumeProfileJobDuration {
     return getProfileJobDuration(profile);
   }
@@ -44,7 +44,7 @@ export class ProfileMetricsService {
    * @returns Object containing job categories
    */
   getProfileCategories(
-    profile: TResumeTechProfileDocument,
+    profile: TResumeProfileDocument,
   ): TResumeProfileCategories {
     return getProfileCategories(profile);
   }
@@ -55,7 +55,7 @@ export class ProfileMetricsService {
    * @returns Object containing tech focus usage
    */
   getProfileTechFocusUsage(
-    profile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+    profile: Pick<TResumeProfileDocument, "technologies" | "createdAt"> &
       Pick<TResumeProfileCategories, "earliestJobStart">,
   ): TResumeProfileTechFocusUsage {
     return getProfileTechFocusUsage(profile);
@@ -67,7 +67,7 @@ export class ProfileMetricsService {
    * @returns Object containing tech usage
    */
   getProfileTechUsage(
-    profile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+    profile: Pick<TResumeProfileDocument, "technologies" | "createdAt"> &
       Pick<TResumeProfileCategories, "earliestJobStart">,
   ): TResumeProfileTechUsage {
     return getProfileTechUsage(profile);
@@ -79,7 +79,7 @@ export class ProfileMetricsService {
    * @returns Object containing all profile data
    */
   calculateProfileMetrics(
-    profile: TResumeTechProfileDocument,
+    profile: TResumeProfileDocument,
   ): TResumeProfileMetrics {
     // Calculate job gaps and duration
     const jobGaps = this.getProfileJobGaps(profile);

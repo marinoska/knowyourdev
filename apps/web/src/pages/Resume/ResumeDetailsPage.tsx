@@ -4,7 +4,6 @@ import { BasePage } from "@/components/BasePage.tsx";
 import { useState } from "react";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { CareerTimelineChart } from "@/pages/Resume/Chart/CareerTimelineChart.tsx";
-import { ResumeProfileProvider } from "@/pages/Core/ResumeProfileProvider.tsx";
 import { CareerTechTimelineChart } from "@/pages/Resume/Chart/CareerTechTimelineChart.tsx";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
@@ -13,49 +12,56 @@ import { TechDurationPieChart } from "@/pages/Resume/Chart/TechDurationPieChart.
 import { TechMentionsPieChart } from "@/pages/Resume/Chart/TechMentionsPieChart.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { TechPopularityTimelineChart } from "@/pages/Resume/Chart/TechPopularityTimelineChart.tsx";
-import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { useResumeProfileQuery } from "@/api/query/useResumeProfileQuery.ts";
+import { TResumeProfileDTO } from "@/api/query/types.ts";
 
 type ResumeProfileParams = {
   id: string;
 };
 
-const TechnologiesChartGroup = () => {
+const TechnologiesChartGroup = ({
+  profile,
+}: {
+  profile: TResumeProfileDTO;
+}) => {
   // to not render the lower chart while the upper chat is being recalculated - to prevent flickering
   const [chartIsReady, setChartIsReady] = useState(false);
   const [chartIsEmpty, setChartIsEmpty] = useState(false);
   return (
     <>
       <TechTimelineChart
+        profile={profile}
         onChartIsReady={setChartIsReady}
         onChartIsEmpty={setChartIsEmpty}
       />
-      {chartIsReady && <TechDurationPieChart />}
-      {(chartIsReady || chartIsEmpty) && <TechMentionsPieChart />}
+      {chartIsReady && <TechDurationPieChart profile={profile} />}
+      {(chartIsReady || chartIsEmpty) && (
+        <TechMentionsPieChart profile={profile} />
+      )}
     </>
   );
 };
 
-const getTabItems = (): TabsRecord => ({
+const getTabItems = (profile: TResumeProfileDTO): TabsRecord => ({
   timeline: {
     label: "Career Timeline",
     content: (
       <Stack gap={6}>
-        <CareerTimelineChart />
+        <CareerTimelineChart profile={profile} />
         <Divider />
-        <CareerTechTimelineChart />
+        <CareerTechTimelineChart profile={profile} />
       </Stack>
     ),
   },
   techs: {
     label: "Technologies",
-    content: <TechnologiesChartGroup />,
+    content: <TechnologiesChartGroup profile={profile} />,
   },
   insights: {
     label: "Tech insights",
     content: (
       <Stack gap={6}>
-        <TechPopularityTimelineChart />
+        <TechPopularityTimelineChart profile={profile} />
       </Stack>
     ),
   },
@@ -64,34 +70,35 @@ const getTabItems = (): TabsRecord => ({
 export const ResumeDetailsPage = () => {
   const { id } = useParams<ResumeProfileParams>();
 
-  const query = useResumeProfileQuery({ uploadId: id });
+  if (!id) {
+    throw new Error(
+      "Missing required parameters. Please ensure you have a valid resume ID.",
+    );
+  }
 
-  return (
-    <ResumeProfileProvider profile={query.profile}>
-      <ResumeDetails query={query} />
-    </ResumeProfileProvider>
+  const resumeProfile = useResumeProfileQuery({ uploadId: id });
+  const isLoading = resumeProfile.isLoading;
+  const isError = resumeProfile.isError;
+  const { years, months } = monthsToYearsAndMonths(
+    resumeProfile.profile?.monthsActiveInSE || 0,
   );
-};
-
-const ResumeDetails = ({
-  query: { profile, isError, isLoading },
-}: {
-  query: ReturnType<typeof useResumeProfileQuery>;
-}) => {
-  const { monthsActive } = useResumeProfileContext();
-
-  const { years, months } = monthsToYearsAndMonths(monthsActive);
 
   return (
     <>
       <Snackbar type="danger" msg="Failed to load CV list." show={isError} />
-      <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile}>
+      <BasePage
+        isLoading={isLoading}
+        isError={isError}
+        showEmpty={!resumeProfile.profile}
+      >
         <BasePage.Header
           showBackButton
-          subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
-          title={profile?.fullName}
+          subtitle={`${resumeProfile.profile?.position} • ${years} years ${months} month net active time`}
+          title={resumeProfile.profile?.fullName}
         />
-        {profile && <Tabs tabs={getTabItems()} />}
+        {resumeProfile.profile && (
+          <Tabs tabs={getTabItems(resumeProfile.profile)} />
+        )}
       </BasePage>
     </>
   );

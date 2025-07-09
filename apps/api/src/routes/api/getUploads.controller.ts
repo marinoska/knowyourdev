@@ -10,7 +10,7 @@ import {
 import { getUploadsWithDetails } from "@/models/upload.repository.js";
 import { ProfileMatchService } from "@/services/profileMatch.service.js";
 import { ProfileMetricsService } from "@/services/profileMetrics.service.js";
-import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
+import { ResumeProfileModel } from "@/models/resumeProfileModel.js";
 import { ProjectModel } from "@/models/project.model.js";
 import { NotFound } from "@/app/errors.js";
 import { Schema } from "mongoose";
@@ -67,23 +67,23 @@ export const getUploadsListController: RequestHandler<
       if (record.parseStatus === "processed" && profileMetricsService) {
         try {
           // Get the tech profile for this upload
-          const techProfile = await ResumeTechProfileModel.findOne({
+          const resumeProfile = await ResumeProfileModel.findOne({
             uploadRef: record._id,
           }).lean();
 
-          if (techProfile) {
+          if (resumeProfile) {
             // Calculate profile metrics first
             const profileMetrics =
-              profileMetricsService.calculateProfileMetrics(techProfile);
+              profileMetricsService.calculateProfileMetrics(resumeProfile);
 
             // Then calculate match if project is available
             if (project && profileMatchService) {
               const match = profileMatchService.getCandidateMatch({
                 project,
                 candidate: {
-                  ...techProfile,
+                  ...resumeProfile,
                   ...profileMetrics,
-                  uploadId: techProfile.uploadRef as Schema.Types.ObjectId,
+                  uploadId: resumeProfile.uploadRef as Schema.Types.ObjectId,
                 },
               });
 

@@ -8,13 +8,13 @@ import ProjectSettingsContent from "@/pages/Projects/Details/ProjectSettingsCont
 import CandidatesContent from "@/pages/Projects/Details/CandidatesContent.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";
-import { TProject } from "@/api/query/types.ts";
+import { TProjectDTO } from "@/api/query/types.ts";
 
 type ProjectProfileParams = {
   id: string;
 };
 
-const getTabItems = (profile: TProject): TabsRecord => ({
+const getTabItems = (profile: TProjectDTO): TabsRecord => ({
   settings: {
     label: "Project Details",
     content: <ProjectSettingsContent project={profile} />,

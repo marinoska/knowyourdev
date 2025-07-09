@@ -2,21 +2,18 @@ import { Snackbar } from "@/components/Snackbar.tsx";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
 import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
-import { ResumeProfileProvider } from "@/pages/Core/ResumeProfileProvider.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
-import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { Small, Subtitle, Title } from "@/components/typography.tsx";
 import Stack from "@mui/joy/Stack";
 import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
-import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
-import { TechMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechMatch.tsx";
-import { useCandidateMatch } from "@/pages/Core/useCandidateMatch.ts";
 import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
-import { TProject } from "@/api/query/types.ts";
+import { TProjectDTO, TResumeProfileDTO } from "@/api/query/types.ts";
 import { JobStability } from "@/pages/Projects/Details/CandidatesDetailsPage/JobStability.tsx";
 import { useResumeProfileQuery } from "@/api/query/useResumeProfileQuery.ts";
+import { TechMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechMatch.tsx";
+import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
 
 type CandidateDetailsParams = {
   id: string;
@@ -24,22 +21,54 @@ type CandidateDetailsParams = {
 };
 
 export const CandidateMatchPage = () => {
-  const { id, candidateId } = useParams<CandidateDetailsParams>();
+  const { id: projectId, candidateId } = useParams<CandidateDetailsParams>();
 
-  const candidateQuery = useResumeProfileQuery({ uploadId: candidateId });
-  const projectQuery = useProjectProfileQuery({ projectId: id });
+  if (!candidateId || !projectId) {
+    throw new Error(
+      "Missing required parameters. Please ensure you have a valid project and candidate ID.",
+    );
+  }
+
+  const candidateQuery = useResumeProfileQuery({
+    uploadId: candidateId,
+    projectId,
+  });
+  const projectQuery = useProjectProfileQuery({ projectId });
 
   const isLoading = candidateQuery.isLoading || projectQuery.isLoading;
   const isError = candidateQuery.isError || projectQuery.isError;
+  const { years, months } = monthsToYearsAndMonths(
+    candidateQuery.profile?.monthsActiveInSE || 0,
+  );
 
   return (
-    <ResumeProfileProvider profile={candidateQuery.profile}>
-      <CandidateDetails
-        project={projectQuery.data}
+    <>
+      <Snackbar
+        type="danger"
+        msg="Failed to load candidate details."
+        show={isError}
+      />
+      <BasePage
         isLoading={isLoading}
         isError={isError}
-      />
-    </ResumeProfileProvider>
+        showEmpty={!candidateQuery.profile || !projectQuery.data}
+      >
+        <BasePage.Header
+          showBackButton
+          caption={`Project: ${projectQuery.data?.name}`}
+          subtitle={`${candidateQuery.profile?.position} • ${years} years ${months} month net active time`}
+          title={candidateQuery.profile?.fullName}
+        />
+        <BasePage.Content>
+          {projectQuery.data && candidateQuery.profile ? (
+            <CandidateDetails
+              candidate={candidateQuery.profile}
+              project={projectQuery.data}
+            />
+          ) : null}
+        </BasePage.Content>
+      </BasePage>
+    </>
   );
 };
 
@@ -69,12 +98,6 @@ const CareerDetailsAlert = ({ color }: { color: ColorPaletteProp }) => {
 const KeyStrengths = () => {
   // TODO implement
   return null;
-
-  // return (
-  //   <BasePage.Sheet>
-  //     {/*<Title text="Key Strengths" />*/}
-  //   </BasePage.Sheet>
-  // );
 };
 
 const RiskAssessment = () => {
@@ -107,63 +130,29 @@ const RoleSuitability = () => {
 };
 
 const CandidateDetails = ({
+  candidate,
   project,
-  isLoading,
-  isError,
 }: {
-  project?: TProject;
-  isLoading: boolean;
-  isError: boolean;
+  candidate: TResumeProfileDTO<true>;
+  project: TProjectDTO;
 }) => {
-  const { monthsActive, profile } = useResumeProfileContext();
-  const { years, months } = monthsToYearsAndMonths(monthsActive);
-
-  const candidateMatch = useCandidateMatch({
-    project,
-    candidate: profile,
-  });
-
   return (
-    <>
-      <Snackbar
-        type="danger"
-        msg="Failed to load candidate details."
-        show={isError}
-      />
-      <BasePage
-        isLoading={isLoading}
-        isError={isError}
-        showEmpty={!profile || !project}
-      >
-        <BasePage.Header
-          showBackButton
-          caption={`Project: ${project?.name}`}
-          subtitle={`${profile?.position} • ${years} years ${months} month net active time`}
-          title={profile?.fullName}
+    <Stack direction="row" spacing={2}>
+      <Stack direction="column" flex={2}>
+        <KeyStrengths />
+        <TechFocusMatch
+          project={project}
+          techFocusMatch={candidate.match.techFocusMatch}
         />
-        <BasePage.Content>
-          <Stack direction="row" spacing={2}>
-            <Stack direction="column" flex={2}>
-              <KeyStrengths />
-              <TechFocusMatch
-                project={project}
-                techFocusMatch={candidateMatch.techFocusMatch}
-              />
-              <TechMatch
-                project={project}
-                techMatch={candidateMatch.techMatch}
-              />
-              <RiskAssessment />
-            </Stack>
-            <Stack flex={1} direction="column" gap={2}>
-              <OverallMatch match={candidateMatch} />
-              <RoleSuitability />
-              <JobStability match={candidateMatch} />
-              <Actions />
-            </Stack>
-          </Stack>
-        </BasePage.Content>
-      </BasePage>
-    </>
+        <TechMatch project={project} techMatch={candidate.match.techMatch} />
+        <RiskAssessment />
+      </Stack>
+      <Stack flex={1} direction="column" gap={2}>
+        <OverallMatch match={candidate.match!} />
+        <RoleSuitability />
+        <JobStability match={candidate.match!} />
+        <Actions />
+      </Stack>
+    </Stack>
   );
 };

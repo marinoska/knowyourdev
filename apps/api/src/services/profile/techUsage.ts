@@ -6,7 +6,7 @@ import {
   TTechTimeline,
 } from "@kyd/common/api";
 import { endOfMonth, startOfMonth, subMonths } from "date-fns";
-import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 import { loopThroughMonths } from "@/services/profile/helpers.js";
 
 /**
@@ -16,7 +16,7 @@ import { loopThroughMonths } from "@/services/profile/helpers.js";
  * @returns Object containing tech activities data
  */
 export function calculateTechActivities(
-  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+  techProfile: Pick<TResumeProfileDocument, "technologies" | "createdAt"> &
     Pick<TResumeProfileCategories, "earliestJobStart">,
 ): TTechUsage {
   const result = {} as TTechUsage;
@@ -80,7 +80,7 @@ export function calculateTechActivities(
  * @returns The tech activities
  */
 export function getProfileTechUsage(
-  techProfile: Pick<TResumeTechProfileDocument, "technologies" | "createdAt"> &
+  techProfile: Pick<TResumeProfileDocument, "technologies" | "createdAt"> &
     Pick<TResumeProfileCategories, "earliestJobStart">,
 ): TResumeProfileTechUsage {
   if (!techProfile.earliestJobStart) {

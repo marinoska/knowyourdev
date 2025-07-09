@@ -2,9 +2,13 @@ import Stack from "@mui/joy/Stack";
 import Chip from "@mui/joy/Chip";
 import { SCOPE_NAMES } from "@kyd/common/api";
 import { Regular, Title } from "@/components/typography.tsx";
-import { TProject } from "@/api/query/types.ts";
+import { TProjectDTO } from "@/api/query/types.ts";
 
-export const ProjectSettingsContent = ({ project }: { project: TProject }) => {
+export const ProjectSettingsContent = ({
+  project,
+}: {
+  project: TProjectDTO;
+}) => {
   return (
     <Stack gap={2}>
       <Title>Description</Title>
@@ -23,7 +27,8 @@ export const ProjectSettingsContent = ({ project }: { project: TProject }) => {
 
       <Title>Technologies</Title>
       <Stack direction="row" gap={1} flexWrap="wrap">
-        {project.settings?.technologies && project.settings.technologies.length > 0 ? (
+        {project.settings?.technologies &&
+        project.settings.technologies.length > 0 ? (
           project.settings.technologies.map((tech) => (
             <Chip key={tech.code} variant="soft" color="primary" size="md">
               {tech.name}

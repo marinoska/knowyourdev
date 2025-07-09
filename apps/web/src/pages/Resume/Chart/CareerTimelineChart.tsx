@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { useResumeProfileContext } from "@/pages/Core/ResumeProfileContext.ts";
 import { GreenLegendColor, YellowLegendColor } from "@/utils/const";
 import { RedLegendColor } from "@/utils/const.ts";
 import { Legend } from "@/components/Legend.tsx";
 import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
 import { TimelineChart } from "@/pages/components/Chart/TimelineChart.tsx";
+import { TResumeProfileDTO } from "@/api/query/types.ts";
 
 const LegendItems = [
   { label: "Software Development Jobs", color: GreenLegendColor },
@@ -13,8 +13,7 @@ const LegendItems = [
   { label: "Irrelevant Jobs (not in development)", color: RedLegendColor },
 ];
 
-export const CareerTimelineChart = () => {
-  const { profile } = useResumeProfileContext();
+export const CareerTimelineChart = ({ profile }: { profile: TResumeProfileDTO }) => {
 
   const chartData = useMemo(() => {
     const gapsAndJobs = [

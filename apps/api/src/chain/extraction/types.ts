@@ -1,7 +1,7 @@
 import { TechDocument } from "@/models/types.js";
 import { Schema } from "mongoose";
 import { ExtractedCVData } from "@kyd/common/api";
-import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 
 export type ExtractionChainInput = {
   cvText: string;
@@ -10,7 +10,7 @@ export type ExtractionChainInput = {
 };
 export type ExtractionChainOutput = {
   // cvData: TResumeDataDocument;
-  techProfile: TResumeTechProfileDocument;
+  techProfile: TResumeProfileDocument;
 };
 
 export type ExtractionChainParam =

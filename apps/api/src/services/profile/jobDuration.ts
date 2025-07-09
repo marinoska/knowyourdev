@@ -1,8 +1,8 @@
 import {
-  ResumeTechProfileJobEntry,
+  ResumeProfileJobEntry,
   TResumeProfileJobDuration,
 } from "@kyd/common/api";
-import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 
 /**
  * Calculate average duration of jobs
@@ -10,7 +10,7 @@ import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
  * @returns Average duration of jobs in months
  */
 export function calculateAverageJobDuration(
-  jobs: ResumeTechProfileJobEntry[],
+  jobs: ResumeProfileJobEntry[],
 ): number {
   if (!jobs || !jobs.length) return 0;
 
@@ -23,11 +23,13 @@ export function calculateAverageJobDuration(
 
 /**
  * Add average job duration to the tech profile response
- * @param techProfile The tech profile response
+ * @param profile The tech profile response
  * @returns The tech profile response with average job duration added
  */
 export function getProfileJobDuration(
-  techProfile: TResumeTechProfileDocument,
+  profile: TResumeProfileDocument,
 ): TResumeProfileJobDuration {
-  return { averageJobDuration: calculateAverageJobDuration(techProfile.jobs) };
+  return {
+    averageJobDuration: calculateAverageJobDuration(profile.jobs),
+  };
 }

@@ -1,16 +1,16 @@
-import { sortRangesAsc } from "@kyd/common";
+import { sortRangesAsc, sumRanges } from "@kyd/common";
 import {
-  ResumeTechProfileJobEntry,
+  ResumeProfileJobEntry,
   TResumeProfileCategories,
 } from "@kyd/common/api";
-import { TResumeTechProfileDocument } from "@/models/resumeTechProfileModel.js";
+import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 
 /**
  * Categorizes jobs into different groups and calculates the earliest job start date
  * @param jobs Array of jobs
  * @returns Object containing categorized jobs and earliest job start date
  */
-export function categorizeJobs(jobs: ResumeTechProfileJobEntry[]) {
+export function categorizeJobs(jobs: ResumeProfileJobEntry[]) {
   if (!jobs || !jobs.length) {
     return {
       softwareDevelopmentJobs: [],
@@ -23,10 +23,10 @@ export function categorizeJobs(jobs: ResumeTechProfileJobEntry[]) {
 
   const sortedJobs = sortRangesAsc(jobs);
 
-  const devJobs: ResumeTechProfileJobEntry[] = [];
-  const otherJobs: ResumeTechProfileJobEntry[] = [];
-  const jobsWithMissingTech: ResumeTechProfileJobEntry[] = [];
-  const jobsWithFilledTech: ResumeTechProfileJobEntry[] = [];
+  const devJobs: ResumeProfileJobEntry[] = [];
+  const otherJobs: ResumeProfileJobEntry[] = [];
+  const jobsWithMissingTech: ResumeProfileJobEntry[] = [];
+  const jobsWithFilledTech: ResumeProfileJobEntry[] = [];
 
   // Get the earliest job start date
   const earliestJobStart = sortedJobs.length ? sortedJobs[0].start : new Date();
@@ -60,7 +60,11 @@ export function categorizeJobs(jobs: ResumeTechProfileJobEntry[]) {
  * @returns The job categories
  */
 export function getProfileCategories(
-  resumeProfile: TResumeTechProfileDocument,
+  resumeProfile: TResumeProfileDocument,
 ): TResumeProfileCategories {
-  return categorizeJobs(resumeProfile.jobs);
+  const profileWithCategories = categorizeJobs(resumeProfile.jobs);
+  return {
+    ...profileWithCategories,
+    monthsActiveInSE: sumRanges(profileWithCategories.softwareDevelopmentJobs),
+  };
 }

@@ -11,9 +11,11 @@ import { TimelineChart } from "@/pages/components/Chart/TimelineChart.tsx";
 //* TODO add a position description via a tooltip
 
 export const TechTimelineChart = ({
+  profile,
   onChartIsReady,
   onChartIsEmpty,
 }: {
+  profile: any;
   onChartIsReady: (b: boolean) => void;
   onChartIsEmpty: (b: boolean) => void;
 }) => {
@@ -24,7 +26,7 @@ export const TechTimelineChart = ({
     setSelectedScope,
     showKeyTechOnly,
     setShowKeyTechOnly,
-  } = useFilteredTechnologies();
+  } = useFilteredTechnologies(profile);
 
   // todo handleTechnologiesLength instead - ideally get rid of this
   useEffect(() => {

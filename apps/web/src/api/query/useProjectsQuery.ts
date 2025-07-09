@@ -3,7 +3,7 @@ import { projectsKeys } from "./keys.ts";
 import { getProjectProfile, listProjects } from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
 import { GetProjectsListResponse } from "@kyd/common/api";
-import { TProject } from "@/api/query/types.ts";
+import { TProjectDTO } from "@/api/query/types.ts";
 
 export const useProjectsQuery = ({
   page,
@@ -39,7 +39,7 @@ export const useProjectProfileQuery = ({
 }: {
   projectId?: string;
 }) => {
-  return useQuery<TProject, Error>({
+  return useQuery<TProjectDTO, Error>({
     queryKey: projectsKeys.profile(projectId!),
     queryFn: () => getProjectProfile({ projectId: projectId! }),
     retry: TIMES_THREE,
