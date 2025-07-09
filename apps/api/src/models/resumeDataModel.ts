@@ -6,7 +6,6 @@ import {
   TechnologyEntry,
 } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
-import { parseMonthStartUtc, parseMonthEndUtc } from "@/utils/dates.js";
 
 export type TResumeDataDocument<TJob = JobEntry> = Document &
   ExtractedCVData<TJob> & {

@@ -1,5 +1,4 @@
 import Stack from "@mui/joy/Stack";
-import { TUploadItem } from "@kyd/common/api";
 import { LoadMoreButton } from "@/components/LoadMoreButton.tsx";
 import { useUploadsQuery } from "@/api/query/useUploadsQuery.ts";
 import CenteredLoader from "@/components/Loader.tsx";
@@ -16,7 +15,7 @@ import { Regular, Smallest } from "@/components/typography.tsx";
 import { TProject } from "@/api/query/types.ts";
 import Chip from "@mui/joy/Chip";
 import { getScoreColor } from "@/utils/colors.ts";
-import { useCandidatesMatch } from "@/pages/Core/useCandidateMatch.ts";
+import { TExtendedUpload, TUpload } from "@kyd/common/api";
 
 const StatusIcon: Record<string, ReactNode> = {
   pending: <CircularProgress variant="solid" size="sm" />,
@@ -27,13 +26,16 @@ const StatusIcon: Record<string, ReactNode> = {
 const ProjectCandidateItem = ({
   item,
   projectId,
-  score,
 }: {
-  item: TUploadItem;
+  item: TUpload | TExtendedUpload;
   projectId: string;
-  score: number;
 }) => {
-  const { role, name, fullName, position, createdAt, parseStatus, _id } = item;
+  const { name, fullName, position, createdAt, parseStatus, _id } = item;
+  let score = undefined;
+  if ("match" in item) {
+    score = item.match.overallMatch;
+  }
+
   const navigate = useNavigate();
   const isActive = item.parseStatus === "processed";
   const onClick = useCallback(() => {
@@ -52,11 +54,15 @@ const ProjectCandidateItem = ({
           {fullName ? fullName : name} {position && ` - ${position}`}
         </Regular>
         <Smallest>
-          Uploaded on {format(new Date(createdAt), "MMMM d, yyyy")}{" "}
-          {role && ` for ${role}`} ({name})&nbsp;•&nbsp;
-          <Chip variant="soft" color={getScoreColor(score)} size="md">
-            {score.toFixed(2)}% {score > 0.5 ? "Match" : "No match"}
-          </Chip>
+          Uploaded on {format(new Date(createdAt), "MMMM d, yyyy")} {name}
+          {score && (
+            <>
+              &nbsp;•&nbsp;
+              <Chip variant="soft" color={getScoreColor(score)} size="md">
+                {score.toFixed(2)}% {score > 0.5 ? "Match" : "No match"}
+              </Chip>
+            </>
+          )}
         </Smallest>
       </Stack>
       <Typography sx={{ marginLeft: "auto" }}>
@@ -71,8 +77,8 @@ export const CandidatesList = ({ project }: { project: TProject }) => {
     page: 1,
     limit: 300,
     projectId: project._id,
+    withMatch: true,
   });
-  const matches = useCandidatesMatch({ project, candidates: [] });
 
   if (query.isLoading) {
     return <CenteredLoader />;
@@ -86,17 +92,12 @@ export const CandidatesList = ({ project }: { project: TProject }) => {
     <Stack gap={1} direction="column">
       {/* put filters here*/}
       <Stack gap={2}>
-        {query.data?.map((upload) => {
-          // Find match for this upload if available
-          const match = matches.find((m) => m.uploadId === upload._id);
-          const score = match ? match.overallMatch : 88; // Use match score if available, otherwise fallback to 88
-
+        {query.data?.map((upload: TUpload | TExtendedUpload) => {
           return (
             <ProjectCandidateItem
               key={upload._id}
               item={upload}
               projectId={project._id}
-              score={score}
             />
           );
         })}

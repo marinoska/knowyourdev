@@ -23,7 +23,7 @@ export type TProjectResponse = TProject & {
 };
 
 export type TProjectsPage = { projects: TProjectResponse[] };
-export type GetProjectsListResponse = TProjectsPage & TListResponse;
+export type GetProjectsListResponse = TListResponse<TProjectsPage>;
 
 export type GetProjectsListQueryParams = {
   page: number;

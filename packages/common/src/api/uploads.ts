@@ -1,10 +1,10 @@
 import { TListResponse } from "./utils.js";
+import { TCandidateMatch } from "./match.js";
 
 export type ParsedStatus = "pending" | "failed" | "processed";
-export type TUploadItem = {
+export type TUpload = {
   _id: string;
   name: string;
-  role: string | null;
   fullName: string | null;
   position: string | null;
   hash: string;
@@ -12,24 +12,37 @@ export type TUploadItem = {
   size: number;
   parseStatus: ParsedStatus;
   createdAt: string;
-  r2Key?: string; // Cloudflare R2 object key
-  r2Url?: string; // Cloudflare R2 object URL
 };
 
-export type TUploadsPage = { uploads: TUploadItem[] };
+export type TExtendedUpload = TUpload & {
+  match: TCandidateMatch;
+};
 
-export type GetUploadsListResponse = TUploadsPage & TListResponse;
+type ConditionalUploadItem<T extends TUpload> = T extends {
+  parseStatus: "processed";
+}
+  ? TExtendedUpload
+  : T;
+
+export type TUploadsPage<WithExtended extends boolean = false> = {
+  uploads: WithExtended extends true
+    ? ConditionalUploadItem<TUpload>[]
+    : TUpload[];
+};
+
+export type GetUploadsListResponse = TListResponse<TUploadsPage>;
 
 export type GetUploadsListQueryParams = {
   page: number;
   limit: number;
   projectId?: string;
+  withMatch?: boolean; // Optional parameter to include match data
   // sortBy?: string;
   // sortOrder?: 'asc' | 'desc';
 };
 
 export type DocumentUploadResponse = Omit<
-  TUploadItem,
+  TUpload,
   "fullName" | "position" | "hash"
 >;
 

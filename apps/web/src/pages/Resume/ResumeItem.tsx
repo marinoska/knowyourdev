@@ -2,7 +2,7 @@ import DocumentIcon from "@mui/icons-material/Grading";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { format } from "date-fns";
-import { ParsedStatus, TUploadItem } from "@kyd/common/api";
+import { ParsedStatus, TUpload } from "@kyd/common/api";
 import { CircularProgress } from "@mui/joy";
 import * as React from "react";
 import { Done, ReportProblem } from "@mui/icons-material";
@@ -17,8 +17,8 @@ const StatusIcon: Record<ParsedStatus, React.ReactNode> = {
   processed: <Done color="success" />,
 };
 
-export const ResumeItem = ({ item }: { item: TUploadItem }) => {
-  const { role, name, fullName, position, createdAt, parseStatus, _id } = item;
+export const ResumeItem = ({ item }: { item: TUpload }) => {
+  const { name, fullName, position, createdAt, parseStatus, _id } = item;
   const navigate = useNavigate();
   const isActive = item.parseStatus === "processed";
   const onClick = useCallback(() => {
@@ -37,8 +37,7 @@ export const ResumeItem = ({ item }: { item: TUploadItem }) => {
           {fullName ? fullName : name} {position && ` - ${position}`}
         </Regular>
         <Smallest>
-          Uploaded on {format(new Date(createdAt), "MMMM d, yyyy")}{" "}
-          {role && ` for ${role}`} ({name})
+          Uploaded on {format(new Date(createdAt), "MMMM d, yyyy")} {name}
         </Smallest>
       </Stack>
       <Typography sx={{ marginLeft: "auto" }}>

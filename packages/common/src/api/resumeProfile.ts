@@ -54,6 +54,7 @@ export type ResumeTechProfileJobEntry = Pick<
 };
 
 export type TResumeProfile = Pick<ExtractedCVData, "position" | "fullName"> & {
+  uploadId: Schema.Types.ObjectId;
   technologies: ResumeTechProfileTechnologiesEntry[];
   jobs: ResumeTechProfileJobEntry[];
 };
@@ -109,11 +110,8 @@ export type TResumeProfileMetrics = TResumeProfileGaps &
   TResumeProfileTechFocusUsage &
   TResumeProfileTechUsage;
 
-export type TResumeTechProfileDTO = TResumeProfile & {
-  uploadId: Schema.Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type TResumeProfileResponse = TResumeTechProfileDTO &
-  TResumeProfileMetrics;
+export type GetResumeProfileResponse = Omit<TResumeProfile, "uploadId"> & {
+  uploadId: string;
+  createdAt: string;
+  updatedAt: string;
+} & TResumeProfileMetrics;

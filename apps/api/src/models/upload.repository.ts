@@ -1,122 +1,87 @@
 import { UploadModel } from "@/models/upload.model.js";
-import { ResumeDataModel } from "@/models/resumeDataModel.js";
-import { ParsedStatus } from "@kyd/common/api";
-import { ProjectModel } from "@/models/project.model.js";
-import mongoose from "mongoose";
+import {
+  ResumeDataModel,
+  TResumeDataDocument,
+} from "@/models/resumeDataModel.js";
+import { TProjectDocument } from "@/models/project.model.js";
+import { SortOrder } from "mongoose";
+import { TUpload, TListResponse } from "@kyd/common/api";
 
-export type GetUploadsParams = {
+type TParams = {
   page: number;
   limit: number;
   sortOrder?: "asc" | "desc";
-  projectId?: string;
-};
-
-type UploadDetail = {
-  _id: string;
-  originalName: string;
-  filename: string;
-  hash: string;
-  contentType: string;
-  size: number;
-  parseStatus: ParsedStatus;
-  metadata: {
-    name: string;
-    role: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-  uploadData: {
-    fullName: string | null;
-    position: string | null;
-    sections: string[] | null;
-  } | null;
-};
-
-export type GetUploadsWithDetailsResponse = {
-  uploads: UploadDetail[];
-  totalRecords: number;
-  currentPage: number;
-  totalPages: number;
+  project?: TProjectDocument | null;
 };
 
 export const getUploadsWithDetails = async ({
   page,
   limit,
   sortOrder = "desc",
-  projectId,
-}: GetUploadsParams) => {
+  project,
+}: TParams): Promise<TListResponse<{ uploads: TUpload[] }>> => {
   const skip = (page - 1) * limit;
 
-  const uploadIds = [];
-  let matchStage = {};
-  let totalRecords = 0;
+  // Create query conditions
+  const query = project?.candidates ? { _id: { $in: project.candidates } } : {};
 
-  if (projectId) {
-    const project = await ProjectModel.findById(projectId).lean();
-    if (project?.candidates?.length) {
-      matchStage = { _id: { $in: project.candidates } };
-      totalRecords = project?.candidates?.length || 0;
-    } else {
-      // If project not found or no candidates, return empty result
-      return {
-        uploads: [],
-        totalRecords: 0,
-        currentPage: page,
-        totalPages: 0,
-      };
-    }
-  }
+  // Get total records count
+  const totalRecords =
+    project?.candidates?.length || (await UploadModel.countDocuments({}));
 
-  const uploadsWithDetails = await UploadModel.aggregate([
-    ...(projectId ? [{ $match: matchStage }] : []),
-    {
-      $lookup: {
-        from: ResumeDataModel.collection.name,
-        localField: "_id",
-        foreignField: "uploadRef",
-        as: "uploadData",
-      },
-    },
-    {
-      $unwind: {
-        path: "$uploadData", // Flatten the array from $lookup as the looked up data is returned as array of object (always)
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $sort: {
-        createdAt: sortOrder === "asc" ? 1 : -1,
-      },
-    },
-    {
-      $skip: skip,
-    },
-    {
-      $limit: limit,
-    },
-    {
-      $project: {
-        _id: 1,
-        originalName: 1,
-        filename: 1,
-        hash: 1,
-        contentType: 1,
-        size: 1,
-        parseStatus: 1,
-        metadata: 1,
-        createdAt: 1,
-        updatedAt: 1,
-        "uploadData.fullName": 1,
-        "uploadData.position": 1,
-        "uploadData.sections": 1,
-      },
-    },
-  ]);
+  // Create sort options
+  const sortOptions = {
+    createdAt:
+      sortOrder === "asc" ? ("asc" as SortOrder) : ("desc" as SortOrder),
+  };
 
-  // Only count all documents if not filtering by projectId
-  if (!projectId) {
-    totalRecords = await UploadModel.countDocuments({});
-  }
+  // First get the uploads
+  const uploads = await UploadModel.find(query)
+    .sort(sortOptions)
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  // Get the upload IDs
+  const uploadIds = uploads.map((upload) => upload._id);
+
+  // Find the corresponding resume data
+  const resumeData = await ResumeDataModel.find(
+    { uploadRef: { $in: uploadIds } },
+    { fullName: 1, position: 1, sections: 1, uploadRef: 1 },
+  ).lean();
+
+  type ResumeDataMap = {
+    [key: string]: Pick<TResumeDataDocument, "fullName" | "position">;
+  };
+
+  // Create a map of resume data by upload ID for quick lookup
+  const resumeDataMap = resumeData.reduce<ResumeDataMap>((map, data) => {
+    map[data.uploadRef.toString()] = {
+      fullName: data.fullName,
+      position: data.position,
+    };
+    return map;
+  }, {});
+
+  // Combine the data
+  const uploadsWithDetails = uploads.map((upload) => {
+    const uploadId = upload._id.toString();
+    const resumeData = resumeDataMap[uploadId] || null;
+    return {
+      _id: uploadId,
+      name: upload.metadata?.name || "",
+      fullName: resumeData?.fullName,
+      position: resumeData?.position,
+      hash: upload.hash,
+      contentType: upload.contentType,
+      size: upload.size,
+      parseStatus: upload.parseStatus,
+      createdAt: upload.createdAt.toISOString(),
+      originalName: upload.originalName,
+      filename: upload.filename,
+    };
+  });
 
   return {
     uploads: uploadsWithDetails,

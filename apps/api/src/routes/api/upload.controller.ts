@@ -78,7 +78,6 @@ export const documentUploadController: DocumentUploadController = async (
   res.status(200).json({
     _id: newUpload._id.toString(),
     name: newUpload.metadata.name,
-    role: newUpload.metadata.projectId,
     size: newUpload.size,
     contentType: newUpload.contentType,
     parseStatus: newUpload.parseStatus,

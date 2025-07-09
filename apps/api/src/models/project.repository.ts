@@ -1,4 +1,5 @@
 import { ProjectModel, TProjectDocument } from "@/models/project.model.js";
+import { SortOrder } from "mongoose";
 
 export type GetProjectsParams = {
   page: number;
@@ -21,7 +22,7 @@ export const getProjects = async ({
   const skip = (page - 1) * limit;
 
   const projects = await ProjectModel.find({})
-    .sort({ createdAt: sortOrder === "asc" ? 1 : -1 })
+    .sort({ createdAt: sortOrder === "asc" ? "asc" as SortOrder : "desc" as SortOrder })
     .skip(skip)
     .limit(limit)
     .populate('settings.technologies.ref')

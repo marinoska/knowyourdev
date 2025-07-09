@@ -3,7 +3,7 @@ import {
   ScopeType,
   TProject,
   TResumeProfileMetrics,
-  TResumeTechProfileDTO,
+  TResumeProfile,
   TTechFocusTimeline,
   TTechTimeline,
 } from "@kyd/common/api";
@@ -47,7 +47,7 @@ export class ProfileMatchService {
     candidate,
   }: {
     project?: TProject;
-    candidate?: TResumeTechProfileDTO & TResumeProfileMetrics;
+    candidate?: TResumeProfile & TResumeProfileMetrics;
   }): TCandidateMatch {
     if (!project || !candidate) {
       return DefaultCandidateMatch;
@@ -61,7 +61,7 @@ export class ProfileMatchService {
     candidates,
   }: {
     project?: TProject;
-    candidates?: (TResumeTechProfileDTO & TResumeProfileMetrics)[];
+    candidates?: (TResumeProfile & TResumeProfileMetrics)[];
   }) {
     if (!project || !candidates) {
       return [DefaultCandidateMatch];
@@ -115,7 +115,7 @@ function candidateMatch({
   candidate,
 }: {
   project: TProject;
-  candidate: TResumeTechProfileDTO & TResumeProfileMetrics;
+  candidate: TResumeProfile & TResumeProfileMetrics;
 }): TCandidateMatch {
   // Process scope matches
   const techFocusMatch = {} as Record<ScopeType, TTechFocusMatch>;

@@ -1,3 +1,4 @@
+export * from "./utils.js";
 export * from "./uploads.js";
 export * from "./tech.js";
 export * from "./resumeData.js";

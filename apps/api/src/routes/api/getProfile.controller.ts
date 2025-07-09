@@ -1,22 +1,21 @@
 import { RequestHandler, Response } from "express";
 import { ResumeTechProfileModel } from "@/models/resumeTechProfileModel.js";
 import { Joi, Segments } from "celebrate";
-import { TResumeProfileResponse } from "@kyd/common/api";
+import { GetResumeProfileResponse } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
-import { Types, Schema } from "mongoose";
+import { Types } from "mongoose";
 import { ProfileMetricsService } from "@/services/profileMetrics.service.js";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },
-  TResumeProfileResponse,
-  any,
-  any,
-  {}
+  GetResumeProfileResponse,
+  unknown,
+  unknown
 >;
 
 export const getResumeProfileController: ResumeProfileController = async (
   req,
-  res: Response<TResumeProfileResponse>,
+  res: Response<GetResumeProfileResponse>,
 ) => {
   const { uploadId } = req.params;
 
@@ -31,11 +30,11 @@ export const getResumeProfileController: ResumeProfileController = async (
   }
 
   const response = {
-    uploadId: new Schema.Types.ObjectId(uploadId),
+    uploadId,
     fullName: techProfile.fullName,
     position: techProfile.position,
-    createdAt: techProfile.createdAt,
-    updatedAt: techProfile.updatedAt,
+    createdAt: techProfile.createdAt.toISOString(),
+    updatedAt: techProfile.updatedAt.toISOString(),
     technologies: techProfile.technologies,
     jobs: techProfile.jobs,
   };

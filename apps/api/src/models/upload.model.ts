@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 import { ParsedStatus } from "@kyd/common/api";
 
-export type TUpload = {
+export type TUploadDTO = {
   originalName: string; // Original filename
   filename: string; // Stored filename (hashed or unique)
   hash: string; // SHA-256 hash for deduplication
@@ -18,7 +18,7 @@ export type TUpload = {
 };
 
 export type TUploadDocument = Document &
-  TUpload & {
+  TUploadDTO & {
     _id: Schema.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;

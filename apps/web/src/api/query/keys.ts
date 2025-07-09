@@ -2,10 +2,11 @@ import { QueryKey } from "@tanstack/react-query";
 
 export const uploadsKeys = {
   list: (): QueryKey => ["uploads", "list"],
-  paginate: (page: number, projectId: string = ""): QueryKey => [
+  paginate: (page: number, projectId: string = "", withMatch: boolean = false): QueryKey => [
     "uploads",
     page,
     projectId,
+    withMatch,
   ],
   profile: (id: string): QueryKey => ["uploads", "profile", id],
 };
