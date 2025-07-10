@@ -30,7 +30,7 @@ export const ProjectsList = () => {
         isError={isError}
         showEmpty={!projects?.length}
       >
-        <BasePage.Header title="ProjectsList">
+        <BasePage.Header title="Projects">
           <Button
             onClick={() => setOpenProjectModal(true)}
             startDecorator={<BusinessCenterIcon />}

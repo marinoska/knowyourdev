@@ -75,15 +75,23 @@ export const CandidateMatchPage = () => {
   );
 };
 
-const CareerDetailsAlert = ({ color }: { color: ColorPaletteProp }) => {
+const CareerDetailsAlert = ({
+  color,
+  text,
+  title,
+}: {
+  color: ColorPaletteProp;
+  title: string;
+  text: string;
+}) => {
   return (
     <Alert
       variant="soft"
       color={color}
       startDecorator={
         <Box
-          width={16}
-          height={16}
+          width={12}
+          height={12}
           borderRadius="50%"
           bgcolor={`${color}.500`}
           mr={1}
@@ -91,26 +99,38 @@ const CareerDetailsAlert = ({ color }: { color: ColorPaletteProp }) => {
       }
     >
       <Stack>
-        <Subtitle>Career Gap Detected</Subtitle>
-        <Small>6 months gap in 2022</Small>
+        <Subtitle>{title}</Subtitle>
+        <Small>{text}</Small>
       </Stack>
     </Alert>
   );
 };
 
-const KeyStrengths = () => {
-  // TODO implement
-  return null;
-};
-
-const RiskAssessment = () => {
+const RedFlags = () => {
   return (
     <BasePage.Sheet>
       <Stack gap={2}>
-        <Title text="Risk Assessment" />
-        <CareerDetailsAlert color="danger" />
-        <CareerDetailsAlert color="warning" />
-        <CareerDetailsAlert color="success" />
+        <Title text="Risk assessment" />
+        <CareerDetailsAlert
+          color="danger"
+          title="Legacy technologies"
+          text="jQuery, Backbone, AngularJS"
+        />
+        <CareerDetailsAlert
+          color="warning"
+          title="Career Gap Detected"
+          text="6 months gap in 2022"
+        />
+        <CareerDetailsAlert
+          color="warning"
+          title="Limited backend experience"
+          text="No experience with backend technologies since 2018"
+        />
+        <CareerDetailsAlert
+          color="warning"
+          title="Tech stack inconsistency"
+          text="Node.js, PHP, no backend framework mentioned"
+        />{" "}
       </Stack>
     </BasePage.Sheet>
   );
@@ -119,7 +139,9 @@ const RiskAssessment = () => {
 const Actions = () => {
   return (
     <BasePage.Sheet>
-      <Title text="Actions" />
+      <Stack gap={2}>
+        <Title text="Actions" />
+      </Stack>
     </BasePage.Sheet>
   );
 };
@@ -128,6 +150,21 @@ const RoleSuitability = () => {
   return (
     <BasePage.Sheet>
       <Title text="Role suitability" />
+    </BasePage.Sheet>
+  );
+};
+
+const KeyStrengths = () => {
+  return (
+    <BasePage.Sheet>
+      <Stack gap={2}>
+        <Title text="Key Strengths" />
+        <CareerDetailsAlert
+          color="success"
+          title="Progressive career growth"
+          text="100% growth"
+        />
+      </Stack>
     </BasePage.Sheet>
   );
 };
@@ -142,18 +179,18 @@ const CandidateDetails = ({
   return (
     <Stack direction="row" spacing={2}>
       <Stack direction="column" flex={2}>
-        <KeyStrengths />
         <TechFocusMatch
           project={project}
           techFocusMatch={candidate.match.techFocusMatch}
         />
         <TechMatch project={project} techMatch={candidate.match.techMatch} />
-        <RiskAssessment />
       </Stack>
       <Stack flex={1} direction="column" gap={2}>
         <OverallMatch match={candidate.match!} />
-        <RoleSuitability />
         <JobStability match={candidate.match!} />
+        <RedFlags />
+        <KeyStrengths />
+        <RoleSuitability />
         <Actions />
       </Stack>
     </Stack>

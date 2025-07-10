@@ -14,7 +14,7 @@ const CenteredLoader = () => {
         alignItems: "center",
       }}
     >
-      <CircularProgress size="lg" />
+      <CircularProgress size="md" />
     </Box>
   );
 };

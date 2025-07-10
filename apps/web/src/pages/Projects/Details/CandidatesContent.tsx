@@ -14,7 +14,7 @@ import { CircularProgress } from "@mui/joy";
 import { Regular, Smallest } from "@/components/typography.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
 import Chip from "@mui/joy/Chip";
-import { getScoreColor } from "@/utils/colors.ts";
+import { getScoreColor, SCORE_DISTRIBUTION } from "@/utils/colors.ts";
 import { TExtendedUpload, TUpload } from "@kyd/common/api";
 
 const StatusIcon: Record<string, ReactNode> = {
@@ -58,8 +58,13 @@ const ProjectCandidateItem = ({
           {score && (
             <>
               &nbsp;•&nbsp;
-              <Chip variant="soft" color={getScoreColor(score)} size="md">
-                {score.toFixed(2)}% {score > 0.5 ? "Match" : "No match"}
+              <Chip variant="solid" color={getScoreColor(score)} size="md">
+                {score.toFixed(2)}%{" "}
+                {score >= SCORE_DISTRIBUTION.GOOD
+                  ? "Match"
+                  : score >= SCORE_DISTRIBUTION.FAIR
+                    ? "Fair match"
+                    : "No match"}
               </Chip>
             </>
           )}

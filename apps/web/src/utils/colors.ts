@@ -1,9 +1,30 @@
 import { ColorPaletteProp } from "@mui/joy/styles";
 
+export const SCORE_DISTRIBUTION = {
+  EXCELLENT: 85,
+  GOOD: 70,
+  FAIR: 50,
+  POOR: 25,
+} as const;
+
 export const getScoreColor = (score: number): ColorPaletteProp => {
-  if (score >= 85) return "success";
-  if (score >= 65) return "primary";
-  if (score >= 45) return "warning";
-  if (score >= 25) return "neutral";
-  return "danger";
+  let color: ColorPaletteProp;
+  switch (true) {
+    case score >= SCORE_DISTRIBUTION.EXCELLENT:
+      color = "success";
+      break;
+    case score >= SCORE_DISTRIBUTION.GOOD:
+      color = "primary";
+      break;
+    case score >= SCORE_DISTRIBUTION.FAIR:
+      color = "warning";
+      break;
+    case score >= SCORE_DISTRIBUTION.POOR:
+      color = "neutral";
+      break;
+    default:
+      color = "danger";
+  }
+
+  return color;
 };
