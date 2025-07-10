@@ -2,6 +2,7 @@ import {
   GetResumeProfileResponse,
   ResumeProfileTechnologiesEntry,
   TProjectResponse,
+  WithCandidateMatch,
 } from "@kyd/common/api";
 
 export type TechProfile = Omit<ResumeProfileTechnologiesEntry, "jobs"> & {
@@ -14,6 +15,6 @@ export type TechProfile = Omit<ResumeProfileTechnologiesEntry, "jobs"> & {
   }[];
 };
 
-export type TResumeProfileDTO<WithMatch extends boolean = false> =
-  GetResumeProfileResponse<WithMatch>;
+export type TResumeProfileDTO<T = {}> =
+  GetResumeProfileResponse<T>;
 export type TProjectDTO = TProjectResponse;

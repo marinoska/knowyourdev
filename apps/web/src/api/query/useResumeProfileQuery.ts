@@ -14,11 +14,8 @@ import {
   TTechMatch,
   TTechFocusMatch,
   TCandidateMatch,
+  WithCandidateMatch,
 } from "@kyd/common/api";
-
-type ResumeProfileDTOType<T extends boolean | undefined> = T extends true
-  ? TResumeProfileDTO<true>
-  : TResumeProfileDTO;
 
 export const useResumeProfileQuery = ({
   uploadId,
@@ -28,7 +25,9 @@ export const useResumeProfileQuery = ({
   projectId?: string;
 }) => {
   const { data, ...rest } = useQuery<
-    ResumeProfileDTOType<typeof projectId extends string ? true : false>,
+    typeof projectId extends string
+      ? TResumeProfileDTO<WithCandidateMatch>
+      : TResumeProfileDTO,
     Error
   >({
     queryKey: uploadsKeys.profile(uploadId, projectId), // Include projectId in the query key

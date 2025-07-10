@@ -10,6 +10,7 @@ import { Alert } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
 import { TProjectDTO, TResumeProfileDTO } from "@/api/query/types.ts";
+import { WithCandidateMatch } from "@kyd/common/api";
 import { JobStability } from "@/pages/Projects/Details/CandidatesDetailsPage/JobStability.tsx";
 import { useResumeProfileQuery } from "@/api/query/useResumeProfileQuery.ts";
 import { TechMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechMatch.tsx";
@@ -133,7 +134,7 @@ const CandidateDetails = ({
   candidate,
   project,
 }: {
-  candidate: TResumeProfileDTO<true>;
+  candidate: TResumeProfileDTO<WithCandidateMatch>;
   project: TProjectDTO;
 }) => {
   return (

@@ -8,6 +8,7 @@ import {
   TUploadsPage,
   GetResumeProfileResponse,
   GetUploadsListQueryParams,
+  WithCandidateMatch,
 } from "@kyd/common/api";
 import { InfiniteData } from "@tanstack/react-query";
 
@@ -68,7 +69,7 @@ export const getResumeProfile = async ({
   projectId?: string;
 }) => {
   return apiClient.get<
-    GetResumeProfileResponse<typeof projectId extends string ? true : false>
+    GetResumeProfileResponse<typeof projectId extends string ? WithCandidateMatch : {}>
   >(`/resume/profile/${uploadId}`, {
     params: { projectId },
   });

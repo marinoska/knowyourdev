@@ -112,12 +112,16 @@ export type TResumeProfileMetrics = TResumeProfileGaps &
   TResumeProfileTechFocusUsage &
   TResumeProfileTechUsage;
 
-export type GetResumeProfileResponse<WithMatch extends boolean = false> = Omit<
+export type WithCandidateMatch = {
+  match: TCandidateMatch;
+};
+
+export type GetResumeProfileResponse<T = {}> = Omit<
   TResumeProfile,
   "uploadId"
 > & {
   uploadId: string;
   createdAt: string;
   updatedAt: string;
-} & (WithMatch extends true ? { match: TCandidateMatch } : {}) &
+} & T &
   TResumeProfileMetrics;

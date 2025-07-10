@@ -1,7 +1,7 @@
 import { RequestHandler, Response } from "express";
 import { ResumeProfileModel } from "@/models/resumeProfileModel.js";
 import { Joi, Segments } from "celebrate";
-import { GetResumeProfileResponse } from "@kyd/common/api";
+import { GetResumeProfileResponse, WithCandidateMatch } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { ProfileMetricsService } from "@/services/profileMetrics.service.js";
@@ -10,14 +10,14 @@ import { ProjectModel } from "@/models/project.model.js";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },
-  GetResumeProfileResponse<true>,
+  GetResumeProfileResponse<WithCandidateMatch>,
   unknown,
   { projectId?: string }
 >;
 
 export const getResumeProfileController: ResumeProfileController = async (
   req,
-  res: Response<GetResumeProfileResponse<true>>,
+  res: Response<GetResumeProfileResponse<WithCandidateMatch>>,
 ) => {
   const { uploadId } = req.params;
   const { projectId } = req.query;
