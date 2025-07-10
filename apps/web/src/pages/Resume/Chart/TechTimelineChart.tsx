@@ -7,6 +7,7 @@ import { ChartContainer } from "@/pages/components/Chart/ChartContainer.tsx";
 import { useFilteredTechnologies } from "@/pages/Core/useFilteredTechnologies.ts";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
 import { TimelineChart } from "@/pages/components/Chart/TimelineChart.tsx";
+import { TResumeProfileDTO } from "@/api/query/types.ts";
 
 //* TODO add a position description via a tooltip
 
@@ -15,7 +16,7 @@ export const TechTimelineChart = ({
   onChartIsReady,
   onChartIsEmpty,
 }: {
-  profile: any;
+  profile: TResumeProfileDTO;
   onChartIsReady: (b: boolean) => void;
   onChartIsEmpty: (b: boolean) => void;
 }) => {

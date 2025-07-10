@@ -5,7 +5,7 @@ import { ScopeSelect } from "@/pages/components/Chart/ScopeSelect.tsx";
 import { TimelineChart } from "@/pages/components/Chart/TimelineChart.tsx";
 import { defaultTimelineOptions } from "@/utils/chart.ts";
 import { TREND_MAP, TrendType } from "@kyd/common/api";
-import { TechProfile } from "@/api/query/types.ts";
+import { TechProfile, TResumeProfileDTO } from "@/api/query/types.ts";
 import Typography from "@mui/joy/Typography";
 import {
   DeepGreenLegendColor,
@@ -70,7 +70,11 @@ const sortByTrend = (a: TechProfile, b: TechProfile) => {
   return TREND_MAP[a.trend] < TREND_MAP[b.trend] ? 1 : -1;
 };
 
-export const TechPopularityTimelineChart = ({ profile }) => {
+export const TechPopularityTimelineChart = ({
+  profile,
+}: {
+  profile: TResumeProfileDTO;
+}) => {
   const {
     allTechnologies,
     filteredTechnologies,

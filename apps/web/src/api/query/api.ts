@@ -69,7 +69,9 @@ export const getResumeProfile = async ({
   projectId?: string;
 }) => {
   return apiClient.get<
-    GetResumeProfileResponse<typeof projectId extends string ? WithCandidateMatch : {}>
+    GetResumeProfileResponse<
+      typeof projectId extends string ? WithCandidateMatch : object
+    >
   >(`/resume/profile/${uploadId}`, {
     params: { projectId },
   });

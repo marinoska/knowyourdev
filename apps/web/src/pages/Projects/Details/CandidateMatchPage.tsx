@@ -63,7 +63,9 @@ export const CandidateMatchPage = () => {
         <BasePage.Content>
           {projectQuery.data && candidateQuery.profile ? (
             <CandidateDetails
-              candidate={candidateQuery.profile}
+              candidate={
+                candidateQuery.profile as TResumeProfileDTO<WithCandidateMatch>
+              }
               project={projectQuery.data}
             />
           ) : null}
