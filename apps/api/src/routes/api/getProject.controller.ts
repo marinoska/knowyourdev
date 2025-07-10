@@ -4,6 +4,7 @@ import { TProjectResponse } from "@kyd/common/api";
 import { NotFound, ValidationError } from "@/app/errors.js";
 import { Types } from "mongoose";
 import { getProjectById } from "@/models/project.repository.js";
+import { validateObjectId } from "@/utils/validation.js";
 
 export type GetProjectController = RequestHandler<
   { projectId: string },
@@ -40,6 +41,8 @@ export const getProjectController: GetProjectController = async (
 
 export const getProjectValidationSchema = {
   [Segments.PARAMS]: Joi.object({
-    projectId: Joi.string().required(),
+    projectId: Joi.string()
+      .required()
+      .custom(validateObjectId, "MongoDB ObjectId validation"),
   }),
 };

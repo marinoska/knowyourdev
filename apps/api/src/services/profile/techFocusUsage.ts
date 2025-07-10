@@ -1,6 +1,6 @@
 import {
   TResumeProfileCategories,
-  ResumeTechProfileTechnologiesEntry,
+  ResumeProfileTechnologiesEntry,
   ScopeType,
   TTechFocusTimeline,
   TTechFocusUsage,
@@ -29,7 +29,7 @@ export function calculateScopes(
   const uploadDate = startOfMonth(new Date(techProfile.createdAt));
   const scopeTechnologies = {} as Record<
     ScopeType,
-    ResumeTechProfileTechnologiesEntry[]
+    ResumeProfileTechnologiesEntry[]
   >;
 
   for (const tech of techProfile.technologies) {
@@ -99,7 +99,7 @@ function addPeriod(
   scopeData: TTechFocusTimeline,
   periodStart: Date,
   periodEnd: Date,
-  technologies: ResumeTechProfileTechnologiesEntry[],
+  technologies: ResumeProfileTechnologiesEntry[],
 ) {
   scopeData.periods.push({
     start: periodStart,

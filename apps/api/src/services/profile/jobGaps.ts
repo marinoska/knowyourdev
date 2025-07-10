@@ -1,5 +1,5 @@
 import {
-  ResumeTechProfileJobEntry,
+  ResumeProfileJobEntry,
   GapEntry,
   TResumeProfileGaps,
 } from "@kyd/common/api";
@@ -18,9 +18,7 @@ import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
  * @param jobs Array of jobs with start and end dates
  * @returns Array of job gaps with start, end, and months properties
  */
-export function calculateJobGaps(
-  jobs: ResumeTechProfileJobEntry[],
-): GapEntry[] {
+export function calculateJobGaps(jobs: ResumeProfileJobEntry[]): GapEntry[] {
   if (!jobs || !jobs.length) return [];
   const gapsRanges = getJobGaps(jobs);
 
@@ -37,11 +35,11 @@ export function calculateJobGaps(
 }
 
 export function getJobGaps(
-  jobs: ResumeTechProfileJobEntry[],
+  jobs: ResumeProfileJobEntry[],
 ): (Range & { months: number })[] {
   const sortedJobs = sortRangesAsc(jobs);
   const mergedAndSorted = mergeRanges(
-    sortedJobs.map((job: ResumeTechProfileJobEntry) => ({
+    sortedJobs.map((job: ResumeProfileJobEntry) => ({
       start: job.start,
       end: job.end,
     })),

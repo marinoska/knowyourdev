@@ -1,6 +1,6 @@
 import {
   TResumeProfileCategories,
-  ResumeTechProfileTechnologiesEntry,
+  ResumeProfileTechnologiesEntry,
   TResumeProfileTechUsage,
   TTechUsage,
   TTechTimeline,
@@ -97,7 +97,7 @@ function addPeriod(
   periodStart: Date,
   periodEnd: Date,
   techCode: string,
-  technologies: ResumeTechProfileTechnologiesEntry[],
+  technologies: ResumeProfileTechnologiesEntry[],
 ) {
   techData.periods.push({
     start: periodStart,

@@ -10,6 +10,7 @@ import { processUpload } from "@/chain/extraction/runner.js";
 import { ValidationError } from "@/app/errors.js";
 import { getProjectById } from "@/models/project.repository.js";
 import { ProjectModel } from "@/models/project.model.js";
+import { validateOptionalObjectId } from "@/utils/validation.js";
 
 export type DocumentUploadController = RequestHandler<
   any,
@@ -90,11 +91,6 @@ export const documentUploadValidationSchema = {
     name: Joi.string().allow("").optional().default(""),
     projectId: Joi.string()
       .optional()
-      .custom((value, helpers) => {
-        if (value && !Types.ObjectId.isValid(value)) {
-          return helpers.error("string.objectId", { value });
-        }
-        return value;
-      }, "MongoDB ObjectId validation"),
+      .custom(validateOptionalObjectId, "MongoDB ObjectId validation"),
   },
 };
