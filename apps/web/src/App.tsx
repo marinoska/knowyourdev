@@ -22,7 +22,7 @@ const NotFound = () => {
 };
 
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return <div>Nothing here yet...</div>;
 };
 
 export default function App() {
