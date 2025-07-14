@@ -95,13 +95,9 @@ export const ProjectSettingsContent = ({
     },
   });
 
-  //TODO
-  console.log("Project settings form errors", errors);
   const onSubmit: SubmitHandler<ProjectFormValues> = (data) => {
-    console.log("Project settings form submitted", data);
     handleProjectUpdate(data);
   };
-  console.log({ isSuccess, isError });
 
   useEffect(() => {
     // Reset form's dirty state after successful mutation
@@ -127,6 +123,36 @@ export const ProjectSettingsContent = ({
         msg="Project details updated."
         show={isSuccess}
       />
+
+      {/* Display form errors */}
+      {Object.keys(errors).length > 0 && (
+        <Alert color="danger" variant="soft" sx={{ mb: 2 }}>
+          <Stack>
+            <Regular>Please fix the following errors:</Regular>
+            {errors.name && (
+              <Small>• Project name: {errors.name.message}</Small>
+            )}
+            {errors.settings?.description && (
+              <Small>
+                • Description: {errors.settings.description.message}
+              </Small>
+            )}
+            {errors.settings?.baselineJobDuration && (
+              <Small>
+                • Baseline job duration:{" "}
+                {errors.settings.baselineJobDuration.message}
+              </Small>
+            )}
+            {errors.settings?.expectedRecentRelevantYears && (
+              <Small>
+                • Expected recent relevant years:{" "}
+                {errors.settings.expectedRecentRelevantYears.message}
+              </Small>
+            )}
+          </Stack>
+        </Alert>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap={2} direction="row" flexWrap="wrap" pt={1}>
           <Stack flex={1} gap={2}>
@@ -288,7 +314,7 @@ const FormActions = ({
   project,
 }: {
   isDirty: boolean;
-  reset: (values?: any) => void;
+  reset: (values?: unknown) => void;
   isLoading: boolean;
   project: TProjectDTO;
 }) => {
@@ -327,7 +353,6 @@ const FormActions = ({
   );
 };
 
-// SystemGeneratedSection component for the right panel
 const SystemGeneratedSection = ({ project }: { project: TProjectDTO }) => {
   return (
     <Card size="lg" variant="soft">
