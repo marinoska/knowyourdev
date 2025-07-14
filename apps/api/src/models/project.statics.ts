@@ -1,6 +1,6 @@
 import { TProjectModel, TProjectDocument } from "@/models/project.model.js";
 import { SortOrder } from "mongoose";
-import { PutProjectBody } from "@kyd/common/api";
+import { PutProjectBody, ScopeType } from "@kyd/common/api";
 
 // export async function getById(
 //   this: TProjectModel,
@@ -16,17 +16,25 @@ export async function patch(
     name: string;
     settings: Partial<{
       baselineJobDuration: number;
-      techFocus: string[];
+      techFocus: ScopeType[];
       description: string;
       expectedRecentRelevantYears: number;
     }>;
   }>,
 ): Promise<TProjectDocument | null> {
-  return this.findByIdAndUpdate(
-    id,
-    projectData,
-    { new: true }, // it ensures that the method returns the updated document
-  ).populate("settings.technologies.ref");
+  const doc = await this.findById(id).populate("settings.technologies.ref");
+  if (!doc) return null;
+
+  if (projectData.name) doc.name = projectData.name;
+  if (projectData.settings) {
+    doc.settings = {
+      ...doc.settings,
+      ...projectData.settings,
+    };
+  }
+
+  await doc.save();
+  return doc;
 }
 
 export type GetProjectsPageParams = {

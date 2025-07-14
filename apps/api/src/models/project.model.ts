@@ -33,11 +33,12 @@ const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
   {
     name: { type: String, required: true },
     settings: {
-      baselineJobDuration: { type: Number, default: 12 }, // Default to 12 months
-      techFocus: [{ type: String, enum: SCOPE }],
+      baselineJobDuration: { type: Number }, // Default to 12 months
+      techFocus: [{ required: true, type: String, enum: SCOPE }],
       description: { type: String, default: "" },
-      expectedRecentRelevantYears: { type: Number, default: 5 },
+      expectedRecentRelevantYears: { type: Number },
       technologies: {
+        required: true,
         type: [
           {
             ref: {

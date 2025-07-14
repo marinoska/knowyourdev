@@ -20,6 +20,8 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { useForm, Controller, SubmitHandler, Control } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useProjectUpdateMutation } from "@/api/query/useProjectUpdateMutation";
+import { Snackbar } from "@/components/Snackbar.tsx";
 
 type ProjectFormValues = {
   name: string;
@@ -60,16 +62,14 @@ const validationSchema = yup.object({
 
 export const ProjectSettingsContent = ({
   project,
-  onSubmit: onSubmitProp,
 }: {
   project: TProjectDTO;
-  onSubmit?: (data: ProjectFormValues) => void;
 }) => {
   const {
     control,
     handleSubmit,
     reset,
-    formState: { isDirty },
+    formState: { isDirty, errors },
   } = useForm<ProjectFormValues>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -83,26 +83,40 @@ export const ProjectSettingsContent = ({
     },
   });
 
+  const { handleProjectUpdate, isPending, isError, isSuccess } =
+    useProjectUpdateMutation(project._id);
+  //TODO
+  console.log("Project settings form errors", errors);
   const onSubmit: SubmitHandler<ProjectFormValues> = (data) => {
-    console.log("Form submitted:", data);
-    if (onSubmitProp) {
-      onSubmitProp(data);
-    }
+    console.log("Project settings form submitted", data);
+    handleProjectUpdate(data);
   };
-
+  console.log({ isSuccess, isError });
   return (
-    <form onSubmit={handleSubmit(onSubmit, console.log)}>
-      <Stack gap={2} direction="row" flexWrap="wrap" pt={1}>
-        <Stack flex={1} gap={2}>
-          <BasicInfoSection control={control} />
-          <DurationSettingsSection control={control} />
+    <>
+      <Snackbar type="danger" msg="Failed to update project." show={isError} />
+      <Snackbar
+        type="success"
+        msg="Project details updated."
+        show={isSuccess}
+      />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack gap={2} direction="row" flexWrap="wrap" pt={1}>
+          <Stack flex={1} gap={2}>
+            <BasicInfoSection control={control} />
+            <DurationSettingsSection control={control} />
+          </Stack>
+          <Stack flex={1} gap={2} justifyContent="space-between">
+            <SystemGeneratedSection project={project} />
+            <FormActions
+              isDirty={isDirty}
+              reset={reset}
+              isLoading={isPending}
+            />
+          </Stack>
         </Stack>
-        <Stack flex={1} gap={2} justifyContent="space-between">
-          <SystemGeneratedSection project={project} />
-          <FormActions isDirty={isDirty} reset={reset} />
-        </Stack>
-      </Stack>
-    </form>
+      </form>
+    </>
   );
 };
 
@@ -242,16 +256,29 @@ const DurationSettingsSection = ({
 const FormActions = ({
   isDirty,
   reset,
+  isLoading,
 }: {
   isDirty: boolean;
   reset: VoidFunction;
+  isLoading: boolean;
 }) => {
   return (
     <Stack direction="row" gap={2} justifyContent="end">
-      <Button type="submit" color="primary" disabled={!isDirty}>
-        Save Changes
+      <Button
+        type="submit"
+        color="primary"
+        disabled={!isDirty || isLoading}
+        loading={isLoading}
+      >
+        {isLoading ? "Saving..." : "Save Changes"}
       </Button>
-      <Button type="button" color="neutral" variant="outlined" onClick={reset}>
+      <Button
+        type="button"
+        color="neutral"
+        variant="outlined"
+        onClick={reset}
+        disabled={isLoading}
+      >
         Reset
       </Button>
     </Stack>

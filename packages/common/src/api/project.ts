@@ -29,9 +29,11 @@ export type TProjectResponse = TProject<string> & {
 export type TProjectsPage = { projects: TProjectResponse[] };
 
 export type PatchProjectBody = RequireAtLeastOne<
-  Partial<Omit<TProject, "candidates" | "_id">>
+  Partial<Omit<TProject, "candidates" | "_id" | "settings">> & {
+    settings: Partial<TProject["settings"]>;
+  }
 >;
-export type PutProjectBody = Partial<Omit<TProject, "candidates" | "_id">>;
+export type PutProjectBody = Omit<TProject, "candidates" | "_id">;
 export type GetProjectsListResponse = TListResponse<TProjectsPage>;
 
 export type GetProjectsPageQueryParams = {

@@ -21,8 +21,8 @@ export const ProjectItem = ({ item }: { item: TProjectDTO }) => {
         <Stack direction="row" gap={2} flexWrap="wrap" alignItems="center">
           <Regular>{name}</Regular>
           <Stack direction="row" gap={1} flexWrap="wrap" alignItems="center">
-            {item.settings.techFocus.map((scope) => (
-              <Chip size="md" variant="outlined" color="primary">
+            {item.settings?.techFocus?.map((scope) => (
+              <Chip size="md" variant="outlined" color="primary" key={scope}>
                 {SCOPE_NAMES[scope]}
               </Chip>
             ))}
