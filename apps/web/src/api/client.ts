@@ -116,15 +116,23 @@ class Client {
     });
   }
 
-  public put<R>(path: string, options: RequestInit) {
+  public put<R>(
+    path: string,
+    options: RequestInit,
+    method: "PUT" | "PATCH" = "PUT",
+  ): Promise<R> {
     const headers = options.headers
       ? { ...options.headers, ...defaultHeaders }
       : { ...defaultHeaders };
     return this._doFetch<R>(`${path}`, {
       body: JSON.stringify(options.body),
       headers,
-      method: "PUT",
+      method,
     });
+  }
+
+  public patch<R>(...params: [path: string, options: object]): Promise<R> {
+    return this.put<R>(...params, "PATCH");
   }
 
   public setAccessToken(accessToken: string) {

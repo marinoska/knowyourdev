@@ -17,13 +17,7 @@ import {
 } from "@mui/joy";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import WarningIcon from "@mui/icons-material/Warning";
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  Control,
-  FieldErrors,
-} from "react-hook-form";
+import { useForm, Controller, SubmitHandler, Control } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -75,7 +69,7 @@ export const ProjectSettingsContent = ({
     control,
     handleSubmit,
     reset,
-    formState: { errors, isDirty },
+    formState: { isDirty },
   } = useForm<ProjectFormValues>({
     resolver: yupResolver(validationSchema),
     defaultValues: {

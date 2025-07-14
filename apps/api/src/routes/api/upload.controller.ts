@@ -1,31 +1,22 @@
 import { Joi, Segments } from "celebrate";
-import type { Response, Request, RequestHandler } from "express";
+import type { Response, Request } from "express";
 import { TUploadDocument, UploadModel } from "@/models/upload.model.js";
-import { Types } from "mongoose";
 import {
   DocumentUploadRequestBody,
   DocumentUploadResponse,
 } from "@kyd/common/api";
 import { processUpload } from "@/chain/extraction/runner.js";
 import { ValidationError } from "@/app/errors.js";
-import { getProjectById } from "@/models/project.repository.js";
 import { ProjectModel } from "@/models/project.model.js";
 import { validateOptionalObjectId } from "@/utils/validation.js";
 
-export type DocumentUploadController = RequestHandler<
-  any,
-  DocumentUploadResponse,
-  DocumentUploadRequestBody,
-  any,
-  {}
->;
 export type DocumentUploadRequest = Request<
-  any,
-  any,
+  unknown,
+  unknown,
   DocumentUploadRequestBody
 >;
 
-export const documentUploadController: DocumentUploadController = async (
+export const documentUploadController = async (
   req: DocumentUploadRequest,
   res: Response<DocumentUploadResponse>,
 ) => {
@@ -38,10 +29,8 @@ export const documentUploadController: DocumentUploadController = async (
   const { originalname, mimetype, size, buffer } = req.file;
   const { hash, r2Key, r2Url } = req.r2File;
 
-  // Check if projectId exists in the project table
   if (projectId) {
-    const project = await getProjectById(projectId);
-    if (!project) {
+    if (!(await ProjectModel.findById(projectId))) {
       throw new ValidationError(
         `Project not found for the provided ID: ${projectId}`,
       );
@@ -65,7 +54,6 @@ export const documentUploadController: DocumentUploadController = async (
 
   await newUpload.save();
 
-  // Add the new upload _id to the project.candidates array if projectId is provided
   if (projectId) {
     await ProjectModel.findByIdAndUpdate(
       projectId,

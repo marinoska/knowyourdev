@@ -1,16 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProject } from "./api.ts";
-import { TProject, TProjectResponse } from "@kyd/common/api";
+import { PatchProjectBody, TProjectResponse } from "@kyd/common/api";
 import { projectsKeys } from "./keys.ts";
-
-type ProjectUpdateParams = {
-  projectId: string;
-  projectData: Partial<TProject>;
-};
 
 export const useProjectUpdateMutation = (projectId: string) => {
   const queryClient = useQueryClient();
-  const query = useMutation<TProjectResponse, Error, ProjectUpdateParams>({
+  const query = useMutation<
+    TProjectResponse,
+    Error,
+    {
+      projectId: string;
+      projectData: PatchProjectBody;
+    }
+  >({
     mutationFn: updateProject,
     onError: (err) => {
       console.error("ProjectUpdateMutation error:", err.toString());
@@ -29,7 +31,7 @@ export const useProjectUpdateMutation = (projectId: string) => {
     },
   });
 
-  const handleProjectUpdate = (projectData: Partial<TProject>) => {
+  const handleProjectUpdate = (projectData: PatchProjectBody) => {
     return query.mutate({ projectId, projectData });
   };
 

@@ -54,8 +54,10 @@ export type ResumeProfileJobEntry = Pick<
   }[];
 };
 
-export type TResumeProfile = Pick<ExtractedCVData, "position" | "fullName"> & {
-  uploadId: Schema.Types.ObjectId;
+export type TResumeProfile<
+  TId extends string | Schema.Types.ObjectId = Schema.Types.ObjectId,
+> = Pick<ExtractedCVData, "position" | "fullName"> & {
+  uploadId: TId;
   technologies: ResumeProfileTechnologiesEntry[];
   jobs: ResumeProfileJobEntry[];
 };
@@ -116,11 +118,7 @@ export type WithCandidateMatch = {
   match: TCandidateMatch;
 };
 
-export type GetResumeProfileResponse<T = {}> = Omit<
-  TResumeProfile,
-  "uploadId"
-> & {
-  uploadId: string;
+export type GetResumeProfileResponse<T = {}> = TResumeProfile<string> & {
   createdAt: string;
   updatedAt: string;
 } & T &

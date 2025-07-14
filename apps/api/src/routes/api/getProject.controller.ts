@@ -1,17 +1,15 @@
 import { RequestHandler, Response } from "express";
 import { Joi, Segments } from "celebrate";
 import { TProjectResponse } from "@kyd/common/api";
-import { NotFound, ValidationError } from "@/app/errors.js";
-import { Types } from "mongoose";
-import { getProjectById } from "@/models/project.repository.js";
+import { NotFound } from "@/app/errors.js";
 import { validateObjectId } from "@/utils/validation.js";
+import { ProjectModel } from "@/models/project.model.js";
 
 export type GetProjectController = RequestHandler<
   { projectId: string },
   TProjectResponse,
-  any,
-  any,
-  {}
+  unknown,
+  unknown
 >;
 
 export const getProjectController: GetProjectController = async (
@@ -19,17 +17,15 @@ export const getProjectController: GetProjectController = async (
   res: Response<TProjectResponse>,
 ) => {
   const { projectId } = req.params;
-  if (!Types.ObjectId.isValid(projectId)) {
-    throw new ValidationError("Invalid project ID: " + projectId);
-  }
 
-  const project = await getProjectById(projectId);
+  const project = await ProjectModel.findById(projectId)
+    .populate("settings.technologies.ref")
+    .lean();
 
   if (!project) {
     throw new NotFound(`Project not found for the provided ID: ${projectId}`);
   }
 
-  // Send the project in the response
   res.status(200).json({
     _id: project._id.toString(),
     name: project.name,

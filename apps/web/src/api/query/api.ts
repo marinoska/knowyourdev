@@ -9,6 +9,7 @@ import {
   GetResumeProfileResponse,
   GetUploadsListQueryParams,
   WithCandidateMatch,
+  PatchProjectBody,
 } from "@kyd/common/api";
 import { InfiniteData } from "@tanstack/react-query";
 
@@ -83,4 +84,16 @@ export const getProjectProfile = async ({
   projectId: string;
 }): Promise<TProjectResponse> => {
   return apiClient.get<TProjectResponse>(`/projects/${projectId}`);
+};
+
+export const updateProject = async ({
+  projectId,
+  projectData,
+}: {
+  projectId: string;
+  projectData: PatchProjectBody;
+}): Promise<TProjectResponse> => {
+  return apiClient.patch<TProjectResponse>(`/projects/${projectId}`, {
+    body: projectData,
+  });
 };

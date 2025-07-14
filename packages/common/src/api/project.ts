@@ -1,7 +1,12 @@
 import { ScopeType } from "./constants.js";
 import { TListResponse } from "./utils.js";
+import { Schema } from "mongoose";
+import { RequireAtLeastOne } from "type-fest";
 
-export type TProject = {
+export type TProject<
+  TId extends string | Schema.Types.ObjectId = Schema.Types.ObjectId,
+> = {
+  _id: TId;
   name: string;
   settings: {
     baselineJobDuration: number;
@@ -17,15 +22,20 @@ export type TProject = {
   candidates: string[];
 };
 
-export type TProjectResponse = TProject & {
-  _id: string;
+export type TProjectResponse = TProject<string> & {
   createdAt: string;
 };
 
 export type TProjectsPage = { projects: TProjectResponse[] };
+
+export type PatchProjectBody = RequireAtLeastOne<
+  Partial<Omit<TProject, "candidates" | "_id">>
+>;
+export type PutProjectBody = Partial<Omit<TProject, "candidates" | "_id">>;
 export type GetProjectsListResponse = TListResponse<TProjectsPage>;
 
-export type GetProjectsListQueryParams = {
+export type GetProjectsPageQueryParams = {
   page: number;
   limit: number;
+  sortOrder?: "asc" | "desc";
 };

@@ -4,11 +4,12 @@ import { Box } from "@mui/joy";
 import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
-import { SCOPE_NAMES, TProject, TTechFocusMatch } from "@kyd/common/api";
+import { SCOPE_NAMES, TTechFocusMatch } from "@kyd/common/api";
 import { getScoreColor } from "@/utils/colors.ts";
+import { TProjectDTO } from "@/api/query/types.ts";
 
 type TechFocusMatchProps = {
-  project?: TProject;
+  project?: TProjectDTO;
   techFocusMatch: Record<string, TTechFocusMatch>;
 };
 

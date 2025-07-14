@@ -22,11 +22,15 @@ import {
 import {
   getProjectsListController,
   getProjectsListValidationSchema,
-} from "@/routes/api/projects.controller.js";
+} from "@/routes/api/getProjects.controller.js";
 import {
   getProjectController,
   getProjectValidationSchema,
 } from "@/routes/api/getProject.controller.js";
+import {
+  updateProjectController,
+  updateProjectValidationSchema,
+} from "@/routes/api/updateProject.controller.js";
 // import { loadAuthenticatedUser } from 'nftit/User/loadAuthenticatedUser.middleware';
 
 const validateOptions = { abortEarly: false };
@@ -60,6 +64,11 @@ apiRouter.get(
   "/projects/:projectId",
   celebrate(getProjectValidationSchema),
   getProjectController,
+);
+apiRouter.patch(
+  "/projects/:projectId",
+  celebrate(updateProjectValidationSchema),
+  updateProjectController,
 );
 
 apiRouter.use(notFoundController);

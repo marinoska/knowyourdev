@@ -3,12 +3,13 @@ import Stack from "@mui/joy/Stack";
 import { Box } from "@mui/joy";
 import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
-import { TProject, TTechMatch } from "@kyd/common/api";
+import { TTechMatch } from "@kyd/common/api";
 import { ColorPaletteProp } from "@mui/joy/styles";
 import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
+import { TProjectDTO } from "@/api/query/types.ts";
 
 type TechMatchProps = {
-  project?: TProject;
+  project?: TProjectDTO;
   techMatch: Record<string, TTechMatch>;
 };
 

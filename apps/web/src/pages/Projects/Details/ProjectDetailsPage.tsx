@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
-import ProjectSettingsContent from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
+import { ProjectSettingsContent } from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
 import CandidatesContent from "@/pages/Projects/Details/CandidatesContent.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";

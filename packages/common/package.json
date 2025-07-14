@@ -27,6 +27,7 @@
   "types": "./dist/esm/api/index.d.ts",
   "devDependencies": {
     "@kyd/typescript-config": "workspace:*",
+    "type-fest": "^4.41.0",
     "typescript": "^5.0.0"
   },
   "dependencies": {

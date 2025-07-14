@@ -1,31 +1,32 @@
 import { Joi, Segments } from "celebrate";
 import { Request, Response, RequestHandler } from "express";
-import { GetProjectsListResponse } from "@kyd/common/api";
-import { getProjects } from "@/models/project.repository.js";
-
-// Define query params type locally to match the structure in common package
-type GetProjectsListQueryParams = {
-  page: number;
-  limit: number;
-};
+import {
+  GetProjectsListResponse,
+  GetProjectsPageQueryParams,
+} from "@kyd/common/api";
+import { ProjectModel } from "@/models/project.model.js";
 
 export const getProjectsListController: RequestHandler<
-  any,
+  unknown,
   GetProjectsListResponse,
-  any,
-  GetProjectsListQueryParams
+  unknown,
+  GetProjectsPageQueryParams
 > = async (
-  req: Request<any, GetProjectsListResponse, any, GetProjectsListQueryParams>,
+  req: Request<
+    unknown,
+    GetProjectsListResponse,
+    unknown,
+    GetProjectsPageQueryParams
+  >,
   res: Response<GetProjectsListResponse>,
 ) => {
   const { page = 1, limit = 10 } = req.query;
 
-  const { projects, totalRecords, totalPages, currentPage } = await getProjects(
-    {
+  const { projects, totalRecords, totalPages, currentPage } =
+    await ProjectModel.getPage({
       page: Number(page),
       limit: Number(limit),
-    },
-  );
+    });
 
   const responseData = {
     projects: projects.map((project) => ({
