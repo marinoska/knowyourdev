@@ -29,14 +29,14 @@ export function Snackbar({
 
   return (
     <JoySnackbar
-      variant="soft"
+      variant={variant}
       color={type}
       open={open}
       autoHideDuration={5000}
       onClose={handleClose}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       endDecorator={
-        <Button onClick={handleClose} size="md" variant={variant}>
+        <Button onClick={handleClose} size="md" variant="outlined">
           Dismiss
         </Button>
       }

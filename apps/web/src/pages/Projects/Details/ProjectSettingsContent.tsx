@@ -17,7 +17,13 @@ import {
 } from "@mui/joy";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import WarningIcon from "@mui/icons-material/Warning";
-import { useForm, Controller, SubmitHandler, Control } from "react-hook-form";
+import {
+  useForm,
+  Controller,
+  SubmitHandler,
+  Control,
+  UseFormReset,
+} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect } from "react";
@@ -66,7 +72,6 @@ export const ProjectSettingsContent = ({
 }: {
   defaultProject: TProjectDTO;
 }) => {
-  console.log("Project settings content", defaultProject);
   const {
     handleProjectUpdate,
     isPending,
@@ -81,7 +86,7 @@ export const ProjectSettingsContent = ({
     control,
     handleSubmit,
     reset,
-    formState: { isDirty, errors },
+    formState: { isDirty, errors, dirtyFields },
   } = useForm<ProjectFormValues>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -160,7 +165,10 @@ export const ProjectSettingsContent = ({
             <DurationSettingsSection control={control} />
           </Stack>
           <Stack flex={1} gap={2} justifyContent="space-between">
-            <SystemGeneratedSection project={project} />
+            <SystemGeneratedSection 
+              project={project} 
+              isDescriptionDirty={!!dirtyFields.settings?.description} 
+            />
             <FormActions
               isDirty={isDirty}
               reset={reset}
@@ -314,7 +322,7 @@ const FormActions = ({
   project,
 }: {
   isDirty: boolean;
-  reset: (values?: unknown) => void;
+  reset: UseFormReset<ProjectFormValues>;
   isLoading: boolean;
   project: TProjectDTO;
 }) => {
@@ -353,7 +361,13 @@ const FormActions = ({
   );
 };
 
-const SystemGeneratedSection = ({ project }: { project: TProjectDTO }) => {
+const SystemGeneratedSection = ({ 
+  project, 
+  isDescriptionDirty 
+}: { 
+  project: TProjectDTO;
+  isDescriptionDirty: boolean;
+}) => {
   return (
     <Card size="lg" variant="soft">
       <Stack>
@@ -364,17 +378,19 @@ const SystemGeneratedSection = ({ project }: { project: TProjectDTO }) => {
         </Small>
       </Stack>
       <Stack>
-        <Alert
-          startDecorator={<WarningIcon />}
-          color="warning"
-          variant="soft"
-          sx={{ my: 2 }}
-        >
-          <Small>
-            Out of sync — your role description has changed. Re-generate to
-            refresh settings.
-          </Small>
-        </Alert>
+        {isDescriptionDirty && (
+          <Alert
+            startDecorator={<WarningIcon />}
+            color="warning"
+            variant="soft"
+            sx={{ my: 2 }}
+          >
+            <Small>
+              Out of sync — your role description has changed. Re-generate to
+              refresh settings.
+            </Small>
+          </Alert>
+        )}
         <Stack direction="row" alignItems="center">
           <IconButton size="md" color="success" variant="plain">
             <Stack
