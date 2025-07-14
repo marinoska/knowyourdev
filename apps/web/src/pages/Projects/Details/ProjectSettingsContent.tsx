@@ -20,6 +20,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { useForm, Controller, SubmitHandler, Control } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useEffect } from "react";
 import { useProjectUpdateMutation } from "@/api/query/useProjectUpdateMutation";
 import { Snackbar } from "@/components/Snackbar.tsx";
 
@@ -61,10 +62,21 @@ const validationSchema = yup.object({
 });
 
 export const ProjectSettingsContent = ({
-  project,
+  defaultProject,
 }: {
-  project: TProjectDTO;
+  defaultProject: TProjectDTO;
 }) => {
+  console.log("Project settings content", defaultProject);
+  const {
+    handleProjectUpdate,
+    isPending,
+    isError,
+    isSuccess,
+    data: updatedProject,
+  } = useProjectUpdateMutation(defaultProject._id);
+
+  const project = updatedProject || defaultProject;
+
   const {
     control,
     handleSubmit,
@@ -83,8 +95,6 @@ export const ProjectSettingsContent = ({
     },
   });
 
-  const { handleProjectUpdate, isPending, isError, isSuccess } =
-    useProjectUpdateMutation(project._id);
   //TODO
   console.log("Project settings form errors", errors);
   const onSubmit: SubmitHandler<ProjectFormValues> = (data) => {
@@ -92,6 +102,23 @@ export const ProjectSettingsContent = ({
     handleProjectUpdate(data);
   };
   console.log({ isSuccess, isError });
+
+  useEffect(() => {
+    // Reset form's dirty state after successful mutation
+    // It will update the default form values to the latest saved state
+    if (isSuccess && project) {
+      reset({
+        name: project.name,
+        settings: {
+          description: project.settings.description,
+          baselineJobDuration: project.settings.baselineJobDuration,
+          expectedRecentRelevantYears:
+            project.settings.expectedRecentRelevantYears,
+        },
+      });
+    }
+  }, [isSuccess, project, reset]);
+
   return (
     <>
       <Snackbar type="danger" msg="Failed to update project." show={isError} />
@@ -112,6 +139,7 @@ export const ProjectSettingsContent = ({
               isDirty={isDirty}
               reset={reset}
               isLoading={isPending}
+              project={project}
             />
           </Stack>
         </Stack>
@@ -257,11 +285,25 @@ const FormActions = ({
   isDirty,
   reset,
   isLoading,
+  project,
 }: {
   isDirty: boolean;
-  reset: VoidFunction;
+  reset: (values?: any) => void;
   isLoading: boolean;
+  project: TProjectDTO;
 }) => {
+  const handleReset = () => {
+    reset({
+      name: project.name,
+      settings: {
+        description: project.settings.description,
+        baselineJobDuration: project.settings.baselineJobDuration,
+        expectedRecentRelevantYears:
+          project.settings.expectedRecentRelevantYears,
+      },
+    });
+  };
+
   return (
     <Stack direction="row" gap={2} justifyContent="end">
       <Button
@@ -276,8 +318,8 @@ const FormActions = ({
         type="button"
         color="neutral"
         variant="outlined"
-        onClick={reset}
-        disabled={isLoading}
+        onClick={handleReset}
+        disabled={isLoading || !isDirty}
       >
         Reset
       </Button>

@@ -14,14 +14,14 @@ type ProjectProfileParams = {
   id: string;
 };
 
-const getTabItems = (profile: TProjectDTO): TabsRecord => ({
+const getTabItems = (project: TProjectDTO): TabsRecord => ({
   settings: {
     label: "Project Details",
-    content: <ProjectSettingsContent project={profile} />,
+    content: <ProjectSettingsContent defaultProject={project} />,
   },
   candidates: {
     label: "Candidates",
-    content: <CandidatesContent project={profile} />,
+    content: <CandidatesContent project={project} />,
   },
 });
 
