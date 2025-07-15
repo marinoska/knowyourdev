@@ -4,15 +4,18 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
-import { ProjectSettingsContent } from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
+import {
+  FormActions,
+  ProjectSettingsContent,
+} from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
 import CandidatesContent from "@/pages/Projects/Details/CandidatesContent.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
 
-type ProjectProfileParams = {
-  id: string;
-};
+import { usePageContext } from "@/core/contexts/UsePageContext.tsx";
+
+type ProjectProfileParams = { id: string };
 
 const getTabItems = (project: TProjectDTO): TabsRecord => ({
   settings: {
@@ -39,7 +42,8 @@ const ProjectPage = ({
   query: ReturnType<typeof useProjectProfileQuery>;
 }) => {
   const [activeTab, setActiveTab] = useState(0);
-
+  const { headerState } = usePageContext();
+  console.log({ headerState });
   return (
     <>
       <Snackbar
@@ -53,6 +57,7 @@ const ProjectPage = ({
           subtitle={`Created on ${profile ? format(new Date(profile.createdAt), "MMMM d, yyyy") : ""}`}
           title={profile?.name}
         >
+          {activeTab === 0 && profile && <FormActions {...headerState} />}
           {activeTab === 1 && profile && (
             <UploadButton projectId={profile._id} />
           )}

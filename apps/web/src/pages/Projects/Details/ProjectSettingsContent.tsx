@@ -17,18 +17,14 @@ import {
 } from "@mui/joy";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import WarningIcon from "@mui/icons-material/Warning";
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  Control,
-  UseFormReset,
-} from "react-hook-form";
+import { useForm, Controller, Control } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useProjectUpdateMutation } from "@/api/query/useProjectUpdateMutation";
 import { Snackbar } from "@/components/Snackbar.tsx";
+
+import { usePageContext } from "@/core/contexts/UsePageContext.tsx";
 
 type ProjectFormValues = {
   name: string;
@@ -72,8 +68,10 @@ export const ProjectSettingsContent = ({
 }: {
   defaultProject: TProjectDTO;
 }) => {
+  const { updateHeaderState } = usePageContext();
+
   const {
-    handleProjectUpdate,
+    mutate: handleProjectUpdate,
     isPending,
     isError,
     isSuccess,
@@ -100,14 +98,18 @@ export const ProjectSettingsContent = ({
     },
   });
 
-  const onSubmit: SubmitHandler<ProjectFormValues> = (data) => {
-    handleProjectUpdate(data);
-  };
+  const doSubmit = useCallback(
+    handleSubmit((data: ProjectFormValues) =>
+      handleProjectUpdate({
+        projectId: defaultProject._id,
+        projectData: data,
+      }),
+    ),
+    [defaultProject._id, handleProjectUpdate, handleSubmit],
+  );
 
-  useEffect(() => {
-    // Reset form's dirty state after successful mutation
-    // It will update the default form values to the latest saved state
-    if (isSuccess && project) {
+  const doReset = useCallback(
+    () =>
       reset({
         name: project.name,
         settings: {
@@ -116,9 +118,26 @@ export const ProjectSettingsContent = ({
           expectedRecentRelevantYears:
             project.settings.expectedRecentRelevantYears,
         },
-      });
+      }),
+    [project, reset],
+  );
+
+  useEffect(() => {
+    updateHeaderState({
+      isLoading: isPending,
+      disabled: isPending || !isDirty,
+      reset: doReset,
+      submit: doSubmit,
+    });
+  }, [doReset, doSubmit, isDirty, isPending, updateHeaderState]);
+
+  useEffect(() => {
+    // Reset form's dirty state after successful mutation
+    // It will update the default form values to the latest saved state
+    if (isSuccess && project) {
+      doReset();
     }
-  }, [isSuccess, project, reset]);
+  }, [doReset, isSuccess, project, reset]);
 
   return (
     <>
@@ -158,22 +177,16 @@ export const ProjectSettingsContent = ({
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <Stack gap={2} direction="row" flexWrap="wrap" pt={1}>
           <Stack flex={1} gap={2}>
             <BasicInfoSection control={control} />
             <DurationSettingsSection control={control} />
           </Stack>
-          <Stack flex={1} gap={2} justifyContent="space-between">
-            <SystemGeneratedSection 
-              project={project} 
-              isDescriptionDirty={!!dirtyFields.settings?.description} 
-            />
-            <FormActions
-              isDirty={isDirty}
-              reset={reset}
-              isLoading={isPending}
+          <Stack flex={1} gap={2}>
+            <SystemGeneratedSection
               project={project}
+              isDescriptionDirty={!!dirtyFields.settings?.description}
             />
           </Stack>
         </Stack>
@@ -315,36 +328,25 @@ const DurationSettingsSection = ({
   );
 };
 
-const FormActions = ({
-  isDirty,
-  reset,
+export const FormActions = ({
+  disabled,
   isLoading,
-  project,
+  reset,
+  submit,
 }: {
-  isDirty: boolean;
-  reset: UseFormReset<ProjectFormValues>;
+  disabled: boolean;
   isLoading: boolean;
-  project: TProjectDTO;
+  reset: VoidFunction | null;
+  submit: VoidFunction | null;
 }) => {
-  const handleReset = () => {
-    reset({
-      name: project.name,
-      settings: {
-        description: project.settings.description,
-        baselineJobDuration: project.settings.baselineJobDuration,
-        expectedRecentRelevantYears:
-          project.settings.expectedRecentRelevantYears,
-      },
-    });
-  };
-
   return (
     <Stack direction="row" gap={2} justifyContent="end">
       <Button
         type="submit"
         color="primary"
-        disabled={!isDirty || isLoading}
+        disabled={disabled}
         loading={isLoading}
+        onClick={submit ? submit : () => {}}
       >
         {isLoading ? "Saving..." : "Save Changes"}
       </Button>
@@ -352,8 +354,8 @@ const FormActions = ({
         type="button"
         color="neutral"
         variant="outlined"
-        onClick={handleReset}
-        disabled={isLoading || !isDirty}
+        onClick={reset ? reset : () => {}}
+        disabled={disabled}
       >
         Reset
       </Button>
@@ -361,10 +363,10 @@ const FormActions = ({
   );
 };
 
-const SystemGeneratedSection = ({ 
-  project, 
-  isDescriptionDirty 
-}: { 
+const SystemGeneratedSection = ({
+  project,
+  isDescriptionDirty,
+}: {
   project: TProjectDTO;
   isDescriptionDirty: boolean;
 }) => {
@@ -417,7 +419,7 @@ const SystemGeneratedSection = ({
       <Small>Technologies</Small>
       <Stack direction="row" gap={1} flexWrap="wrap">
         {project.settings?.technologies &&
-        project.settings.technologies.length > 0 ? (
+        project.settings.technologies.length ? (
           project.settings.technologies.map((tech) => (
             <Chip key={tech.code} variant="soft" color="primary" size="md">
               {tech.name}

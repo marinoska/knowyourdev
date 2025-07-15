@@ -5,7 +5,7 @@ import { projectsKeys } from "./keys.ts";
 
 export const useProjectUpdateMutation = (projectId: string) => {
   const queryClient = useQueryClient();
-  const query = useMutation<
+  return useMutation<
     TProjectResponse,
     Error,
     {
@@ -30,13 +30,6 @@ export const useProjectUpdateMutation = (projectId: string) => {
       });
     },
   });
-
-  const handleProjectUpdate = (projectData: PatchProjectBody) => {
-    return query.mutate({ projectId, projectData });
-  };
-
-  return {
-    ...query,
-    handleProjectUpdate,
-  };
 };
+
+//return query.mutate({ projectId, projectData });

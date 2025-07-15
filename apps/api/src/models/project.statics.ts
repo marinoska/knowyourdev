@@ -2,13 +2,6 @@ import { TProjectModel, TProjectDocument } from "@/models/project.model.js";
 import { SortOrder } from "mongoose";
 import { PutProjectBody, ScopeType } from "@kyd/common/api";
 
-// export async function getById(
-//   this: TProjectModel,
-//   id: string,
-// ): Promise<TProjectDocument | null> {
-//   return this.findById(id).populate("settings.technologies.ref").lean();
-// }
-
 export async function patch(
   this: TProjectModel,
   id: string,

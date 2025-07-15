@@ -20,7 +20,6 @@ export type TProjectDocument = Document &
   };
 
 export type TProjectModel = Model<TProjectDocument> & {
-  // getById: (id: string) => Promise<TProjectDocument | null>;
   patch: (
     id: string,
     projectData: PatchProjectBody,
@@ -58,7 +57,6 @@ const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
   { timestamps: true, collection: "Project", autoIndex: true },
 );
 
-// ProjectSchema.static("getById", getById);
 ProjectSchema.static("patch", patch);
 ProjectSchema.static("getPage", getPage);
 ProjectSchema.static("create", create);

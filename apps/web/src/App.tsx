@@ -16,6 +16,7 @@ import KnowYourDevIcon from "@/components/KnowYourDevIcon.tsx";
 import Loader from "@/components/Loader.tsx";
 import { ApiClientProvider } from "@/api/ApiClientProvider.tsx";
 import { ErrorBoundary } from "@/components/ErrorBoundary.tsx";
+import { PageContextProvider } from "@/core/contexts/PageContext.tsx";
 
 const NotFound = () => {
   return <div>Not Found</div>;
@@ -82,23 +83,25 @@ export default function App() {
               gap: 0,
             }}
           >
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/projects" element={<ProjectsList />} />
-              <Route path="/projects/:id" element={<ProjectDetailsPage />} />
-              <Route
-                path="/projects/:id/candidates/:candidateId"
-                element={
-                  <ErrorBoundary>
-                    <CandidateMatchPage />
-                  </ErrorBoundary>
-                }
-              />
-              <Route path="/uploads" element={<ResumeList />} />
-              <Route path="/uploads/:id" element={<ResumeDetailsPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <PageContextProvider>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/projects" element={<ProjectsList />} />
+                <Route path="/projects/:id" element={<ProjectDetailsPage />} />
+                <Route
+                  path="/projects/:id/candidates/:candidateId"
+                  element={
+                    <ErrorBoundary>
+                      <CandidateMatchPage />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route path="/uploads" element={<ResumeList />} />
+                <Route path="/uploads/:id" element={<ResumeDetailsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </PageContextProvider>
           </Box>
         </Box>
       </CssVarsProvider>
