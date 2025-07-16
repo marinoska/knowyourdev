@@ -5,7 +5,6 @@ import { Regular, Small, Subtitle } from "@/components/typography.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
 import {
   Alert,
-  Button,
   Card,
   FormControl,
   FormHelperText,
@@ -17,11 +16,12 @@ import {
 } from "@mui/joy";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import WarningIcon from "@mui/icons-material/Warning";
-import { useForm, Controller, Control } from "react-hook-form";
+import { useForm, Controller, Control, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useCallback, useEffect } from "react";
 import { useProjectUpdateMutation } from "@/api/query/useProjectUpdateMutation";
+import { useExtractJobDataMutation } from "@/api/query/useExtractJobDataMutation";
 import { Snackbar } from "@/components/Snackbar.tsx";
 
 import { usePageContext } from "@/core/contexts/UsePageContext.tsx";
@@ -153,23 +153,19 @@ export const ProjectSettingsContent = ({
         <Alert color="danger" variant="soft" sx={{ mb: 2 }}>
           <Stack>
             <Regular>Please fix the following errors:</Regular>
-            {errors.name && (
-              <Small>• Project name: {errors.name.message}</Small>
-            )}
+            {errors.name && <Small>●Job title: {errors.name.message}</Small>}
             {errors.settings?.description && (
-              <Small>
-                • Description: {errors.settings.description.message}
-              </Small>
+              <Small>●Description: {errors.settings.description.message}</Small>
             )}
             {errors.settings?.baselineJobDuration && (
               <Small>
-                • Baseline job duration:{" "}
+                ●Baseline job duration:{" "}
                 {errors.settings.baselineJobDuration.message}
               </Small>
             )}
             {errors.settings?.expectedRecentRelevantYears && (
               <Small>
-                • Expected recent relevant years:{" "}
+                ●Expected recent relevant years:{" "}
                 {errors.settings.expectedRecentRelevantYears.message}
               </Small>
             )}
@@ -181,13 +177,14 @@ export const ProjectSettingsContent = ({
         <Stack gap={2} direction="row" flexWrap="wrap" pt={1}>
           <Stack flex={1} gap={2}>
             <BasicInfoSection control={control} />
-            <DurationSettingsSection control={control} />
           </Stack>
           <Stack flex={1} gap={2}>
             <SystemGeneratedSection
               project={project}
               isDescriptionDirty={!!dirtyFields.settings?.description}
+              control={control}
             />
+            <DurationSettingsSection control={control} />
           </Stack>
         </Stack>
       </form>
@@ -209,7 +206,7 @@ const BasicInfoSection = ({
           return (
             <FormControl error={!!fieldState.error}>
               <FormLabel id="project-name-label" htmlFor={field.name} required>
-                Project name
+                Job Title / Project Name
               </FormLabel>
               <Input {...field} id="project-name" error={!!fieldState.error} />
               {fieldState.error && (
@@ -232,7 +229,7 @@ const BasicInfoSection = ({
             >
               Description
             </FormLabel>
-            <Textarea {...field} id="role-description" minRows={10} size="sm" />
+            <Textarea {...field} id="role-description" maxRows={25} size="sm" />
             {fieldState.error && (
               <FormHelperText>{fieldState.error.message}</FormHelperText>
             )}
@@ -328,48 +325,40 @@ const DurationSettingsSection = ({
   );
 };
 
-export const FormActions = ({
-  disabled,
-  isLoading,
-  reset,
-  submit,
-}: {
-  disabled: boolean;
-  isLoading: boolean;
-  reset: VoidFunction | null;
-  submit: VoidFunction | null;
-}) => {
-  return (
-    <Stack direction="row" gap={2} justifyContent="end">
-      <Button
-        type="submit"
-        color="primary"
-        disabled={disabled}
-        loading={isLoading}
-        onClick={submit ? submit : () => {}}
-      >
-        {isLoading ? "Saving..." : "Save Changes"}
-      </Button>
-      <Button
-        type="button"
-        color="neutral"
-        variant="outlined"
-        onClick={reset ? reset : () => {}}
-        disabled={disabled}
-      >
-        Reset
-      </Button>
-    </Stack>
-  );
-};
-
 const SystemGeneratedSection = ({
   project,
   isDescriptionDirty,
+  control,
 }: {
   project: TProjectDTO;
   isDescriptionDirty: boolean;
+  control: Control<ProjectFormValues>;
 }) => {
+  const {
+    mutate: extractJobData,
+    isPending,
+    isError,
+    isSuccess,
+  } = useExtractJobDataMutation();
+
+  // Watch the form values
+  const formValues = useWatch({ control });
+
+  const name = formValues.name?.trim();
+  const description = formValues.settings?.description?.trim();
+
+  const handleRegenerate = () => {
+    if (!name || !description) {
+      return;
+    }
+
+    extractJobData({
+      title: name,
+      description: description,
+      projectId: project._id,
+    });
+  };
+
   return (
     <Card size="lg" variant="soft">
       <Stack>
@@ -393,8 +382,30 @@ const SystemGeneratedSection = ({
             </Small>
           </Alert>
         )}
+        {isError && (
+          <Alert
+            startDecorator={<WarningIcon />}
+            color="danger"
+            variant="soft"
+            sx={{ my: 2 }}
+          >
+            <Small>Failed to re-generate settings. Please try again.</Small>
+          </Alert>
+        )}
+        {isSuccess && (
+          <Alert color="success" variant="soft" sx={{ my: 2 }}>
+            <Small>Settings successfully re-generated.</Small>
+          </Alert>
+        )}
         <Stack direction="row" alignItems="center">
-          <IconButton size="md" color="success" variant="plain">
+          <IconButton
+            size="md"
+            color="success"
+            variant="plain"
+            onClick={handleRegenerate}
+            loading={isPending}
+            disabled={!name || !description}
+          >
             <Stack
               direction="row"
               gap={1}

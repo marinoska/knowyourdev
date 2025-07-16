@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import { Range } from "../utils/index.js";
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
-import { ExtractedCVData, GapEntry, JobEntry } from "./resumeData.js";
+import { ExtractedResumeData, GapEntry, JobEntry } from "./resumeData.js";
 import { TCandidateMatch } from "./match.js";
 
 export type ResumeProfileTechnologiesEntry = {
@@ -56,7 +56,7 @@ export type ResumeProfileJobEntry = Pick<
 
 export type TResumeProfile<
   TId extends string | Schema.Types.ObjectId = Schema.Types.ObjectId,
-> = Pick<ExtractedCVData, "position" | "fullName"> & {
+> = Pick<ExtractedResumeData, "position" | "fullName"> & {
   uploadId: TId;
   technologies: ResumeProfileTechnologiesEntry[];
   jobs: ResumeProfileJobEntry[];

@@ -5,7 +5,7 @@ import { Title } from "@/components/typography.tsx";
 import { LinearProgress } from "@mui/joy";
 import { MatchDetailsRow } from "./MatchDetailsRow.tsx";
 import { getScoreColor } from "@/utils/colors.ts";
-import { TCandidateMatch } from "@kyd/common/api";
+import { TCandidateMatch } from "@kyd/common";
 
 type TOverallMatch = Pick<
   TCandidateMatch,

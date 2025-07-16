@@ -2,6 +2,8 @@ import { apiClient } from "@/api";
 import {
   DocumentUploadRequestType,
   DocumentUploadResponse,
+  ExtractJobDataRequestBody,
+  ExtractJobDataResponse,
   GetProjectsListResponse,
   GetUploadsListResponse,
   TProjectResponse,
@@ -95,5 +97,15 @@ export const updateProject = async ({
 }): Promise<TProjectResponse> => {
   return apiClient.patch<TProjectResponse>(`/projects/${projectId}`, {
     body: projectData,
+  });
+};
+
+export const extractJobData = async ({
+  title,
+  description,
+  projectId,
+}: ExtractJobDataRequestBody): Promise<ExtractJobDataResponse> => {
+  return apiClient.post<ExtractJobDataResponse>(`/projects/extract-job-data`, {
+    body: { title, description, projectId },
   });
 };

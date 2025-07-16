@@ -2,7 +2,7 @@
  * Langchain params
  * {cv_text}
  */
-export const ExtractCVDataPrompt = `You're provided with a developer's CV. Your task is to extract the developer's **work experience, job descriptions, profile and skills list**.
+export const ExtractResumeDataPrompt = `You're provided with a developer's CV. Your task is to extract the developer's **work experience, job descriptions, profile and skills list**.
 
 TODAY is ${Date()}
 

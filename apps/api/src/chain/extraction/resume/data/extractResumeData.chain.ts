@@ -1,16 +1,16 @@
 import { RunnableSequence } from "@langchain/core/runnables";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { parseJsonOutput } from "@/utils/json.js";
-import { ExtractCVDataPrompt } from "./extractCVData.prompt.js";
+import { ExtractResumeDataPrompt } from "./extractResumeData.prompt.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { gpt4oMini } from "@/app/aiModel.js";
 import {
   ExtractionChainInput,
   ExtractionChainParam,
-} from "@/chain/extraction/types.js";
+} from "@/chain/extraction/resume/types.js";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.js";
 import {
-  ExtractedCVData,
+  ExtractedResumeData,
   JobEntry,
   SECTIONS,
   SectionsNames,
@@ -25,7 +25,7 @@ type OutputType = {
   sections: string[];
 };
 const techPrompt = PromptTemplate.fromTemplate(`
-${ExtractCVDataPrompt}
+${ExtractResumeDataPrompt}
 
 ${jsonOutputPrompt({
   fullName: "extracted name and surname",
@@ -37,7 +37,7 @@ ${jsonOutputPrompt({
 })}
 `);
 
-export const extractCVData = async (
+export const extractResumeData = async (
   params: ExtractionChainInput,
 ): Promise<ExtractionChainParam> => {
   const { cvText } = params;
@@ -78,6 +78,6 @@ export const extractCVData = async (
       skillSection: {
         text: extractedData.skillSection,
       },
-    } as ExtractedCVData,
+    } as ExtractedResumeData,
   };
 };

@@ -35,6 +35,7 @@ Example Output:
   "softwareDevelopmentScope": "BE",
   "roleType": "SE",
   "isSoftwareDevelopmentRole": true,
+  "isMobileDevelopmentRole": false,
   "summary": "Contributed in the development of a SaaS platform."
 }}
 `;

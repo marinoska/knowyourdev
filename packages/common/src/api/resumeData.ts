@@ -27,6 +27,7 @@ export type JobEntry = {
   role: string;
   roleType: RoleType;
   isSoftwareDevelopmentRole: boolean;
+  isMobileDevelopmentRole: boolean;
   softwareDevelopmentScope: ScopeType | "";
   summary: string;
   job: string;
@@ -55,7 +56,7 @@ export type GapEntry = {
   popularity: 0;
 };
 
-export type ExtractedCVData<TJob = JobEntry> = {
+export type ExtractedResumeData<TJob = JobEntry> = {
   // technologies: TechnologiesEntry[],
   // techStack: TechStack[];
   position: string;

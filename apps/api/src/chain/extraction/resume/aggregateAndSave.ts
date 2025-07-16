@@ -1,4 +1,4 @@
-import { ExtractionChainParam } from "@/chain/extraction/types.js";
+import { ExtractionChainParam } from "@/chain/extraction/resume/types.js";
 import {
   ResumeDataModel,
   TResumeDataDocument,

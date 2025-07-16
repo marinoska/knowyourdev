@@ -3,9 +3,9 @@ import Stack from "@mui/joy/Stack";
 import { Box } from "@mui/joy";
 import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
-import { TTechMatch } from "@kyd/common/api";
+import { TTechMatch } from "@kyd/common";
 import { ColorPaletteProp } from "@mui/joy/styles";
-import { ActivityCard } from "@/pages/Projects/Details/CandidatesDetailsPage/ActivityCard.tsx";
+import { ActivityCard } from "@/pages/Projects/CandidateMatchPage/ActivityCard.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
 
 type TechMatchProps = {

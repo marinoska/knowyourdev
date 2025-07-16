@@ -3,7 +3,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { gpt4oMini } from "@/app/aiModel.js";
 import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
-import { extractTechProficiencyPrompt } from "@/chain/extraction/techs/sub/extractTechProficiency.prompt.js";
+import { extractTechProficiencyPrompt } from "@/chain/extraction/common/extractTechProficiency.prompt.js";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.js";
 import { PROFICIENCY, ProficiencyType } from "@kyd/common/api";
 

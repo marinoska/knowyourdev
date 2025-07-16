@@ -1,6 +1,6 @@
 import { TechDocument } from "@/models/types.js";
 import { Schema } from "mongoose";
-import { ExtractedCVData } from "@kyd/common/api";
+import { ExtractedResumeData } from "@kyd/common/api";
 import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 
 export type ExtractionChainInput = {
@@ -15,7 +15,7 @@ export type ExtractionChainOutput = {
 
 export type ExtractionChainParam =
   | ExtractionChainInput
-  | (ExtractionChainInput & { extractedData: ExtractedCVData })
+  | (ExtractionChainInput & { extractedData: ExtractedResumeData })
   | (ExtractionChainInput & {
-      extractedData: ExtractedCVData;
+      extractedData: ExtractedResumeData;
     } & ExtractionChainOutput);

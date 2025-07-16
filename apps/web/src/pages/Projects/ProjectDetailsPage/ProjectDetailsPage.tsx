@@ -4,16 +4,15 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
-import {
-  FormActions,
-  ProjectSettingsContent,
-} from "@/pages/Projects/Details/ProjectSettingsContent.tsx";
-import CandidatesContent from "@/pages/Projects/Details/CandidatesContent.tsx";
+import { ProjectSettingsContent } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsContent.tsx";
+import CandidatesContent from "@/pages/Projects/ProjectDetailsPage/CandidatesContent.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
 
 import { usePageContext } from "@/core/contexts/UsePageContext.tsx";
+import Stack from "@mui/joy/Stack";
+import { Button } from "@mui/joy";
 
 type ProjectProfileParams = { id: string };
 
@@ -43,7 +42,7 @@ const ProjectPage = ({
 }) => {
   const [activeTab, setActiveTab] = useState(0);
   const { headerState } = usePageContext();
-  console.log({ headerState });
+
   return (
     <>
       <Snackbar
@@ -67,5 +66,40 @@ const ProjectPage = ({
         )}
       </BasePage>
     </>
+  );
+};
+
+export const FormActions = ({
+  disabled,
+  isLoading,
+  reset,
+  submit,
+}: {
+  disabled: boolean;
+  isLoading: boolean;
+  reset: VoidFunction | null;
+  submit: VoidFunction | null;
+}) => {
+  return (
+    <Stack direction="row" gap={2} justifyContent="end">
+      <Button
+        type="submit"
+        color="primary"
+        disabled={disabled}
+        loading={isLoading}
+        onClick={submit ? submit : () => {}}
+      >
+        {isLoading ? "Saving..." : "Save Changes"}
+      </Button>
+      <Button
+        type="button"
+        color="neutral"
+        variant="outlined"
+        onClick={reset ? reset : () => {}}
+        disabled={disabled}
+      >
+        Reset
+      </Button>
+    </Stack>
   );
 };

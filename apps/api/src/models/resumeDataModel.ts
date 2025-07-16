@@ -1,6 +1,6 @@
 import { Document, Model, model, Schema } from "mongoose";
 import {
-  ExtractedCVData,
+  ExtractedResumeData,
   JobEntry,
   ROLE_TYPE,
   TechnologyEntry,
@@ -8,7 +8,7 @@ import {
 import { TUploadDocument } from "@/models/upload.model.js";
 
 export type TResumeDataDocument<TJob = JobEntry> = Document &
-  ExtractedCVData<TJob> & {
+  ExtractedResumeData<TJob> & {
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
   };
 
@@ -51,7 +51,7 @@ const JobEntrySchema = new Schema<JobEntry>(
     months: { type: Number, required: true },
     present: { type: Boolean, default: false },
     // softwareDevelopmentScope: {type: String, enum: ["BE", "FE", "FS", ""]},
-    // isMobileDevelopmentRole: {type: Boolean, default: false},
+    isMobileDevelopmentRole: { type: Boolean, default: false },
     technologies: [TechnologyEntrySchema],
     techStack: [TechStackSchema],
   },

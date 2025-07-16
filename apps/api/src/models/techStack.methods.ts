@@ -1,10 +1,10 @@
-import { TechStackDocumentType } from "./types.js";
+import { TechStackDocument } from "./types.js";
 import { TechCode, TechStack } from "@kyd/common/api";
 
 // Methods on Document level (TechStackDocument)
 
 export async function matchTechList(
-  this: TechStackDocumentType,
+  this: TechStackDocument,
   techCodeSet: Set<TechCode>,
 ): Promise<TechStack | null> {
   if (techCodeSet.has(this.name)) {

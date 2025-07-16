@@ -1,20 +1,20 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
 import { Small, Subtitle, Title } from "@/components/typography.tsx";
 import Stack from "@mui/joy/Stack";
-import { OverallMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/OverallMatch.tsx";
-import { Alert } from "@mui/joy";
+import { OverallMatch } from "@/pages/Projects/CandidateMatchPage/OverallMatch.tsx";
+import { Alert, Button } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { ColorPaletteProp } from "@mui/joy/styles";
-import { TProjectDTO, TResumeProfileDTO } from "@/api/query/types.ts";
-import { WithCandidateMatch } from "@kyd/common/api";
-import { JobStability } from "@/pages/Projects/Details/CandidatesDetailsPage/JobStability.tsx";
+import type { TProjectDTO, TResumeProfileDTO } from "@/api/query/types.ts";
+import type { WithCandidateMatch } from "@kyd/common/api";
+import { JobStability } from "@/pages/Projects/CandidateMatchPage/JobStability.tsx";
 import { useResumeProfileQuery } from "@/api/query/useResumeProfileQuery.ts";
-import { TechMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechMatch.tsx";
-import { TechFocusMatch } from "@/pages/Projects/Details/CandidatesDetailsPage/TechFocusMatch.tsx";
+import { TechMatch } from "@/pages/Projects/CandidateMatchPage/TechMatch.tsx";
+import { TechFocusMatch } from "@/pages/Projects/CandidateMatchPage/TechFocusMatch.tsx";
 
 type CandidateDetailsParams = {
   id: string;
@@ -23,7 +23,7 @@ type CandidateDetailsParams = {
 
 export const CandidateMatchPage = () => {
   const { id: projectId, candidateId } = useParams<CandidateDetailsParams>();
-
+  const navigate = useNavigate();
   if (!candidateId || !projectId) {
     throw new Error(
       "Missing required parameters. Please ensure you have a valid project and candidate ID.",
@@ -57,9 +57,16 @@ export const CandidateMatchPage = () => {
         <BasePage.Header
           showBackButton
           caption={`Project: ${projectQuery.data?.name}`}
-          subtitle={`${candidateQuery.profile?.position} • ${years} years ${months} month net active time`}
+          subtitle={`${candidateQuery.profile?.position} ●${years} years ${months} month net active time`}
           title={candidateQuery.profile?.fullName}
-        />
+        >
+          <Button
+            onClick={() => navigate(`/uploads/${candidateId}`)}
+            variant="outlined"
+          >
+            Profile
+          </Button>
+        </BasePage.Header>
         <BasePage.Content>
           {projectQuery.data && candidateQuery.profile ? (
             <CandidateDetails

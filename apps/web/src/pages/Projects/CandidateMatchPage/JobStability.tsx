@@ -1,8 +1,8 @@
 import { BasePage } from "@/components/BasePage.tsx";
 import Stack from "@mui/joy/Stack";
 import { Title } from "@/components/typography.tsx";
-import { MatchDetailsRow } from "@/pages/Projects/Details/CandidatesDetailsPage/MatchDetailsRow.tsx";
-import { TCandidateMatch } from "@kyd/common/api";
+import { MatchDetailsRow } from "@/pages/Projects/CandidateMatchPage/MatchDetailsRow.tsx";
+import { TCandidateMatch } from "@kyd/common";
 
 type TOverallMatch = Pick<
   TCandidateMatch,

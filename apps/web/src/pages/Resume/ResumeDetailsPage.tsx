@@ -93,7 +93,7 @@ export const ResumeDetailsPage = () => {
       >
         <BasePage.Header
           showBackButton
-          subtitle={`${resumeProfile.profile?.position} • ${years} years ${months} month net active time`}
+          subtitle={`${resumeProfile.profile?.position} ●${years} years ${months} month net active time`}
           title={resumeProfile.profile?.fullName}
         />
         {resumeProfile.profile && (

@@ -33,7 +33,7 @@ export type StackComponents = {
   or: TechCode[][];
 };
 
-export type TechStackDocumentType = Document & {
+export type TechStackDocument = Document & {
   name: string;
   recommended: number;
   components: StackComponents;
@@ -53,7 +53,7 @@ export type TechStackDocumentType = Document & {
   matchTechList: (techNamesSet: Set<TechCode>) => Promise<TechStack | null>;
 };
 
-export type TechStackModelType = Model<TechStackDocumentType> & {
+export type TechStackModelType = Model<TechStackDocument> & {
   identifyStack: (techNames: TechCode[]) => Promise<TechStack[]>;
 };
 

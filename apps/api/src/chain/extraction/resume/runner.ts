@@ -1,15 +1,15 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
-import { extractCVData } from "@/chain/extraction/cvData/extractCVData.chain.js";
+import { extractResumeData } from "@/chain/extraction/resume/data/extractResumeData.chain.js";
 import { pipe } from "@/utils/func.js";
-import { ExtractionChainParam } from "@/chain/extraction/types.js";
-import { extractTechnologies } from "@/chain/extraction/techs/extractTechnologies.chain.js";
-import { aggregateAndSave } from "@/chain/extraction/aggregateAndSave.js";
+import { ExtractionChainParam } from "@/chain/extraction/resume/types.js";
+import { extractTechnologies } from "@/chain/extraction/resume/technologies/extractTechnologies.chain.js";
+import { aggregateAndSave } from "@/chain/extraction/resume/aggregateAndSave.js";
 import { TechListModel } from "@/models/techList.model.js";
 import { TUploadDocument } from "@/models/upload.model.js";
 import logger from "@/app/logger.js";
 import mammoth from "mammoth";
 import { Schema } from "mongoose";
-import { ExtractedCVData } from "@kyd/common/api";
+import { ExtractedResumeData } from "@kyd/common/api";
 import pdfParse from "@/utils/pdf-parse-wrapper.js";
 import { downloadFileFromR2 } from "@/services/r2Storage.service.js";
 
@@ -66,7 +66,7 @@ async function processPdfDocument(
   }
 }
 
-async function extractCVText(
+async function extractResumeText(
   filePathOrBuffer: string | Buffer,
   contentType: string,
 ): Promise<string> {
@@ -102,9 +102,9 @@ export async function processUpload(upload: TUploadDocument, buffer?: Buffer) {
     if (fileBuffer) {
       log.info(`Using file buffer for upload: ${upload._id}`);
 
-      const cvText = await extractCVText(fileBuffer, upload.contentType);
+      const cvText = await extractResumeText(fileBuffer, upload.contentType);
       // TODO check the amount of tokens in cvText - has to be limited?
-      await runCVDataExtraction(cvText, upload._id);
+      await runResumeDataExtraction(cvText, upload._id);
       upload.parseStatus = "processed";
       void upload.save();
     }
@@ -116,10 +116,10 @@ export async function processUpload(upload: TUploadDocument, buffer?: Buffer) {
   }
 }
 
-export async function runCVDataExtraction(
+export async function runResumeDataExtraction(
   cvText: string,
   uploadId: Schema.Types.ObjectId,
-): Promise<ExtractedCVData> {
+): Promise<ExtractedResumeData> {
   if (!cvText || cvText.trim() === "") {
     throw new Error("CV text extraction failed. Please check the PDF file.");
   }
@@ -134,7 +134,7 @@ export async function runCVDataExtraction(
 
   const output = await pipe<ExtractionChainParam>(
     inputData,
-    extractCVData,
+    extractResumeData,
     extractTechnologies,
     aggregateAndSave,
   );

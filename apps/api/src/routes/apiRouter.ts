@@ -31,6 +31,10 @@ import {
   updateProjectController,
   updateProjectValidationSchema,
 } from "@/routes/api/updateProject.controller.js";
+import {
+  extractJobDataController,
+  extractJobDataValidationSchema,
+} from "@/routes/api/extractJobData.controller.js";
 // import { loadAuthenticatedUser } from 'nftit/User/loadAuthenticatedUser.middleware';
 
 const validateOptions = { abortEarly: false };
@@ -69,6 +73,11 @@ apiRouter.patch(
   "/projects/:projectId",
   celebrate(updateProjectValidationSchema),
   updateProjectController,
+);
+apiRouter.post(
+  "/projects/extract-job-data",
+  celebrate(extractJobDataValidationSchema, validateOptions),
+  extractJobDataController,
 );
 
 apiRouter.use(notFoundController);

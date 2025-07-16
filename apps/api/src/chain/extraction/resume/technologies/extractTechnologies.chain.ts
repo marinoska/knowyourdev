@@ -4,9 +4,9 @@ import { gpt4oMini } from "@/app/aiModel.js";
 import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { extractTechnologiesPrompt } from "./extractTechnologies.prompt.js";
-import { normalizeTechList } from "./sub/normaliseTechNameList.chain.js";
-import { ExtractionChainParam } from "@/chain/extraction/types.js";
-import { extractTechProficiency } from "@/chain/extraction/techs/sub/extractTechProficiency.chain.js";
+import { normalizeTechList } from "@/chain/extraction/common/normaliseTechNameList.chain.js";
+import { ExtractionChainParam } from "@/chain/extraction/resume/types.js";
+import { extractTechProficiency } from "@/chain/extraction/common/extractTechProficiency.chain.js";
 import { TechStackModel } from "@/models/techStack.model.js";
 import { JobEntry, TechnologyEntry, RoleType } from "@kyd/common/api";
 
@@ -25,6 +25,8 @@ type Output = {
   technologies: string[];
   roleType: string;
   isSoftwareDevelopmentRole: boolean;
+  softwareDevelopmentScope: string;
+  isMobileDevelopmentRole: boolean;
   summary: string;
 };
 
@@ -48,10 +50,15 @@ export const extractTechnologies = async (
   async function extracted(text: string): Promise<Partial<JobEntry>> {
     if (!text) return { technologies: [], techStack: [] };
 
-    const { technologies, roleType, isSoftwareDevelopmentRole, summary } =
-      await jobTechExtractor.invoke({
-        description: text,
-      }); // Process each job separately
+    const {
+      technologies,
+      roleType,
+      isSoftwareDevelopmentRole,
+      summary,
+      isMobileDevelopmentRole,
+    } = await jobTechExtractor.invoke({
+      description: text,
+    }); // Process each job separately
 
     const normalisedTechList = technologies.length
       ? await normalizeTechList({
@@ -83,6 +90,7 @@ export const extractTechnologies = async (
       techStack: stackMatches,
       roleType: roleType as RoleType,
       isSoftwareDevelopmentRole,
+      isMobileDevelopmentRole,
       summary,
     };
   }

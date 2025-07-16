@@ -37,7 +37,7 @@ export function Snackbar({
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       endDecorator={
         <Button onClick={handleClose} size="md" variant="outlined">
-          Dismiss
+          Close
         </Button>
       }
     >

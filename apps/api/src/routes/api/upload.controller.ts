@@ -5,7 +5,7 @@ import {
   DocumentUploadRequestBody,
   DocumentUploadResponse,
 } from "@kyd/common/api";
-import { processUpload } from "@/chain/extraction/runner.js";
+import { processUpload } from "@/chain/extraction/resume/runner.js";
 import { ValidationError } from "@/app/errors.js";
 import { ProjectModel } from "@/models/project.model.js";
 import { validateOptionalObjectId } from "@/utils/validation.js";
