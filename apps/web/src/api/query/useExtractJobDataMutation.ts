@@ -1,12 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
 import { extractJobData } from "./api.ts";
-import { ExtractJobDataRequestBody, ExtractJobDataResponse } from "@kyd/common/api";
+import {
+  ExtractProjectDataRequestBody,
+  ExtractProjectDataResponse,
+} from "@kyd/common/api";
 
 export const useExtractJobDataMutation = () => {
   return useMutation<
-    ExtractJobDataResponse,
+    ExtractProjectDataResponse,
     Error,
-    ExtractJobDataRequestBody
+    ExtractProjectDataRequestBody
   >({
     mutationFn: extractJobData,
     onError: (err) => {

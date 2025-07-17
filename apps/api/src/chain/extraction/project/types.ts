@@ -13,7 +13,6 @@ export type ExtractedProjectData = {
   isSoftwareDevelopmentRole: boolean;
   isMobileDevelopmentRole: boolean;
   summary: string;
-  scopes: ScopeType[];
 };
 
 export type ExtractionChainOutput = {

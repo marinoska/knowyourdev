@@ -53,7 +53,7 @@ type ExtractTechnologiesInput = {
 
 export const extractTechnologies = async (
   params: ExtractTechnologiesInput,
-): Promise<Omit<ExtractedProjectData, "scopes">> => {
+): Promise<ExtractedProjectData> => {
   const { description, title, techCollection } = params;
 
   const {

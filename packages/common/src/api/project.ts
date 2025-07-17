@@ -1,9 +1,9 @@
 import { RoleType, ScopeType } from "./constants.js";
 import { TListResponse } from "./utils.js";
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import { RequireAtLeastOne } from "type-fest";
 import { TechnologyEntry } from "./resumeData.js";
-import { TechStack } from "./tech.js";
+import { TechStack, TechType } from "./tech.js";
 
 export type TProject<
   TId extends string | Schema.Types.ObjectId = Schema.Types.ObjectId,
@@ -44,17 +44,18 @@ export type GetProjectsPageQueryParams = {
   sortOrder?: "asc" | "desc";
 };
 
-export type ExtractJobDataRequestBody = {
-  title: string;
-  description: string;
-  projectId: string;
-};
-
-export type ExtractJobDataResponse = {
-  technologies: TechnologyEntry[];
+export type ExtractProjectDataResponse = {
+  technologies: (Pick<TechType, "name" | "code"> & { ref: string })[];
+  techFocus: ScopeType[];
   techStack: TechStack[];
   roleType: RoleType;
   isSoftwareDevelopmentRole: boolean;
   isMobileDevelopmentRole: boolean;
   summary: string;
+};
+
+export type ExtractProjectDataRequestBody = {
+  title: string;
+  description: string;
+  projectId: string;
 };

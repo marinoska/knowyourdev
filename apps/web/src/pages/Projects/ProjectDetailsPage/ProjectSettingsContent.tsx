@@ -1,6 +1,6 @@
 import Stack from "@mui/joy/Stack";
 import Chip from "@mui/joy/Chip";
-import { SCOPE_NAMES } from "@kyd/common/api";
+import { SCOPE, SCOPE_NAMES, ScopeType } from "@kyd/common/api";
 import { Regular, Small, Subtitle } from "@/components/typography.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
 import {
@@ -32,6 +32,12 @@ type ProjectFormValues = {
     description: string;
     baselineJobDuration: number;
     expectedRecentRelevantYears: number;
+    techFocus: ScopeType[];
+    technologies: Array<{
+      ref: string;
+      code: string;
+      name: string;
+    }>;
   };
 };
 
@@ -60,6 +66,17 @@ const validationSchema = yup.object({
       .required("Expected recent relevant years is required")
       .min(MIN_EXPECTED_DURATION, `Minimum years is ${MIN_EXPECTED_DURATION}`)
       .max(MAX_EXPECTED_DURATION, `Maximum years is ${MAX_EXPECTED_DURATION}`),
+    techFocus: yup.array().of(yup.string().oneOf(SCOPE).defined()).default([]),
+    technologies: yup
+      .array()
+      .of(
+        yup.object({
+          ref: yup.string().defined(),
+          code: yup.string().defined(),
+          name: yup.string().defined(),
+        }),
+      )
+      .default([]),
   }),
 });
 
@@ -84,6 +101,7 @@ export const ProjectSettingsContent = ({
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { isDirty, errors, dirtyFields },
   } = useForm<ProjectFormValues>({
     resolver: yupResolver(validationSchema),
@@ -94,6 +112,8 @@ export const ProjectSettingsContent = ({
         baselineJobDuration: project.settings.baselineJobDuration,
         expectedRecentRelevantYears:
           project.settings.expectedRecentRelevantYears,
+        techFocus: project.settings.techFocus,
+        technologies: project.settings.technologies,
       },
     },
   });
@@ -117,6 +137,8 @@ export const ProjectSettingsContent = ({
           baselineJobDuration: project.settings.baselineJobDuration,
           expectedRecentRelevantYears:
             project.settings.expectedRecentRelevantYears,
+          techFocus: project.settings.techFocus,
+          technologies: project.settings.technologies,
         },
       }),
     [project, reset],
@@ -169,6 +191,16 @@ export const ProjectSettingsContent = ({
                 {errors.settings.expectedRecentRelevantYears.message}
               </Small>
             )}
+            {errors.settings?.techFocus && (
+              <Small>
+                ●Technical Focus: {errors.settings.techFocus.message}
+              </Small>
+            )}
+            {errors.settings?.technologies && (
+              <Small>
+                ●Technologies: {errors.settings.technologies.message}
+              </Small>
+            )}
           </Stack>
         </Alert>
       )}
@@ -183,6 +215,10 @@ export const ProjectSettingsContent = ({
               project={project}
               isDescriptionDirty={!!dirtyFields.settings?.description}
               control={control}
+              setTechFocus={(value) => setValue("settings.techFocus", value)}
+              setTechnologies={(value) =>
+                setValue("settings.technologies", value)
+              }
             />
             <DurationSettingsSection control={control} />
           </Stack>
@@ -329,21 +365,34 @@ const SystemGeneratedSection = ({
   project,
   isDescriptionDirty,
   control,
+  setTechFocus,
+  setTechnologies,
 }: {
   project: TProjectDTO;
   isDescriptionDirty: boolean;
   control: Control<ProjectFormValues>;
+  setTechFocus: (value: ScopeType[]) => void;
+  setTechnologies: (
+    value: ProjectFormValues["settings"]["technologies"],
+  ) => void;
 }) => {
   const {
     mutate: extractJobData,
     isPending,
     isError,
     isSuccess,
+    data: extractedData,
   } = useExtractJobDataMutation();
 
   // Watch the form values
   const formValues = useWatch({ control });
 
+  useEffect(() => {
+    if (extractedData) {
+      setTechnologies(extractedData.technologies);
+      setTechFocus(extractedData.techFocus);
+    }
+  }, [extractedData, setTechFocus, setTechnologies]);
   const name = formValues.name?.trim();
   const description = formValues.settings?.description?.trim();
 
@@ -420,25 +469,20 @@ const SystemGeneratedSection = ({
       </Stack>
       <Small>Technical Focus</Small>
       <Stack direction="row" gap={1} flexWrap="wrap">
-        {project.settings?.techFocus.map((tech) => (
+        {formValues.settings?.techFocus?.map((tech) => (
           <Chip key={tech} variant="soft" color="primary" size="md">
             {SCOPE_NAMES[tech]}
           </Chip>
-        ))}
+        )) || <Regular>No technologies specified.</Regular>}
       </Stack>
 
       <Small>Technologies</Small>
       <Stack direction="row" gap={1} flexWrap="wrap">
-        {project.settings?.technologies &&
-        project.settings.technologies.length ? (
-          project.settings.technologies.map((tech) => (
-            <Chip key={tech.code} variant="soft" color="primary" size="md">
-              {tech.name}
-            </Chip>
-          ))
-        ) : (
-          <Regular>No technologies specified.</Regular>
-        )}
+        {formValues.settings?.technologies.map((tech) => (
+          <Chip key={tech.code} variant="soft" color="primary" size="md">
+            {tech.name}
+          </Chip>
+        )) || <Regular>No technologies specified.</Regular>}
       </Stack>
     </Card>
   );
