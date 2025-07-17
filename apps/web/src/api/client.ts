@@ -20,7 +20,7 @@ export type ClientError = {
 };
 type GetParams = { params?: object; headers?: object };
 type PostParams = {
-  body?: BodyInit;
+  body?: BodyInit | object;
   headers?: HeadersInit;
   query?: object;
   isFormData?: boolean;
@@ -95,14 +95,10 @@ class Client {
     { body, headers, query = {}, isFormData = false }: PostParams,
   ) {
     const qs = Object.keys(query).length ? `?${stringify(query)}` : "";
-    console.log(
-      "HEADERS",
-      headers ? { ...defaultHeaders, ...headers } : { ...defaultHeaders },
-    );
 
     if (isFormData) {
       return this._doFetch<R>(`${path}${qs}`, {
-        body,
+        body: body as FormData,
         method: "POST",
       });
     }

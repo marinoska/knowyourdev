@@ -100,12 +100,10 @@ export const updateProject = async ({
   });
 };
 
-export const extractJobData = async ({
-  title,
-  description,
-  projectId,
-}: ExtractJobDataRequestBody): Promise<ExtractJobDataResponse> => {
+export const extractJobData = async (
+  requestBody: ExtractJobDataRequestBody,
+): Promise<ExtractJobDataResponse> => {
   return apiClient.post<ExtractJobDataResponse>(`/projects/extract-job-data`, {
-    body: { title, description, projectId },
+    body: requestBody,
   });
 };

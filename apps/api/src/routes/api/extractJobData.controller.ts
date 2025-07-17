@@ -1,8 +1,8 @@
 import { Joi, Segments } from "celebrate";
 import type { Response, Request } from "express";
 import { Schema } from "mongoose";
-import { runJobDataExtraction } from "@/chain/extraction/project/runner.js";
-import { ExtractedJobData } from "@/chain/extraction/project/types.js";
+import { runProjectDataExtraction } from "@/chain/extraction/project/runner.js";
+import { ExtractedProjectData } from "@/chain/extraction/project/types.js";
 import { ProjectModel } from "@/models/project.model.js";
 import { ValidationError } from "@/app/errors.js";
 import { validateObjectId } from "@/utils/validation.js";
@@ -15,7 +15,7 @@ export type ExtractJobDataRequestBody = {
 };
 
 // Define response type
-export type ExtractJobDataResponse = ExtractedJobData;
+export type ExtractJobDataResponse = ExtractedProjectData;
 
 // Define request type with generics
 export type ExtractJobDataRequest = Request<
@@ -24,7 +24,6 @@ export type ExtractJobDataRequest = Request<
   ExtractJobDataRequestBody
 >;
 
-// Controller function
 export const extractJobDataController = async (
   req: ExtractJobDataRequest,
   res: Response<ExtractJobDataResponse>,
@@ -40,12 +39,12 @@ export const extractJobDataController = async (
 
   const projectObjectId = new Schema.Types.ObjectId(projectId);
 
-  const extractedData = await runJobDataExtraction(
+  const extractedData = await runProjectDataExtraction(
     title,
     description,
     projectObjectId,
   );
-
+  console.log({ extractedData });
   res.status(200).json(extractedData);
 };
 

@@ -4,11 +4,13 @@ import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { gpt4oMini } from "@/app/aiModel.js";
 import { parseJsonOutput } from "@/utils/json.js";
-import { ExtractionChainParam } from "@/chain/extraction/project/types.js";
+import { ExtractedProjectData } from "@/chain/extraction/project/types.js";
 import { normalizeTechList } from "@/chain/extraction/common/normaliseTechNameList.chain.js";
 import { extractTechProficiency } from "@/chain/extraction/common/extractTechProficiency.chain.js";
 import { TechStackModel } from "@/models/techStack.model.js";
 import { RoleType, TechnologyEntry } from "@kyd/common/api";
+import { TechDocument } from "@/models/types.js";
+import { Schema } from "mongoose";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechnologiesFromJobDescriptionPrompt}
@@ -42,9 +44,16 @@ const jobTechExtractor = RunnableSequence.from<
   parseJsonOutput, // Parses JSON output
 ]);
 
+type ExtractTechnologiesInput = {
+  description: string;
+  title: string;
+  techCollection: TechDocument[];
+  projectId: Schema.Types.ObjectId;
+};
+
 export const extractTechnologies = async (
-  params: ExtractionChainParam,
-): Promise<ExtractionChainParam> => {
+  params: ExtractTechnologiesInput,
+): Promise<Omit<ExtractedProjectData, "scopes">> => {
   const { description, title, techCollection } = params;
 
   const {
@@ -81,17 +90,12 @@ export const extractTechnologies = async (
     normalisedTechList.map((tech) => tech.code),
   );
 
-  const extracted = {
+  return {
     technologies: technologiesEntry,
     techStack: stackMatches,
     roleType: roleType as RoleType,
     isSoftwareDevelopmentRole,
     isMobileDevelopmentRole,
     summary,
-  };
-
-  return {
-    ...params,
-    extractedJobData: { ...extracted },
   };
 };

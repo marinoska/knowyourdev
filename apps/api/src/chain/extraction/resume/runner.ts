@@ -15,7 +15,7 @@ import { downloadFileFromR2 } from "@/services/r2Storage.service.js";
 
 const log = logger("DataExtraction");
 
-/*
+/**
 Here are typical bullet symbols found in CVs:
 ● (black circle)
 • (small black dot)
@@ -24,9 +24,9 @@ Here are typical bullet symbols found in CVs:
 ▪ (small square)
 * (asterisk)
 ►, », → (arrow-like symbols)
- */
-// const bulletRegex = /[\u2022\u25CF\u25AA\u25B6\u00BB\u2192\-–*]/;
 
+// const bulletRegex = /[\u2022\u25CF\u25AA\u25B6\u00BB\u2192\-–*]/;
+ */
 const cleanup = (text: string) => {
   // Normalize all bullet-like lines to start with "●"
   return text

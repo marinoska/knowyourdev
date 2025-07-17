@@ -4,7 +4,7 @@ import { ColorPaletteProp } from "@mui/joy/styles";
 import { Small, Subtitle } from "@/components/typography.tsx";
 import { format } from "date-fns";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
-import { ActivityPeriod } from "@kyd/common";
+import { ActivityPeriod } from "@kyd/common/api";
 import { useMemo } from "react";
 
 type ActivityTypeProps = {
