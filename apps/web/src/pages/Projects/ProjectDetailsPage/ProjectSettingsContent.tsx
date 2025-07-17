@@ -431,20 +431,19 @@ const SystemGeneratedSection = ({
             </Small>
           </Alert>
         )}
-        {isError && (
-          <Alert
-            startDecorator={<WarningIcon />}
-            color="danger"
-            variant="soft"
-            sx={{ my: 2 }}
-          >
-            <Small>Failed to re-generate settings. Please try again.</Small>
-          </Alert>
-        )}
         {isSuccess && (
-          <Alert color="success" variant="soft" sx={{ my: 2 }}>
-            <Small>Settings successfully re-generated.</Small>
-          </Alert>
+          <Snackbar
+            type="success"
+            show={isSuccess}
+            msg="Settings successfully re-generated."
+          />
+        )}
+        {isError && (
+          <Snackbar
+            type="danger"
+            show={isError}
+            msg="Failed to re-generate settings. Please try again later."
+          />
         )}
         <Stack direction="row" alignItems="center">
           <IconButton
@@ -462,7 +461,7 @@ const SystemGeneratedSection = ({
               flexWrap="nowrap"
             >
               <RefreshIcon />
-              <Subtitle color="success">Re-generate all settings</Subtitle>
+              <Subtitle color="success">Re-generate settings</Subtitle>
             </Stack>
           </IconButton>
         </Stack>
@@ -478,7 +477,7 @@ const SystemGeneratedSection = ({
 
       <Small>Technologies</Small>
       <Stack direction="row" gap={1} flexWrap="wrap">
-        {formValues.settings?.technologies.map((tech) => (
+        {formValues.settings?.technologies?.map((tech) => (
           <Chip key={tech.code} variant="soft" color="primary" size="md">
             {tech.name}
           </Chip>
