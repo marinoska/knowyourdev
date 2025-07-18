@@ -1,7 +1,8 @@
 import {
   GetResumeProfileResponse,
   ResumeProfileTechnologiesEntry,
-  TProjectResponse,
+  TProjectPopulated,
+  TProject,
 } from "@kyd/common/api";
 
 export type TechProfile = Omit<ResumeProfileTechnologiesEntry, "jobs"> & {
@@ -15,4 +16,5 @@ export type TechProfile = Omit<ResumeProfileTechnologiesEntry, "jobs"> & {
 };
 
 export type TResumeProfileDTO<T = object> = GetResumeProfileResponse<T>;
-export type TProjectDTO = TProjectResponse;
+export type TProjectDTO = TProject<string, string>; // all Ids are strings
+export type TProjectPopulatedDTO = TProjectPopulated<string>; // all Ids are strings

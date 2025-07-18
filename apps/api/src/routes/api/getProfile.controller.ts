@@ -4,6 +4,7 @@ import { Joi, Segments } from "celebrate";
 import {
   GetResumeProfileResponse,
   TCandidateMatch,
+  TProject,
   WithCandidateMatch,
 } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
@@ -14,6 +15,7 @@ import {
   validateObjectId,
   validateOptionalObjectId,
 } from "@/utils/validation.js";
+import { Schema } from "mongoose";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },
@@ -69,7 +71,7 @@ export const getResumeProfileController: ResumeProfileController = async (
   if (project) {
     const profileMatchService = new ProfileMatchService();
     const match: TCandidateMatch = profileMatchService.getCandidateMatch({
-      project,
+      project: project as TProject,
       candidate: {
         ...resumeProfile,
         ...profileMetrics,

@@ -1,38 +1,29 @@
-import { RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import { Joi, Segments } from "celebrate";
-import { TProjectResponse } from "@kyd/common/api";
+import { TProjectPopulated } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { validateObjectId } from "@/utils/validation.js";
 import { ProjectModel } from "@/models/project.model.js";
 
 export type GetProjectController = RequestHandler<
   { projectId: string },
-  TProjectResponse,
+  TProjectPopulated,
   unknown,
   unknown
 >;
 
-export const getProjectController: GetProjectController = async (
-  req,
-  res: Response<TProjectResponse>,
-) => {
+export const getProjectController: GetProjectController = async (req, res) => {
   const { projectId } = req.params;
 
-  const project = await ProjectModel.findById(projectId)
+  const project = (await ProjectModel.findById<TProjectPopulated>(projectId)
     .populate("settings.technologies.ref")
-    .lean();
+    .lean()) as TProjectPopulated;
 
   if (!project) {
     throw new NotFound(`Project not found for the provided ID: ${projectId}`);
   }
 
-  res.status(200).json({
-    _id: project._id.toString(),
-    name: project.name,
-    settings: project.settings,
-    createdAt: project.createdAt.toISOString(),
-    candidates: project.candidates, // Ensure candidates are included
-  });
+  res.status(200).json(project);
 };
 
 export const getProjectValidationSchema = {

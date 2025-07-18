@@ -3,15 +3,14 @@ import {
   ResumeDataModel,
   TResumeDataDocument,
 } from "@/models/resumeDataModel.js";
-import { TProjectDocument } from "@/models/project.model.js";
 import { SortOrder } from "mongoose";
-import { TUpload, TListResponse } from "@kyd/common/api";
+import { TUpload, TListResponse, TProject } from "@kyd/common/api";
 
 type TParams = {
   page: number;
   limit: number;
   sortOrder?: "asc" | "desc";
-  project?: TProjectDocument | null;
+  project?: TProject | null;
 };
 
 export const getUploadsWithDetails = async ({

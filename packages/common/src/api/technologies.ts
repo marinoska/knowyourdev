@@ -1,7 +1,11 @@
 import { CategoryType, ScopeType, TechCode, TrendType } from "./constants.js";
+import { Schema } from "mongoose";
 
 export type TechCodeType = string;
-export type TechType = {
+export type TTechnology<
+  TId extends string | Schema.Types.ObjectId = Schema.Types.ObjectId,
+> = {
+  _id: TId;
   name: string;
   code: TechCodeType;
   usage2024?: number;

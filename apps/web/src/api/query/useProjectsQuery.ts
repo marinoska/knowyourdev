@@ -1,8 +1,11 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { projectsKeys } from "./keys.ts";
-import { getProjectProfile, listProjects } from "./api.ts";
+import {
+  getProjectProfile,
+  GetProjectsListResponse,
+  listProjects,
+} from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
-import { GetProjectsListResponse } from "@kyd/common/api";
 import { TProjectDTO } from "@/api/query/types.ts";
 
 export const useProjectsQuery = ({

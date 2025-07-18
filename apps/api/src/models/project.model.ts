@@ -1,41 +1,32 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import {
-  PatchProjectBody,
-  PutProjectBody,
-  SCOPE,
-  TProject,
-} from "@kyd/common/api";
-import {
-  patch,
-  getPage,
-  create,
-  GtProjectsPageResult,
-  GetProjectsPageParams,
-} from "@/models/project.statics.js";
+import { SCOPE, TProject, TTechnology } from "@kyd/common/api";
+import { patch, getPage, create } from "@/models/project.statics.js";
 
 export type TProjectDocument = Document &
-  TProject & {
-    _id: string;
-    createdAt: Date;
-  };
+  TProject<Schema.Types.ObjectId, Schema.Types.ObjectId>;
 
-export type TProjectModel = Model<TProjectDocument> & {
-  patch: (
-    id: string,
-    projectData: PatchProjectBody,
-  ) => Promise<TProjectDocument | null>;
-  getPage: (params: GetProjectsPageParams) => Promise<GtProjectsPageResult>;
-  create: (projectData: PutProjectBody) => Promise<TProjectDocument>;
+export type TProjectDocumentPopulated = Document &
+  TProject<Schema.Types.ObjectId, TTechnology>;
+
+export type TProjectModel = Model<
+  TProjectDocument | TProjectDocumentPopulated
+> & {
+  patch: typeof patch;
+  getPage: typeof getPage;
+  create: typeof create;
 };
 
 const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
   {
     name: { type: String, required: true },
     settings: {
-      baselineJobDuration: { type: Number }, // Default to 12 months
-      techFocus: [{ required: true, type: String, enum: SCOPE }],
+      baselineJobDuration: { type: Number, default: 1 }, // Default to 12 months
+      techFocus: {
+        type: [{ required: true, type: String, enum: SCOPE }],
+        default: [],
+      },
       description: { type: String, default: "" },
-      expectedRecentRelevantYears: { type: Number },
+      expectedRecentRelevantYears: { type: Number, default: 1 },
       technologies: {
         required: true,
         type: [

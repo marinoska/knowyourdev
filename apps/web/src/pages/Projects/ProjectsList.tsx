@@ -43,7 +43,7 @@ export const ProjectsList = () => {
           <BasePage.Sheet>
             <Stack gap={2} direction="column">
               {projects?.map((project) => (
-                <ProjectItem key={project._id} item={project} />
+                <ProjectItem key={String(project._id)} item={project} />
               ))}
             </Stack>
           </BasePage.Sheet>

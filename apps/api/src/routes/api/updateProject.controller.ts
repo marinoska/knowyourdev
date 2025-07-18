@@ -1,34 +1,33 @@
-import { RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import { Joi, Segments } from "celebrate";
-import { PatchProjectBody, TProjectResponse } from "@kyd/common/api";
+import { PatchProjectBody, TProjectPopulated } from "@kyd/common/api";
 import { NotFound } from "@/app/errors.js";
 import { validateObjectId } from "@/utils/validation.js";
 import { ProjectModel } from "@/models/project.model.js";
 
 export type UpdateProjectController = RequestHandler<
   { projectId: string },
-  TProjectResponse,
+  TProjectPopulated,
   PatchProjectBody,
   unknown
 >;
 
 export const updateProjectController: UpdateProjectController = async (
   req,
-  res: Response<TProjectResponse>,
+  res,
 ) => {
   const { projectId } = req.params;
 
-  const updatedProject = await ProjectModel.patch(projectId, req.body);
+  const updatedProject: TProjectPopulated | null = await ProjectModel.patch(
+    projectId,
+    req.body,
+  );
   if (!updatedProject) {
     throw new NotFound(`Project not found for the provided ID: ${projectId}`);
   }
 
-  // Send the updated project in the response
   res.status(200).json({
-    _id: updatedProject._id.toString(),
-    name: updatedProject.name,
-    settings: updatedProject.settings,
-    createdAt: updatedProject.createdAt.toISOString(),
+    ...updatedProject,
     candidates: updatedProject.candidates || [], // Ensure candidates are included
   });
 };

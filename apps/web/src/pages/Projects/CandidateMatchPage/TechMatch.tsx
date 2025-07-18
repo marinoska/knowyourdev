@@ -28,25 +28,27 @@ export const TechMatch = ({ project, techMatch }: TechMatchProps) => {
             Analyzed against {project?.name} project requirements
           </Small>
         </Box>
-        {project?.settings.technologies.map((tech) => {
-          const techActivity = techMatch[tech.code];
+        {project?.settings.technologies.map(
+          ({ code, name }: { code: string; name: string }) => {
+            const techActivity = techMatch[code];
 
-          if (!techActivity) return null;
+            if (!techActivity) return null;
 
-          return (
-            <ActivityCard
-              key={tech.code}
-              scopeName={tech.name}
-              descActivityPeriods={techActivity.descActivityPeriods}
-              descNormalizedActivityScoreList={
-                techActivity.descNormalizedActivityScoreList
-              }
-              totalActiveMonths={techActivity.totalActiveMonths}
-              overallScore={techActivity.overallScore}
-              color={getScoreColor(techActivity.overallScore)}
-            />
-          );
-        })}
+            return (
+              <ActivityCard
+                key={code}
+                scopeName={name}
+                descActivityPeriods={techActivity.descActivityPeriods}
+                descNormalizedActivityScoreList={
+                  techActivity.descNormalizedActivityScoreList
+                }
+                totalActiveMonths={techActivity.totalActiveMonths}
+                overallScore={techActivity.overallScore}
+                color={getScoreColor(techActivity.overallScore)}
+              />
+            );
+          },
+        )}
       </Stack>
     </BasePage.Sheet>
   );

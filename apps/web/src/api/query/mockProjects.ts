@@ -1,6 +1,6 @@
-import { TProjectResponse } from "@kyd/common/api";
+import { TProjectDTO } from "@/api/query/types.ts";
 
-export const mockProjects: TProjectResponse[] = [
+export const mockProjects: TProjectDTO[] = [
   {
     _id: "1",
     name: "Web Application Development",
@@ -13,7 +13,7 @@ export const mockProjects: TProjectResponse[] = [
       technologies: [],
     },
     candidates: [],
-    createdAt: new Date(2023, 0, 15).toISOString(),
+    createdAt: new Date(2023, 0, 15),
   },
   {
     _id: "2",
@@ -27,7 +27,7 @@ export const mockProjects: TProjectResponse[] = [
       technologies: [],
     },
     candidates: [],
-    createdAt: new Date(2023, 1, 20).toISOString(),
+    createdAt: new Date(2023, 1, 20),
   },
   {
     _id: "3",
@@ -41,7 +41,7 @@ export const mockProjects: TProjectResponse[] = [
       technologies: [],
     },
     candidates: [],
-    createdAt: new Date(2023, 2, 10).toISOString(),
+    createdAt: new Date(2023, 2, 10),
   },
   {
     _id: "4",
@@ -55,7 +55,7 @@ export const mockProjects: TProjectResponse[] = [
       technologies: [],
     },
     candidates: [],
-    createdAt: new Date(2023, 3, 5).toISOString(),
+    createdAt: new Date(2023, 3, 5),
   },
   {
     _id: "5",
@@ -69,6 +69,6 @@ export const mockProjects: TProjectResponse[] = [
       technologies: [],
     },
     candidates: [],
-    createdAt: new Date(2023, 4, 25).toISOString(),
+    createdAt: new Date(2023, 4, 25),
   },
 ];

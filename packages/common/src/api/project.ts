@@ -1,12 +1,15 @@
 import { RoleType, ScopeType } from "./constants.js";
 import { TListResponse } from "./utils.js";
-import { Schema, Types } from "mongoose";
+import { Schema } from "mongoose";
 import { RequireAtLeastOne } from "type-fest";
-import { TechnologyEntry } from "./resumeData.js";
-import { TechStack, TechType } from "./tech.js";
+import { TechStack, TTechnology } from "./technologies.js";
 
 export type TProject<
   TId extends string | Schema.Types.ObjectId = Schema.Types.ObjectId,
+  TRef extends
+    | string
+    | Schema.Types.ObjectId
+    | TTechnology<TId> = Schema.Types.ObjectId,
 > = {
   _id: TId;
   name: string;
@@ -16,27 +19,29 @@ export type TProject<
     description: string;
     expectedRecentRelevantYears: number;
     technologies: Array<{
-      ref: string;
+      ref: TRef;
       code: string;
       name: string;
     }>;
   };
   candidates: string[];
+  createdAt: Date;
 };
 
-export type TProjectResponse = TProject<string> & {
-  createdAt: string;
-};
-
-export type TProjectsPage = { projects: TProjectResponse[] };
+export type TProjectPopulated<
+  TId extends string | Schema.Types.ObjectId = Schema.Types.ObjectId,
+> = TProject<TId, TTechnology<TId>>;
 
 export type PatchProjectBody = RequireAtLeastOne<
-  Partial<Omit<TProject, "candidates" | "_id" | "settings">> & {
-    settings: Partial<TProject["settings"]>;
-  }
+  Partial<Omit<TProject<string>, "candidates" | "_id" | "settings">> &
+    (
+      | {
+          settings: Partial<TProject<string>["settings"]>;
+        }
+      | {}
+    )
 >;
 export type PutProjectBody = Omit<TProject, "candidates" | "_id">;
-export type GetProjectsListResponse = TListResponse<TProjectsPage>;
 
 export type GetProjectsPageQueryParams = {
   page: number;
@@ -45,7 +50,7 @@ export type GetProjectsPageQueryParams = {
 };
 
 export type ExtractProjectDataResponse = {
-  technologies: (Pick<TechType, "name" | "code"> & { ref: string })[];
+  technologies: (Pick<TTechnology, "name" | "code"> & { ref: string })[];
   techFocus: ScopeType[];
   techStack: TechStack[];
   roleType: RoleType;

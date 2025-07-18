@@ -4,16 +4,16 @@ import {
   DocumentUploadResponse,
   ExtractProjectDataRequestBody,
   ExtractProjectDataResponse,
-  GetProjectsListResponse,
   GetUploadsListResponse,
-  TProjectResponse,
   TUploadsPage,
   GetResumeProfileResponse,
   GetUploadsListQueryParams,
   WithCandidateMatch,
   PatchProjectBody,
+  TListResponse,
 } from "@kyd/common/api";
 import { InfiniteData } from "@tanstack/react-query";
+import { TProjectDTO } from "@/api/query/types.ts";
 
 export const uploadCV = ({
   file,
@@ -51,6 +51,10 @@ export const listUploads = async ({
   });
 };
 
+export type GetProjectsListResponse = TListResponse<{
+  projects: TProjectDTO[];
+}>;
+
 export const listProjects = async ({ page, limit }: ListParams) => {
   return apiClient.get<GetProjectsListResponse>("/projects", {
     params: { page, limit },
@@ -84,8 +88,8 @@ export const getProjectProfile = async ({
   projectId,
 }: {
   projectId: string;
-}): Promise<TProjectResponse> => {
-  return apiClient.get<TProjectResponse>(`/projects/${projectId}`);
+}): Promise<TProjectDTO> => {
+  return apiClient.get(`/projects/${projectId}`);
 };
 
 export const updateProject = async ({
@@ -94,8 +98,8 @@ export const updateProject = async ({
 }: {
   projectId: string;
   projectData: PatchProjectBody;
-}): Promise<TProjectResponse> => {
-  return apiClient.patch<TProjectResponse>(`/projects/${projectId}`, {
+}): Promise<TProjectDTO> => {
+  return apiClient.patch(`/projects/${projectId}`, {
     body: projectData,
   });
 };

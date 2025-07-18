@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProject } from "./api.ts";
-import { PatchProjectBody, TProjectResponse } from "@kyd/common/api";
+import { PatchProjectBody } from "@kyd/common/api";
 import { projectsKeys } from "./keys.ts";
+import { TProjectDTO } from "@/api/query/types.ts";
 
 export const useProjectUpdateMutation = (projectId: string) => {
   const queryClient = useQueryClient();
   return useMutation<
-    TProjectResponse,
+    TProjectDTO,
     Error,
     {
       projectId: string;
@@ -24,7 +25,6 @@ export const useProjectUpdateMutation = (projectId: string) => {
         updatedProject,
       );
 
-      // Invalidate the projects list to ensure it reflects the updated project
       void queryClient.invalidateQueries({
         queryKey: projectsKeys.list(),
       });

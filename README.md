@@ -1,7 +1,7 @@
 ## Initial Data ingestion
 
 ```
-pnpm exec tsx src/scripts/load-tech.ts
+pnpm exec tsx src/scripts/load-technologies.ts
 ```
 
 # Turborepo starter

@@ -6,6 +6,7 @@ import {
   GetUploadsListResponse,
   TUpload,
   TExtendedUpload,
+  TProject,
 } from "@kyd/common/api";
 import { getUploadsWithDetails } from "@/models/upload.repository.js";
 import { ProfileMatchService } from "@/services/profileMatch.service.js";
@@ -31,8 +32,9 @@ export const getUploadsListController: RequestHandler<
 ) => {
   const { page = 1, limit = 10, projectId, withMatch } = req.query;
   const project = projectId
-    ? await ProjectModel.findById(projectId).lean()
+    ? ((await ProjectModel.findById<TProject>(projectId).lean()) as TProject)
     : undefined;
+
   if (!project && projectId) {
     throw new NotFound(`Project not found for the provided ID: ${projectId}`);
   }
@@ -56,11 +58,9 @@ export const getUploadsListController: RequestHandler<
     return;
   }
 
-  // Initialize services if withMatch is true
   const profileMatchService = new ProfileMatchService();
   const profileMetricsService = new ProfileMetricsService();
 
-  // Process uploads and add match data if needed
   const processedUploads = await Promise.all(
     uploads.map(async (record) => {
       // Add match data for processed uploads if withMatch is true

@@ -4,7 +4,7 @@ import { Box } from "@mui/joy";
 import { Small, Title } from "@/components/typography.tsx";
 import { Tooltip } from "@/components/Tooltip.tsx";
 import { ActivityCard } from "@/pages/Projects/CandidateMatchPage/ActivityCard.tsx";
-import { SCOPE_NAMES, TTechFocusMatch } from "@kyd/common/api";
+import { SCOPE_NAMES, ScopeType, TTechFocusMatch } from "@kyd/common/api";
 import { getScoreColor } from "@/utils/colors.ts";
 import { TProjectDTO } from "@/api/query/types.ts";
 
@@ -31,7 +31,7 @@ export const TechFocusMatch = ({
             Analyzed against {project?.name} project requirements
           </Small>
         </Box>
-        {project?.settings.techFocus.map((scope) => {
+        {project?.settings.techFocus.map((scope: ScopeType) => {
           const techFocusActivity = techFocusMatch[scope];
 
           return (

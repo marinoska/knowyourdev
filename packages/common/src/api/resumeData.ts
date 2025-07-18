@@ -6,7 +6,7 @@ import {
   SECTIONS,
   TechCode,
 } from "./constants.js";
-import { TechStack, TechType } from "./tech.js";
+import { TechStack, TTechnology } from "./technologies.js";
 import { GAP_ROLE, GAP_JOB } from "../utils/index.js";
 
 export type TechnologyEntry = {
@@ -16,7 +16,7 @@ export type TechnologyEntry = {
   proficiency: ProficiencyType;
   techReference:
     | Schema.Types.ObjectId
-    | (TechType & {
+    | (TTechnology & {
         _id: Schema.Types.ObjectId;
       })
     | null;

@@ -2,15 +2,15 @@ import { Document, Model, Schema } from "mongoose";
 import {
   TechCode,
   TrendType,
-  TechType,
+  TTechnology,
   TechCodeType,
   TechStack,
   JobEntry,
   CategoryType,
 } from "@kyd/common/api";
 
-export type TechDocument = Document<unknown, unknown, TechType> &
-  TechType & {
+export type TechDocument = Document<unknown, unknown, TTechnology> &
+  TTechnology & {
     _id: Schema.Types.ObjectId;
   };
 

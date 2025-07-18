@@ -6,7 +6,7 @@ import { BasePage } from "@/components/BasePage";
 import { Regular, Smallest } from "@/components/typography.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
 import Chip from "@mui/joy/Chip";
-import { SCOPE_NAMES } from "@kyd/common/api";
+import { SCOPE_NAMES, ScopeType } from "@kyd/common/api";
 
 export const ProjectItem = ({ item }: { item: TProjectDTO }) => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export const ProjectItem = ({ item }: { item: TProjectDTO }) => {
         <Stack direction="row" gap={2} flexWrap="wrap" alignItems="center">
           <Regular>{name}</Regular>
           <Stack direction="row" gap={1} flexWrap="wrap" alignItems="center">
-            {item.settings?.techFocus?.map((scope) => (
+            {item.settings?.techFocus?.map((scope: ScopeType) => (
               <Chip size="md" variant="outlined" color="primary" key={scope}>
                 {SCOPE_NAMES[scope]}
               </Chip>

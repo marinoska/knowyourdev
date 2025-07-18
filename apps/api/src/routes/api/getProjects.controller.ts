@@ -1,10 +1,15 @@
 import { Joi, Segments } from "celebrate";
 import { Request, Response, RequestHandler } from "express";
 import {
-  GetProjectsListResponse,
   GetProjectsPageQueryParams,
+  TListResponse,
+  TProjectPopulated,
 } from "@kyd/common/api";
 import { ProjectModel } from "@/models/project.model.js";
+
+type GetProjectsListResponse = TListResponse<{
+  projects: TProjectPopulated[];
+}>;
 
 export const getProjectsListController: RequestHandler<
   unknown,
@@ -30,10 +35,7 @@ export const getProjectsListController: RequestHandler<
 
   const responseData = {
     projects: projects.map((project) => ({
-      _id: project._id?.toString(),
-      name: project.name,
-      settings: project.settings,
-      createdAt: project.createdAt?.toISOString(),
+      ...project,
       candidates: project.candidates || [], // Ensure candidates field is included
     })),
     totalRecords,
