@@ -2,7 +2,7 @@ import { TProjectDTO } from "@/api/query/types.ts";
 import { Control, useWatch } from "react-hook-form";
 import { ProjectFormValues } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsForm/types.ts";
 import { useExtractJobDataMutation } from "@/api/query/useExtractJobDataMutation.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Card, IconButton } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
 import { Regular, Small, Subtitle } from "@/components/typography.tsx";
@@ -35,7 +35,6 @@ export const SystemGeneratedSection = ({
     data: extractedData,
   } = useExtractJobDataMutation();
 
-  // Watch the form values
   const formValues = useWatch({ control });
 
   useEffect(() => {
@@ -44,14 +43,17 @@ export const SystemGeneratedSection = ({
       setTechFocus([...extractedData.techFocus]);
     }
   }, [extractedData, setTechFocus, setTechnologies]);
+
   const name = formValues.name?.trim();
   const description = formValues.settings?.description?.trim();
+  const [lastGeneratedDescription, setLastGeneratedDescription] =
+    useState(description);
 
   const handleRegenerate = () => {
     if (!name || !description) {
       return;
     }
-
+    setLastGeneratedDescription(description);
     extractJobData({
       title: name,
       description: description,
@@ -69,7 +71,7 @@ export const SystemGeneratedSection = ({
         </Small>
       </Stack>
       <Stack>
-        {isDescriptionDirty && (
+        {isDescriptionDirty && lastGeneratedDescription !== description && (
           <Alert
             startDecorator={<WarningIcon />}
             color="warning"
