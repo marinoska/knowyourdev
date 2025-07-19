@@ -1,5 +1,4 @@
 import { RoleType, ScopeType } from "./constants.js";
-import { TListResponse } from "./utils.js";
 import { Schema } from "mongoose";
 import { RequireAtLeastOne } from "type-fest";
 import { TechStack, TTechnology } from "./technologies.js";
@@ -33,14 +32,11 @@ export type TProjectPopulated<
 > = TProject<TId, TTechnology<TId>>;
 
 export type PatchProjectBody = RequireAtLeastOne<
-  Partial<Omit<TProject<string>, "candidates" | "_id" | "settings">> &
-    (
-      | {
-          settings: Partial<TProject<string>["settings"]>;
-        }
-      | {}
-    )
+  Partial<Omit<TProject<string, string>, "candidates" | "_id" | "settings">> & {
+    settings?: Partial<TProject<string, string>["settings"]>;
+  }
 >;
+
 export type PutProjectBody = Omit<TProject, "candidates" | "_id">;
 
 export type GetProjectsPageQueryParams = {

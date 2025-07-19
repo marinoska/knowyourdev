@@ -3,11 +3,12 @@ import Stack from "@mui/joy/Stack";
 import { Card, FormLabel, Slider } from "@mui/joy";
 import { Subtitle } from "@/components/typography.tsx";
 import { ProjectFormValues } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsForm/types.ts";
-
-export const MAX_BASELINE_DURATION = 36;
-export const MIN_BASELINE_DURATION = 1;
-export const MAX_EXPECTED_DURATION = 7;
-export const MIN_EXPECTED_DURATION = 1;
+import {
+  MAX_EXPECTED_DURATION,
+  MIN_BASELINE_DURATION,
+  MIN_EXPECTED_DURATION,
+  MAX_BASELINE_DURATION,
+} from "@kyd/common/api";
 
 export const DurationSettingsSection = ({
   control,

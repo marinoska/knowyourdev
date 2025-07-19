@@ -57,7 +57,7 @@ export const CandidateMatchPage = () => {
         <BasePage.Header
           showBackButton
           caption={`Project: ${projectQuery.data?.name}`}
-          subtitle={`${candidateQuery.profile?.position} ●${years} years ${months} month net active time`}
+          subtitle={`${candidateQuery.profile?.position} •${years} years ${months} month net active time`}
           title={candidateQuery.profile?.fullName}
         >
           <Button

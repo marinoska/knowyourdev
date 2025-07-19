@@ -71,3 +71,8 @@ export const SECTIONS = [
   "Publications",
   "Languages",
 ] as const;
+
+export const MAX_BASELINE_DURATION = 36;
+export const MIN_BASELINE_DURATION = 1;
+export const MAX_EXPECTED_DURATION = 7;
+export const MIN_EXPECTED_DURATION = 1;

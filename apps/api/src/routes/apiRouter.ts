@@ -20,7 +20,7 @@ import {
   getResumeProfileValidationSchema,
 } from "@/routes/api/getProfile.controller.js";
 import {
-  getProjectsListController,
+  getProjectsController,
   getProjectsListValidationSchema,
 } from "@/routes/api/getProjects.controller.js";
 import {
@@ -62,7 +62,7 @@ apiRouter.get(
 apiRouter.get(
   "/projects",
   celebrate(getProjectsListValidationSchema),
-  getProjectsListController,
+  getProjectsController,
 );
 apiRouter.get(
   "/projects/:projectId",

@@ -3,15 +3,15 @@ import { Request, Response, RequestHandler } from "express";
 import {
   GetProjectsPageQueryParams,
   TListResponse,
-  TProjectPopulated,
+  TProject,
 } from "@kyd/common/api";
 import { ProjectModel } from "@/models/project.model.js";
 
 type GetProjectsListResponse = TListResponse<{
-  projects: TProjectPopulated[];
+  projects: TProject[];
 }>;
 
-export const getProjectsListController: RequestHandler<
+export const getProjectsController: RequestHandler<
   unknown,
   GetProjectsListResponse,
   unknown,
