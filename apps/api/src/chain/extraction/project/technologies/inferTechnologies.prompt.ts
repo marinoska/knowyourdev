@@ -1,4 +1,4 @@
-export const extractTechnologiesFromJobDescriptionPrompt = `You're provided with a job title and job description from a company that is hiring a developer.  
+export const inferTechnologiesFromJobDescriptionPrompt = `You're provided with a job title and job description from a company that is hiring a developer.  
 Your task is to analyze the **role expectations, project goals, and required skills** to extract and classify the **technologies list**.
 
 ## Step 1. **Extract Technologies**

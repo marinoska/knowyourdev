@@ -41,12 +41,14 @@ export const extractProjectDataController = async (
     description,
     projectObjectId,
   );
+  console.log({ extractedData: extractedData.technologies });
 
   const scopesSet = new Set<ScopeType>();
 
   const technologies = [];
 
   for (const tech of extractedData.technologies) {
+    console.log({ tech });
     const techDocument = await TechListModel.findById(
       tech.techReference,
     ).lean();
@@ -67,6 +69,8 @@ export const extractProjectDataController = async (
     ...extractedData,
     technologies,
     techFocus: Array.from(scopesSet),
+    // @ts-ignore
+    reasoning: extractedData.reasoning,
   });
 };
 

@@ -1,18 +1,19 @@
-import {
-  RoleType,
-  ScopeType,
-  TechnologyEntry,
-  TechStack,
-} from "@kyd/common/api";
+import { RoleType, TechnologyEntry, TechStack } from "@kyd/common/api";
 import { TResumeProfileDocument } from "@/models/resumeProfileModel.js";
 
-export type ExtractedProjectData = {
+export type InferredProjectData = {
   technologies: TechnologyEntry[];
   techStack: TechStack[];
   roleType: RoleType;
   isSoftwareDevelopmentRole: boolean;
   isMobileDevelopmentRole: boolean;
   summary: string;
+  reasoning?: string;
+};
+export type SuggestedProjectTechnologies = {
+  suggestedTechnologies: TechnologyEntry[];
+  suggestedTechStack: TechStack[];
+  reasoning: string;
 };
 
 export type ExtractionChainOutput = {

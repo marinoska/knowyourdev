@@ -1,10 +1,10 @@
 import { PromptTemplate } from "@langchain/core/prompts";
-import { extractTechnologiesFromJobDescriptionPrompt } from "@/chain/extraction/project/technologies/extractTechnologies.prompt.js";
+import { inferTechnologiesFromJobDescriptionPrompt } from "@/chain/extraction/project/technologies/inferTechnologies.prompt.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { gpt4oMini } from "@/app/aiModel.js";
 import { parseJsonOutput } from "@/utils/json.js";
-import { ExtractedProjectData } from "@/chain/extraction/project/types.js";
+import { InferredProjectData } from "@/chain/extraction/project/types.js";
 import { normalizeTechList } from "@/chain/extraction/common/normaliseTechNameList.chain.js";
 import { extractTechProficiency } from "@/chain/extraction/common/extractTechProficiency.chain.js";
 import { TechStackModel } from "@/models/techStack.model.js";
@@ -13,7 +13,7 @@ import { TechDocument } from "@/models/types.js";
 import { Schema } from "mongoose";
 
 const prompt = PromptTemplate.fromTemplate(`
-${extractTechnologiesFromJobDescriptionPrompt}
+${inferTechnologiesFromJobDescriptionPrompt}
 
 ${jsonOutputPrompt({
   technologies: "extracted technologies array",
@@ -51,9 +51,9 @@ type ExtractTechnologiesInput = {
   projectId: Schema.Types.ObjectId;
 };
 
-export const extractTechnologies = async (
+export const inferTechnologies = async (
   params: ExtractTechnologiesInput,
-): Promise<ExtractedProjectData> => {
+): Promise<InferredProjectData> => {
   const { description, title, techCollection } = params;
 
   const {
