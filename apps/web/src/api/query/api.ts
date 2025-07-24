@@ -118,3 +118,16 @@ export const extractJobData = async (
     },
   );
 };
+
+export type PostProjectBody = {
+  name: string;
+  description: string;
+};
+
+export const createProject = async (
+  projectData: PostProjectBody
+): Promise<TProjectDTO> => {
+  return apiClient.post<TProjectDTO>('/projects', {
+    body: projectData,
+  });
+};

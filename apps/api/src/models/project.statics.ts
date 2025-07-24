@@ -100,7 +100,7 @@ export type PostProjectBody = {
   description: string;
 };
 
-export async function create(
+export async function createNew(
   this: TProjectModel,
   projectData: PostProjectBody,
 ): Promise<TProjectDocument> {

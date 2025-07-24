@@ -32,6 +32,10 @@ import {
   updateProjectValidationSchema,
 } from "@/routes/api/updateProject.controller.js";
 import {
+  createProjectController,
+  createProjectValidationSchema,
+} from "@/routes/api/createProject.controller.js";
+import {
   extractProjectDataController,
   extractJobDataValidationSchema,
 } from "@/routes/api/extractProjectData.controller.js";
@@ -68,6 +72,11 @@ apiRouter.get(
   "/projects/:projectId",
   celebrate(getProjectValidationSchema),
   getProjectController,
+);
+apiRouter.post(
+  "/projects",
+  celebrate(createProjectValidationSchema, validateOptions),
+  createProjectController,
 );
 apiRouter.patch(
   "/projects/:projectId",

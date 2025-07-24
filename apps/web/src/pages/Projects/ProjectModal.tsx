@@ -9,7 +9,9 @@ import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import { FormLabel, Input, Textarea } from "@mui/joy";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Snackbar } from "../../components/Snackbar.tsx";
+import { useProjectCreateMutation } from "@/api/query/useProjectCreateMutation.ts";
 
 export const ProjectModal = ({
   open,
@@ -20,31 +22,33 @@ export const ProjectModal = ({
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
-  // Mock project creation - in a real app, this would use a mutation hook
-  const [isPending, setIsPending] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const reset = () => {
-    setIsError(false);
-    setIsSuccess(false);
-  };
+  const {
+    mutate: handleProjectCreate,
+    isPending,
+    isError,
+    isSuccess,
+    data: createdProject,
+  } = useProjectCreateMutation();
 
   const handleCreateProject = () => {
-    setIsPending(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsPending(false);
-      setIsSuccess(true);
-      // In a real app, this would create a project via API
-      console.log("Creating project:", { name, description });
-    }, 1000);
+    handleProjectCreate(
+      { name, description },
+      {
+        onError: (error) => {
+          console.error("Failed to create project:", error);
+        },
+      },
+    );
   };
 
   useEffect(() => {
-    isSuccess && setOpen(false);
-  }, [isSuccess, setOpen]);
+    if (isSuccess && createdProject) {
+      setOpen(false);
+      navigate(`/projects/${createdProject._id}`);
+    }
+  }, [isSuccess, createdProject, setOpen, navigate]);
 
   return (
     <Modal
@@ -58,24 +62,21 @@ export const ProjectModal = ({
       }}
     >
       <>
-        {isError && (
-          <Snackbar
-            msg="Failed to create project"
-            type={"danger"}
-            onClose={() => reset()}
-          />
-        )}
-        {isSuccess && (
-          <Snackbar
-            msg="Project created successfully"
-            type={"success"}
-            onClose={() => reset()}
-          />
-        )}
+        <Snackbar msg="Failed to create project" type="danger" show={isError} />
+        <Snackbar
+          msg="Project created successfully"
+          type="success"
+          show={isSuccess}
+        />
 
         <Sheet
           variant="outlined"
-          sx={{ maxWidth: 800, borderRadius: "md", boxShadow: "lg" }}
+          sx={{
+            maxWidth: 800,
+            minWidth: 500,
+            borderRadius: "md",
+            boxShadow: "lg",
+          }}
         >
           <Box sx={{ m: 3 }}>
             <ModalClose
@@ -112,7 +113,7 @@ export const ProjectModal = ({
             <Textarea
               id="project-description"
               placeholder="Enter project description"
-              minRows={3}
+              minRows={10}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />

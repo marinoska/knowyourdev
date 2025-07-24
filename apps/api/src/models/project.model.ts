@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 import { SCOPE, TProject, TTechnology } from "@kyd/common/api";
-import { patch, getPage, create } from "@/models/project.statics.js";
+import { patch, getPage, createNew } from "@/models/project.statics.js";
 
 export type TProjectDocument = Document &
   TProject<Schema.Types.ObjectId, Schema.Types.ObjectId>;
@@ -13,7 +13,7 @@ export type TProjectModel = Model<
 > & {
   patch: typeof patch;
   getPage: typeof getPage;
-  create: typeof create;
+  createNew: typeof createNew;
 };
 
 const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
@@ -50,7 +50,7 @@ const ProjectSchema = new Schema<TProjectDocument, TProjectModel>(
 
 ProjectSchema.static("patch", patch);
 ProjectSchema.static("getPage", getPage);
-ProjectSchema.static("create", create);
+ProjectSchema.static("createNew", createNew);
 
 export const ProjectModel = mongoose.model<TProjectDocument, TProjectModel>(
   "Project",
