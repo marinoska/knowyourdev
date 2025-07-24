@@ -5,13 +5,12 @@ const CenteredLoader = () => {
   return (
     <Box
       sx={{
-        position: "absolute", // Makes it absolute in the parent container.
-        top: "30%", // Shifts to the vertical center.
-        left: "50%", // Shifts to the horizontal center.
-        transform: "translate(-50%, -50%)", // Centers it perfectly.
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        height: "100%",
+        minHeight: "200px", // Ensure a minimum height for the loader
+        width: "100%",
       }}
     >
       <CircularProgress size="md" />

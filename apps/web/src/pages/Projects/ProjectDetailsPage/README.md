@@ -4,7 +4,7 @@ This directory contains an implementation of [React Hook Form](https://react-hoo
 
 ## Files
 
-- `ProjectSettingsContent.tsx`: The main form component using React Hook Form
+- `ProjectSettingsTab.tsx`: The main form component using React Hook Form
 - `ProjectSettingsTest.tsx`: A test component that demonstrates how to use the form
 
 ## Implementation Details
@@ -36,7 +36,7 @@ This modular approach makes the code more maintainable and easier to understand.
 ### Basic Usage
 
 ```tsx
-import { ProjectSettingsContent } from "./ProjectSettingsContent";
+import { ProjectSettingsTab } from "./ProjectSettingsTab";
 
 // Your component
 const YourComponent = ({ project }) => {
@@ -46,7 +46,7 @@ const YourComponent = ({ project }) => {
   };
 
   return (
-    <ProjectSettingsContent 
+    <ProjectSettingsTab 
       project={project} 
       onSubmit={handleSubmit} 
     />

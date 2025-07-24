@@ -6,7 +6,9 @@ const EmptyPage = ({ isError = false }: { isError?: boolean }) => {
   return (
     <Stack
       sx={{
-        height: "50vh", // Full height of the screen
+        height: "100%",
+        minHeight: "300px", // Ensure a minimum height
+        width: "100%",
         alignItems: "center",
         justifyContent: "center",
         textAlign: "center",

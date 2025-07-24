@@ -8,17 +8,15 @@ export const useUploadsQuery = ({
   page,
   limit,
   projectId,
-  withMatch = false,
 }: {
   page: number;
   limit: number;
   projectId?: string;
-  withMatch?: boolean;
 }) => {
   const { data, ...rest } = useInfiniteQuery<GetUploadsListResponse, Error>({
-    queryKey: uploadsKeys.paginate(page, projectId, withMatch),
+    queryKey: uploadsKeys.paginate(page, projectId),
     queryFn: ({ pageParam }: { pageParam: number | unknown }) =>
-      listUploads({ page: Number(pageParam), limit, projectId, withMatch }),
+      listUploads({ page: Number(pageParam), limit, projectId }),
     initialPageParam: 1,
     retry: TIMES_THREE,
     refetchInterval: (query) => {

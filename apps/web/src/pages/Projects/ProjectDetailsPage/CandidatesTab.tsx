@@ -82,7 +82,6 @@ export const CandidatesList = ({ project }: { project: TProjectDTO }) => {
     page: 1,
     limit: 300,
     projectId: project._id,
-    withMatch: true,
   });
 
   if (query.isLoading) {
@@ -117,8 +116,8 @@ export const CandidatesList = ({ project }: { project: TProjectDTO }) => {
   );
 };
 
-export const CandidatesContent = ({ project }: { project: TProjectDTO }) => {
+export const CandidatesTab = ({ project }: { project: TProjectDTO }) => {
   return <CandidatesList project={project} />;
 };
 
-export default CandidatesContent;
+export default CandidatesTab;

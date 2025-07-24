@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
-import { ProjectSettingsContent } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsContent.tsx";
-import CandidatesContent from "@/pages/Projects/ProjectDetailsPage/CandidatesContent.tsx";
+import { ProjectSettingsTab } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsTab.tsx";
+import CandidatesTab from "@/pages/Projects/ProjectDetailsPage/CandidatesTab.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";
 import { TProjectDTO } from "@/api/query/types.ts";
@@ -19,11 +19,11 @@ type ProjectProfileParams = { id: string };
 const getTabItems = (project: TProjectDTO): TabsRecord => ({
   settings: {
     label: "Project Details",
-    content: <ProjectSettingsContent defaultProject={project} />,
+    content: <ProjectSettingsTab defaultProject={project} />,
   },
   candidates: {
     label: "Candidates",
-    content: <CandidatesContent project={project} />,
+    content: <CandidatesTab project={project} />,
   },
 });
 

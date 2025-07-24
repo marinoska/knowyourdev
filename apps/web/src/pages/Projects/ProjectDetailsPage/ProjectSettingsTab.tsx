@@ -56,7 +56,7 @@ const validationSchema = yup.object({
   }),
 });
 
-export const ProjectSettingsContent = ({
+export const ProjectSettingsTab = ({
   defaultProject,
 }: {
   defaultProject: TProjectDTO;
@@ -166,7 +166,8 @@ export const ProjectSettingsContent = ({
   }, [doReset, isSuccess, project, reset]);
 
   const setTechFocus = useCallback(
-    (value: ScopeType[]) => setValue("settings.techFocus", value, { shouldDirty: true }),
+    (value: ScopeType[]) =>
+      setValue("settings.techFocus", value, { shouldDirty: true }),
     [setValue],
   );
   const setTechnologies = useCallback(

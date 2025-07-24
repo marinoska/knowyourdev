@@ -44,10 +44,14 @@ export const listUploads = async ({
   page,
   limit,
   projectId,
-  withMatch,
 }: GetUploadsListQueryParams) => {
   return apiClient.get<GetUploadsListResponse>("/document/uploads", {
-    params: { page, limit, projectId, withMatch },
+    params: {
+      page,
+      limit,
+      projectId,
+      withMatch: !!projectId, // Optional parameter to include match data part
+    },
   });
 };
 
