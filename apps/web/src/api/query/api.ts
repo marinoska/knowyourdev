@@ -125,9 +125,15 @@ export type PostProjectBody = {
 };
 
 export const createProject = async (
-  projectData: PostProjectBody
+  projectData: PostProjectBody,
 ): Promise<TProjectDTO> => {
-  return apiClient.post<TProjectDTO>('/projects', {
+  return apiClient.post<TProjectDTO>("/projects", {
     body: projectData,
   });
+};
+
+export const deleteProject = async (
+  projectId: string,
+): Promise<{ success: boolean }> => {
+  return apiClient.doDelete<{ success: boolean }>(`/projects/${projectId}`);
 };

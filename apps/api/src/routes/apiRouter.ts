@@ -36,6 +36,10 @@ import {
   createProjectValidationSchema,
 } from "@/routes/api/createProject.controller.js";
 import {
+  deleteProjectController,
+  deleteProjectValidationSchema,
+} from "@/routes/api/deleteProject.controller.js";
+import {
   extractProjectDataController,
   extractJobDataValidationSchema,
 } from "@/routes/api/extractProjectData.controller.js";
@@ -82,6 +86,11 @@ apiRouter.patch(
   "/projects/:projectId",
   celebrate(updateProjectValidationSchema),
   updateProjectController,
+);
+apiRouter.delete(
+  "/projects/:projectId",
+  celebrate(deleteProjectValidationSchema),
+  deleteProjectController,
 );
 apiRouter.post(
   "/projects/extract-job-data",

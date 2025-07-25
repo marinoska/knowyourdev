@@ -118,3 +118,11 @@ export async function createNew(
 
   return project.save();
 }
+
+export async function deleteById(
+  this: TProjectModel,
+  id: string,
+): Promise<boolean> {
+  const result = await this.findByIdAndDelete(id);
+  return result !== null;
+}

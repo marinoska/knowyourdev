@@ -84,7 +84,7 @@ class Client {
     });
   }
 
-  public httpDelete<R>(path: string) {
+  public doDelete<R>(path: string) {
     return this._doFetch<R>(`${path}`, {
       method: "DELETE",
     });
