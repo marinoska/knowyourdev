@@ -35,7 +35,7 @@ export const DurationSettingsSection = ({
                   htmlFor="baseline-job-duration"
                   required
                 >
-                  Baseline job duration
+                  Average job tenure
                 </FormLabel>
                 <Subtitle>{field.value} months</Subtitle>
               </Stack>

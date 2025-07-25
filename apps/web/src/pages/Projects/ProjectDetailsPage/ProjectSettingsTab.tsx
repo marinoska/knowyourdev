@@ -196,7 +196,7 @@ export const ProjectSettingsTab = ({
             )}
             {errors.settings?.baselineJobDuration && (
               <Small>
-                ●Baseline job duration:{" "}
+                ●Average job tenure:{" "}
                 {errors.settings.baselineJobDuration.message}
               </Small>
             )}
