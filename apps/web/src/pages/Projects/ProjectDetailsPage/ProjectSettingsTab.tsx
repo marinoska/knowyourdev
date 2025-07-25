@@ -28,7 +28,7 @@ const validationSchema = yup.object({
     description: yup.string().required("Description is required"),
     baselineJobDuration: yup
       .number()
-      .required("Baseline job duration is required")
+      .required("Average tenure at a job is required")
       .min(
         MIN_BASELINE_DURATION,
         `Minimum duration is ${MIN_BASELINE_DURATION} month`,
