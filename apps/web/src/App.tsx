@@ -44,7 +44,14 @@ export default function App() {
       >
         <Button
           size="lg"
-          onClick={() => loginWithRedirect()}
+          onClick={() =>
+            loginWithRedirect({
+              authorizationParams: {
+                audience: import.meta.env.VITE_AUTH0_API_AUDIENCE,
+                redirect_uri: window.location.origin,
+              },
+            })
+          }
           startDecorator={<KnowYourDevIcon />}
         >
           Log In
