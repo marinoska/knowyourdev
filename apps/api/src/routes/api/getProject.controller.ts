@@ -14,10 +14,15 @@ export type GetProjectController = RequestHandler<
 
 export const getProjectController: GetProjectController = async (req, res) => {
   const { projectId } = req.params;
+  if (!req.auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = req.auth.payload.sub;
 
-  const project = (await ProjectModel.findById<TProjectPopulated>(
-    projectId,
-  ).lean()) as TProject;
+  const project = await ProjectModel.get({
+    id: projectId,
+    _userId: userId,
+  });
 
   if (!project) {
     throw new NotFound(`Project not found for the provided ID: ${projectId}`);

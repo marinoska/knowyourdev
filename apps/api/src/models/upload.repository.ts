@@ -11,6 +11,7 @@ type TParams = {
   limit: number;
   sortOrder?: "asc" | "desc";
   project?: TProject | null;
+  userId: string;
 };
 
 export const getUploadsWithDetails = async ({
@@ -18,43 +19,41 @@ export const getUploadsWithDetails = async ({
   limit,
   sortOrder = "desc",
   project,
+  userId,
 }: TParams): Promise<TListResponse<{ uploads: TUpload[] }>> => {
   const skip = (page - 1) * limit;
 
-  // Create query conditions
   const query = project?.candidates ? { _id: { $in: project.candidates } } : {};
 
-  // Get total records count
-  const totalRecords =
-    project?.candidates?.length || (await UploadModel.countDocuments({}));
+  const totalRecords = project
+    ? project.candidates.length
+    : await UploadModel.countDocuments({}).setOptions({ userId });
 
-  // Create sort options
   const sortOptions = {
     createdAt:
       sortOrder === "asc" ? ("asc" as SortOrder) : ("desc" as SortOrder),
   };
 
-  // First get the uploads
   const uploads = await UploadModel.find(query)
+    .setOptions({ userId })
     .sort(sortOptions)
     .skip(skip)
     .limit(limit)
     .lean();
 
-  // Get the upload IDs
   const uploadIds = uploads.map((upload) => upload._id);
 
-  // Find the corresponding resume data
   const resumeData = await ResumeDataModel.find(
     { uploadRef: { $in: uploadIds } },
     { fullName: 1, position: 1, sections: 1, uploadRef: 1 },
-  ).lean();
+  )
+    .setOptions({ userId })
+    .lean();
 
   type ResumeDataMap = {
     [key: string]: Pick<TResumeDataDocument, "fullName" | "position">;
   };
 
-  // Create a map of resume data by upload ID for quick lookup
   const resumeDataMap = resumeData.reduce<ResumeDataMap>((map, data) => {
     map[data.uploadRef.toString()] = {
       fullName: data.fullName,
@@ -63,7 +62,6 @@ export const getUploadsWithDetails = async ({
     return map;
   }, {});
 
-  // Combine the data
   const uploadsWithDetails = uploads.map((upload) => {
     const uploadId = upload._id.toString();
     const resumeData = resumeDataMap[uploadId] || null;

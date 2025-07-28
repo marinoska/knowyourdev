@@ -15,7 +15,6 @@ import {
   validateObjectId,
   validateOptionalObjectId,
 } from "@/utils/validation.js";
-import { Schema } from "mongoose";
 
 export type ResumeProfileController = RequestHandler<
   { uploadId: string },
@@ -33,9 +32,15 @@ export const getResumeProfileController: ResumeProfileController = async (
   const { uploadId } = req.params;
   const { projectId } = req.query;
 
-  const resumeProfile = await ResumeProfileModel.findOne({
+  if (!req.auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = req.auth.payload.sub;
+
+  const resumeProfile = await ResumeProfileModel.getOne({
     uploadRef: uploadId,
-  }).lean();
+    _userId: userId,
+  });
 
   if (!resumeProfile) {
     throw new NotFound(
@@ -66,7 +71,7 @@ export const getResumeProfileController: ResumeProfileController = async (
     return;
   }
 
-  const project = await ProjectModel.findById(projectId).lean();
+  const project = await ProjectModel.get({ id: projectId, _userId: userId });
 
   if (project) {
     const profileMatchService = new ProfileMatchService();

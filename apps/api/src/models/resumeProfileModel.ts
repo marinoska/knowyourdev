@@ -10,6 +10,8 @@ import {
   TResumeProfile,
 } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
+import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.js";
+import { getOne } from "@/models/resumeProfile.statics.js";
 
 const JobSchema = {
   _id: false, // No separate _id for sub-documents
@@ -100,12 +102,15 @@ const ResumeProfileTechnologiesEntrySchema =
 
 export type TResumeProfileDocument = Document &
   TResumeProfile & {
+    userId: string;
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
     createdAt: Date;
     updatedAt: Date;
   };
 
-export type TResumeTechProfileModel = Model<TResumeProfileDocument>;
+export type TResumeTechProfileModel = Model<TResumeProfileDocument> & {
+  getOne: typeof getOne;
+};
 
 const ResumeProfileSchema = new Schema<
   TResumeProfileDocument,
@@ -118,6 +123,7 @@ const ResumeProfileSchema = new Schema<
       required: true, // Ensure this is always provided
       unique: true,
     },
+    userId: { type: String, required: true, immutable: true, index: true },
     fullName: { type: String, required: true },
     position: { type: String, required: true },
     technologies: {
@@ -133,6 +139,10 @@ const ResumeProfileSchema = new Schema<
   },
   { timestamps: true, collection: "ResumeTechProfile" }, // Automatically adds createdAt and updatedAt
 );
+
+applyOwnershipEnforcement(ResumeProfileSchema);
+
+ResumeProfileSchema.static("getOne", getOne);
 
 export const ResumeProfileModel = model<
   TResumeProfileDocument,

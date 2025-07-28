@@ -6,7 +6,6 @@ import {
   GetUploadsListResponse,
   TUpload,
   TExtendedUpload,
-  TProject,
 } from "@kyd/common/api";
 import { getUploadsWithDetails } from "@/models/upload.repository.js";
 import { ProfileMatchService } from "@/services/profileMatch.service.js";
@@ -31,8 +30,14 @@ export const getUploadsListController: RequestHandler<
   res: Response<GetUploadsListResponse>,
 ) => {
   const { page = 1, limit = 10, projectId, withMatch } = req.query;
+
+  if (!req.auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = req.auth.payload.sub;
+
   const project = projectId
-    ? ((await ProjectModel.findById<TProject>(projectId).lean()) as TProject)
+    ? await ProjectModel.get({ id: projectId, _userId: userId })
     : undefined;
 
   if (!project && projectId) {
@@ -44,6 +49,7 @@ export const getUploadsListController: RequestHandler<
       page: Number(page),
       limit: Number(limit),
       project,
+      userId,
     });
 
   const responseData = {
@@ -63,20 +69,17 @@ export const getUploadsListController: RequestHandler<
 
   const processedUploads = await Promise.all(
     uploads.map(async (record) => {
-      // Add match data for processed uploads if withMatch is true
       if (record.parseStatus === "processed" && profileMetricsService) {
         try {
-          // Get the tech profile for this upload
-          const resumeProfile = await ResumeProfileModel.findOne({
+          const resumeProfile = await ResumeProfileModel.getOne({
             uploadRef: record._id,
-          }).lean();
+            _userId: userId,
+          });
 
           if (resumeProfile) {
-            // Calculate profile metrics first
             const profileMetrics =
               profileMetricsService.calculateProfileMetrics(resumeProfile);
 
-            // Then calculate match if project is available
             if (project && profileMatchService) {
               const match = profileMatchService.getCandidateMatch({
                 project,
@@ -87,16 +90,12 @@ export const getUploadsListController: RequestHandler<
                 },
               });
 
-              // Add match data to the upload item
               return { ...record, match } satisfies TExtendedUpload;
             }
-
-            // If no project is available, we don't add match data
           }
         } catch (error) {
-          console.error(
-            `Error calculating match for upload ${record._id}:`,
-            error,
+          throw new Error(
+            `Error calculating match for upload ${record._id}: ${error}`,
           );
         }
       }

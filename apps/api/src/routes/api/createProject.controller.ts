@@ -15,9 +15,13 @@ export const createProjectController: CreateProjectController = async (
   req,
   res,
 ) => {
-  const { body } = req;
+  const { body, auth } = req;
+  if (!auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = auth.payload.sub;
 
-  const createdProject = await ProjectModel.createNew(body);
+  const createdProject = await ProjectModel.createNew(body, userId);
 
   res.status(201).json(createdProject);
 };

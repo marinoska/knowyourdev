@@ -14,9 +14,16 @@ export const deleteProjectController: DeleteProjectController = async (
   res,
 ) => {
   const { projectId } = req.params;
+  if (!req.auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = req.auth.payload.sub;
 
   try {
-    const success = await ProjectModel.deleteById(projectId);
+    const success = await ProjectModel.deleteById({
+      id: projectId,
+      _userId: userId,
+    });
 
     if (success) {
       res.status(200).json({ success: true });

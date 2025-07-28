@@ -1,5 +1,7 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { ParsedStatus } from "@kyd/common/api";
+import { ParsedStatus, TUpload } from "@kyd/common/api";
+import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.js";
+import { get } from "@/models/upload.statics.js";
 
 export type TUploadDTO = {
   originalName: string; // Original filename
@@ -20,10 +22,13 @@ export type TUploadDTO = {
 export type TUploadDocument = Document &
   TUploadDTO & {
     _id: Schema.Types.ObjectId;
+    userId: string;
     createdAt: Date;
     updatedAt: Date;
   };
-export type TUploadModel = Model<TUploadDocument>;
+export type TUploadModel = Model<TUploadDocument> & {
+  get: typeof get;
+};
 
 const UploadSchema = new Schema<TUploadDocument, TUploadModel>(
   {
@@ -34,6 +39,7 @@ const UploadSchema = new Schema<TUploadDocument, TUploadModel>(
     size: { type: Number, required: true, immutable: true },
     r2Key: { type: String, required: true, immutable: true },
     r2Url: { type: String, required: true, immutable: true },
+    userId: { type: String, required: true, immutable: true, index: true },
     metadata: {
       name: { type: String, required: true },
       projectId: { type: String, default: "" },
@@ -42,6 +48,10 @@ const UploadSchema = new Schema<TUploadDocument, TUploadModel>(
   },
   { timestamps: true, collection: "Upload", autoIndex: true },
 );
+
+applyOwnershipEnforcement(UploadSchema);
+
+UploadSchema.static("get", get);
 
 export const UploadModel = mongoose.model<TUploadDocument, TUploadModel>(
   "Upload",

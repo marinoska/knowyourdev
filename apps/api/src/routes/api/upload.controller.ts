@@ -25,12 +25,17 @@ export const documentUploadController = async (
     throw new Error("No file uploaded to R2. Please try again.");
   }
 
+  if (!req.auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = req.auth.payload.sub;
+
   const { name, projectId } = req.body;
   const { originalname, mimetype, size, buffer } = req.file;
   const { hash, r2Key, r2Url } = req.r2File;
 
   if (projectId) {
-    if (!(await ProjectModel.findById(projectId))) {
+    if (!(await ProjectModel.get({ id: projectId, _userId: userId }))) {
       throw new ValidationError(
         `Project not found for the provided ID: ${projectId}`,
       );
@@ -45,6 +50,7 @@ export const documentUploadController = async (
     size,
     r2Key,
     r2Url,
+    userId,
     metadata: {
       name: name || originalname,
       projectId: projectId || "",
@@ -55,11 +61,11 @@ export const documentUploadController = async (
   await newUpload.save();
 
   if (projectId) {
-    await ProjectModel.findByIdAndUpdate(
+    await ProjectModel.addCandidate({
       projectId,
-      { $push: { candidates: newUpload._id } },
-      { new: true },
-    );
+      candidateId: newUpload._id,
+      _userId: userId,
+    });
   }
 
   void processUpload(newUpload, buffer);

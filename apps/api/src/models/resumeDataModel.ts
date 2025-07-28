@@ -6,10 +6,14 @@ import {
   TechnologyEntry,
 } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
+import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.js";
 
 export type TResumeDataDocument<TJob = JobEntry> = Document &
   ExtractedResumeData<TJob> & {
+    userId: string;
     uploadRef: Schema.Types.ObjectId | TUploadDocument;
+    createdAt: Date;
+    updatedAt: Date;
   };
 
 export type TResumeDataModel = Model<TResumeDataDocument>;
@@ -69,6 +73,7 @@ const resumeDataSchema = new Schema<TResumeDataDocument, TResumeDataModel>(
       required: true, // Ensure this is always provided
       unique: true,
     },
+    userId: { type: String, required: true, immutable: true, index: true },
     fullName: { type: String, required: true, immutable: true },
     position: { type: String, required: true, default: "" },
     sections: [{ type: String }],
@@ -94,6 +99,8 @@ const resumeDataSchema = new Schema<TResumeDataDocument, TResumeDataModel>(
   },
   { timestamps: true, collection: "ResumeData", autoIndex: true },
 );
+
+applyOwnershipEnforcement(resumeDataSchema);
 
 export const ResumeDataModel = model<TResumeDataDocument, TResumeDataModel>(
   "ResumeData",

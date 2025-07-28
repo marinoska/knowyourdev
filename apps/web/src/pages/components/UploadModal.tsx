@@ -43,7 +43,7 @@ export const UploadModal = ({
         alignItems: "center",
       }}
     >
-      <>
+      <Box>
         {isError && (
           <Snackbar
             msg="Failed file uploading"
@@ -125,7 +125,7 @@ export const UploadModal = ({
             </Button>
           </Box>
         </Sheet>
-      </>
+      </Box>
     </Modal>
   );
 };

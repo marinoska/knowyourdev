@@ -27,8 +27,14 @@ export const getProjectsController: RequestHandler<
 ) => {
   const { page = 1, limit = 10 } = req.query;
 
+  if (!req.auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = req.auth.payload.sub;
+
   const { projects, totalRecords, totalPages, currentPage } =
     await ProjectModel.getPage({
+      _userId: userId,
       page: Number(page),
       limit: Number(limit),
     });

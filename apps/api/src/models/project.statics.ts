@@ -19,10 +19,19 @@ export type ProjectPatchData = Partial<{
 
 export async function patch(
   this: TProjectModel,
-  id: string,
-  projectData: ProjectPatchData,
+  {
+    id,
+    _userId,
+    projectData,
+  }: {
+    id: string;
+    _userId: string;
+    projectData: ProjectPatchData;
+  },
 ): Promise<TProject | null> {
-  const doc = await this.findById<TProjectDocument>(id);
+  const doc = await this.findById<TProjectDocument>(id).setOptions({
+    userId: _userId,
+  });
   if (!doc) return null;
 
   if (projectData.name) {
@@ -72,11 +81,22 @@ export type GetProjectsPageResult = {
 };
 export async function getPage(
   this: TProjectModel,
-  { page, limit, sortOrder = "desc" }: GetProjectsPageParams,
+  {
+    page,
+    limit,
+    sortOrder = "desc",
+    _userId,
+  }: {
+    page: number;
+    limit: number;
+    sortOrder?: "asc" | "desc";
+    _userId: string;
+  },
 ): Promise<GetProjectsPageResult> {
   const skip = (page - 1) * limit;
 
-  const projects = await this.find({})
+  const projects = await this.find({ userId: _userId })
+    .setOptions({ userId: _userId })
     .sort({
       createdAt:
         sortOrder === "asc" ? ("asc" as SortOrder) : ("desc" as SortOrder),
@@ -85,7 +105,9 @@ export async function getPage(
     .limit(limit)
     .lean();
 
-  const totalRecords = await this.countDocuments({});
+  const totalRecords = await this.countDocuments({
+    userId: _userId,
+  }).setOptions({ userId: _userId });
 
   return {
     projects: projects as TProject[],
@@ -103,8 +125,10 @@ export type PostProjectBody = {
 export async function createNew(
   this: TProjectModel,
   projectData: PostProjectBody,
+  userId: string,
 ): Promise<TProjectDocument> {
   const project = new this({
+    userId,
     name: projectData.name,
     candidates: [],
     settings: {
@@ -121,8 +145,54 @@ export async function createNew(
 
 export async function deleteById(
   this: TProjectModel,
-  id: string,
+  {
+    id,
+    _userId,
+  }: {
+    id: string;
+    _userId: string;
+  },
 ): Promise<boolean> {
-  const result = await this.findByIdAndDelete(id);
+  const result = await this.findByIdAndDelete(id).setOptions({
+    userId: _userId,
+  });
   return result !== null;
+}
+
+export async function get(
+  this: TProjectModel,
+  {
+    id,
+    _userId,
+  }: {
+    id: string;
+    _userId: string;
+  },
+): Promise<TProject | null> {
+  const project = await this.findById(id)
+    .setOptions({ userId: _userId })
+    .lean();
+
+  return project as TProject | null;
+}
+
+export async function addCandidate(
+  this: TProjectModel,
+  {
+    projectId,
+    candidateId,
+    _userId,
+  }: {
+    projectId: string;
+    candidateId: Schema.Types.ObjectId;
+    _userId: string;
+  },
+): Promise<TProject | null> {
+  const updatedProject = await this.findByIdAndUpdate(
+    projectId,
+    { $push: { candidates: candidateId } },
+    { new: true }
+  ).setOptions({ userId: _userId });
+
+  return updatedProject as TProject | null;
 }

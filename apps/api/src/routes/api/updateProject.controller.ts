@@ -26,7 +26,12 @@ export const updateProjectController: UpdateProjectController = async (
   res,
 ) => {
   const { projectId } = req.params;
-  const { body } = req;
+  const { body, auth } = req;
+
+  if (!auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = auth.payload.sub;
 
   const typedInput = { ...body } as ProjectPatchData;
 
@@ -59,10 +64,11 @@ export const updateProjectController: UpdateProjectController = async (
   }
 
   // Use the typed input for the patch operation
-  const updatedProject: TProject | null = await ProjectModel.patch(
-    projectId,
-    typedInput,
-  );
+  const updatedProject: TProject | null = await ProjectModel.patch({
+    id: projectId,
+    _userId: userId,
+    projectData: typedInput,
+  });
   if (!updatedProject) {
     throw new NotFound(`Project not found for the provided ID: ${projectId}`);
   }

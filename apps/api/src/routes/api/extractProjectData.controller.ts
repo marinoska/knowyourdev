@@ -26,8 +26,12 @@ export const extractProjectDataController = async (
   res: Response<ExtractProjectDataResponse>,
 ) => {
   const { title, description, projectId } = req.body;
+  if (!req.auth?.payload.sub) {
+    throw new Error("Authentication required");
+  }
+  const userId = req.auth.payload.sub;
 
-  const project = await ProjectModel.findById(projectId);
+  const project = await ProjectModel.get({ id: projectId, _userId: userId });
   if (!project) {
     throw new ValidationError(
       `Project not found for the provided ID: ${projectId}`,
