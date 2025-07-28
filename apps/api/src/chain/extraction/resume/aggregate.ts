@@ -1,13 +1,8 @@
-import { ExtractionChainParam } from "@/chain/extraction/resume/types.js";
-import {
-  ResumeDataModel,
-  TResumeDataDocument,
-} from "@/models/resumeDataModel.js";
+import { ExtractedData } from "@/chain/extraction/resume/types.js";
+import { TResumeDataDocument } from "@/models/resumeDataModel.js";
 import { TechDocument } from "@/models/types.js";
 import { subYears } from "date-fns";
-import logger from "@/app/logger.js";
 import { Schema } from "mongoose";
-import { ResumeProfileModel } from "@/models/resumeProfileModel.js";
 import { isNotNull } from "@/utils/types.utils.js";
 import {
   TechCode,
@@ -23,29 +18,15 @@ import { normalizePopularityLevel } from "@/chain/normalizer/popularityLevel.js"
 import { mergeRanges, Range } from "@kyd/common";
 import { parseMonthEndUtc, parseMonthStartUtc } from "@/utils/dates.js";
 
-const log = logger("extraction:extraction:runner");
-
-export const aggregateAndSave = async (
-  params: ExtractionChainParam,
-): Promise<ExtractionChainParam> => {
-  if (!("extractedData" in params))
-    throw new Error("extractedData is required");
-
-  const resumeDocument = await ResumeDataModel.findOneAndUpdate<
-    TResumeDataDocument<JobEntry>
-  >(
-    { uploadRef: params.uploadId },
-    {
-      $set: { uploadRef: params.uploadId, ...params.extractedData },
-    }, // Set new or updated fields
-    { upsert: true, new: true, runValidators: true }, // Create if not exists, return updated, apply schema validations
-  )
-    .populate({
-      path: "jobs.technologies.techReference", // Path to populate nested techReference in jobs array
-      // model: "TechModel" // Specify the model being populated
-    })
-    .lean();
-
+export const aggregate = async (
+  params: ExtractedData,
+  resumeDocument: TResumeDataDocument<JobEntry>,
+): Promise<
+  ExtractedData & {
+    techWithTotals: Record<TechCode, ResumeProfileTechnologiesEntry>;
+    techProfileJobs: ResumeProfileJobEntry[];
+  }
+> => {
   const updatedCV = {
     ...resumeDocument,
     jobs: resumeDocument.jobs.map<EnhancedJobEntry>((job: JobEntry) => {
@@ -214,21 +195,11 @@ export const aggregateAndSave = async (
     },
   );
 
-  const resumeProfile = await ResumeProfileModel.findOneAndUpdate(
-    { uploadRef: updatedCV.uploadRef }, // Find by hash
-    {
-      $set: {
-        uploadRef: updatedCV.uploadRef,
-        fullName: updatedCV.fullName,
-        position: updatedCV.position,
-        technologies: Object.values(techWithTotals),
-        jobs: techProfileJobs,
-      },
-    }, // Set new or updated fields
-    { upsert: true, new: true, runValidators: true }, // Create if not exists, return updated, apply schema validations
-  ).lean();
-
-  return { ...params, techProfile: resumeProfile };
+  return {
+    ...params,
+    techWithTotals,
+    techProfileJobs,
+  };
 };
 
 // Function to calculate the total number of months covered by merged ranges

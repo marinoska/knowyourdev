@@ -6,7 +6,7 @@ import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { gpt4oMini } from "@/app/aiModel.js";
 import {
   ExtractionChainInput,
-  ExtractionChainParam,
+  ExtractedData,
 } from "@/chain/extraction/resume/types.js";
 import { semanticSimilarity } from "@/chain/normalizer/semanticSimilarity.js";
 import {
@@ -39,7 +39,7 @@ ${jsonOutputPrompt({
 
 export const extractResumeData = async (
   params: ExtractionChainInput,
-): Promise<ExtractionChainParam> => {
+): Promise<ExtractedData> => {
   const { cvText } = params;
 
   const techExtractionChain = RunnableSequence.from<

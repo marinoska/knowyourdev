@@ -1,15 +1,19 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { extractResumeData } from "@/chain/extraction/resume/data/extractResumeData.chain.js";
-import { pipe } from "@/utils/func.js";
-import { ExtractionChainParam } from "@/chain/extraction/resume/types.js";
+import { ExtractionChainInput } from "@/chain/extraction/resume/types.js";
 import { extractTechnologies } from "@/chain/extraction/resume/technologies/extractTechnologies.chain.js";
-import { aggregateAndSave } from "@/chain/extraction/resume/aggregateAndSave.js";
+import { aggregate } from "@/chain/extraction/resume/aggregate.js";
 import { TechListModel } from "@/models/techList.model.js";
 import { TUploadDocument } from "@/models/upload.model.js";
+import {
+  ResumeDataModel,
+  TResumeDataDocument,
+} from "@/models/resumeDataModel.js";
+import { ResumeProfileModel } from "@/models/resumeProfileModel.js";
 import logger from "@/app/logger.js";
 import mammoth from "mammoth";
 import { Schema } from "mongoose";
-import { ExtractedResumeData } from "@kyd/common/api";
+import { JobEntry } from "@kyd/common/api";
 import pdfParse from "@/utils/pdf-parse-wrapper.js";
 import { downloadFileFromR2 } from "@/services/r2Storage.service.js";
 
@@ -104,7 +108,7 @@ export async function processUpload(upload: TUploadDocument, buffer?: Buffer) {
 
       const cvText = await extractResumeText(fileBuffer, upload.contentType);
       // TODO check the amount of tokens in cvText - has to be limited?
-      await runResumeDataExtraction(cvText, upload._id);
+      await runResumeDataExtraction(cvText, upload._id, upload.userId);
       upload.parseStatus = "processed";
       void upload.save();
     }
@@ -116,29 +120,79 @@ export async function processUpload(upload: TUploadDocument, buffer?: Buffer) {
   }
 }
 
+/**
+ * Processes resume text to extract structured data in a sequential pipeline:
+ * 1. Extract basic resume data (personal info, jobs, sections)
+ * 2. Extract and process technologies from the resume data
+ * 3. Aggregate the data and save it to the database
+ *
+ * Each step has clear inputs and outputs, making the data flow explicit.
+ */
 export async function runResumeDataExtraction(
   cvText: string,
   uploadId: Schema.Types.ObjectId,
-): Promise<ExtractedResumeData> {
+  userId: string,
+): Promise<void> {
   if (!cvText || cvText.trim() === "") {
     throw new Error("CV text extraction failed. Please check the PDF file.");
   }
 
   const techCollection = await TechListModel.find().lean();
 
-  const inputData: ExtractionChainParam = {
+  // Create the initial input data
+  const inputData: ExtractionChainInput = {
     cvText,
     techCollection,
     uploadId,
   };
 
-  const output = await pipe<ExtractionChainParam>(
-    inputData,
-    extractResumeData,
-    extractTechnologies,
-    aggregateAndSave,
+  // Step 1: Extract resume data
+  const resumeDataResult = await extractResumeData(inputData);
+
+  // Step 2: Extract technologies
+  const technologiesResult = await extractTechnologies(resumeDataResult);
+
+  // Step 3: Find or create resume document in the database
+  const resumeDocument = await ResumeDataModel.findOneAndUpdate<
+    TResumeDataDocument<JobEntry>
+  >(
+    { uploadRef: technologiesResult.uploadId },
+    {
+      $set: {
+        uploadRef: technologiesResult.uploadId,
+        ...technologiesResult.extractedData,
+      },
+    },
+    { upsert: true, new: true, runValidators: true }, // Create if not exists, return updated, apply schema validations
+  )
+    .setOptions({ userId })
+    .populate({
+      path: "jobs.technologies.techReference", // Path to populate nested techReference in jobs array
+      // model: "TechModel" // Specify the model being populated
+    })
+    .lean();
+
+  // Step 4: Process the data to prepare for resume profile creation
+  const { techWithTotals, techProfileJobs } = await aggregate(
+    technologiesResult,
+    resumeDocument,
   );
 
-  // @ts-ignore
-  return output.extractedData;
+  // Step 5: Find or create resume profile document in the database
+  await ResumeProfileModel.findOneAndUpdate(
+    { uploadRef: resumeDocument.uploadRef },
+    {
+      $set: {
+        uploadRef: resumeDocument.uploadRef,
+        userId, // Include userId in the set options
+        fullName: resumeDocument.fullName,
+        position: resumeDocument.position,
+        technologies: Object.values(techWithTotals),
+        jobs: techProfileJobs,
+      },
+    },
+    { upsert: true, new: true, runValidators: true }, // Create if not exists, return updated, apply schema validations
+  )
+    .setOptions({ userId })
+    .lean();
 }

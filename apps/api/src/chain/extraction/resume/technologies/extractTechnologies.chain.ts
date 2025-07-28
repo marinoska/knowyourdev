@@ -5,10 +5,10 @@ import { parseJsonOutput } from "@/utils/json.js";
 import { jsonOutputPrompt } from "@/utils/JsonOutput.prompt.js";
 import { extractTechnologiesPrompt } from "./extractTechnologies.prompt.js";
 import { normalizeTechList } from "@/chain/extraction/common/normaliseTechNameList.chain.js";
-import { ExtractionChainParam } from "@/chain/extraction/resume/types.js";
 import { extractTechProficiency } from "@/chain/extraction/common/extractTechProficiency.chain.js";
 import { TechStackModel } from "@/models/techStack.model.js";
 import { JobEntry, TechnologyEntry, RoleType } from "@kyd/common/api";
+import { ExtractedData } from "@/chain/extraction/resume/types.js";
 
 const prompt = PromptTemplate.fromTemplate(`
 ${extractTechnologiesPrompt}
@@ -40,11 +40,8 @@ const jobTechExtractor = RunnableSequence.from<{ description: string }, Output>(
 
 //role + description
 export const extractTechnologies = async (
-  params: ExtractionChainParam,
-): Promise<ExtractionChainParam> => {
-  if (!("extractedData" in params))
-    throw new Error("extractedData is required");
-
+  params: ExtractedData,
+): Promise<ExtractedData> => {
   const { extractedData, techCollection } = params;
 
   async function extracted(text: string): Promise<Partial<JobEntry>> {

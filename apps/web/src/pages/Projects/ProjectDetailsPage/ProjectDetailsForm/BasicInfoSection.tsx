@@ -46,7 +46,13 @@ export const BasicInfoSection = ({
             >
               Description
             </FormLabel>
-            <Textarea {...field} id="role-description" maxRows={25} size="sm" />
+            <Textarea
+              {...field}
+              id="role-description"
+              maxRows={25}
+              minRows={25}
+              size="sm"
+            />
             {fieldState.error && (
               <FormHelperText>{fieldState.error.message}</FormHelperText>
             )}

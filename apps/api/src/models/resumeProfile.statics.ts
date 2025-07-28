@@ -2,7 +2,6 @@ import {
   TResumeTechProfileModel,
   TResumeProfileDocument,
 } from "@/models/resumeProfileModel.js";
-import { TResumeProfile } from "@kyd/common/api";
 import { Schema } from "mongoose";
 
 export async function getOne(
@@ -15,8 +14,5 @@ export async function getOne(
     _userId: string;
   },
 ): Promise<TResumeProfileDocument | null> {
-  const resumeProfile = await this.findOne({ uploadRef })
-    .setOptions({ userId: _userId });
-
-  return resumeProfile;
+  return this.findOne({ uploadRef }).setOptions({ userId: _userId });
 }
