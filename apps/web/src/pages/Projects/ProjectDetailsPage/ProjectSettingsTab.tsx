@@ -28,7 +28,7 @@ const validationSchema = yup.object({
     description: yup.string().required("Description is required"),
     baselineJobDuration: yup
       .number()
-      .required("Average tenure at a job is required")
+      .required("Expected Tenure at a job is required")
       .min(
         MIN_BASELINE_DURATION,
         `Minimum duration is ${MIN_BASELINE_DURATION} month`,
@@ -196,8 +196,7 @@ export const ProjectSettingsTab = ({
             )}
             {errors.settings?.baselineJobDuration && (
               <Small>
-                ●Average job tenure:{" "}
-                {errors.settings.baselineJobDuration.message}
+                ●Expected Tenure: {errors.settings.baselineJobDuration.message}
               </Small>
             )}
             {errors.settings?.expectedRecentRelevantYears && (
