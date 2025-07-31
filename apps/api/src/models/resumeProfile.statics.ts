@@ -14,5 +14,5 @@ export async function getOne(
     _userId: string;
   },
 ): Promise<TResumeProfileDocument | null> {
-  return this.findOne({ uploadRef }).setOptions({ userId: _userId });
+  return this.findOne({ uploadRef }).setOptions({ userId: _userId }).lean();
 }

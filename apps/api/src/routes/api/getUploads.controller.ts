@@ -75,7 +75,6 @@ export const getUploadsListController: RequestHandler<
             uploadRef: record._id,
             _userId: userId,
           });
-
           if (resumeProfile) {
             const profileMetrics =
               profileMetricsService.calculateProfileMetrics(resumeProfile);

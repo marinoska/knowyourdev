@@ -18,7 +18,7 @@ export const JobStability = ({ match }: { match: TOverallMatch }) => {
         <MatchDetailsRow
           value={`${match.baselineJobDuration} months`}
           color="neutral"
-          text="Expected Tenure at a job"
+          text="Expected Tenure"
         />
         <MatchDetailsRow
           value={`${match.averageJobDuration} months`}
