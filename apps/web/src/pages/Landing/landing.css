@@ -1,0 +1,95 @@
+/* Global font preservation to match previous index.html settings */
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scoped landing page styles preserved from original index.html */
+.landing {
+  --primary-color: #0a192f;
+  --secondary-color: #ccd6f6;
+  --accent-color: #64ffda;
+  --accent-hover: #52d1b8;
+  --bg-color: #f8f9fa;
+  --text-color: #343a40;
+  --light-gray: #e9ecef;
+  --border-color: #dee2e6;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+}
+
+.landing *, .landing *::before, .landing *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.landing { font-family: var(--font-sans); line-height: 1.6; color: var(--text-color); background-color: var(--bg-color); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Ensure code-related elements use mono stack within landing */
+.landing code, .landing kbd, .landing pre, .landing samp { font-family: var(--font-mono); }
+
+.landing h1, .landing h2, .landing h3 { font-weight: 700; line-height: 1.2; color: var(--primary-color); margin-bottom: 1rem; }
+.landing h1 { font-size: clamp(2rem, 5vw, 3.5rem);} 
+.landing h2 { font-size: clamp(1.75rem, 4vw, 2.5rem);} 
+.landing h3 { font-size: clamp(1.2rem, 3vw, 1.5rem);} 
+.landing p { margin-bottom: 1rem; max-width: 65ch; }
+.landing a { color: var(--primary-color); text-decoration: none; transition: color .2s ease-in-out; }
+.landing a:hover { color: var(--accent-color); text-decoration: underline; }
+.landing .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.landing section { padding: 4rem 0; }
+.landing section:not(:first-of-type) { border-top: 1px solid var(--border-color); }
+
+/* Header */
+.landing .site-header { padding: 1rem 0; background-color: var(--bg-color); border-bottom: 1px solid var(--border-color); }
+.landing .site-header .container { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.landing .site-header .logo { display: flex; align-items: center; gap: 1.25rem; font-size: 1.5rem; font-weight: 700; color: var(--primary-color);} 
+.landing .site-header .logo img { width: 28px; height: 28px; display: block; }
+.landing .site-header .tagline { font-family: var(--font-mono); font-size: .875rem; color: var(--text-color); display: none; }
+@media (min-width: 768px) { .landing .site-header .tagline { display: block; } }
+.landing .header-actions { display: flex; align-items: center; gap: .75rem; }
+
+/* Hero */
+.landing .hero { text-align: center; padding: 5rem 0; }
+.landing .hero p { font-size: clamp(1rem, 2.5vw, 1.125rem); color: #495057; margin: 0 auto 2rem; }
+
+/* Buttons */
+.landing .cta-button, .landing .login-button { display: inline-block; background-color: var(--primary-color); color: #fff; font-size: 1.05rem; font-weight: 600; padding: .7rem 1.25rem; border-radius: 6px; border: 2px solid transparent; cursor: pointer; transition: all .2s ease-in-out; text-decoration: none; }
+.landing .cta-button:hover, .landing .login-button:hover { background-color: #1d3557; color: #fff; transform: translateY(-2px); text-decoration: none; }
+.landing .cta-button:focus-visible, .landing .login-button:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; }
+
+/* Features */
+.landing .features-grid { display: grid; gap: 2rem; margin-top: 2rem; }
+@media (min-width: 768px) { .landing .features-grid { grid-template-columns: repeat(2, 1fr);} }
+@media (min-width: 992px) { .landing .features-grid { grid-template-columns: repeat(3, 1fr);} }
+.landing .feature-card { background-color: #fff; padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; transition: transform .2s, box-shadow .2s; }
+.landing .feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,.07); }
+.landing .feature-icon { font-size: 2.5rem; margin-bottom: 1rem; display: inline-block; }
+
+/* How it works */
+.landing .how-it-works ol { list-style: none; counter-reset: steps-counter; display: grid; gap: 2rem; margin-top: 2rem; }
+@media (min-width: 768px) { .landing .how-it-works ol { grid-template-columns: repeat(2, 1fr);} }
+@media (min-width: 992px) { .landing .how-it-works ol { grid-template-columns: repeat(3, 1fr);} }
+.landing .how-it-works li { counter-increment: steps-counter; position: relative; padding-left: 3rem; padding-top: .5rem; }
+.landing .how-it-works li::before { content: counter(steps-counter); position: absolute; left: 0; top: 0; width: 2.5rem; height: 2.5rem; border-radius: 50%; background-color: var(--light-gray); color: var(--primary-color); font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; }
+.landing .how-it-works h3 { font-size: 1.25rem; margin-bottom: .25rem; }
+.landing .how-it-works p { font-size: .95rem; color: #495057; }
+
+/* Footer */
+.landing .site-footer { background-color: var(--primary-color); color: var(--secondary-color); padding: 3rem 0; text-align: center; }
+.landing .site-footer a { color: var(--secondary-color); }
+.landing .site-footer a:hover { color: var(--accent-color); text-decoration: underline; }
+.landing .footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; list-style: none; margin-bottom: 1.5rem; }
+.landing .social-links { display: flex; justify-content: center; align-items: center; gap: 1.5rem; list-style: none; font-family: var(--font-mono); font-size: 1.25rem; margin-bottom: 1rem; }
+/* Adjust social links when placed in header */
+.landing .site-header .social-links { margin-bottom: 0; justify-content: flex-end; align-items: center; gap: .75rem; font-size: 1.1rem; margin-left: 1rem; margin-right: 1.25rem; }
+.landing .social-links a { display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+.landing .social-links a svg { display: block; vertical-align: middle; }
+.landing .social-links li { display: flex; align-items: center; }
+.landing .copyright { font-size: .875rem; opacity: .8; margin: 0 auto; }
