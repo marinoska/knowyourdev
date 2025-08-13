@@ -48,17 +48,17 @@ export function LandingPage() {
             <h2 style={{ textAlign: "center" }}>Why Choose Know Your Dev?</h2>
             <div className="features-grid">
               <div className="feature-card">
-                <span className="feature-icon" aria-hidden="true">🎯</span>
+                <img className="feature-image" src="/project-matching.png" alt="Accurate Project Matching" />
                 <h3>Accurate Project Matching</h3>
                 <p>Our AI analyzes past projects to predict future success, matching skills to your specific needs.</p>
               </div>
               <div className="feature-card">
-                <span className="feature-icon" aria-hidden="true">📈</span>
+                <img className="feature-image" src="/career-progression-insights.png" alt="Career Progression Insights" />
                 <h3>Career Progression Insights</h3>
                 <p>Understand a candidate's growth trajectory and potential for long-term contribution.</p>
               </div>
               <div className="feature-card">
-                <span className="feature-icon" aria-hidden="true">💻</span>
+                <img className="feature-image" src="/tech-stack-evaluation.png" alt="Modern Tech Stack Evaluation" />
                 <h3>Modern Tech Stack Evaluation</h3>
                 <p>We accurately assess proficiency in the latest frameworks, libraries, and languages.</p>
               </div>

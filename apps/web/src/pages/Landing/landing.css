@@ -71,6 +71,7 @@ body {
 .landing .feature-card { background-color: #fff; padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; transition: transform .2s, box-shadow .2s; }
 .landing .feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,.07); }
 .landing .feature-icon { font-size: 2.5rem; margin-bottom: 1rem; display: inline-block; }
+.landing .feature-image { display: block; width: 100%; max-width: 320px; height: auto; border-radius: 8px; margin: 0 auto 1rem; }
 
 /* How it works */
 .landing .how-it-works ol { list-style: none; counter-reset: steps-counter; display: grid; gap: 2rem; margin-top: 2rem; }
