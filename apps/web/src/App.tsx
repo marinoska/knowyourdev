@@ -16,7 +16,6 @@ import { ApiClientProvider } from "@/api/ApiClientProvider.tsx";
 import { ErrorBoundary } from "@/components/ErrorBoundary.tsx";
 import { PageContextProvider } from "@/core/contexts/PageContext.tsx";
 import { useEffect } from "react";
-import { LandingPage } from "@/pages/Landing/LandingPage";
 
 const NotFound = () => {
   return <div>Not Found</div>;
@@ -96,7 +95,7 @@ export default function App() {
     <ApiClientProvider>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<></>} />
         <Route path="/auth/login" element={<Login />} />
 
         {/* Protected routes */}
