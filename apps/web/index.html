@@ -9,9 +9,9 @@
     <script>
       (function() {
         function updateLandingVisibility() {
-          var landingEl = document.getElementById('landing');
+          const landingEl = document.getElementById('landing');
           if (!landingEl) return;
-          var isRoot = location.pathname === '/' || location.pathname === '';
+          const isRoot = location.pathname === '/' || location.pathname === '';
           landingEl.style.display = isRoot ? '' : 'none';
         }
         document.addEventListener('DOMContentLoaded', updateLandingVisibility);
