@@ -10,7 +10,7 @@ import ListItemContent from "@mui/joy/ListItemContent";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import Tooltip from "@mui/joy/Tooltip";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+// import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -22,11 +22,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Regular } from "@/components/typography.tsx";
 
 const routes = [
-  {
-    path: "/dashboard",
-    label: "Dashboard",
-    icon: HomeRoundedIcon,
-  },
+  // {
+  //   path: "/dashboard",
+  //   label: "Dashboard",
+  //   icon: HomeRoundedIcon,
+  // },
   {
     path: "/projects",
     label: "Projects",

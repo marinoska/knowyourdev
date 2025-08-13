@@ -2,7 +2,7 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import theme from "./theme";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import { ResumeList } from "@/pages/Resume/ResumeList.tsx";
@@ -11,8 +11,6 @@ import { ProjectsList } from "@/pages/Projects/ProjectsList.tsx";
 import { ProjectDetailsPage } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsPage.tsx";
 import { CandidateMatchPage } from "@/pages/Projects/CandidateMatchPage/CandidateMatchPage.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import Button from "@mui/joy/Button";
-import KnowYourDevIcon from "@/components/KnowYourDevIcon.tsx";
 import Loader from "@/components/Loader.tsx";
 import { ApiClientProvider } from "@/api/ApiClientProvider.tsx";
 import { ErrorBoundary } from "@/components/ErrorBoundary.tsx";
@@ -29,35 +27,22 @@ const Dashboard = () => {
 export default function App() {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
 
+  const shouldAutoLogin = window.location.pathname === "/auth/login";
+  if (shouldAutoLogin && !isAuthenticated && !isLoading) {
+    void loginWithRedirect({
+      authorizationParams: {
+        audience: import.meta.env.VITE_KYD_API_AUDIENCE,
+        redirect_uri: window.location.origin + "/projects",
+      },
+    });
+  }
+
   if (isLoading) {
     return <Loader />;
   }
 
   if (!isAuthenticated) {
-    return (
-      <Box
-        alignItems="center"
-        width="100%"
-        display="flex"
-        justifyContent="center"
-        pt={10}
-      >
-        <Button
-          size="lg"
-          onClick={() =>
-            loginWithRedirect({
-              authorizationParams: {
-                audience: import.meta.env.VITE_AUTH0_API_AUDIENCE,
-                redirect_uri: window.location.origin,
-              },
-            })
-          }
-          startDecorator={<KnowYourDevIcon />}
-        >
-          Log In
-        </Button>
-      </Box>
-    );
+    return null;
   }
 
   return (
@@ -92,7 +77,7 @@ export default function App() {
           >
             <PageContextProvider>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<Navigate to="/projects" replace />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/projects" element={<ProjectsList />} />
                 <Route path="/projects/:id" element={<ProjectDetailsPage />} />

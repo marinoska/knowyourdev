@@ -62,9 +62,9 @@ export const CandidateMatchPage = () => {
         >
           <Button
             onClick={() => navigate(`/uploads/${candidateId}`)}
-            variant="outlined"
+            variant="solid"
           >
-            Profile
+            View Profile
           </Button>
         </BasePage.Header>
         <BasePage.Content>
