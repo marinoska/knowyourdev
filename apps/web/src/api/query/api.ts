@@ -121,7 +121,7 @@ export const extractJobData = async (
 
 export type PostProjectBody = {
   name: string;
-  description: string;
+  // description: string;
 };
 
 export const createProject = async (

@@ -29,6 +29,6 @@ export const createProjectController: CreateProjectController = async (
 export const createProjectValidationSchema = {
   [Segments.BODY]: Joi.object({
     name: Joi.string().required(),
-    description: Joi.string().required(),
+    description: Joi.string().optional(),
   }),
 };

@@ -7,7 +7,7 @@ import { StateSetter } from "../../types.ts";
 import Divider from "@mui/joy/Divider";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
-import { FormLabel, Input, Textarea } from "@mui/joy";
+import { FormLabel, Input } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Snackbar } from "../../components/Snackbar.tsx";
@@ -21,7 +21,6 @@ export const ProjectModal = ({
   setOpen: StateSetter<boolean>;
 }) => {
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -34,7 +33,7 @@ export const ProjectModal = ({
 
   const handleCreateProject = () => {
     handleProjectCreate(
-      { name, description },
+      { name },
       {
         onError: (error) => {
           console.error("Failed to create project:", error);
@@ -68,7 +67,6 @@ export const ProjectModal = ({
           type="success"
           show={isSuccess}
         />
-        git push
         <Sheet
           variant="outlined"
           sx={{
@@ -104,19 +102,6 @@ export const ProjectModal = ({
               onChange={(e) => setName(e.target.value)}
             />
 
-            <FormLabel
-              id="project-description-label"
-              htmlFor="project-description"
-            >
-              Description
-            </FormLabel>
-            <Textarea
-              id="project-description"
-              placeholder="Enter project description"
-              minRows={10}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
           </Stack>
 
           <Divider sx={{ my: 2 }} />

@@ -119,7 +119,7 @@ export async function getPage(
 
 export type PostProjectBody = {
   name: string;
-  description: string;
+  description?: string;
 };
 
 export async function createNew(
@@ -134,7 +134,7 @@ export async function createNew(
     settings: {
       baselineJobDuration: 1,
       expectedRecentRelevantYears: 1,
-      description: projectData.description,
+      description: projectData.description ?? "",
       technologies: [],
       techFocus: [],
     },
