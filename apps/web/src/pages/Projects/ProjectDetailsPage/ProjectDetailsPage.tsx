@@ -30,16 +30,12 @@ const getTabItems = (project: TProjectDTO): TabsRecord => ({
 export const ProjectDetailsPage = () => {
   const { id } = useParams<ProjectProfileParams>();
 
-  const query = useProjectProfileQuery({ projectId: id });
+  const {
+    data: profile,
+    isError,
+    isLoading,
+  } = useProjectProfileQuery({ projectId: id });
 
-  return <ProjectPage query={query} />;
-};
-
-const ProjectPage = ({
-  query: { data: profile, isError, isLoading },
-}: {
-  query: ReturnType<typeof useProjectProfileQuery>;
-}) => {
   const [activeTab, setActiveTab] = useState(0);
   const { headerState } = usePageContext();
 
