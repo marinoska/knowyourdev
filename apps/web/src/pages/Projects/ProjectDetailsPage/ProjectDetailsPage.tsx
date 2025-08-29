@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
+import { ProjectSettingsForm } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsForm.tsx";
 import { ProjectSettingsTab } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsTab.tsx";
 import CandidatesTab from "@/pages/Projects/ProjectDetailsPage/CandidatesTab.tsx";
 import { useState } from "react";
@@ -19,7 +20,11 @@ type ProjectProfileParams = { id: string };
 const getTabItems = (project: TProjectDTO): TabsRecord => ({
   settings: {
     label: "Project Details",
-    content: <ProjectSettingsTab defaultProject={project} />,
+    content: (
+      <ProjectSettingsForm defaultProject={project}>
+        {(props) => <ProjectSettingsTab {...props} />}
+      </ProjectSettingsForm>
+    ),
   },
   candidates: {
     label: "Candidates",
