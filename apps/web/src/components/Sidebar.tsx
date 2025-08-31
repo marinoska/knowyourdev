@@ -254,7 +254,11 @@ export default function Sidebar() {
                 transform: "translateX(4px)",
               },
             }}
-            onClick={() => logout()}
+            onClick={() =>
+              logout({
+                logoutParams: { returnTo: window.location.origin },
+              })
+            }
           >
             <LogoutRoundedIcon />
           </IconButton>
