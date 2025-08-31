@@ -52,6 +52,7 @@ export const FormActions = ({
   reset: VoidFunction | null;
   submit: VoidFunction | null;
 }) => {
+  const { isRegenerating } = useProjectSettingsFormContext();
   return (
     <Stack direction="row" gap={2} justifyContent="end">
       <Button
@@ -68,7 +69,7 @@ export const FormActions = ({
         color="neutral"
         variant="outlined"
         onClick={reset ? reset : () => {}}
-        disabled={disabled}
+        disabled={isRegenerating}
       >
         Reset
       </Button>

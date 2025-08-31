@@ -12,7 +12,7 @@ import { SCOPE_NAMES } from "@kyd/common/api";
 import { useProjectSettingsFormContext } from "@/pages/Projects/ProjectSettingsFormContext.tsx";
 
 export const SystemGeneratedSection = () => {
-  const { project, control, setTechFocus, setTechnologies, markDescriptionSynced } =
+  const { project, control, setTechFocus, setTechnologies, markDescriptionSynced, setRegenerating } =
     useProjectSettingsFormContext();
   const {
     mutate: extractJobData,
@@ -23,6 +23,11 @@ export const SystemGeneratedSection = () => {
   } = useExtractJobDataMutation();
 
   const formValues = useWatch({ control });
+
+  useEffect(() => {
+    setRegenerating(isPending);
+    return () => setRegenerating(false);
+  }, [isPending, setRegenerating]);
 
   useEffect(() => {
     if (extractedData) {

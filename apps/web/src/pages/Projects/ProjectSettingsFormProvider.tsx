@@ -4,8 +4,14 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useState,
 } from "react";
-import { useForm, Control, UseFormStateReturn, useWatch } from "react-hook-form";
+import {
+  useForm,
+  Control,
+  UseFormStateReturn,
+  useWatch,
+} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { TProjectDTO } from "@/api/query/types.ts";
@@ -66,6 +72,8 @@ export type ProjectSettingsContextType = {
     value: { ref: string; code: string; name: string }[],
   ) => void;
   markDescriptionSynced: (value: string) => void;
+  isRegenerating: boolean;
+  setRegenerating: (value: boolean) => void;
   isError: boolean;
   isSuccess: boolean;
 };
@@ -82,6 +90,7 @@ export const ProjectSettingsFormProvider = ({
   children: ReactNode;
 }) => {
   const { updateHeaderState } = usePageContext();
+  const [isRegenerating, setRegenerating] = useState(false);
 
   const {
     mutate: handleProjectUpdate,
@@ -173,14 +182,31 @@ export const ProjectSettingsFormProvider = ({
     [project, reset],
   );
 
+  const isDescriptionOutOfSync = useWatch({
+    control,
+    name: "settings.isDescriptionOutOfSync",
+  });
+
   useEffect(() => {
     updateHeaderState({
       isLoading: isPending,
-      disabled: isPending || !formState.isDirty,
+      disabled:
+        isPending ||
+        isRegenerating ||
+        !!isDescriptionOutOfSync ||
+        !formState.isDirty,
       reset: doReset,
       submit: doSubmit,
     });
-  }, [doReset, doSubmit, formState.isDirty, isPending, updateHeaderState]);
+  }, [
+    doReset,
+    doSubmit,
+    formState.isDirty,
+    isPending,
+    isRegenerating,
+    isDescriptionOutOfSync,
+    updateHeaderState,
+  ]);
 
   useEffect(() => {
     if (isSuccess && project) {
@@ -204,12 +230,17 @@ export const ProjectSettingsFormProvider = ({
       setValue("settings.lastSyncedDescription", value, {
         shouldDirty: false,
       });
-      setValue("settings.isDescriptionOutOfSync", false, { shouldDirty: false });
+      setValue("settings.isDescriptionOutOfSync", false, {
+        shouldDirty: false,
+      });
     },
     [setValue],
   );
 
-  const currentDescription = useWatch({ control, name: "settings.description" });
+  const currentDescription = useWatch({
+    control,
+    name: "settings.description",
+  });
   const lastSynced = useWatch({
     control,
     name: "settings.lastSyncedDescription",
@@ -218,7 +249,9 @@ export const ProjectSettingsFormProvider = ({
     const a = (currentDescription || "").trim();
     const b = (lastSynced || "").trim();
     const changed = a !== b;
-    setValue("settings.isDescriptionOutOfSync", changed, { shouldDirty: false });
+    setValue("settings.isDescriptionOutOfSync", changed, {
+      shouldDirty: false,
+    });
   }, [currentDescription, lastSynced, setValue]);
 
   const contextValue = useMemo<ProjectSettingsContextType>(
@@ -229,6 +262,8 @@ export const ProjectSettingsFormProvider = ({
       setTechFocus,
       setTechnologies,
       markDescriptionSynced,
+      isRegenerating,
+      setRegenerating,
       isError,
       isSuccess,
     }),
@@ -241,6 +276,8 @@ export const ProjectSettingsFormProvider = ({
       setTechFocus,
       setTechnologies,
       markDescriptionSynced,
+      isRegenerating,
+      setRegenerating,
     ],
   );
 
