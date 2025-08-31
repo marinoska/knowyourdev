@@ -18,6 +18,7 @@ import { useProjectSettingsFormContext } from "../ProjectSettingsFormContext.tsx
 import { computeCandidateMatch } from "./computeMatch.ts";
 import { useMemo } from "react";
 import { useWatch } from "react-hook-form";
+import CenteredLoader from "@/components/Loader.tsx";
 
 type CandidateDetailsParams = {
   id: string;
@@ -50,8 +51,13 @@ export const CandidateMatchPage = () => {
   }, [project, watchedSettings]);
 
   const isError = candidateQuery.isError;
+
+  if (candidateQuery.isLoading) {
+    return <CenteredLoader />;
+  }
+
   const { years, months } = monthsToYearsAndMonths(
-    candidateQuery.profile?.monthsActiveInSE || 0,
+    (candidateQuery.profile?.monthsActiveInSE as number) || 0,
   );
 
   return (
