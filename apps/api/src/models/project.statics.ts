@@ -132,8 +132,8 @@ export async function createNew(
     name: projectData.name,
     candidates: [],
     settings: {
-      baselineJobDuration: 1,
-      expectedRecentRelevantYears: 1,
+      baselineJobDuration: 15,
+      expectedRecentRelevantYears: 5,
       description: projectData.description ?? "",
       technologies: [],
       techFocus: [],

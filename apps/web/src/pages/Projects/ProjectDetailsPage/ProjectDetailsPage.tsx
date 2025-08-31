@@ -1,20 +1,14 @@
-import { Snackbar } from "@/components/Snackbar.tsx";
-import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
-import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
-import { ProjectSettingsFormProvider } from "@/pages/Projects/ProjectSettingsFormProvider.tsx";
 import { ProjectSettingsTab } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsTab.tsx";
 import CandidatesTab from "@/pages/Projects/ProjectDetailsPage/CandidatesTab.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";
-
 import { usePageContext } from "@/core/contexts/UsePageContext.tsx";
 import Stack from "@mui/joy/Stack";
 import { Button } from "@mui/joy";
-
-type ProjectProfileParams = { id: string };
+import { useProjectSettingsFormContext } from "../ProjectSettingsFormContext.tsx";
 
 const getTabItems = (): TabsRecord => ({
   settings: {
@@ -28,41 +22,21 @@ const getTabItems = (): TabsRecord => ({
 });
 
 export const ProjectDetailsPage = () => {
-  const { id } = useParams<ProjectProfileParams>();
-
-  const {
-    data: profile,
-    isError,
-    isLoading,
-  } = useProjectProfileQuery({ projectId: id });
-
   const [activeTab, setActiveTab] = useState(0);
   const { headerState } = usePageContext();
+  const { project } = useProjectSettingsFormContext();
 
   return (
     <>
-      <Snackbar
-        type="danger"
-        msg="Failed to load project details."
-        show={isError}
-      />
-      <BasePage isLoading={isLoading} isError={isError} showEmpty={!profile}>
-        <BasePage.Header
-          showBackButton
-          subtitle={`Created on ${profile ? format(new Date(profile.createdAt), "MMMM d, yyyy") : ""}`}
-          title={profile?.name}
-        >
-          {activeTab === 0 && profile && <FormActions {...headerState} />}
-          {activeTab === 1 && profile && (
-            <UploadButton projectId={profile._id} />
-          )}
-        </BasePage.Header>
-        {profile && (
-          <ProjectSettingsFormProvider defaultProject={profile}>
-            <Tabs tabs={getTabItems()} onTabChange={setActiveTab} />
-          </ProjectSettingsFormProvider>
-        )}
-      </BasePage>
+      <BasePage.Header
+        showBackButton
+        subtitle={`Created on ${format(new Date(project.createdAt), "MMMM d, yyyy")}`}
+        title={project.name}
+      >
+        {activeTab === 0 && <FormActions {...headerState} />}
+        {activeTab === 1 && <UploadButton projectId={project._id} />}
+      </BasePage.Header>
+      <Tabs tabs={getTabItems()} onTabChange={setActiveTab} />
     </>
   );
 };

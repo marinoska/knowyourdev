@@ -5,9 +5,9 @@ export type ProjectFormValues = {
   settings: {
     description: string;
     // Stores the last description when system parameters were last synced
-    lastSyncedDescription?: string;
+    lastSyncedDescription: string;
     // Derived: true if description differs from lastSyncedDescription
-    isDescriptionOutOfSync?: boolean;
+    isDescriptionOutOfSync: boolean;
     baselineJobDuration: number;
     expectedRecentRelevantYears: number;
     techFocus: ScopeType[];

@@ -1,5 +1,4 @@
 import { Snackbar } from "@/components/Snackbar.tsx";
-import { useProjectProfileQuery } from "@/api/query/useProjectsQuery.ts";
 import { useNavigate, useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import { monthsToYearsAndMonths } from "@/utils/dates.ts";
@@ -15,6 +14,10 @@ import { JobStability } from "@/pages/Projects/CandidateMatchPage/JobStability.t
 import { useResumeProfileQuery } from "@/api/query/useResumeProfileQuery.ts";
 import { TechMatch } from "@/pages/Projects/CandidateMatchPage/TechMatch.tsx";
 import { TechFocusMatch } from "@/pages/Projects/CandidateMatchPage/TechFocusMatch.tsx";
+import { useProjectSettingsFormContext } from "../ProjectSettingsFormContext.tsx";
+import { computeCandidateMatch } from "./computeMatch.ts";
+import { useMemo } from "react";
+import { useWatch } from "react-hook-form";
 
 type CandidateDetailsParams = {
   id: string;
@@ -32,12 +35,21 @@ export const CandidateMatchPage = () => {
 
   const candidateQuery = useResumeProfileQuery({
     uploadId: candidateId,
-    projectId,
   });
-  const projectQuery = useProjectProfileQuery({ projectId });
 
-  const isLoading = candidateQuery.isLoading || projectQuery.isLoading;
-  const isError = candidateQuery.isError || projectQuery.isError;
+  const { project, control } = useProjectSettingsFormContext();
+  const watchedSettings = useWatch({ control, name: "settings" });
+  const effectiveProject = useMemo<TProjectDTO | null>(() => {
+    return {
+      ...project,
+      settings: {
+        ...project.settings,
+        ...watchedSettings,
+      },
+    } as TProjectDTO;
+  }, [project, watchedSettings]);
+
+  const isError = candidateQuery.isError;
   const { years, months } = monthsToYearsAndMonths(
     candidateQuery.profile?.monthsActiveInSE || 0,
   );
@@ -49,35 +61,38 @@ export const CandidateMatchPage = () => {
         msg="Failed to load candidate details."
         show={isError}
       />
-      <BasePage
-        isLoading={isLoading}
-        isError={isError}
-        showEmpty={!candidateQuery.profile || !projectQuery.data}
+      <BasePage.Header
+        showBackButton
+        caption={`Project: ${effectiveProject?.name ?? ""}`}
+        subtitle={`${candidateQuery.profile?.position} •${years} years ${months} month net active time`}
+        title={candidateQuery.profile?.fullName}
       >
-        <BasePage.Header
-          showBackButton
-          caption={`Project: ${projectQuery.data?.name}`}
-          subtitle={`${candidateQuery.profile?.position} •${years} years ${months} month net active time`}
-          title={candidateQuery.profile?.fullName}
+        <Button
+          onClick={() => navigate(`/uploads/${candidateId}`)}
+          variant="solid"
         >
-          <Button
-            onClick={() => navigate(`/uploads/${candidateId}`)}
-            variant="solid"
-          >
-            View Profile
-          </Button>
-        </BasePage.Header>
-        <BasePage.Content>
-          {projectQuery.data && candidateQuery.profile ? (
-            <CandidateDetails
-              candidate={
-                candidateQuery.profile as TResumeProfileDTO<WithCandidateMatch>
-              }
-              project={projectQuery.data}
-            />
-          ) : null}
-        </BasePage.Content>
-      </BasePage>
+          View Profile
+        </Button>
+      </BasePage.Header>
+      <BasePage.Content>
+        {effectiveProject && candidateQuery.profile
+          ? (() => {
+              const candidateWithMatch = {
+                ...(candidateQuery.profile as TResumeProfileDTO),
+                match: computeCandidateMatch(
+                  effectiveProject,
+                  candidateQuery.profile as TResumeProfileDTO,
+                ),
+              } as TResumeProfileDTO<WithCandidateMatch>;
+              return (
+                <CandidateDetails
+                  candidate={candidateWithMatch}
+                  project={effectiveProject}
+                />
+              );
+            })()
+          : null}
+      </BasePage.Content>
     </>
   );
 };

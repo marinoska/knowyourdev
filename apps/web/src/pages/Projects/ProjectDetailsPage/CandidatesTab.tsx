@@ -38,10 +38,10 @@ const ProjectCandidateItem = ({
 
   const navigate = useNavigate();
   const isActive = item.parseStatus === "processed";
-  const onClick = useCallback(() => {
-    if (isActive) {
-      navigate(`/projects/${projectId}/candidates/${_id}`);
-    }
+
+    const onClick = useCallback(() => {
+    if (!isActive) return;
+    navigate(`/projects/${projectId}/candidates/${_id}`);
   }, [_id, isActive, navigate, projectId]);
 
   return (

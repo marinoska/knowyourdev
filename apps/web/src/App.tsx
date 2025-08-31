@@ -11,6 +11,7 @@ import { ProjectsList } from "@/pages/Projects/ProjectsList.tsx";
 import { ProjectDetailsPage } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsPage.tsx";
 import { CandidateMatchPage } from "@/pages/Projects/CandidateMatchPage/CandidateMatchPage.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import { ProjectPageLayout } from "@/pages/Projects/ProjectPageLayout.tsx";
 import Loader from "@/components/Loader.tsx";
 import { ApiClientProvider } from "@/api/ApiClientProvider.tsx";
 import { ErrorBoundary } from "@/components/ErrorBoundary.tsx";
@@ -103,11 +104,10 @@ export default function App() {
           <Route path="/" element={<ProtectedLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="projects" element={<ProjectsList />} />
-            <Route path="projects/:id" element={<ProjectDetailsPage />} />
-            <Route
-              path="projects/:id/candidates/:candidateId"
-              element={<CandidateMatchPage />}
-            />
+            <Route path="projects/:id" element={<ProjectPageLayout />}>
+              <Route index element={<ProjectDetailsPage />} />
+              <Route path="candidates/:candidateId" element={<CandidateMatchPage />} />
+            </Route>
             <Route path="uploads" element={<ResumeList />} />
             <Route path="uploads/:id" element={<ResumeDetailsPage />} />
           </Route>
