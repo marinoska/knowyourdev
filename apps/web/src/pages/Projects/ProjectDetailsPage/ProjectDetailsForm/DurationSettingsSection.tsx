@@ -1,8 +1,8 @@
-import { Control, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import Stack from "@mui/joy/Stack";
 import { Card, FormLabel, Slider } from "@mui/joy";
 import { Subtitle } from "@/components/typography.tsx";
-import { ProjectFormValues } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsForm/types.ts";
+import { useProjectSettingsFormContext } from "@/pages/Projects/ProjectSettingsFormContext.tsx";
 import {
   MAX_EXPECTED_DURATION,
   MIN_BASELINE_DURATION,
@@ -10,11 +10,8 @@ import {
   MAX_BASELINE_DURATION,
 } from "@kyd/common/api";
 
-export const DurationSettingsSection = ({
-  control,
-}: {
-  control: Control<ProjectFormValues>;
-}) => {
+export const DurationSettingsSection = () => {
+  const { control } = useProjectSettingsFormContext();
   return (
     <Stack gap={2}>
       <Card size="lg" variant="soft">

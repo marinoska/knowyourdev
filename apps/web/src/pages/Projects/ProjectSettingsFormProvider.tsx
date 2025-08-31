@@ -5,7 +5,7 @@ import {
   useEffect,
   useMemo,
 } from "react";
-import { useForm, Control, UseFormStateReturn } from "react-hook-form";
+import { useForm, Control, UseFormStateReturn, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { TProjectDTO } from "@/api/query/types.ts";
@@ -25,6 +25,8 @@ const validationSchema = yup.object({
   name: yup.string().required("Project name is required"),
   settings: yup.object({
     description: yup.string().required("Description is required"),
+    lastSyncedDescription: yup.string().default(""),
+    isDescriptionOutOfSync: yup.boolean().default(false),
     baselineJobDuration: yup
       .number()
       .required("Expected Tenure at a job is required")
@@ -63,6 +65,7 @@ export type ProjectSettingsContextType = {
   setTechnologies: (
     value: { ref: string; code: string; name: string }[],
   ) => void;
+  markDescriptionSynced: (value: string) => void;
   isError: boolean;
   isSuccess: boolean;
 };
@@ -97,6 +100,8 @@ export const ProjectSettingsFormProvider = ({
         name: project.name,
         settings: {
           description: project.settings.description,
+          lastSyncedDescription: project.settings.description,
+          isDescriptionOutOfSync: false,
           baselineJobDuration: project.settings.baselineJobDuration,
           expectedRecentRelevantYears:
             project.settings.expectedRecentRelevantYears,
@@ -152,6 +157,8 @@ export const ProjectSettingsFormProvider = ({
         name: project.name,
         settings: {
           description: project.settings.description,
+          lastSyncedDescription: project.settings.description,
+          isDescriptionOutOfSync: false,
           baselineJobDuration: project.settings.baselineJobDuration,
           expectedRecentRelevantYears:
             project.settings.expectedRecentRelevantYears,
@@ -192,6 +199,28 @@ export const ProjectSettingsFormProvider = ({
     [setValue],
   );
 
+  const markDescriptionSynced = useCallback(
+    (value: string) => {
+      setValue("settings.lastSyncedDescription", value, {
+        shouldDirty: false,
+      });
+      setValue("settings.isDescriptionOutOfSync", false, { shouldDirty: false });
+    },
+    [setValue],
+  );
+
+  const currentDescription = useWatch({ control, name: "settings.description" });
+  const lastSynced = useWatch({
+    control,
+    name: "settings.lastSyncedDescription",
+  });
+  useEffect(() => {
+    const a = (currentDescription || "").trim();
+    const b = (lastSynced || "").trim();
+    const changed = a !== b;
+    setValue("settings.isDescriptionOutOfSync", changed, { shouldDirty: false });
+  }, [currentDescription, lastSynced, setValue]);
+
   const contextValue = useMemo<ProjectSettingsContextType>(
     () => ({
       project,
@@ -199,6 +228,7 @@ export const ProjectSettingsFormProvider = ({
       formState,
       setTechFocus,
       setTechnologies,
+      markDescriptionSynced,
       isError,
       isSuccess,
     }),
@@ -210,6 +240,7 @@ export const ProjectSettingsFormProvider = ({
       isSuccess,
       setTechFocus,
       setTechnologies,
+      markDescriptionSynced,
     ],
   );
 

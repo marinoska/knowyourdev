@@ -8,15 +8,7 @@ import { SystemGeneratedSection } from "@/pages/Projects/ProjectDetailsPage/Proj
 import { useProjectSettingsFormContext } from "../ProjectSettingsFormContext.tsx";
 
 export const ProjectSettingsTab = () => {
-  const {
-    project,
-    control,
-    formState,
-    setTechFocus,
-    setTechnologies,
-    isError,
-    isSuccess,
-  } = useProjectSettingsFormContext();
+  const { formState, isError, isSuccess } = useProjectSettingsFormContext();
   return (
     <>
       <Snackbar type="danger" msg="Failed to update project." show={isError} />
@@ -67,17 +59,11 @@ export const ProjectSettingsTab = () => {
       <form>
         <Stack gap={2} direction="row" flexWrap="wrap" pt={1}>
           <Stack flex={1} gap={2}>
-            <BasicInfoSection control={control} />
+            <BasicInfoSection />
           </Stack>
           <Stack flex={1} gap={2}>
-            <SystemGeneratedSection
-              project={project}
-              isDescriptionDirty={!!formState.dirtyFields.settings?.description}
-              control={control}
-              setTechFocus={setTechFocus}
-              setTechnologies={setTechnologies}
-            />
-            <DurationSettingsSection control={control} />
+            <SystemGeneratedSection />
+            <DurationSettingsSection />
           </Stack>
         </Stack>
       </form>

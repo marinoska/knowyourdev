@@ -1,4 +1,4 @@
-import { Control, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import Stack from "@mui/joy/Stack";
 import {
   FormControl,
@@ -7,13 +7,10 @@ import {
   Input,
   Textarea,
 } from "@mui/joy";
-import { ProjectFormValues } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsForm/types.ts";
+import { useProjectSettingsFormContext } from "@/pages/Projects/ProjectSettingsFormContext.tsx";
 
-export const BasicInfoSection = ({
-  control,
-}: {
-  control: Control<ProjectFormValues>;
-}) => {
+export const BasicInfoSection = () => {
+  const { control } = useProjectSettingsFormContext();
   return (
     <Stack gap={2}>
       <Controller

@@ -1,8 +1,6 @@
-import { TProjectDTO } from "@/api/query/types.ts";
-import { Control, useWatch } from "react-hook-form";
-import { ProjectFormValues } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsForm/types.ts";
+import { useWatch } from "react-hook-form";
 import { useExtractJobDataMutation } from "@/api/query/useExtractJobDataMutation.ts";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Alert, Card, IconButton } from "@mui/joy";
 import Stack from "@mui/joy/Stack";
 import { Regular, Small, Subtitle } from "@/components/typography.tsx";
@@ -10,23 +8,12 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Chip from "@mui/joy/Chip";
-import { SCOPE_NAMES, ScopeType } from "@kyd/common/api";
+import { SCOPE_NAMES } from "@kyd/common/api";
+import { useProjectSettingsFormContext } from "@/pages/Projects/ProjectSettingsFormContext.tsx";
 
-export const SystemGeneratedSection = ({
-  project,
-  isDescriptionDirty,
-  control,
-  setTechFocus,
-  setTechnologies,
-}: {
-  project: TProjectDTO;
-  isDescriptionDirty: boolean;
-  control: Control<ProjectFormValues>;
-  setTechFocus: (value: ScopeType[]) => void;
-  setTechnologies: (
-    value: ProjectFormValues["settings"]["technologies"],
-  ) => void;
-}) => {
+export const SystemGeneratedSection = () => {
+  const { project, control, setTechFocus, setTechnologies, markDescriptionSynced } =
+    useProjectSettingsFormContext();
   const {
     mutate: extractJobData,
     isPending,
@@ -46,14 +33,13 @@ export const SystemGeneratedSection = ({
 
   const name = formValues.name?.trim();
   const description = formValues.settings?.description?.trim();
-  const [lastGeneratedDescription, setLastGeneratedDescription] =
-    useState(description);
+  const isDescriptionOutOfSync = !!formValues.settings?.isDescriptionOutOfSync;
 
   const handleRegenerate = () => {
     if (!name || !description) {
       return;
     }
-    setLastGeneratedDescription(description);
+    markDescriptionSynced(description);
     extractJobData({
       title: name,
       description: description,
@@ -71,7 +57,7 @@ export const SystemGeneratedSection = ({
         </Small>
       </Stack>
       <Stack>
-        {isDescriptionDirty && lastGeneratedDescription !== description && (
+        {isDescriptionOutOfSync && (
           <Alert
             startDecorator={<WarningIcon />}
             color="warning"
