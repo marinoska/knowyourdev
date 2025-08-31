@@ -1,60 +1,64 @@
 import Stack from "@mui/joy/Stack";
 import { Regular, Small } from "@/components/typography.tsx";
-import { TProjectDTO } from "@/api/query/types.ts";
 import { Alert } from "@mui/joy";
-import { Control, UseFormStateReturn } from "react-hook-form";
-import { ScopeType } from "@kyd/common/api";
 import { Snackbar } from "@/components/Snackbar.tsx";
 import { BasicInfoSection } from "./ProjectDetailsForm/BasicInfoSection.tsx";
 import { DurationSettingsSection } from "./ProjectDetailsForm/DurationSettingsSection.tsx";
-import { ProjectFormValues } from "./ProjectDetailsForm/types.ts";
 import { SystemGeneratedSection } from "@/pages/Projects/ProjectDetailsPage/ProjectDetailsForm/SystemGeneratedSection.tsx";
+import { useProjectSettingsFormContext } from "../ProjectSettingsFormContext.tsx";
 
-export const ProjectSettingsTab = ({
-  project,
-  control,
-  formState,
-  setTechFocus,
-  setTechnologies,
-  isError,
-  isSuccess,
-}: {
-  project: TProjectDTO;
-  control: Control<ProjectFormValues>;
-  formState: UseFormStateReturn<ProjectFormValues>;
-  setTechFocus: (value: ScopeType[]) => void;
-  setTechnologies: (value: { ref: string; code: string; name: string }[]) => void;
-  isError: boolean;
-  isSuccess: boolean;
-}) => {
+export const ProjectSettingsTab = () => {
+  const {
+    project,
+    control,
+    formState,
+    setTechFocus,
+    setTechnologies,
+    isError,
+    isSuccess,
+  } = useProjectSettingsFormContext();
   return (
     <>
       <Snackbar type="danger" msg="Failed to update project." show={isError} />
-      <Snackbar type="success" msg="Project details updated." show={isSuccess} />
+      <Snackbar
+        type="success"
+        msg="Project details updated."
+        show={isSuccess}
+      />
 
       {Object.keys(formState.errors).length > 0 && (
         <Alert color="danger" variant="soft" sx={{ mb: 2 }}>
           <Stack>
             <Regular>Please fix the following errors:</Regular>
-            {formState.errors.name && <Small>●Job title: {formState.errors.name.message}</Small>}
+            {formState.errors.name && (
+              <Small>●Job title: {formState.errors.name.message}</Small>
+            )}
             {formState.errors.settings?.description && (
-              <Small>●Description: {formState.errors.settings.description.message}</Small>
+              <Small>
+                ●Description: {formState.errors.settings.description.message}
+              </Small>
             )}
             {formState.errors.settings?.baselineJobDuration && (
               <Small>
-                ●Expected Tenure: {formState.errors.settings.baselineJobDuration.message}
+                ●Expected Tenure:{" "}
+                {formState.errors.settings.baselineJobDuration.message}
               </Small>
             )}
             {formState.errors.settings?.expectedRecentRelevantYears && (
               <Small>
-                ●Expected recent relevant years: {formState.errors.settings.expectedRecentRelevantYears.message}
+                ●Expected recent relevant years:{" "}
+                {formState.errors.settings.expectedRecentRelevantYears.message}
               </Small>
             )}
             {formState.errors.settings?.techFocus && (
-              <Small>●Technical Focus: {formState.errors.settings.techFocus.message}</Small>
+              <Small>
+                ●Technical Focus: {formState.errors.settings.techFocus.message}
+              </Small>
             )}
             {formState.errors.settings?.technologies && (
-              <Small>●Technologies: {formState.errors.settings.technologies.message}</Small>
+              <Small>
+                ●Technologies: {formState.errors.settings.technologies.message}
+              </Small>
             )}
           </Stack>
         </Alert>

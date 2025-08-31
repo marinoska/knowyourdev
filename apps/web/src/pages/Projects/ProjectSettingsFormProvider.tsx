@@ -1,11 +1,17 @@
-import { useCallback, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
 import { useForm, Control, UseFormStateReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { TProjectDTO } from "@/api/query/types.ts";
-import { useProjectUpdateMutation } from "@/api/query/useProjectUpdateMutation";
+import { useProjectUpdateMutation } from "@/api/query/useProjectUpdateMutation.ts";
 import { usePageContext } from "@/core/contexts/UsePageContext.tsx";
-import { ProjectFormValues } from "./ProjectDetailsForm/types.ts";
+import { ProjectFormValues } from "./ProjectDetailsPage/ProjectDetailsForm/types.ts";
 import {
   SCOPE,
   ScopeType,
@@ -49,7 +55,7 @@ const validationSchema = yup.object({
   }),
 });
 
-export type ProjectSettingsChildrenProps = {
+export type ProjectSettingsContextType = {
   project: TProjectDTO;
   control: Control<ProjectFormValues>;
   formState: UseFormStateReturn<ProjectFormValues>;
@@ -61,12 +67,16 @@ export type ProjectSettingsChildrenProps = {
   isSuccess: boolean;
 };
 
-export const ProjectSettingsForm = ({
+export const ProjectSettingsFormContext = createContext<
+  ProjectSettingsContextType | undefined
+>(undefined);
+
+export const ProjectSettingsFormProvider = ({
   defaultProject,
   children,
 }: {
   defaultProject: TProjectDTO;
-  children: (props: ProjectSettingsChildrenProps) => ReactNode;
+  children: ReactNode;
 }) => {
   const { updateHeaderState } = usePageContext();
 
@@ -182,15 +192,30 @@ export const ProjectSettingsForm = ({
     [setValue],
   );
 
-  return children({
-    control,
-    project,
-    formState,
-    setTechFocus,
-    setTechnologies,
-    isError,
-    isSuccess,
-  });
-};
+  const contextValue = useMemo<ProjectSettingsContextType>(
+    () => ({
+      project,
+      control,
+      formState,
+      setTechFocus,
+      setTechnologies,
+      isError,
+      isSuccess,
+    }),
+    [
+      project,
+      control,
+      formState,
+      isError,
+      isSuccess,
+      setTechFocus,
+      setTechnologies,
+    ],
+  );
 
-export default ProjectSettingsForm;
+  return (
+    <ProjectSettingsFormContext.Provider value={contextValue}>
+      {children}
+    </ProjectSettingsFormContext.Provider>
+  );
+};

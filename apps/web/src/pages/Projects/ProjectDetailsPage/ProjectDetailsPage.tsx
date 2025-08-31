@@ -4,12 +4,11 @@ import { useParams } from "react-router-dom";
 import { BasePage } from "@/components/BasePage.tsx";
 import Tabs, { TabsRecord } from "@/components/Tabs.tsx";
 import { format } from "date-fns";
-import { ProjectSettingsForm } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsForm.tsx";
+import { ProjectSettingsFormProvider } from "@/pages/Projects/ProjectSettingsFormProvider.tsx";
 import { ProjectSettingsTab } from "@/pages/Projects/ProjectDetailsPage/ProjectSettingsTab.tsx";
 import CandidatesTab from "@/pages/Projects/ProjectDetailsPage/CandidatesTab.tsx";
 import { useState } from "react";
 import { UploadButton } from "@/components/UploadButton.tsx";
-import { TProjectDTO } from "@/api/query/types.ts";
 
 import { usePageContext } from "@/core/contexts/UsePageContext.tsx";
 import Stack from "@mui/joy/Stack";
@@ -17,18 +16,14 @@ import { Button } from "@mui/joy";
 
 type ProjectProfileParams = { id: string };
 
-const getTabItems = (project: TProjectDTO): TabsRecord => ({
+const getTabItems = (): TabsRecord => ({
   settings: {
     label: "Project Details",
-    content: (
-      <ProjectSettingsForm defaultProject={project}>
-        {(props) => <ProjectSettingsTab {...props} />}
-      </ProjectSettingsForm>
-    ),
+    content: <ProjectSettingsTab />,
   },
   candidates: {
     label: "Candidates",
-    content: <CandidatesTab project={project} />,
+    content: <CandidatesTab />,
   },
 });
 
@@ -63,7 +58,9 @@ export const ProjectDetailsPage = () => {
           )}
         </BasePage.Header>
         {profile && (
-          <Tabs tabs={getTabItems(profile)} onTabChange={setActiveTab} />
+          <ProjectSettingsFormProvider defaultProject={profile}>
+            <Tabs tabs={getTabItems()} onTabChange={setActiveTab} />
+          </ProjectSettingsFormProvider>
         )}
       </BasePage>
     </>

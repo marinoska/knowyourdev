@@ -12,10 +12,10 @@ import { format } from "date-fns";
 import { Done, ReportProblem } from "@mui/icons-material";
 import { CircularProgress } from "@mui/joy";
 import { Regular, Smallest } from "@/components/typography.tsx";
-import { TProjectDTO } from "@/api/query/types.ts";
 import Chip from "@mui/joy/Chip";
 import { getScoreColor, SCORE_DISTRIBUTION } from "@/utils/colors.ts";
 import { TExtendedUpload, TUpload } from "@kyd/common/api";
+import { useProjectSettingsFormContext } from "../ProjectSettingsFormContext.tsx";
 
 const StatusIcon: Record<string, ReactNode> = {
   pending: <CircularProgress variant="solid" size="sm" />,
@@ -77,7 +77,8 @@ const ProjectCandidateItem = ({
   );
 };
 
-export const CandidatesList = ({ project }: { project: TProjectDTO }) => {
+export const CandidatesList = () => {
+  const { project } = useProjectSettingsFormContext();
   const query = useUploadsQuery({
     page: 1,
     limit: 300,
@@ -94,7 +95,7 @@ export const CandidatesList = ({ project }: { project: TProjectDTO }) => {
 
   return (
     <Stack gap={1} direction="column">
-      {/* put filters here*/}
+      {/* todo add filters here*/}
       <Stack gap={2}>
         {query.data?.map((upload: TUpload | TExtendedUpload) => {
           return (
@@ -116,8 +117,8 @@ export const CandidatesList = ({ project }: { project: TProjectDTO }) => {
   );
 };
 
-export const CandidatesTab = ({ project }: { project: TProjectDTO }) => {
-  return <CandidatesList project={project} />;
+export const CandidatesTab = () => {
+  return <CandidatesList />;
 };
 
 export default CandidatesTab;
