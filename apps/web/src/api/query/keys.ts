@@ -4,6 +4,7 @@ export const uploadsKeys = {
   list: (): QueryKey => ["uploads", "list"],
   paginate: (page: number, projectId: string = ""): QueryKey => [
     "uploads",
+    "paginate",
     page,
     projectId,
   ],

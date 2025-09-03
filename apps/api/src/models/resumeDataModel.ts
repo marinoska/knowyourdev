@@ -6,7 +6,7 @@ import {
   TechnologyEntry,
 } from "@kyd/common/api";
 import { TUploadDocument } from "@/models/upload.model.js";
-import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.js";
+import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.middleware.js";
 
 export type TResumeDataDocument<TJob = JobEntry> = Document &
   ExtractedResumeData<TJob> & {

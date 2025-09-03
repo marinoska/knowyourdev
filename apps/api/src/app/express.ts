@@ -8,8 +8,9 @@ import routes from "@/routes/index.js";
 // Init Mongo connection
 import "./mongo.js";
 import { globals } from "./globals.js";
-import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
+import { auth } from "express-oauth2-jwt-bearer";
 import { env } from "@/app/env.js";
+import eventsRouter from "@/routes/eventsRouter.js";
 
 const log = logger("Application");
 void globals.init();
@@ -41,11 +42,11 @@ const checkJwt = auth({
 
 app.use(cors({ origin: env("ALLOWED_ORIGIN"), credentials: true }));
 
-app.use(checkJwt);
+app.use("/api/events", checkJwt, eventsRouter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/api", routes.apiRouter);
+app.use("/api", checkJwt, routes.apiRouter);
 // app.use('/', routes.publicRouter);
 app.use(errorHandler);
 

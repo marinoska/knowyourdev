@@ -68,6 +68,21 @@ export const documentUploadController = async (
     });
   }
 
+  // Notify client about new upload
+  try {
+    const { sseManager } = await import("@/services/sse.service.js");
+    sseManager.broadcast(userId, {
+      type: "upload_created",
+      payload: {
+        uploadId: newUpload._id.toString(),
+        parseStatus: newUpload.parseStatus,
+        projectId: projectId || undefined,
+      },
+    });
+  } catch (e) {
+    // non-fatal
+  }
+
   void processUpload(newUpload, buffer);
 
   res.status(200).json({

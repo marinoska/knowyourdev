@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { ParsedStatus, TUpload } from "@kyd/common/api";
-import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.js";
+import { ParsedStatus } from "@kyd/common/api";
+import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.middleware.js";
 import { get } from "@/models/upload.statics.js";
 
 export type TUploadDTO = {

@@ -34,12 +34,19 @@ type ErrorOptions = {
 
 class Client {
   private authHeader: { Authorization?: string } = {};
+  private _authToken? = "";
   private onError?: (options: ErrorOptions) => void;
 
-  constructor(private readonly host: string) {
-    if (!host) throw new Error("No remote host provided");
+  constructor(private readonly _host: string) {
+    if (!_host) throw new Error("No remote host provided");
+  }
 
-    this.host = host;
+  get host() {
+    return this._host;
+  }
+
+  get authToken() {
+    return this._authToken;
   }
 
   private async _doFetch<T>(url: string, options: RequestInit): Promise<T> {
@@ -133,11 +140,13 @@ class Client {
 
   public setAccessToken(accessToken: string) {
     this.authHeader.Authorization = `Bearer ${accessToken}`;
+    this._authToken = accessToken;
   }
 
   public deleteAccessToken() {
     if (this.authHeader.Authorization) {
       delete this.authHeader.Authorization;
+      this._authToken = "";
     }
   }
 

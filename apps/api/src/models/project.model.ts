@@ -8,7 +8,7 @@ import {
   get,
   addCandidate,
 } from "@/models/project.statics.js";
-import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.js";
+import { applyOwnershipEnforcement } from "@/middleware/mongoOwnershipEnforcement.middleware.js";
 
 export type TProjectDocument = Document &
   TProject<Schema.Types.ObjectId, Schema.Types.ObjectId> & {

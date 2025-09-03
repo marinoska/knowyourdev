@@ -111,11 +111,29 @@ export async function processUpload(upload: TUploadDocument, buffer?: Buffer) {
       await runResumeDataExtraction(cvText, upload._id, upload.userId);
       upload.parseStatus = "processed";
       void upload.save();
+      const { sseManager } = await import("@/services/sse.service.js");
+      sseManager.broadcast(upload.userId, {
+        type: "upload_updated",
+        payload: {
+          uploadId: upload._id.toString(),
+          parseStatus: upload.parseStatus,
+          projectId: upload.metadata?.projectId || undefined,
+        },
+      });
     }
   } catch (error) {
     //TODO process failed on FE
     upload.parseStatus = "failed";
     void upload.save();
+    const { sseManager } = await import("@/services/sse.service.js");
+    sseManager.broadcast(upload.userId, {
+      type: "upload_updated",
+      payload: {
+        uploadId: upload._id.toString(),
+        parseStatus: upload.parseStatus,
+        projectId: upload.metadata?.projectId || undefined,
+      },
+    });
     log.error("Upload processing error: " + upload._id, error);
   }
 }
