@@ -1,9 +1,17 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { uploadsKeys } from "./keys.ts";
-import { listUploads, type InfiniteUploadList } from "./api.ts";
+import {
+  listUploads,
+  type InfiniteUploadList,
+  getUploadListItem,
+} from "./api.ts";
 import { TIMES_THREE } from "@/utils/const.ts";
-import { GetUploadsListResponse } from "@kyd/common/api";
+import {
+  GetUploadsListResponse,
+  TExtendedUpload,
+  TUpload,
+} from "@kyd/common/api";
 import { apiClient } from "@/api";
 
 const RELEVANT_EVENTS = new Set(["upload_updated", "upload_created"]);
@@ -17,26 +25,35 @@ function isRelevantForProject(
 }
 
 function updateUploadInInfiniteData(
-  data: InfiniteUploadList | undefined,
+  data: InfiniteUploadList,
   {
     uploadId,
     parseStatus,
-  }: { uploadId: string; parseStatus?: "pending" | "processed" | "failed" },
-): InfiniteUploadList | undefined {
+    fullUpload,
+  }: {
+    uploadId: string;
+    parseStatus?: "pending" | "processed" | "failed";
+    fullUpload?: TExtendedUpload | TUpload;
+  },
+) {
   if (!data) return data;
 
   return {
     ...data,
     pages: data.pages.map((page) => ({
       ...page,
-      uploads: page.uploads.map((upload) =>
-        (upload as { _id?: string })._id === uploadId
-          ? {
-              ...upload,
-              parseStatus: parseStatus ?? upload.parseStatus,
-            }
-          : upload,
-      ),
+      uploads: page.uploads.map((upload) => {
+        const id = (upload as { _id?: string })._id;
+        if (id !== uploadId) return upload;
+        if (fullUpload) {
+          return fullUpload;
+        }
+        return {
+          ...upload,
+          parseStatus:
+            parseStatus ?? (upload as { parseStatus?: string }).parseStatus,
+        };
+      }),
     })),
   };
 }
@@ -66,7 +83,34 @@ export const useUploadsQuery = ({
       firstPage.currentPage > 1 ? firstPage.currentPage - 1 : undefined,
   });
 
-  // Subscribe to server-sent updates using EventSource
+  const handler = useCallback(
+    async (ev: MessageEvent) => {
+      if (!RELEVANT_EVENTS.has(ev.type)) return;
+      const payload = JSON.parse(ev.data);
+      console.log("SSE event:", ev.type, payload);
+      if (!isRelevantForProject(payload, projectId)) return;
+
+      if (ev.type === "upload_updated") {
+        const { uploadId, parseStatus } = payload as {
+          uploadId: string;
+          parseStatus?: "pending" | "processed" | "failed";
+        };
+
+        const updatedItem = await getUploadListItem({ uploadId, projectId });
+        queryClient.setQueriesData(
+          { queryKey: ["uploads", "paginate"] },
+          (old: InfiniteUploadList) =>
+            updateUploadInInfiniteData(old, {
+              uploadId,
+              parseStatus,
+              fullUpload: updatedItem,
+            }),
+        );
+      }
+    },
+    [projectId, queryClient],
+  );
+
   useEffect(() => {
     const token = apiClient.authToken;
     const url = new URL(`${apiClient.host}/events/uploads`);
@@ -74,30 +118,6 @@ export const useUploadsQuery = ({
 
     const connect = () => {
       const es = new EventSource(url.toString());
-
-      const handler = (ev: MessageEvent) => {
-        if (!RELEVANT_EVENTS.has(ev.type)) return;
-        const payload = JSON.parse(ev.data);
-        console.log("SSE event:", ev.type, payload);
-        if (!isRelevantForProject(payload, projectId)) return;
-
-        if (ev.type === "upload_updated") {
-          const { uploadId, parseStatus } = payload as {
-            uploadId: string;
-            parseStatus?: "pending" | "processed" | "failed";
-          };
-
-          queryClient.setQueriesData(
-            { queryKey: ["uploads", "paginate"] },
-            (old: InfiniteUploadList) => {
-              return updateUploadInInfiniteData(old, {
-                uploadId,
-                parseStatus,
-              });
-            },
-          );
-        }
-      };
 
       for (const evName of RELEVANT_EVENTS) {
         es.addEventListener(evName, handler);
@@ -113,7 +133,7 @@ export const useUploadsQuery = ({
     const es = connect();
 
     return () => es.close();
-  }, [projectId, queryClient]);
+  }, [handler]);
 
   const allData = data ? data.pages.flatMap((page) => page.uploads) : [];
 

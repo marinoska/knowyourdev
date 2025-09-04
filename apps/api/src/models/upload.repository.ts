@@ -5,6 +5,7 @@ import {
 } from "@/models/resumeDataModel.js";
 import { SortOrder } from "mongoose";
 import { TUpload, TListResponse, TProject } from "@kyd/common/api";
+import { buildUploadBase } from "@/services/uploadsView.service.js";
 
 type TParams = {
   page: number;
@@ -64,20 +65,8 @@ export const getUploadsWithDetails = async ({
 
   const uploadsWithDetails = uploads.map((upload) => {
     const uploadId = upload._id.toString();
-    const resumeData = resumeDataMap[uploadId] || null;
-    return {
-      _id: uploadId,
-      name: upload.metadata?.name || "",
-      fullName: resumeData?.fullName,
-      position: resumeData?.position,
-      hash: upload.hash,
-      contentType: upload.contentType,
-      size: upload.size,
-      parseStatus: upload.parseStatus,
-      createdAt: upload.createdAt.toISOString(),
-      originalName: upload.originalName,
-      filename: upload.filename,
-    };
+    const resume = resumeDataMap[uploadId];
+    return buildUploadBase(upload, resume);
   });
 
   return {

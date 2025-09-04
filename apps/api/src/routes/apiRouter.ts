@@ -1,6 +1,5 @@
 import express, { Router } from "express";
 import { celebrate, errors } from "celebrate";
-// import { checkAuth0Token } from 'nftit/User/checkAuth0Token.middlware';
 import { notFoundController } from "./api/notFound.controller.js";
 import {
   documentUploadController,
@@ -15,6 +14,10 @@ import {
   getUploadsListController,
   getUploadsListValidationSchema,
 } from "@/routes/api/getUploads.controller.js";
+import {
+  getUploadController,
+  getUploadValidationSchema,
+} from "@/routes/api/getUpload.controller.js";
 import {
   getResumeProfileController,
   getResumeProfileValidationSchema,
@@ -43,7 +46,6 @@ import {
   extractProjectDataController,
   extractJobDataValidationSchema,
 } from "@/routes/api/extractProjectData.controller.js";
-// import { loadAuthenticatedUser } from 'nftit/User/loadAuthenticatedUser.middleware';
 
 const validateOptions = { abortEarly: false };
 
@@ -61,6 +63,11 @@ apiRouter.get(
   "/document/uploads",
   celebrate(getUploadsListValidationSchema),
   getUploadsListController,
+);
+apiRouter.get(
+  "/document/upload/:uploadId",
+  celebrate(getUploadValidationSchema),
+  getUploadController,
 );
 apiRouter.get(
   "/resume/profile/:uploadId",

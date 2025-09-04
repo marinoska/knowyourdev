@@ -11,6 +11,8 @@ import {
   WithCandidateMatch,
   PatchProjectBody,
   TListResponse,
+  TUpload,
+  TExtendedUpload,
 } from "@kyd/common/api";
 import { InfiniteData } from "@tanstack/react-query";
 import { TProjectDTO } from "@/api/query/types.ts";
@@ -50,7 +52,24 @@ export const listUploads = async ({
       page,
       limit,
       projectId,
-      withMatch: !!projectId, // Optional parameter to include match data part
+      withMatch: !!projectId,
+    },
+  });
+};
+
+export const getUploadListItem = async ({
+  uploadId,
+  projectId,
+}: {
+  uploadId: string;
+  projectId?: string;
+}) => {
+  return apiClient.get<
+    typeof projectId extends string ? TExtendedUpload : TUpload
+  >(`/document/upload/${uploadId}`, {
+    params: {
+      projectId,
+      withMatch: !!projectId,
     },
   });
 };

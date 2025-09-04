@@ -1,35 +1,22 @@
 import { Joi, Segments } from "celebrate";
 
-import { Request, Response, RequestHandler } from "express";
+import { RequestHandler } from "express";
 import {
   GetUploadsListQueryParams,
   GetUploadsListResponse,
-  TUpload,
-  TExtendedUpload,
 } from "@kyd/common/api";
 import { getUploadsWithDetails } from "@/models/upload.repository.js";
-import { ProfileMatchService } from "@/services/profileMatch.service.js";
-import { ProfileMetricsService } from "@/services/profileMetrics.service.js";
-import { ResumeProfileModel } from "@/models/resumeProfileModel.js";
+import { extendWithMatchIfApplicable } from "@/services/uploadsView.service.js";
 import { ProjectModel } from "@/models/project.model.js";
 import { NotFound } from "@/app/errors.js";
-import { Schema } from "mongoose";
 
 export const getUploadsListController: RequestHandler<
   unknown,
   GetUploadsListResponse,
   unknown,
   GetUploadsListQueryParams
-> = async (
-  req: Request<
-    unknown,
-    GetUploadsListResponse,
-    unknown,
-    GetUploadsListQueryParams
-  >,
-  res: Response<GetUploadsListResponse>,
-) => {
-  const { page = 1, limit = 10, projectId, withMatch } = req.query;
+> = async (req, res) => {
+  const { page, limit, projectId, withMatch } = req.query;
 
   if (!req.auth?.payload.sub) {
     throw new Error("Authentication required");
@@ -64,42 +51,19 @@ export const getUploadsListController: RequestHandler<
     return;
   }
 
-  const profileMatchService = new ProfileMatchService();
-  const profileMetricsService = new ProfileMetricsService();
-
   const processedUploads = await Promise.all(
     uploads.map(async (record) => {
-      if (record.parseStatus === "processed" && profileMetricsService) {
-        try {
-          const resumeProfile = await ResumeProfileModel.getOne({
-            uploadRef: record._id,
-            _userId: userId,
-          });
-          if (resumeProfile) {
-            const profileMetrics =
-              profileMetricsService.calculateProfileMetrics(resumeProfile);
-
-            if (project && profileMatchService) {
-              const match = profileMatchService.getCandidateMatch({
-                project,
-                candidate: {
-                  ...resumeProfile,
-                  ...profileMetrics,
-                  uploadId: resumeProfile.uploadRef as Schema.Types.ObjectId,
-                },
-              });
-
-              return { ...record, match } satisfies TExtendedUpload;
-            }
-          }
-        } catch (error) {
-          throw new Error(
-            `Error calculating match for upload ${record._id}: ${error}`,
-          );
-        }
+      try {
+        return await extendWithMatchIfApplicable(
+          record,
+          userId,
+          project ?? undefined,
+        );
+      } catch (error) {
+        throw new Error(
+          `Error calculating match for upload ${record._id}: ${error}`,
+        );
       }
-
-      return record satisfies TUpload;
     }),
   );
 
