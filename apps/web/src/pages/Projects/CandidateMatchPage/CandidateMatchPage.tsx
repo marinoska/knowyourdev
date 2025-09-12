@@ -128,7 +128,7 @@ const CareerDetailsAlert = ({
     >
       <Stack>
         <Subtitle>{title}</Subtitle>
-        <Small>{text}</Small>
+        <Small>hardcoded example {text}</Small>
       </Stack>
     </Alert>
   );
@@ -158,7 +158,7 @@ const RedFlags = () => {
           color="warning"
           title="Tech stack inconsistency"
           text="Node.js, PHP, no backend framework mentioned"
-        />{" "}
+        />
       </Stack>
     </BasePage.Sheet>
   );

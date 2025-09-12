@@ -11,10 +11,12 @@ Node.js/Express TypeScript API powering KYD. It exposes endpoints for uploads an
 ## Setup
 1. Install dependencies from repo root:
    - pnpm install
-2. Configure environment variables:
+2. Build workspaces (first-time setup or after dependency changes):
+   - pnpm build
+3. Configure environment variables:
    - Copy .env.example to .env
    - Fill values (OpenAI, MongoDB, logger, etc.). See .env.example which mirrors a working .env.
-3. Start in development:
+4. Start in development:
    - From repo root: pnpm --filter ./apps/api dev
    - Or inside this folder: pnpm dev
 

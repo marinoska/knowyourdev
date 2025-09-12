@@ -23,13 +23,15 @@ Check your versions:
 1. Clone the repo.
 2. Install dependencies at the root:
    pnpm install
+3. Build all workspaces (first-time setup or after dependency changes):
+   pnpm build
 
-3. Set up environment variables:
+4. Set up environment variables:
    - Copy apps/api/.env.example to apps/api/.env and fill required values.
    - Copy apps/web/.env.example to apps/web/.env and fill required values.
    - Note: .env.example files mirror the existing .env files’ keys and comments. Do not add inferred variables; keep them in sync with the real .env files.
 
-4. Run the app(s) in development mode:
+5. Run the app(s) in development mode:
    - Run all dev tasks concurrently via Turborepo:
      pnpm dev
    - Or run a single app from its directory:
