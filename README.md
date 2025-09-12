@@ -11,11 +11,19 @@ A monorepo for KYD containing the API service and the Web frontend. It uses pnpm
 
 ## Screenshots
 
+<!--
+  When hosted, files in a public/ directory are accessible via URLs.
+  For GitHub Pages, use: https://<username>.github.io/<repository-name>/<path-to-screenshot.png>
+  Example for this repo:
+  https://marinoska.github.io/knowyourdev/apps/web/public/screenshot-1.png
+-->
 <div style="display:flex; gap:12px; align-items:flex-start; justify-content:center; flex-wrap:nowrap; overflow-x:auto; padding:8px 0;">
-  <img src="./apps/web/public/screenshot-1.png" alt="Candidate Matching" style="height:320px; width:auto; flex:0 0 auto;" />
-  <img src="./apps/web/public/screenshot-2.png" alt="Project Overview" style="height:320px; width:auto; flex:0 0 auto;" />
-  <img src="./apps/web/public/screenshot-3.png" alt="Insights and Risk Assessment" style="height:320px; width:auto; flex:0 0 auto;" />
+  <img src="https://marinoska.github.io/knowyourdev/apps/web/public/screenshot-1.png" alt="Candidate Matching" style="height:200px; width:auto; flex:0 0 auto;" />
+  <img src="https://marinoska.github.io/knowyourdev/apps/web/public/screenshot-2.png" alt="Project Overview" style="height:200px; width:auto; flex:0 0 auto;" />
+  <img src="https://marinoska.github.io/knowyourdev/apps/web/public/screenshot-3.png" alt="Insights and Risk Assessment" style="height:200px; width:auto; flex:0 0 auto;" />
 </div>
+
+Small note: if you are browsing the repository on GitHub, the images above are shown via hosted URLs. If you prefer local relative paths for repository rendering, replace the src attributes with ./apps/web/public/screenshot-*.png.
 
 ## Contents
 - apps/
