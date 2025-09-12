@@ -140,11 +140,6 @@ const RedFlags = () => {
       <Stack gap={2}>
         <Title text="Risk assessment" />
         <CareerDetailsAlert
-          color="danger"
-          title="Legacy technologies"
-          text="jQuery, Backbone, AngularJS"
-        />
-        <CareerDetailsAlert
           color="warning"
           title="Career Gap Detected"
           text="6 months gap in 2022"
