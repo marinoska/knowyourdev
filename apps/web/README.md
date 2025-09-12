@@ -25,23 +25,9 @@ React + TypeScript + Vite frontend for KYD. It communicates with the KYD API and
 - pnpm preview — preview the production build
 - pnpm lint — lint the codebase
 
-## Environment variables
-- VITE_KYD_API_ENDPOINT — base URL of the API (e.g., http://knowyourdev.local:5050/api)
-- VITE_AUTH0_API_AUDIENCE — API audience used for token requests
-- VITE_AUTH0_DOMAIN — Auth0 tenant domain (e.g., your-tenant.eu.auth0.com)
-- VITE_AUTH0_CLIENT_ID — Auth0 application client ID
-
-These variables are consumed in:
-- src/api/client.ts (API host)
-- src/api/ApiClientProvider.tsx (Auth0 audience)
-- src/main.tsx (Auth0 domain/clientId and API audience)
 
 ## Useful paths
 - src/components — UI components
 - src/pages — pages and forms
 - src/api — API client and React Query setup
 
-## Troubleshooting
-- If API requests fail with 401, ensure you are authenticated and the audience matches the API’s expected AUTH0_API_AUDIENCE
-- If the app cannot reach the API, verify VITE_KYD_API_ENDPOINT and CORS (ALLOWED_ORIGIN on the API)
-- Node version mismatch — ensure Node >= 22

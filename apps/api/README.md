@@ -28,18 +28,6 @@ Node.js/Express TypeScript API powering KYD. It exposes endpoints for uploads an
 - pnpm format — format code
 - pnpm fetch-cv — run local script to fetch a CV sample
 
-## Environment variables
-This service reads env vars on startup. The .env.example file mirrors keys and comments. Important keys:
-- PORT: server port (e.g., 5050)
-- SCHEME: http or https
-- LOGGER_FILE, LOGGER_LEVEL: logging configuration
-- ALLOWED_ORIGIN: CORS origin for the web app (e.g., http://localhost:5173)
-- OPENAI_API_KEY, OPENAI_MODEL: LLM provider
-- LANGCHAIN_*: tracing and project settings
-- MONGO_CONNECTION: MongoDB connection string
-- AUTH0_API_AUDIENCE, AUTH0_API_ISSUER: API auth configuration
-- CLOUDFLARE_*: R2 storage settings (optional)
-- HF_TOKEN: Hugging Face token (optional)
 
 ## HTTPS notes
 If SCHEME=https, local certs are read from ./src/cert/key.pem and ./src/cert/cert.pem (see src/index.ts). For local development, you can keep SCHEME=http.
@@ -51,8 +39,3 @@ If SCHEME=https, local certs are read from ./src/cert/key.pem and ./src/cert/cer
 - src/routes/* — controllers and routing (REST API)
 - src/services/* — domain services (uploads, etc.)
 
-## Troubleshooting
-- Missing env var: check apps/api/.env and messages like "<KEY> is undefined" (src/app/env.ts throws if missing)
-- Mongo connection: verify MONGO_CONNECTION and that your IP is whitelisted
-- OpenAI: ensure OPENAI_API_KEY is valid and has access to the configured model
-- HTTPS: if enabled, ensure key/cert paths are correct, otherwise use SCHEME=http

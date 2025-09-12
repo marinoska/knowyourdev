@@ -128,7 +128,7 @@ const CareerDetailsAlert = ({
     >
       <Stack>
         <Subtitle>{title}</Subtitle>
-        <Small>hardcoded example {text}</Small>
+        <Small>(hardcoded, not implemented) {text}</Small>
       </Stack>
     </Alert>
   );

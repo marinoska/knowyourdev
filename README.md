@@ -1,10 +1,21 @@
 # KnowYourDev (KYD)
 
-An AI platform for evaluating software contractors.  
+An AI platform for evaluating software engineersq
 KYD analyzes CVs, scores tech stacks, and highlights strengths and red flags to help employers quickly assess developer suitability.  
+
+> Note: This repository is a Work in Progress (WIP). Features, APIs, and documentation may change.
+
 🌐 Try it here: [knowyourdev.onrender.com](https://knowyourdev.onrender.com/) — access requires credentials, please contact us to request them.
 
 A monorepo for KYD containing the API service and the Web frontend. It uses pnpm workspaces and Turborepo for task orchestration.
+
+## Screenshots
+
+<div style="display:flex; gap:12px; align-items:flex-start; justify-content:center; flex-wrap:nowrap; overflow-x:auto; padding:8px 0;">
+  <img src="./apps/web/public/screenshot-1.png" alt="Candidate Matching" style="height:320px; width:auto; flex:0 0 auto;" />
+  <img src="./apps/web/public/screenshot-2.png" alt="Project Overview" style="height:320px; width:auto; flex:0 0 auto;" />
+  <img src="./apps/web/public/screenshot-3.png" alt="Insights and Risk Assessment" style="height:320px; width:auto; flex:0 0 auto;" />
+</div>
 
 ## Contents
 - apps/
@@ -67,21 +78,4 @@ To run only the API in dev, from root:
 To run only the Web app in dev, from root:
 - pnpm --filter ./apps/web dev
 
-## Environment variables
-At minimum, ensure:
-- apps/api/.env:
-  - PORT: Port for the API server
-  - SCHEME: http or https
-  - Any database credentials (e.g., MONGODB_URI) and AI provider keys required by the extraction chains
 
-Check the codebase for exact names and defaults (e.g., apps/api/src/app/env.ts).
-
-## Development tips
-- Use pnpm format before committing: pnpm format
-- Git hooks can be wired via husky (prepare script is configured). Run pnpm prepare after install if hooks are missing.
-- Turborepo caching is configured; dev task is marked non-cached/persistent.
-
-## Troubleshooting
-- Node version mismatch: Ensure Node >= 22 (see package.json engines).
-- Missing env vars: The API will fail on startup if required variables are absent.
-- HTTPS local: Provide cert/key files or set SCHEME=http for local development.
