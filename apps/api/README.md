@@ -1,38 +1,41 @@
-https://www.section.io/engineering-education/how-to-get-ssl-https-for-localhost/
+# KYD API (apps/api)
 
-```
-cd ./cert
-1. openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365
-2. openssl rsa -in keytmp.pem -out key.pem
-3. const credentials = {
-  key: key,
-  cert: cert,
-};
+Node.js/Express TypeScript API powering KYD. It exposes endpoints for uploads and AI-powered resume/project extraction chains.
 
-OR
-1. openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365
-2. const credentials = {
-  key: key,
-  cert: cert,
-  passphrase: 'your-password-here' // Replace with the actual passphrase
-};
+## Prerequisites
+- Node.js >= 22
+- pnpm 9.x
+- MongoDB connection (Atlas or self-hosted)
+- OpenAI API key (and any optional providers you enable)
 
-```
+## Setup
+1. Install dependencies from repo root:
+   - pnpm install
+2. Build workspaces (first-time setup or after dependency changes):
+   - pnpm build
+3. Configure environment variables:
+   - Copy .env.example to .env
+   - Fill values (OpenAI, MongoDB, logger, etc.). See .env.example which mirrors a working .env.
+4. Start in development:
+   - From repo root: pnpm --filter ./apps/api dev
+   - Or inside this folder: pnpm dev
 
-The best solution
-
-```aiignore
-🛠 Using mkcert (Recommended, Easier)
-If you installed mkcert, just run:
-
-mkcert -key-file key.pem -cert-file cert.pem localhost
-
-This automatically generates a valid certificate for localhost.
+## Scripts
+- pnpm dev — run with tsx + nodemon (watches src/index.ts)
+- pnpm build — compile TypeScript to dist (tsc and tsc-alias)
+- pnpm start — run the compiled server (dist/index.js)
+- pnpm lint — lint source files
+- pnpm format — format code
+- pnpm fetch-cv — run local script to fetch a CV sample
 
 
-```
+## HTTPS notes
+If SCHEME=https, local certs are read from ./src/cert/key.pem and ./src/cert/cert.pem (see src/index.ts). For local development, you can keep SCHEME=http.
 
-$$
-mongoose-encryption
-Generate secret: `openssl rand -base64 32`
-$$
+## Code map
+- src/index.ts — server bootstrap (http/https, graceful shutdown)
+- src/app/* — env, logger, mongo utilities, AI model setup
+- src/chain/* — extraction chains, prompts, and utilities
+- src/routes/* — controllers and routing (REST API)
+- src/services/* — domain services (uploads, etc.)
+

@@ -128,7 +128,7 @@ const CareerDetailsAlert = ({
     >
       <Stack>
         <Subtitle>{title}</Subtitle>
-        <Small>{text}</Small>
+        <Small>(hardcoded, not implemented) {text}</Small>
       </Stack>
     </Alert>
   );
@@ -139,11 +139,6 @@ const RedFlags = () => {
     <BasePage.Sheet>
       <Stack gap={2}>
         <Title text="Risk assessment" />
-        <CareerDetailsAlert
-          color="danger"
-          title="Legacy technologies"
-          text="jQuery, Backbone, AngularJS"
-        />
         <CareerDetailsAlert
           color="warning"
           title="Career Gap Detected"
@@ -158,7 +153,7 @@ const RedFlags = () => {
           color="warning"
           title="Tech stack inconsistency"
           text="Node.js, PHP, no backend framework mentioned"
-        />{" "}
+        />
       </Stack>
     </BasePage.Sheet>
   );
